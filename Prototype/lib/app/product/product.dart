@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:prototype/app/product/addproduct.dart';
 import 'package:prototype/app/product/productdata.dart';
 import 'package:prototype/app/product/productinfo.dart';
+import 'package:prototype/widgets/bottomnavigator.dart';
 
 
 
@@ -95,6 +96,7 @@ class ProductManagementScreen extends StatelessWidget {
         },
         child: Icon(Icons.add),
       ),
+      bottomNavigationBar: CustomBottomNavigationBar(),
     );
   }
 }

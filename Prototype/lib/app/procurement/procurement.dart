@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:prototype/app/procurement/addprocurement.dart';
 import 'package:prototype/app/procurement/procurementdata.dart';
 import 'package:prototype/app/procurement/procurementinfo.dart';
+import 'package:prototype/widgets/bottomnavigator.dart';
 
 class ProcurementScreen extends StatefulWidget {
   @override
@@ -57,6 +58,7 @@ class _ProcurementScreenState extends State<ProcurementScreen> {
         },
         child: Icon(Icons.add),
       ),
+      bottomNavigationBar: CustomBottomNavigationBar(),
     );
   }
 }

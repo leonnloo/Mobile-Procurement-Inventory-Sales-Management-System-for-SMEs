@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:prototype/app/home/home.dart';
+import 'package:prototype/app/inventory/inventory.dart';
 
 class InventoryStatusWidget extends StatelessWidget {
   final int inStockCount;
@@ -21,7 +21,7 @@ class InventoryStatusWidget extends StatelessWidget {
         onTap: () {
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => HomeScreen(initialIndex: 4)),
+            MaterialPageRoute(builder: (context) => InventoryScreen()),
           );
         },
         child: Padding(

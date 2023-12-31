@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:prototype/app/customer/addcustomer.dart';
 import 'package:prototype/app/customer/customerdata.dart';
 import 'package:prototype/app/customer/customerinfo.dart';
+import 'package:prototype/widgets/bottomnavigator.dart';
 
 class CustomerManagementScreen extends StatelessWidget {
   @override
@@ -96,6 +97,7 @@ class CustomerManagementScreen extends StatelessWidget {
         },
         child: Icon(Icons.add),
       ),
+      bottomNavigationBar: CustomBottomNavigationBar(),
     );
   }
 }

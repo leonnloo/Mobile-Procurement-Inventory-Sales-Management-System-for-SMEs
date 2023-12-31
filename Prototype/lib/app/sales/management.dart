@@ -3,6 +3,7 @@ import 'package:prototype/app/sales/monthlysalesbar.dart';
 import 'package:prototype/app/sales/individualsales.dart';
 import 'package:prototype/app/sales/salesorders/order.dart';
 import 'package:prototype/app/sales/linechart.dart';
+import 'package:prototype/widgets/bottomnavigator.dart';
 
 class SalesManagementScreen extends StatelessWidget {
   @override
@@ -110,6 +111,8 @@ class SalesManagementScreen extends StatelessWidget {
           ],
         ),
       ),
+      bottomNavigationBar: CustomBottomNavigationBar(),
+
     );
   }
 }
