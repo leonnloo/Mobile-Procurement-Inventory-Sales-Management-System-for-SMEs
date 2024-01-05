@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:prototype/app/product/productdata.dart';
+import 'package:prototype/models/productdata.dart';
 
 void navigateToProductDetail(BuildContext context, Product product) {
   Navigator.of(context).push(

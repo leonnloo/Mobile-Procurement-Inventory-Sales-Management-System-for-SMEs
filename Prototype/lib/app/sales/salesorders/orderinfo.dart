@@ -1,5 +1,5 @@
 import "package:flutter/material.dart";
-import 'package:prototype/app/sales/salesorders/orderdata.dart';
+import 'package:prototype/models/orderdata.dart';
 
 void navigateToOrderDetail(BuildContext context, SalesOrder item) {
   Navigator.of(context).push(

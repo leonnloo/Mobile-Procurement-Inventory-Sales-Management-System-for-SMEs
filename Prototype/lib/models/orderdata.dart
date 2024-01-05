@@ -1,5 +1,3 @@
-import 'package:flutter/foundation.dart';
-
 class SalesOrder {
   final int orderNo;
   final String date;

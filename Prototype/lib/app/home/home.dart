@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:prototype/app/userprofile.dart';
-import 'package:prototype/widgets/totalprofits.dart';
+import 'package:prototype/widgets/homewidgets.dart';
 
 class HomeScreen extends StatefulWidget {
   final void Function(int index) onWidgetClick; // Add this line
@@ -18,7 +17,7 @@ class _HomeScreenState extends State<HomeScreen> {
       body: Column(
         children: [
           Expanded(
-            child: TotalProfitsScreen(
+            child: HomeWidgets(
               onWidgetsClick: (index) {
                 widget.onWidgetClick(index);
               },

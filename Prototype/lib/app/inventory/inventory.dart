@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:prototype/app/inventory/addinventory.dart';
-import 'package:prototype/app/inventory/inventorydata.dart';
+import 'package:prototype/models/inventorydata.dart';
 import 'package:prototype/app/inventory/inventoryinfo.dart';
-import 'package:prototype/widgets/bottomnavigator.dart';
 
 class InventoryScreen extends StatelessWidget {
   @override

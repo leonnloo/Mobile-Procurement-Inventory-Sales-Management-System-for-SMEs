@@ -1,8 +1,8 @@
 import "dart:math";
 
 import "package:flutter/material.dart";
-import "package:prototype/app/customer/customerdata.dart";
-import "package:prototype/app/supplier/supplierdata.dart";
+import 'package:prototype/models/customerdata.dart';
+import 'package:prototype/models/supplierdata.dart';
 
 void navigateToSupplierDetail(BuildContext context, SupplierData supplier) {
   Navigator.of(context).push(

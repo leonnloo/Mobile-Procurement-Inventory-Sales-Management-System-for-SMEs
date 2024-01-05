@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:prototype/app/home/inventorystatus.dart';
-import 'package:prototype/app/home/productsales.dart';
-import 'package:prototype/app/inventory/inventorydata.dart';
-import 'package:prototype/app/sales/management.dart';
+import 'package:prototype/widgets/inventorystatus.dart';
+import 'package:prototype/widgets/productsales.dart';
+import 'package:prototype/models/inventorydata.dart';
 import 'package:prototype/app/sales/monthlysalesbar.dart';
-import 'package:prototype/app/sales/salesorders/addorder.dart';
 
 
-class TotalProfitsScreen extends StatelessWidget {
+class HomeWidgets extends StatelessWidget {
   final Function(int) onWidgetsClick;
 
-  TotalProfitsScreen({required this.onWidgetsClick});
+  HomeWidgets({required this.onWidgetsClick});
   @override
   Widget build(BuildContext context) {
     // Add logic to calculate total profits

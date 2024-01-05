@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:prototype/app/supplier/supplierdata.dart';
+import 'package:prototype/models/supplierdata.dart';
 
 class AddSupplierScreen extends StatefulWidget {
   @override

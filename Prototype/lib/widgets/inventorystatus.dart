@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:prototype/app/inventory/inventory.dart';
 
 class InventoryStatusWidget extends StatelessWidget {
   final int inStockCount;

@@ -1,11 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:prototype/app/customer/customer.dart';
-import 'package:prototype/app/home/home.dart';
-import 'package:prototype/app/inventory/inventory.dart';
-import 'package:prototype/app/procurement/procurement.dart';
-import 'package:prototype/app/product/product.dart';
-import 'package:prototype/app/sales/management.dart';
-import 'package:prototype/app/supplier/supplier.dart';
 
 class CustomBottomNavigationBar extends StatefulWidget {
   int currentIndex;

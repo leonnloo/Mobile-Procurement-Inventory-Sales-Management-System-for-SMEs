@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:prototype/app/customer/customerdata.dart';
+import 'package:prototype/models/customerdata.dart';
 
 class AddCustomerScreen extends StatefulWidget {
   @override

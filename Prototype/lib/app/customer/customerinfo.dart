@@ -1,5 +1,5 @@
 import "package:flutter/material.dart";
-import "package:prototype/app/customer/customerdata.dart";
+import 'package:prototype/models/customerdata.dart';
 import 'dart:math';
 
 void navigateToCustomerDetail(BuildContext context, CustomerData customer) {

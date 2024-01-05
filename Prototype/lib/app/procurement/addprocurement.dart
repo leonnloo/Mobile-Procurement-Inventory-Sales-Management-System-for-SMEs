@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:prototype/app/procurement/procurementdata.dart';
+import 'package:prototype/models/procurementdata.dart';
 
 class AddProcurementScreen extends StatefulWidget {
   @override

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:prototype/app/sales/salesorders/orderdata.dart';
+import 'package:prototype/models/orderdata.dart';
 
 class AddInventoryScreen extends StatefulWidget {
   @override

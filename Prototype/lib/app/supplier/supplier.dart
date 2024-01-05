@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:prototype/app/supplier/addsupplier.dart';
-import 'package:prototype/app/supplier/supplierdata.dart';
+import 'package:prototype/models/supplierdata.dart';
 import 'package:prototype/app/supplier/supplierinfo.dart';
-import 'package:prototype/widgets/bottomnavigator.dart';
 
 
 class SupplierManagementScreen extends StatelessWidget {
