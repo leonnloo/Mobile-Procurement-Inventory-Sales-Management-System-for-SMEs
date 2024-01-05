@@ -91,7 +91,6 @@ class SupplierManagementScreen extends StatelessWidget {
         },
         child: Icon(Icons.add),
       ),
-      bottomNavigationBar: CustomBottomNavigationBar(),
     );
   }
 }

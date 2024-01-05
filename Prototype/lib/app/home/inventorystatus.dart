@@ -17,14 +17,7 @@ class InventoryStatusWidget extends StatelessWidget {
     return Card(
       elevation: 4.0,
       margin: EdgeInsets.all(16.0),
-      child: GestureDetector(
-        onTap: () {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => InventoryScreen()),
-          );
-        },
-        child: Padding(
+      child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -40,7 +33,6 @@ class InventoryStatusWidget extends StatelessWidget {
             ],
           ),
         ),
-      ),
     );
   }
 }

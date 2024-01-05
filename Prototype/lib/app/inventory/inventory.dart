@@ -59,7 +59,6 @@ class InventoryScreen extends StatelessWidget {
         },
         child: Icon(Icons.add),
       ),
-      bottomNavigationBar: CustomBottomNavigationBar(),
     );
   }
 

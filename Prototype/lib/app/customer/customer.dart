@@ -97,7 +97,6 @@ class CustomerManagementScreen extends StatelessWidget {
         },
         child: Icon(Icons.add),
       ),
-      bottomNavigationBar: CustomBottomNavigationBar(),
     );
   }
 }

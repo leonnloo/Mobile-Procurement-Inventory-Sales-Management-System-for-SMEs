@@ -8,6 +8,9 @@ import 'package:prototype/app/sales/salesorders/addorder.dart';
 
 
 class TotalProfitsScreen extends StatelessWidget {
+  final Function(int) onWidgetsClick;
+
+  TotalProfitsScreen({required this.onWidgetsClick});
   @override
   Widget build(BuildContext context) {
     // Add logic to calculate total profits
@@ -35,10 +38,7 @@ class TotalProfitsScreen extends StatelessWidget {
             children: [
               GestureDetector(
                 onTap: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => SalesManagementScreen()),
-                  );
+                   onWidgetsClick(0);
                 },
                 child: Card(
                   elevation: 4.0,
@@ -65,10 +65,7 @@ class TotalProfitsScreen extends StatelessWidget {
               ),
               GestureDetector(
                 onTap: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => SalesManagementScreen()),
-                  );
+                  onWidgetsClick(0);
                 },
                 child: const Card(
                   elevation: 4.0,
@@ -82,20 +79,24 @@ class TotalProfitsScreen extends StatelessWidget {
               SizedBox(height: 15),
               Row(
                 children: [
-                  InventoryStatusWidget(
-                    inStockCount: inStockCount, 
-                    lowStockCount: lowStockCount,
-                    outOfStockCount: outOfStockCount,
+                  GestureDetector(
+                    onTap: () {
+                      onWidgetsClick(4);
+                    },
+                    child:
+                      InventoryStatusWidget(
+                        inStockCount: inStockCount, 
+                        lowStockCount: lowStockCount,
+                        outOfStockCount: outOfStockCount,
+                      ),
                   ),
                   Card(
                     elevation: 4.0,
                     margin: EdgeInsets.all(16.0),
                     child: GestureDetector(
                       onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => AddOrderScreen()),
-                        );
+                        // add order
+                         onWidgetsClick(0);
                       },
                       child: Padding(
                         padding: const EdgeInsets.all(16.0),

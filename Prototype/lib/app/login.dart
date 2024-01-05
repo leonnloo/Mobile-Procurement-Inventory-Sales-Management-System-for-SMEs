@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:prototype/app/home/home.dart';
+import 'package:prototype/app/screenmanager.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -52,14 +52,14 @@ class _LoginScreenState extends State<LoginScreen> {
                   print('Login successful!');
                   Navigator.pushReplacement(
                     context,
-                    MaterialPageRoute(builder: (context) => HomeScreen()),
+                    MaterialPageRoute(builder: (context) => ScreenManager()),
                   );
                 } else {
                   // Show an error message or handle the case where
                   // username or password is empty
                   Navigator.pushReplacement(
                     context,
-                    MaterialPageRoute(builder: (context) => HomeScreen()),
+                    MaterialPageRoute(builder: (context) => ScreenManager()),
                   );
                   print('Please enter both username and password');
                 }

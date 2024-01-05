@@ -111,8 +111,6 @@ class SalesManagementScreen extends StatelessWidget {
           ],
         ),
       ),
-      bottomNavigationBar: CustomBottomNavigationBar(),
-
     );
   }
 }

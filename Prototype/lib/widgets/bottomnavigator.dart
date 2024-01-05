@@ -8,36 +8,27 @@ import 'package:prototype/app/sales/management.dart';
 import 'package:prototype/app/supplier/supplier.dart';
 
 class CustomBottomNavigationBar extends StatefulWidget {
+  int currentIndex;
+  final Function(int) onIndexChanged;
+
+  CustomBottomNavigationBar({required this.currentIndex, required this.onIndexChanged});
   @override
   _CustomBottomNavigationBarState createState() =>
       _CustomBottomNavigationBarState();
 }
 
 class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
-  int _currentIndex = 3;
-  final List<Widget> _screens = [
-    SalesManagementScreen(),
-    ProcurementScreen(),
-    ProductManagementScreen(),
-    HomeScreen(),
-    InventoryScreen(),
-    SupplierManagementScreen(),
-    CustomerManagementScreen(),
-  ];
 
   @override
   Widget build(BuildContext context) {
     return 
       BottomNavigationBar(
-        currentIndex: _currentIndex,
+        currentIndex: widget.currentIndex,
         onTap: (index) {
           setState(() {
-            _currentIndex = index;
+            widget.currentIndex = index;
           });
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => _screens[index]),
-          );
+          widget.onIndexChanged(index); // Callback to notify ScreenManager
         },
         backgroundColor: Color.fromARGB(255, 255, 16, 16),
         selectedItemColor: Color.fromARGB(255, 255, 0, 0),

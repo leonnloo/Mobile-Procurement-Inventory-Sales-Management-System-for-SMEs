@@ -58,7 +58,6 @@ class _ProcurementScreenState extends State<ProcurementScreen> {
         },
         child: Icon(Icons.add),
       ),
-      bottomNavigationBar: CustomBottomNavigationBar(),
     );
   }
 }

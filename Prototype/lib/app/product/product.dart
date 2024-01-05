@@ -96,7 +96,6 @@ class ProductManagementScreen extends StatelessWidget {
         },
         child: Icon(Icons.add),
       ),
-      bottomNavigationBar: CustomBottomNavigationBar(),
     );
   }
 }
