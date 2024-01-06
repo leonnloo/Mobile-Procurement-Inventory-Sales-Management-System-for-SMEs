@@ -37,6 +37,8 @@ $ flutter upgrade
 $ flutter pub get
 $ flutter run
 ```
+## Reference
+https://github.com/hemanta212/Flutter-Inventory-App
 
 ## Tasks
 1) tianpu
