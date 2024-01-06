@@ -38,3 +38,48 @@ $ flutter pub get
 $ flutter run
 ```
 
+## Tasks
+1)
+- class diagram
+- sql tables - look how to achieve every company have their own datasets, each employee has sales record (number of sales, revenue)
+- learn how to link mongodb -> flask -> flutter
+- CRUD (create, read, update, delete)
+
+2)
+LOGIN:
+- authentication 
+- register (only new company can register, employees have to be added by admin or people in authority to the database in settings)
+- when user first time login, prompt for new password, other necessary information (added by admin)
+- login
+- verification for registering
+- forgot password?
+ 
+HOME:
+- adjustable widgets?
+- add icon on the bottom right (add orders, purchase, customer, supplier, product, inventory)
+- 
+3)
+SALES:
+- target sales
+- profits and losses - month, opening(costs), total purchases, total sales, closing (cost), profit or loss, expenses, net profit
+- sales by date
+- sales by item (selling products, products by revenue)
+- sales by time (day, week, month, last 3 month, ?year?)
+- sales by customer
+- individual employee sales
+
+4)
+ORDER:
+- order dispatch and delivery (packed, shipped, delivered)
+- customer claims and refunds - form, history
+- filter system
+
+5) 
+PROCUREMENT:
+- add weekly, montly purchases statistics
+- filter system
+
+INVENTORY:
+- add inventory statistics
+- filter system
+- safety quantity (critical level)
