@@ -38,16 +38,21 @@ $ flutter pub get
 $ flutter run
 ```
 ## Reference
+这是网上的例子，应该是运行不了，可以当作参考
 https://github.com/hemanta212/Flutter-Inventory-App
 
 ## Tasks
-1) tianpu
+程序在进入lib里
+记得跟着folder的名字归类
+有什么问题就直接问
+
+### 1) Tianpu
 - class diagram
 - sql tables - look how to achieve every company have their own datasets, each employee has sales record (number of sales, revenue)
 - learn how to link mongodb -> flask -> flutter
 - CRUD (create, read, update, delete)
 
-2) leon
+### 2) Leon
 LOGIN:
 - authentication 
 - register (only new company can register, employees have to be added by admin or people in authority to the database in settings)
@@ -59,8 +64,8 @@ LOGIN:
 HOME:
 - adjustable widgets?
 - add icon on the bottom right (add orders, purchase, customer, supplier, product, inventory)
-- 
-3) huining
+
+### 3) huining
 SALES:
 - target sales
 - profits and losses - month, opening(costs), total purchases, total sales, closing (cost), profit or loss, expenses, net profit
@@ -70,13 +75,13 @@ SALES:
 - sales by customer
 - individual employee sales
 
-4) zeyu
+### 4) Zeyu
 ORDER:
 - order dispatch and delivery (packed, shipped, delivered)
 - customer claims and refunds - form, history
 - filter system
 
-5) haozhe
+### 5) Haozhe
 PROCUREMENT:
 - add weekly, montly purchases statistics
 - filter system
