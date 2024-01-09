@@ -38,9 +38,16 @@ $ flutter pub get
 $ flutter run
 ```
 ## Reference
-这是网上的例子，应该是运行不了，可以当作参考
+1. 这是网上的例子，应该是运行不了，可以当作参考:\
 https://github.com/hemanta212/Flutter-Inventory-App
 
+2. 你们上次问的，这是我之前在油管学的基础flutter: \
+https://www.youtube.com/watch?v=1ukSR1GRtMU&list=PL4cUxeGkcC9jLYyp2Aoh6hcWuxFDX6PBJ&ab_channel=NetNinja
+
+3. 有一些widgets可以网上找open source的，例如\
+https://github.com/imaNNeo/fl_chart/blob/main/repo_files/documentations/bar_chart.md#sample-2-source-code
+\
+拿了来改就不需要重新写一些比较复杂的编码
 ## Tasks
 程序在进入lib里
 记得跟着folder的名字归类
