@@ -30,8 +30,8 @@ $ cd Mobile-Procurement-Inventory-Sales-Management-System-for-SMEs
 ```
 
 #### 4. Run
-Connect your device 
-
+Connect your device\
+Flutter upgrade 有可能学校网或是vpn网来下载
 ```
 $ flutter upgrade
 $ flutter pub get
@@ -48,7 +48,11 @@ https://www.youtube.com/watch?v=1ukSR1GRtMU&list=PL4cUxeGkcC9jLYyp2Aoh6hcWuxFDX6
 https://github.com/imaNNeo/fl_chart/blob/main/repo_files/documentations/bar_chart.md#sample-2-source-code
 \
 拿了来改就不需要重新写一些比较复杂的编码
-## Tasks
+
+4. Quick hands on practice\
+https://www.youtube.com/watch?v=D4nhaszNW4o&ab_channel=FlutterGuys
+
+## Tasks (截至 - 开学那个星期，到时候出来约出来讨论)
 程序在进入lib里
 记得跟着folder的名字归类
 有什么问题就直接问
