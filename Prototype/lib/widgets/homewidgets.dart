@@ -6,6 +6,8 @@ import 'package:prototype/app/sales/monthlysalesbar.dart';
 
 
 class HomeWidgets extends StatelessWidget {
+  const HomeWidgets({super.key});
+
   @override
   Widget build(BuildContext context) {
     // Add logic to calculate total profits
@@ -33,7 +35,7 @@ class HomeWidgets extends StatelessWidget {
             children: [
               GestureDetector(
                 onTap: () {
-                  
+
                 },
                 child: Card(
                   elevation: 4.0,
@@ -50,9 +52,9 @@ class HomeWidgets extends StatelessWidget {
                           '\$$totalProfits',
                           style: TextStyle(fontSize: 32, color: Colors.green),
                         ),
-                        SizedBox(height: 25),
-                        InventoryPie(),
-                        SizedBox(height: 15),
+                        const SizedBox(height: 25),
+                        const InventoryPie(),
+                        const SizedBox(height: 15),
                       ],
                     ),
                   ),
@@ -70,7 +72,7 @@ class HomeWidgets extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(height: 15),
+              const SizedBox(height: 15),
               Row(
                 children: [
                   GestureDetector(
@@ -90,8 +92,8 @@ class HomeWidgets extends StatelessWidget {
                       onTap: () {
                         // add order
                       },
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
+                      child: const Padding(
+                        padding: EdgeInsets.all(16.0),
                         child: Column(
                           children: [
                             Text(

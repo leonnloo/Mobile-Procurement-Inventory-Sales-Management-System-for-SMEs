@@ -54,6 +54,10 @@ https://github.com/imaNNeo/fl_chart/blob/main/repo_files/documentations/bar_char
 4. Quick hands on practice\
 https://www.youtube.com/watch?v=D4nhaszNW4o&ab_channel=FlutterGuys
 
+5. State Management - BLoC\
+https://www.youtube.com/watch?v=1j_hO0t7IcI&list=PLjyxas0TsCplfGRa-YNJc-t9d2qMbvcBX&ab_channel=FlutterGuys
+
+
 ## Tasks (截至 - 开学那个星期，到时候出来约出来讨论)
 程序在进入lib里
 记得跟着folder的名字归类

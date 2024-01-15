@@ -17,7 +17,7 @@ class _HeaderDrawerState extends State<HeaderDrawer> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Container(
-            margin: EdgeInsets.only(bottom: 10),
+            margin: const EdgeInsets.only(bottom: 10),
             height: 70,
             decoration: const BoxDecoration(
               shape: BoxShape.circle,
