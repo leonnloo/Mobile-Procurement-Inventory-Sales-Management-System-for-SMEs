@@ -12,17 +12,6 @@ class _ProcurementScreenState extends State<ProcurementScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Procurement'),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.search),
-            onPressed: () {
-
-            },
-          ),
-        ],
-      ),
       body: DefaultTabController(
         length: 2,
         child: Column(

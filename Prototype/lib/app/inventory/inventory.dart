@@ -20,18 +20,6 @@ class InventoryScreen extends StatelessWidget {
         .toList();
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Inventory Management'),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.search),
-            onPressed: () {
-              showSearch(context: context, delegate: ItemSearch(inventoryItems));
-            },
-          ),
-        ],
-      ),
-    
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: Column(

@@ -8,17 +8,6 @@ class SalesOrderScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Sales Order'),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.search),
-            onPressed: () {
-              
-            },
-          ),
-        ],
-      ),
       body: SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: SingleChildScrollView(

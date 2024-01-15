@@ -31,7 +31,9 @@ $ cd Mobile-Procurement-Inventory-Sales-Management-System-for-SMEs
 
 #### 4. Run
 Connect your device\
-Flutter upgrade 有可能学校网或是vpn网来下载
+Flutter upgrade 有可能学校网或是vpn网来下载\
+如果还是不能的话，就参考：
+https://docs.flutter.dev/community/china
 ```
 $ flutter upgrade
 $ flutter pub get

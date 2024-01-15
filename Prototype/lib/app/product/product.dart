@@ -9,17 +9,6 @@ class ProductManagementScreen extends StatelessWidget {
 @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Product Management'),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.search),
-            onPressed: () {
-              
-            },
-          ),
-        ],
-      ),
       body: SingleChildScrollView(
         scrollDirection: Axis.horizontal, 
         child:

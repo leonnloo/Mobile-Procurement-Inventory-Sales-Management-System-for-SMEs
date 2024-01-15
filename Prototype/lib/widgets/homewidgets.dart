@@ -6,9 +6,6 @@ import 'package:prototype/app/sales/monthlysalesbar.dart';
 
 
 class HomeWidgets extends StatelessWidget {
-  final Function(int) onWidgetsClick;
-
-  HomeWidgets({required this.onWidgetsClick});
   @override
   Widget build(BuildContext context) {
     // Add logic to calculate total profits
@@ -36,7 +33,7 @@ class HomeWidgets extends StatelessWidget {
             children: [
               GestureDetector(
                 onTap: () {
-                   onWidgetsClick(0);
+                  
                 },
                 child: Card(
                   elevation: 4.0,
@@ -63,7 +60,6 @@ class HomeWidgets extends StatelessWidget {
               ),
               GestureDetector(
                 onTap: () {
-                  onWidgetsClick(0);
                 },
                 child: const Card(
                   elevation: 4.0,
@@ -79,7 +75,6 @@ class HomeWidgets extends StatelessWidget {
                 children: [
                   GestureDetector(
                     onTap: () {
-                      onWidgetsClick(4);
                     },
                     child:
                       InventoryStatusWidget(
@@ -94,7 +89,6 @@ class HomeWidgets extends StatelessWidget {
                     child: GestureDetector(
                       onTap: () {
                         // add order
-                         onWidgetsClick(0);
                       },
                       child: Padding(
                         padding: const EdgeInsets.all(16.0),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:prototype/app/home/home.dart';
 import 'package:prototype/app/screenmanager.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -14,9 +15,6 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        // title: Text('Inventory Management System'),
-      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -52,14 +50,14 @@ class _LoginScreenState extends State<LoginScreen> {
                   print('Login successful!');
                   Navigator.pushReplacement(
                     context,
-                    MaterialPageRoute(builder: (context) => ScreenManager()),
+                    MaterialPageRoute(builder: (context) => HomeScreen()),
                   );
                 } else {
                   // Show an error message or handle the case where
                   // username or password is empty
                   Navigator.pushReplacement(
                     context,
-                    MaterialPageRoute(builder: (context) => ScreenManager()),
+                    MaterialPageRoute(builder: (context) => HomeScreen()),
                   );
                   print('Please enter both username and password');
                 }
