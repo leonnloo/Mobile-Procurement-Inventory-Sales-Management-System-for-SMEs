@@ -1,8 +1,8 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
-class SalesBarChart extends StatelessWidget {
-  const SalesBarChart();
+class MonthlySalesBarChart extends StatelessWidget {
+  const MonthlySalesBarChart();
 
   @override
   Widget build(BuildContext context) {

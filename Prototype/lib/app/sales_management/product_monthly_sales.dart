@@ -290,14 +290,14 @@ class _LineChart extends StatelessWidget {
       );
 }
 
-class LineChartSample1 extends StatefulWidget {
-  const LineChartSample1({super.key});
+class ProductMonthlySalesLine1 extends StatefulWidget {
+  const ProductMonthlySalesLine1({super.key});
 
   @override
-  State<StatefulWidget> createState() => LineChartSample1State();
+  State<StatefulWidget> createState() => ProductMonthlySalesLine1State();
 }
 
-class LineChartSample1State extends State<LineChartSample1> {
+class ProductMonthlySalesLine1State extends State<ProductMonthlySalesLine1> {
   late bool isShowingMainData;
 
   @override

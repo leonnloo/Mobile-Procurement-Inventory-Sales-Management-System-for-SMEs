@@ -3,12 +3,12 @@ import 'package:prototype/app/customer/customer.dart';
 import 'package:prototype/app/inventory/inventory.dart';
 import 'package:prototype/app/procurement/procurement.dart';
 import 'package:prototype/app/product/product.dart';
-import 'package:prototype/app/sales/management.dart';
-import 'package:prototype/app/sales/salesorders/order.dart';
+import 'package:prototype/app/sales_management/management.dart';
+import 'package:prototype/app/sale_orders/order.dart';
 import 'package:prototype/app/settings/settings.dart';
 import 'package:prototype/app/supplier/supplier.dart';
-import 'package:prototype/widgets/headerdrawer.dart';
-import 'package:prototype/widgets/homewidgets.dart';
+import 'package:prototype/widgets/drawer_header.dart';
+import 'package:prototype/widgets/home_widgets.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -26,19 +26,19 @@ class _HomeScreenState extends State<HomeScreen> {
       currentTitle = "Dashboard";
     } else if (currentPage == DrawerSections.sales_order) {
       container = SalesOrderScreen();
-      currentTitle = "Sales Order";
+      currentTitle = "Sales Order (Design how you see fit)";
     } else if (currentPage == DrawerSections.sales_management) {
       container = SalesManagementScreen();
-      currentTitle = "Sales Management";
+      currentTitle = "Sales Management (Design how you see fit)";
     } else if (currentPage == DrawerSections.inventory) {
       container = InventoryScreen();
-      currentTitle = "Inventory";
+      currentTitle = "Inventory (Design how you see fit)";
     } else if (currentPage == DrawerSections.product) {
       container = ProductManagementScreen();
       currentTitle = "Product";
     } else if (currentPage == DrawerSections.procurement) {
       container = ProcurementScreen();
-      currentTitle = "Procurement";
+      currentTitle = "Procurement (Design how you see fit)";
     } else if (currentPage == DrawerSections.supplier) {
       container = SupplierManagementScreen();
       currentTitle = "Supplier";

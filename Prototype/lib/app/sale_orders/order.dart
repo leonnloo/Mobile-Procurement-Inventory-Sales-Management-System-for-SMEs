@@ -1,7 +1,7 @@
 import "package:flutter/material.dart";
-import 'package:prototype/app/sales/salesorders/addorder.dart';
+import 'package:prototype/app/sale_orders/add_order.dart';
 import 'package:prototype/models/orderdata.dart';
-import 'package:prototype/app/sales/salesorders/orderinfo.dart';
+import 'package:prototype/app/sale_orders/order_info.dart';
 
 
 class SalesOrderScreen extends StatelessWidget {

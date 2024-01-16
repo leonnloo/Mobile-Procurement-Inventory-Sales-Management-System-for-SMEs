@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:prototype/app/sales/monthlysalesbar.dart';
-import 'package:prototype/app/sales/individualsales.dart';
-import 'package:prototype/app/sales/salesorders/order.dart';
-import 'package:prototype/app/sales/linechart.dart';
+import 'package:prototype/app/sales_management/monthly_sales_bar.dart';
+import 'package:prototype/app/sales_management/individual_sales.dart';
+import 'package:prototype/app/sale_orders/order.dart';
+import 'package:prototype/app/sales_management/product_monthly_sales.dart';
 
 class SalesManagementScreen extends StatelessWidget {
   @override
-  // State<StatefulWidget> createState() {
-
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
@@ -26,7 +24,7 @@ class SalesManagementScreen extends StatelessWidget {
                 // Navigate to the first page
                 Navigator.push(context, MaterialPageRoute(builder: (context) => SalesOrderScreen()));
               },
-              child: Text('Sales Order'),
+              child: Text('Sales Order (REMOVE THIS)'),
               style: ElevatedButton.styleFrom(
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(15.0), // Adjust the border radius as needed
@@ -54,7 +52,7 @@ class SalesManagementScreen extends StatelessWidget {
                 // Navigate to the third page
                 // Navigator.push(context, MaterialPageRoute(builder: (context) => ThirdPage()));
               },
-              child: Text('Order Dispatch and Delivery'),
+              child: Text('Order Dispatch and Delivery (REMOVE THIS)'),
               style: ElevatedButton.styleFrom(
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(15.0),
@@ -68,7 +66,7 @@ class SalesManagementScreen extends StatelessWidget {
                 // Navigate to the fourth page
                 // Navigator.push(context, MaterialPageRoute(builder: (context) => FourthPage()));
               },
-              child: Text('Customer Claims, Refunds'),
+              child: Text('Customer Claims, Refunds (REMOVE THIS)'),
               style: ElevatedButton.styleFrom(
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(15.0),
@@ -90,7 +88,7 @@ class SalesManagementScreen extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
 
-                child: SalesBarChart(),
+                child: MonthlySalesBarChart(),
               ),
             ),
             const Card(
@@ -99,7 +97,7 @@ class SalesManagementScreen extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
 
-                child: LineChartSample1(),
+                child: ProductMonthlySalesLine1(),
               ),
             ),
               

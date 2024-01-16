@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:prototype/widgets/inventorystatus.dart';
-import 'package:prototype/widgets/productsales.dart';
+import 'package:prototype/widgets/inventory_status.dart';
+import 'package:prototype/widgets/product_sales_pie.dart';
 import 'package:prototype/models/inventorydata.dart';
-import 'package:prototype/app/sales/monthlysalesbar.dart';
+import 'package:prototype/app/sales_management/monthly_sales_bar.dart';
 
 
 class HomeWidgets extends StatelessWidget {
@@ -53,7 +53,7 @@ class HomeWidgets extends StatelessWidget {
                           style: TextStyle(fontSize: 32, color: Colors.green),
                         ),
                         const SizedBox(height: 25),
-                        const InventoryPie(),
+                        const ProductSalesPieChart(),
                         const SizedBox(height: 15),
                       ],
                     ),
@@ -68,7 +68,7 @@ class HomeWidgets extends StatelessWidget {
                   margin: EdgeInsets.all(16.0),
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),
-                    child: SalesBarChart(),
+                    child: MonthlySalesBarChart(),
                   ),
                 ),
               ),

@@ -3,8 +3,8 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:prototype/widgets/indicator.dart';
 
-class InventoryPie extends StatefulWidget {
-  const InventoryPie({super.key});
+class ProductSalesPieChart extends StatefulWidget {
+  const ProductSalesPieChart({super.key});
 
   @override
   State<StatefulWidget> createState() => PieChart2State();
