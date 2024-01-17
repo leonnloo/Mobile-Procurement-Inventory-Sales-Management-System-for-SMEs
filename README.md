@@ -56,12 +56,25 @@ https://www.youtube.com/watch?v=D4nhaszNW4o&ab_channel=FlutterGuys
 
 5. State Management - BLoC\
 https://www.youtube.com/watch?v=1j_hO0t7IcI&list=PLjyxas0TsCplfGRa-YNJc-t9d2qMbvcBX&ab_channel=FlutterGuys
-
-6. Useful Resources\
 \
-Type of widgets:
+\
+Quick hands on practice demo\
+https://www.youtube.com/watch?v=Ep6R7U9wa0U&ab_channel=FlutterMapp
+
+
+6. Highly recommended to check out material 3 to plan out your design\
+https://m3.material.io/
+
+7. Useful Resources
+- https://docs.flutter.dev/ui/widgets
+
 - https://www.youtube.com/watch?v=Kq5ZsygfWAc&t=9s&ab_channel=FlutterMapp\
+
 - https://www.youtube.com/watch?v=M9J-JJOuyE0&ab_channel=FlutterMapp
+\
+\
+This repo is a guide to flutter widgets with sample codes and pictures 
+- https://github.com/material-components/material-components-flutter
 
 ## Tasks (截至 - 开学那个星期，到时候出来约出来讨论)
 程序在进入lib里
