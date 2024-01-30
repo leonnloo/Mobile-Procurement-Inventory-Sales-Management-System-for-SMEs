@@ -6,7 +6,7 @@
 Leon Loo Yang\
 Zeyu Sun\
 Huining Wang\
-Haozhe Wang\
+Haozhe Zhang\
 Tianpu Le
 
 ## Getting Started:
