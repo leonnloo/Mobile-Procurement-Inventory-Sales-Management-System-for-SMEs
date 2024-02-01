@@ -12,14 +12,16 @@ Tianpu Le
 ## Getting Started:
 #### 1. Get Flutter
 * Install flutter : [Flutter Installation](https://flutter.dev/docs/get-started/install)
+* 可以参考：
+https://docs.flutter.dev/community/china
 
 ### 2. Run on either Android Studios or VSC
 * Install Android Studio : [Android Studio Installation](https://developer.android.com/studio)
 * Using Android Studio's device manager on the top or at the right bar to create a virtual device
-1. Select Pixel 7
+1. Select Pixel 7 (要选别的device也可以，这样可以确保我们的app能在所有的框架里运行，但pixel 7是我们统一的developing框架)
 2. Select Pie on system image
 3. Finish
-(You would require at least 8gb to start download and use the virtual device, the space required would increase as you develop on)\
+(You would require at least 8gb to start download and use the virtual device, the space required would increase as you develop on)
 
 If you wish to proceed the project with VSC, you would need to install android emulator extensions on VSC to run the virtual devices. If you have Code Runner Extensions installed, it is recommended to disable it before compiling the flutter code.
 
@@ -35,6 +37,7 @@ Flutter upgrade 有可能学校网或是vpn网来下载\
 如果还是不能的话，就参考：
 https://docs.flutter.dev/community/china
 ```
+$ cd Prototype
 $ flutter upgrade
 $ flutter pub get
 $ flutter run
