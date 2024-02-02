@@ -1,6 +1,6 @@
 # Mobile-Procurement-Inventory-Sales-Management-System-for-SMEs
 
-## GRP TEAM-14
+## GRP TEAM-14 (最后一次更新 - 1/2/2024)
 
 ### Team Members:
 Leon Loo Yang\
