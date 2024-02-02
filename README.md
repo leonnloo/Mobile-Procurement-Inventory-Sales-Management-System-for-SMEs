@@ -1,6 +1,6 @@
 # Mobile-Procurement-Inventory-Sales-Management-System-for-SMEs
 
-## GRP TEAM-14 (最后一次更新 - 1/2/2024)
+## GRP TEAM-14 (最后一次更新 - 2/2/2024)
 
 ### Team Members:
 Leon Loo Yang\
@@ -8,6 +8,26 @@ Zeyu Sun\
 Huining Wang\
 Haozhe Zhang\
 Tianpu Le
+
+## ！！！重要 ！！！
+开branch时，跟着这个方式取名，例如：
+```
+functionality-login (基本操作编码)
+functionality-register
+functionality-sales_management
+functionality-procurement
+enhancement-procurement (如果有更新或是换UI设计)
+enhancement-sale_orders
+database-linking_flask_mongodb (backend)
+database-linking_flask_flutter
+bugfix-... (修改bug)
+```
+前面是统一标题，后面自己设置，如果觉得有什么新的名字可以当作标题就在群里提出来\
+\
+还有就是commit的meesage, 都写成past tense, 例如：Added, Developed, Modified, Changed, Updated\
+\
+**你们能开issues就开，记得放milestones, labels, assignees等等**
+
 
 ## Getting Started:
 #### 1. Get Flutter
@@ -29,6 +49,7 @@ If you wish to proceed the project with VSC, you would need to install android e
 ```
 $ git clone https://github.com/leonnloo/Mobile-Procurement-Inventory-Sales-Management-System-for-SMEs.git
 $ cd Mobile-Procurement-Inventory-Sales-Management-System-for-SMEs
+$ cd Prototype
 ```
 
 #### 4. Run
@@ -37,7 +58,6 @@ Flutter upgrade 有可能学校网或是vpn网来下载\
 如果还是不能的话，就参考：
 https://docs.flutter.dev/community/china
 ```
-$ cd Prototype
 $ flutter upgrade
 $ flutter pub get
 $ flutter run
