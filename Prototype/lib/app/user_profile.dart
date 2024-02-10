@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:prototype/app/login.dart';
+import 'package:prototype/app/authenticate/start_screen.dart';
 
 class UserProfileScreen extends StatelessWidget {
   @override
@@ -13,7 +13,7 @@ class UserProfileScreen extends StatelessWidget {
             onPressed: () {
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(builder: (context) => LoginScreen()),
+                MaterialPageRoute(builder: (context) => StartScreen()),
               );
             },
           ),

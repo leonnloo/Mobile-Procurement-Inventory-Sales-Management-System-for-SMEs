@@ -31,7 +31,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  fl_chart: ^0.65.0
+  fl_chart: ^0.66.1
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -64,6 +64,7 @@ flutter:
   assets:
     - images/user.jpg
     - images/nottingham.jpg
+    - images/
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'login.dart';
+import 'authenticate/start_screen.dart';
 
 class MainView extends StatelessWidget {
   @override
@@ -10,7 +10,7 @@ class MainView extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: LoginScreen(),
+      home: StartScreen(),
     );
   }
 }
