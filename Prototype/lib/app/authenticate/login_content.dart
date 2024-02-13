@@ -38,7 +38,7 @@ class _LoginContentState extends State<LoginContent> {
                 Text('Welcome back to our app!', style: Theme.of(context).textTheme.headlineLarge),
                 const SizedBox(height: 25.0,),
                 /*------ FORM ------*/
-                _LoginForm(context),
+                _loginForm(context),
                 const SizedBox(height: 25.0),
               ],
             ),
@@ -48,7 +48,7 @@ class _LoginContentState extends State<LoginContent> {
     );
   }
 
-  Form _LoginForm(context) {
+  Form _loginForm(context) {
     return Form(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -83,42 +83,55 @@ class _LoginContentState extends State<LoginContent> {
             ),
           ),
           /*------ BUTTON ------*/
-          ElevatedButton(
-            onPressed: () {
-              // Add your authentication logic here
-              String? emailError = _validateTextField(_emailController.text, 'Email');
-              String? passwordError = _validateTextField(_passwordController.text, 'Password');
-  
-              // Add logic for logging in
-              if (emailError != null || passwordError != null) {
-                  // Display validation error messages
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Please fill in all the required fields.'),
-                      backgroundColor: Colors.red,
-                    ),
-                  );
-                } else {
-                  String email = _emailController.text;
-                  String password = _passwordController.text;
-                  if (email == null || password == null){
+          SizedBox(
+            width: 100.0,
+            child: ElevatedButton(
+              style: TextButton.styleFrom(
+                            foregroundColor: Colors.white,
+                            backgroundColor: Colors.black,
+                            side: const BorderSide(color: Colors.black),
+                            shape: const RoundedRectangleBorder(),
+                            padding: const EdgeInsets.symmetric(vertical: 15.0)
+                          ),
+              onPressed: () {
+                // Add your authentication logic here
+                String? emailError = _validateTextField(_emailController.text, 'Email');
+                String? passwordError = _validateTextField(_passwordController.text, 'Password');
+                // Add logic for logging in
+                if (emailError != null || passwordError != null) {
+                    // Display validation error messages
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
-                        content: Text('Email or password is incorrect.'),
+                        content: Text('Please fill in all the required fields.'),
                         backgroundColor: Colors.red,
                       ),
                     );
                   } else {
-                    // Add logic for login
-                    print('Login successful!');
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(builder: (context) => HomeScreen()),
-                    );
+                    String email = _emailController.text;
+                    String password = _passwordController.text;
+
+                    // TO DO: compare email and password to the ones in the database
+                    print(email);
+                    print(password);
+                    // if (emailError == null || passwordError == null){
+                    //   ScaffoldMessenger.of(context).showSnackBar(
+                    //     const SnackBar(
+                    //       content: Text('Email or password is incorrect.'),
+                    //       backgroundColor: Colors.red,
+                    //     ),
+                    //   );
+                    // } else {
+                      // Add logic for login
+                      print('Login successful!');
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (context) => HomeScreen()),
+                      );
+                    // }
                   }
-                }
-            },
-            child: const Text('Login'),
+              },
+              child: const Text('LOGIN'),
+            ),
           ),
           const SizedBox(height: 6.0),
           Align(
@@ -130,7 +143,7 @@ class _LoginContentState extends State<LoginContent> {
                   MaterialPageRoute(builder: (context) => RegisterContent()),
                 );
               },
-              child: const Text('Don\'t have an account? Sign Up'),
+              child: const Text('Don\'t have an account? SIGN UP'),
             ),
           ),
         ],

@@ -49,7 +49,7 @@ class _RegisterContentState extends State<RegisterContent> {
                 // Text('We\'re delighted to have you on board! Get ready to streamline your business operations effortlessly.', style: Theme.of(context).textTheme.bodyLarge),
                 const SizedBox(height: 25.0,),
                 /*------ FORM ------*/
-                _RegisterForm(context),
+                _registerForm(context),
               ],
             ),
           ),
@@ -57,7 +57,7 @@ class _RegisterContentState extends State<RegisterContent> {
       ),
     );
   }
-  Form _RegisterForm(context) {
+  Form _registerForm(context) {
     return Form(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -135,54 +135,65 @@ class _RegisterContentState extends State<RegisterContent> {
           ),
           const SizedBox(height: 16.0),
           /*------ BUTTON ------*/
-          ElevatedButton(
-            onPressed: () {
-              // Add your authentication logic here
-              String? usernameError = _validateTextField(_usernameController.text, 'Full Name');
-              String? emailError = _validateTextField(_emailController.text, 'Email');
-              String? phoneNumberError = _validateTextField(_phoneNumberController.text, 'Phone Number');
-              String? passwordError = _validateTextField(_passwordController.text, 'Password');
-              String? confirmPasswordError = _validateTextField(_confirmPasswordController.text, 'Confirm Password');
-
-              if (usernameError != null ||
-                  emailError != null ||
-                  phoneNumberError != null ||
-                  passwordError != null ||
-                  confirmPasswordError != null) {
-                // Display validation error messages
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Please fill in all the required fields.'),
-                    backgroundColor: Colors.red,
-                  ),
-                );
-                print(_phoneNumberController.text);
-              } else {
-                // All fields are filled, proceed with registration logic
-                String username = _usernameController.text;
-                String email = _emailController.text;
-                String phoneNumber = _phoneNumberController.text;
-                String password = _passwordController.text;
-                String confirmPassword = _confirmPasswordController.text;
-
-                if (password == confirmPassword){
+          SizedBox(
+            width: 100,
+            child: ElevatedButton(
+              style: TextButton.styleFrom(
+                            foregroundColor: Colors.white,
+                            backgroundColor: Colors.black,
+                            side: const BorderSide(color: Colors.black),
+                            shape: const RoundedRectangleBorder(),
+                            padding: const EdgeInsets.symmetric(vertical: 15.0)
+                          ),
+              onPressed: () {
+                // Add your authentication logic here
+                String? usernameError = _validateTextField(_usernameController.text, 'Full Name');
+                String? emailError = _validateTextField(_emailController.text, 'Email');
+                String? phoneNumberError = _validateTextField(_phoneNumberController.text, 'Phone Number');
+                String? passwordError = _validateTextField(_passwordController.text, 'Password');
+                String? confirmPasswordError = _validateTextField(_confirmPasswordController.text, 'Confirm Password');
+            
+                if (usernameError != null ||
+                    emailError != null ||
+                    phoneNumberError != null ||
+                    passwordError != null ||
+                    confirmPasswordError != null) {
+                  // Display validation error messages
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
-                      content: Text('Password does not match.'),
+                      content: Text('Please fill in all the required fields.'),
                       backgroundColor: Colors.red,
-                    )
+                    ),
                   );
+                  print(_phoneNumberController.text);
                 } else {
-                  // Add logic for registering
-                  print('Register successful!');
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => HomeScreen()),
-                  );
+                  // All fields are filled, proceed with registration logic
+                  String username = _usernameController.text;
+                  String email = _emailController.text;
+                  String phoneNumber = _phoneNumberController.text;
+                  String password = _passwordController.text;
+                  String confirmPassword = _confirmPasswordController.text;
+            
+                  // TO DO: CHECK ALL THE FIELDS ARE DONE
+                  if (password == confirmPassword){
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Password does not match.'),
+                        backgroundColor: Colors.red,
+                      )
+                    );
+                  } else {
+                    // Add logic for registering
+                    print('Register successful!');
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (context) => HomeScreen()),
+                    );
+                  }
                 }
-              }
-            },
-            child: const Text('Sign Up'),
+              },
+              child: const Text('SIGN UP'),
+            ),
           ),
           const SizedBox(height: 6.0),
           Align(
@@ -194,7 +205,7 @@ class _RegisterContentState extends State<RegisterContent> {
                   MaterialPageRoute(builder: (context) => LoginContent()),
                 );
               },
-              child: const Text('Already have an account? Login'),
+              child: const Text('Already have an account? LOGIN'),
             ),
           ),
         ],
