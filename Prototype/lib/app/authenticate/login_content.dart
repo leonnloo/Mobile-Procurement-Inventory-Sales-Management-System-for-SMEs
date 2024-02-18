@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:prototype/app/authenticate/register_content.dart';
 import 'package:prototype/app/home/home.dart';
+import 'package:prototype/widgets/fade_in_animation/animation_design.dart';
+import 'package:prototype/widgets/fade_in_animation/fade_in_animation_model.dart';
+import 'package:prototype/widgets/fade_in_animation/fade_in_controller.dart';
 
 class LoginContent extends StatefulWidget {
   @override
@@ -21,34 +25,54 @@ class _LoginContentState extends State<LoginContent> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final controller = Get.put(FadeInController());
+    controller.startAnimation();
+
     return SafeArea(
       child: Scaffold(
-        body: SingleChildScrollView(
-          child: Container(
-            padding: const EdgeInsets.all(30.0),
-            child: Column(
-              children: [
-                SizedBox(height: size.height * 0.04,),
-                /*------ LABEL ------*/
-                Image(
-                  image: const AssetImage('images/login.jpg'),
-                  height: size.height * 0.2,
+        body: Stack(
+          children: [
+            FadeInAnimation(
+              durantionInMs: 1000,
+              animate: AnimatePosition(
+                bottomAfter: 0,
+                bottomBefore: -100,
+                topAfter: 0,
+                topBefore: 0,
+                leftAfter: 0,
+                leftBefore: 0,
+                rightAfter: 0,
+                rightBefore: 0
+              ),
+              child: Container(
+                padding: const EdgeInsets.all(30.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(height: size.height * 0.04,),
+                    /*------ LABEL ------*/
+                    Image.asset(
+                      'images/login.jpg',
+                      height: size.height * 0.2,
+                    ),
+                    const SizedBox(height: 25.0,),
+                    Text('Welcome back to our app!', style: Theme.of(context).textTheme.headlineLarge),
+                    const SizedBox(height: 25.0,),
+                    /*------ FORM ------*/
+                    _loginForm(context),
+                    const SizedBox(height: 25.0),
+                  ],
                 ),
-                const SizedBox(height: 25.0,),
-                Text('Welcome back to our app!', style: Theme.of(context).textTheme.headlineLarge),
-                const SizedBox(height: 25.0,),
-                /*------ FORM ------*/
-                _loginForm(context),
-                const SizedBox(height: 25.0),
-              ],
+              ),
             ),
-          ),
+          ],
         ),
       ),
     );
   }
 
   Form _loginForm(context) {
+    final controller = Get.put(FadeInController());
     return Form(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -138,6 +162,7 @@ class _LoginContentState extends State<LoginContent> {
             alignment: Alignment.center,
             child: TextButton(
               onPressed: () {
+                controller.resetAnimation();
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(builder: (context) => RegisterContent()),

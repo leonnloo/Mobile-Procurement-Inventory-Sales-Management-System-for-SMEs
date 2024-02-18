@@ -11,4 +11,8 @@ class FadeInController extends GetxController {
     await Future.delayed(const Duration(milliseconds: 500));
     animate.value = true;
   }
+
+  void resetAnimation(){
+    animate.value = false;
+  }
 }

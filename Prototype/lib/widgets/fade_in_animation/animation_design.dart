@@ -5,11 +5,11 @@ import 'package:prototype/widgets/fade_in_animation/fade_in_controller.dart';
 
 class FadeInAnimation extends StatelessWidget {
   FadeInAnimation({
-    Key? key,
+    super.key,
     required this.durantionInMs,
     required this.child,
     this.animate,
-  }) : super(key: key);
+  });
 
   final controller = Get.put(FadeInController());
   final int durantionInMs;
