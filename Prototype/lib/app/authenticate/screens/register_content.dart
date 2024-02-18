@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:prototype/app/authenticate/login_content.dart';
+import 'package:prototype/app/authenticate/screens/login_content.dart';
 import 'package:prototype/app/home/home.dart';
 import 'package:prototype/widgets/fade_in_animation/animation_design.dart';
 import 'package:prototype/widgets/fade_in_animation/fade_in_animation_model.dart';
@@ -161,7 +161,7 @@ class _RegisterContentState extends State<RegisterContent> {
           const SizedBox(height: 16.0),
           /*------ BUTTON ------*/
           SizedBox(
-            width: 100,
+            width: double.infinity,
             child: ElevatedButton(
               style: TextButton.styleFrom(
                             foregroundColor: Colors.white,

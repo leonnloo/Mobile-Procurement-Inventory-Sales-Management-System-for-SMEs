@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:prototype/app/authenticate/register_content.dart';
+import 'package:prototype/app/authenticate/screens/forget_password/option/forget_password_option.dart';
+import 'package:prototype/app/authenticate/screens/register_content.dart';
 import 'package:prototype/app/home/home.dart';
 import 'package:prototype/widgets/fade_in_animation/animation_design.dart';
 import 'package:prototype/widgets/fade_in_animation/fade_in_animation_model.dart';
@@ -102,13 +103,15 @@ class _LoginContentState extends State<LoginContent> {
           Align(
             alignment: Alignment.centerRight,
             child: TextButton(
-              onPressed: () {},
+              onPressed: () {
+                ForgetPasswordScreen.forgetPasswordBottomSheet(context);
+              },
               child: const Text('Forget password'),
             ),
           ),
           /*------ BUTTON ------*/
           SizedBox(
-            width: 100.0,
+            width: double.infinity,
             child: ElevatedButton(
               style: TextButton.styleFrom(
                             foregroundColor: Colors.white,
@@ -175,4 +178,6 @@ class _LoginContentState extends State<LoginContent> {
       )
     );
   }
+
+  
 }

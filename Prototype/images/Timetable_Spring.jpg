@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<!-- saved from url=(0044)https://unnc-sws-ad.scientia.com.cn/TCS/view -->
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+</head>
+<body>
+
+    <div class="container">
+        
+
+
+        <main role="main" class="pb-3">
+            
+
+
+
+<title>Student Set Individual</title>
+
+
+
+
+<!-- START REPORT HEADER -->
+<table border="0" cellspacing="0" width="100%"><tbody><tr>
+<td>
+<table cellspacing="0" border="0" width="100%">
+<colgroup><col align="left"><col align="center"><col align="right">
+  </colgroup><tbody><tr>
+    <td>University of Nottingham</td><td></td><td>WDC Group</td>
+  </tr>
+</tbody></table>
+</td>
+</tr><tr>
+<td>
+<table cellspacing="0" border="0" width="100%">
+<colgroup><col align="left"><col align="center"><col align="right">
+  </colgroup><tbody><tr>
+    <td></td><td>Student Set timetable: C6UCPUSCN/02/F/LOO/Leon Yang/526</td><td></td>
+  </tr>
+</tbody></table>
+</td>
+</tr><tr>
+<td>
+<table cellspacing="0" border="0" width="100%">
+<colgroup><col align="left"><col align="center"><col align="right">
+  </colgroup><tbody><tr>
+    <td></td><td></td><td></td>
+  </tr>
+</tbody></table>
+</td>
+</tr><tr>
+<td>
+<table cellspacing="0" border="0" width="100%">
+<colgroup><col align="left"><col align="center"><col align="right">
+  </colgroup><tbody><tr>
+    <td></td><td></td><td></td>
+  </tr>
+</tbody></table>
+</td>
+</tr><tr>
+<td>
+<table cellspacing="0" border="0" width="100%">
+<colgroup><col align="left"><col align="center"><col align="right">
+  </colgroup><tbody><tr>
+    <td>Weeks selected for printout: 19 Feb 2024 to 12 May 2024</td><td></td><td></td>
+  </tr>
+</tbody></table>
+</td>
+</tr><tr>
+<td>
+<table cellspacing="0" border="0" width="100%">
+<colgroup><col align="left"><col align="center"><col align="right">
+  </colgroup><tbody><tr>
+    <td></td><td></td><td></td>
+  </tr>
+</tbody></table>
+</td>
+</tr>
+</tbody></table>
+<!-- END REPORT HEADER -->
+
+<table cellspacing="0" border="1">
+
+<!-- START COLUMN LABELS ONE -->
+<tbody><tr>
+    <td></td>
+    
+    <td colspan="1">8:00</td>
+    <td colspan="1">8:30</td>
+    <td colspan="1">9:00</td>
+    <td colspan="1">9:30</td>
+    <td colspan="1">10:00</td>
+    <td colspan="1">10:30</td>
+    <td colspan="1">11:00</td>
+    <td colspan="1">11:30</td>
+    <td colspan="1">12:00</td>
+    <td colspan="1">12:30</td>
+    <td colspan="1">13:00</td>
+    <td colspan="1">13:30</td>
+    <td colspan="1">14:00</td>
+    <td colspan="1">14:30</td>
+    <td colspan="1">15:00</td>
+    <td colspan="1">15:30</td>
+    <td colspan="1">16:00</td>
+    <td colspan="1">16:30</td>
+    <td colspan="1">17:00</td>
+    <td colspan="1">17:30</td>
+    <td colspan="1">18:00</td>
+    <td colspan="1">18:30</td>
+    <td colspan="1">19:00</td>
+    <td colspan="1">19:30</td>
+</tr>
+
+<!-- END COLUMN LABELS ONE -->
+
+<!-- START ROW OUTPUT -->
+<tr>
+    <td style="border-bottom:3px solid #000000;" rowspan="1">Mon</td>
+    <td style="border-bottom:3px solid #000000;">&nbsp;</td>
+    <td style="border-bottom:3px solid #000000;">&nbsp;</td>
+    <td style="border-bottom:3px solid #000000;">&nbsp;</td>
+    <td style="border-bottom:3px solid #000000;">&nbsp;</td>
+    <td style="border-bottom:3px solid #000000;">&nbsp;</td>
+    <td style="border-bottom:3px solid #000000;">&nbsp;</td>
+    <td style="border-bottom:3px solid #000000;">&nbsp;</td>
+    <td style="border-bottom:3px solid #000000;">&nbsp;</td>
+    <td style="border-bottom:3px solid #000000;">&nbsp;</td>
+    <td style="border-bottom:3px solid #000000;">&nbsp;</td>
+    <td style="border-bottom:3px solid #000000;">&nbsp;</td>
+    <td style="border-bottom:3px solid #000000;">&nbsp;</td>
+    <td style="border-bottom:3px solid #000000;">&nbsp;</td>
+    <td style="border-bottom:3px solid #000000;">&nbsp;</td>
+    <td style="border-bottom:3px solid #000000;">&nbsp;</td>
+    <td style="border-bottom:3px solid #000000;">&nbsp;</td>
+    <td style="border-bottom:3px solid #000000;" colspan="4" rowspan="1">
+<!-- START OBJECT-CELL -->
+<table bgcolor="#C0C0C0" cellspacing="0" border="0" width="100%">
+  <colgroup><col align="left">
+</colgroup><tbody><tr>
+  <td align="left" bgcolor="#C0C0C0"><font color="#000000">COMP2051/L1 (Spring)/01</font></td>
+</tr>
+</tbody></table>
+<table bgcolor="#C0C0C0" cellspacing="0" border="0" width="100%">
+  <colgroup><col align="left">
+</colgroup><tbody><tr>
+  <td align="left" bgcolor="#C0C0C0"><font color="#000000">COMP/2051/01</font></td>
+</tr>
+</tbody></table>
+<table bgcolor="#C0C0C0" cellspacing="0" border="0" width="100%">
+  <colgroup><col align="left">
+  <col align="center">
+  <col align="right">
+</colgroup><tbody><tr>
+  <td align="left" bgcolor="#C0C0C0"><font color="#000000">IAMET-121+</font></td>
+  <td align="center" bgcolor="#C0C0C0"><font color="#000000">Ruibin Bai</font></td>
+  <td align="right" bgcolor="#C0C0C0"><font color="#000000">24-35</font></td>
+</tr>
+</tbody></table>
+<!-- END OBJECT-CELL -->
+    </td>
+    <td style="border-bottom:3px solid #000000;">&nbsp;</td>
+    <td style="border-bottom:3px solid #000000;">&nbsp;</td>
+    <td style="border-bottom:3px solid #000000;">&nbsp;</td>
+    <td style="border-bottom:3px solid #000000;">&nbsp;</td>
+</tr>
+<tr>
+    <td style="border-bottom:3px solid #000000;" rowspan="1">Tue</td>
+    <td style="border-bottom:3px solid #000000;">&nbsp;</td>
+    <td style="border-bottom:3px solid #000000;">&nbsp;</td>
+    <td style="border-bottom:3px solid #000000;" colspan="4" rowspan="1">
+<!-- START OBJECT-CELL -->
+<table bgcolor="#C0C0C0" cellspacing="0" border="0" width="100%">
+  <colgroup><col align="left">
+</colgroup><tbody><tr>
+  <td align="left" bgcolor="#C0C0C0"><font color="#000000">COMP2051/C1 (Spring)/01</font></td>
+</tr>
+</tbody></table>
+<table bgcolor="#C0C0C0" cellspacing="0" border="0" width="100%">
+  <colgroup><col align="left">
+</colgroup><tbody><tr>
+  <td align="left" bgcolor="#C0C0C0"><font color="#000000">COMP/2051/01</font></td>
+</tr>
+</tbody></table>
+<table bgcolor="#C0C0C0" cellspacing="0" border="0" width="100%">
+  <colgroup><col align="left">
+  <col align="center">
+  <col align="right">
+</colgroup><tbody><tr>
+  <td align="left" bgcolor="#C0C0C0"><font color="#000000">IAMET-406(COMP)+</font></td>
+  <td align="center" bgcolor="#C0C0C0"><font color="#000000">Huan Jin, Ruibin Bai</font></td>
+  <td align="right" bgcolor="#C0C0C0"><font color="#000000">24-35</font></td>
+</tr>
+</tbody></table>
+<!-- END OBJECT-CELL -->
+    </td>
+    <td style="border-bottom:3px solid #000000;">&nbsp;</td>
+    <td style="border-bottom:3px solid #000000;">&nbsp;</td>
+    <td style="border-bottom:3px solid #000000;">&nbsp;</td>
+    <td style="border-bottom:3px solid #000000;">&nbsp;</td>
+    <td style="border-bottom:3px solid #000000;" colspan="4" rowspan="1">
+<!-- START OBJECT-CELL -->
+<table bgcolor="#C0C0C0" cellspacing="0" border="0" width="100%">
+  <colgroup><col align="left">
+</colgroup><tbody><tr>
+  <td align="left" bgcolor="#C0C0C0"><font color="#000000">COMP2047/L1 (Spring)/01</font></td>
+</tr>
+</tbody></table>
+<table bgcolor="#C0C0C0" cellspacing="0" border="0" width="100%">
+  <colgroup><col align="left">
+</colgroup><tbody><tr>
+  <td align="left" bgcolor="#C0C0C0"><font color="#000000">COMP/2047/01</font></td>
+</tr>
+</tbody></table>
+<table bgcolor="#C0C0C0" cellspacing="0" border="0" width="100%">
+  <colgroup><col align="left">
+  <col align="center">
+  <col align="right">
+</colgroup><tbody><tr>
+  <td align="left" bgcolor="#C0C0C0"><font color="#000000">DB-B01+</font></td>
+  <td align="center" bgcolor="#C0C0C0"><font color="#000000">Jianfeng Ren</font></td>
+  <td align="right" bgcolor="#C0C0C0"><font color="#000000">24-35</font></td>
+</tr>
+</tbody></table>
+<!-- END OBJECT-CELL -->
+    </td>
+    <td style="border-bottom:3px solid #000000;">&nbsp;</td>
+    <td style="border-bottom:3px solid #000000;">&nbsp;</td>
+    <td style="border-bottom:3px solid #000000;" colspan="4" rowspan="1">
+<!-- START OBJECT-CELL -->
+<table bgcolor="#C0C0C0" cellspacing="0" border="0" width="100%">
+  <colgroup><col align="left">
+</colgroup><tbody><tr>
+  <td align="left" bgcolor="#C0C0C0"><font color="#000000">COMP2049/L1 (Spring)/01</font></td>
+</tr>
+</tbody></table>
+<table bgcolor="#C0C0C0" cellspacing="0" border="0" width="100%">
+  <colgroup><col align="left">
+</colgroup><tbody><tr>
+  <td align="left" bgcolor="#C0C0C0"><font color="#000000">COMP/2049/01</font></td>
+</tr>
+</tbody></table>
+<table bgcolor="#C0C0C0" cellspacing="0" border="0" width="100%">
+  <colgroup><col align="left">
+  <col align="center">
+  <col align="right">
+</colgroup><tbody><tr>
+  <td align="left" bgcolor="#C0C0C0"><font color="#000000">DB-C05+</font></td>
+  <td align="center" bgcolor="#C0C0C0"><font color="#000000">Yuan Yao</font></td>
+  <td align="right" bgcolor="#C0C0C0"><font color="#000000">24-35</font></td>
+</tr>
+</tbody></table>
+<!-- END OBJECT-CELL -->
+    </td>
+    <td style="border-bottom:3px solid #000000;">&nbsp;</td>
+    <td style="border-bottom:3px solid #000000;">&nbsp;</td>
+    <td style="border-bottom:3px solid #000000;">&nbsp;</td>
+    <td style="border-bottom:3px solid #000000;">&nbsp;</td>
+</tr>
+<tr>
+    <td style="border-bottom:3px solid #000000;" rowspan="1">Wed</td>
+    <td style="border-bottom:3px solid #000000;">&nbsp;</td>
+    <td style="border-bottom:3px solid #000000;">&nbsp;</td>
+    <td style="border-bottom:3px solid #000000;" colspan="4" rowspan="1">
+<!-- START OBJECT-CELL -->
+<table bgcolor="#C0C0C0" cellspacing="0" border="0" width="100%">
+  <colgroup><col align="left">
+</colgroup><tbody><tr>
+  <td align="left" bgcolor="#C0C0C0"><font color="#000000">COMP2043/L1 (Spring)/01</font></td>
+</tr>
+</tbody></table>
+<table bgcolor="#C0C0C0" cellspacing="0" border="0" width="100%">
+  <colgroup><col align="left">
+</colgroup><tbody><tr>
+  <td align="left" bgcolor="#C0C0C0"><font color="#000000">COMP/2043/01</font></td>
+</tr>
+</tbody></table>
+<table bgcolor="#C0C0C0" cellspacing="0" border="0" width="100%">
+  <colgroup><col align="left">
+  <col align="center">
+  <col align="right">
+</colgroup><tbody><tr>
+  <td align="left" bgcolor="#C0C0C0"><font color="#000000">DB-C05+</font></td>
+  <td align="center" bgcolor="#C0C0C0"><font color="#000000">Dave Towey</font></td>
+  <td align="right" bgcolor="#C0C0C0"><font color="#000000">24-33, 35</font></td>
+</tr>
+</tbody></table>
+<!-- END OBJECT-CELL -->
+    </td>
+    <td style="border-bottom:3px solid #000000;">&nbsp;</td>
+    <td style="border-bottom:3px solid #000000;">&nbsp;</td>
+    <td style="border-bottom:3px solid #000000;">&nbsp;</td>
+    <td style="border-bottom:3px solid #000000;">&nbsp;</td>
+    <td style="border-bottom:3px solid #000000;">&nbsp;</td>
+    <td style="border-bottom:3px solid #000000;">&nbsp;</td>
+    <td style="border-bottom:3px solid #000000;">&nbsp;</td>
+    <td style="border-bottom:3px solid #000000;">&nbsp;</td>
+    <td style="border-bottom:3px solid #000000;">&nbsp;</td>
+    <td style="border-bottom:3px solid #000000;">&nbsp;</td>
+    <td style="border-bottom:3px solid #000000;">&nbsp;</td>
+    <td style="border-bottom:3px solid #000000;">&nbsp;</td>
+    <td style="border-bottom:3px solid #000000;">&nbsp;</td>
+    <td style="border-bottom:3px solid #000000;">&nbsp;</td>
+    <td style="border-bottom:3px solid #000000;">&nbsp;</td>
+    <td style="border-bottom:3px solid #000000;">&nbsp;</td>
+    <td style="border-bottom:3px solid #000000;">&nbsp;</td>
+    <td style="border-bottom:3px solid #000000;">&nbsp;</td>
+</tr>
+<tr>
+    <td style="border-bottom:3px solid #000000;" rowspan="1">Thu</td>
+    <td style="border-bottom:3px solid #000000;">&nbsp;</td>
+    <td style="border-bottom:3px solid #000000;">&nbsp;</td>
+    <td style="border-bottom:3px solid #000000;">&nbsp;</td>
+    <td style="border-bottom:3px solid #000000;">&nbsp;</td>
+    <td style="border-bottom:3px solid #000000;">&nbsp;</td>
+    <td style="border-bottom:3px solid #000000;">&nbsp;</td>
+    <td style="border-bottom:3px solid #000000;">&nbsp;</td>
+    <td style="border-bottom:3px solid #000000;">&nbsp;</td>
+    <td style="border-bottom:3px solid #000000;">&nbsp;</td>
+    <td style="border-bottom:3px solid #000000;">&nbsp;</td>
+    <td style="border-bottom:3px solid #000000;" colspan="2" rowspan="1">
+<!-- START OBJECT-CELL -->
+<table bgcolor="#C0C0C0" cellspacing="0" border="0" width="100%">
+  <colgroup><col align="left">
+</colgroup><tbody><tr>
+  <td align="left" bgcolor="#C0C0C0"><font color="#000000">COMP2049/S1 (Spring)/01</font></td>
+</tr>
+</tbody></table>
+<table bgcolor="#C0C0C0" cellspacing="0" border="0" width="100%">
+  <colgroup><col align="left">
+</colgroup><tbody><tr>
+  <td align="left" bgcolor="#C0C0C0"><font color="#000000">COMP/2049/01</font></td>
+</tr>
+</tbody></table>
+<table bgcolor="#C0C0C0" cellspacing="0" border="0" width="100%">
+  <colgroup><col align="left">
+  <col align="center">
+  <col align="right">
+</colgroup><tbody><tr>
+  <td align="left" bgcolor="#C0C0C0"><font color="#000000">IAMET-406(COMP)+</font></td>
+  <td align="center" bgcolor="#C0C0C0"><font color="#000000">Yuan Yao</font></td>
+  <td align="right" bgcolor="#C0C0C0"><font color="#000000">24-29, 31-35</font></td>
+</tr>
+</tbody></table>
+<!-- END OBJECT-CELL -->
+    </td>
+    <td style="border-bottom:3px solid #000000;">&nbsp;</td>
+    <td style="border-bottom:3px solid #000000;">&nbsp;</td>
+    <td style="border-bottom:3px solid #000000;">&nbsp;</td>
+    <td style="border-bottom:3px solid #000000;">&nbsp;</td>
+    <td style="border-bottom:3px solid #000000;" colspan="4" rowspan="1">
+<!-- START OBJECT-CELL -->
+<table bgcolor="#C0C0C0" cellspacing="0" border="0" width="100%">
+  <colgroup><col align="left">
+</colgroup><tbody><tr>
+  <td align="left" bgcolor="#C0C0C0"><font color="#000000">COMP2048/L1 (Spring)/01</font></td>
+</tr>
+</tbody></table>
+<table bgcolor="#C0C0C0" cellspacing="0" border="0" width="100%">
+  <colgroup><col align="left">
+</colgroup><tbody><tr>
+  <td align="left" bgcolor="#C0C0C0"><font color="#000000">COMP/2048/01</font></td>
+</tr>
+</tbody></table>
+<table bgcolor="#C0C0C0" cellspacing="0" border="0" width="100%">
+  <colgroup><col align="left">
+  <col align="center">
+  <col align="right">
+</colgroup><tbody><tr>
+  <td align="left" bgcolor="#C0C0C0"><font color="#000000">DB-C05+</font></td>
+  <td align="center" bgcolor="#C0C0C0"><font color="#000000">Heshan Du, Jianfeng Ren</font></td>
+  <td align="right" bgcolor="#C0C0C0"><font color="#000000">24-29, 31-35</font></td>
+</tr>
+</tbody></table>
+<!-- END OBJECT-CELL -->
+    </td>
+    <td style="border-bottom:3px solid #000000;">&nbsp;</td>
+    <td style="border-bottom:3px solid #000000;">&nbsp;</td>
+    <td style="border-bottom:3px solid #000000;">&nbsp;</td>
+    <td style="border-bottom:3px solid #000000;">&nbsp;</td>
+</tr>
+<tr>
+    <td rowspan="2">Fri</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td colspan="2" rowspan="1">
+<!-- START OBJECT-CELL -->
+<table bgcolor="#C0C0C0" cellspacing="0" border="0" width="100%">
+  <colgroup><col align="left">
+</colgroup><tbody><tr>
+  <td align="left" bgcolor="#C0C0C0"><font color="#000000">COMP2048/C1 (Spring)/02</font></td>
+</tr>
+</tbody></table>
+<table bgcolor="#C0C0C0" cellspacing="0" border="0" width="100%">
+  <colgroup><col align="left">
+</colgroup><tbody><tr>
+  <td align="left" bgcolor="#C0C0C0"><font color="#000000">COMP/2048/01</font></td>
+</tr>
+</tbody></table>
+<table bgcolor="#C0C0C0" cellspacing="0" border="0" width="100%">
+  <colgroup><col align="left">
+  <col align="center">
+  <col align="right">
+</colgroup><tbody><tr>
+  <td align="left" bgcolor="#C0C0C0"><font color="#000000">IAMET-406(COMP)+</font></td>
+  <td align="center" bgcolor="#C0C0C0"><font color="#000000">Heshan Du, Jianfeng Ren</font></td>
+  <td align="right" bgcolor="#C0C0C0"><font color="#000000">25, 27, 29, 31, 33</font></td>
+</tr>
+</tbody></table>
+<!-- END OBJECT-CELL -->
+    </td>
+    <td colspan="4" rowspan="1">
+<!-- START OBJECT-CELL -->
+<table bgcolor="#C0C0C0" cellspacing="0" border="0" width="100%">
+  <colgroup><col align="left">
+</colgroup><tbody><tr>
+  <td align="left" bgcolor="#C0C0C0"><font color="#000000">COMP2043/L1 (Spring) one off_LD/01</font></td>
+</tr>
+</tbody></table>
+<table bgcolor="#C0C0C0" cellspacing="0" border="0" width="100%">
+  <colgroup><col align="left">
+</colgroup><tbody><tr>
+  <td align="left" bgcolor="#C0C0C0"><font color="#000000">COMP/2043/01</font></td>
+</tr>
+</tbody></table>
+<table bgcolor="#C0C0C0" cellspacing="0" border="0" width="100%">
+  <colgroup><col align="left">
+  <col align="center">
+  <col align="right">
+</colgroup><tbody><tr>
+  <td align="left" bgcolor="#C0C0C0"><font color="#000000">DB-C05+</font></td>
+  <td align="center" bgcolor="#C0C0C0"><font color="#000000">Dave Towey</font></td>
+  <td align="right" bgcolor="#C0C0C0"><font color="#000000">34</font></td>
+</tr>
+</tbody></table>
+<!-- END OBJECT-CELL -->
+    </td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td colspan="2" rowspan="1">
+<!-- START OBJECT-CELL -->
+<table bgcolor="#C0C0C0" cellspacing="0" border="0" width="100%">
+  <colgroup><col align="left">
+</colgroup><tbody><tr>
+  <td align="left" bgcolor="#C0C0C0"><font color="#000000">COMP2047/C1 (Spring)/01</font></td>
+</tr>
+</tbody></table>
+<table bgcolor="#C0C0C0" cellspacing="0" border="0" width="100%">
+  <colgroup><col align="left">
+</colgroup><tbody><tr>
+  <td align="left" bgcolor="#C0C0C0"><font color="#000000">COMP/2047/01</font></td>
+</tr>
+</tbody></table>
+<table bgcolor="#C0C0C0" cellspacing="0" border="0" width="100%">
+  <colgroup><col align="left">
+  <col align="center">
+  <col align="right">
+</colgroup><tbody><tr>
+  <td align="left" bgcolor="#C0C0C0"><font color="#000000">PMB-306(COMP)+</font></td>
+  <td align="center" bgcolor="#C0C0C0"><font color="#000000">Jianfeng Ren</font></td>
+  <td align="right" bgcolor="#C0C0C0"><font color="#000000">24-35</font></td>
+</tr>
+</tbody></table>
+<!-- END OBJECT-CELL -->
+    </td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+</tr>
+<tr>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td colspan="4" rowspan="1">
+<!-- START OBJECT-CELL -->
+<table bgcolor="#C0C0C0" cellspacing="0" border="0" width="100%">
+  <colgroup><col align="left">
+</colgroup><tbody><tr>
+  <td align="left" bgcolor="#C0C0C0"><font color="#000000">COMP2048/L1 (Spring) one off_QM/01</font></td>
+</tr>
+</tbody></table>
+<table bgcolor="#C0C0C0" cellspacing="0" border="0" width="100%">
+  <colgroup><col align="left">
+</colgroup><tbody><tr>
+  <td align="left" bgcolor="#C0C0C0"><font color="#000000">COMP/2048/01</font></td>
+</tr>
+</tbody></table>
+<table bgcolor="#C0C0C0" cellspacing="0" border="0" width="100%">
+  <colgroup><col align="left">
+  <col align="center">
+  <col align="right">
+</colgroup><tbody><tr>
+  <td align="left" bgcolor="#C0C0C0"><font color="#000000">DB-C05+</font></td>
+  <td align="center" bgcolor="#C0C0C0"><font color="#000000">Heshan Du, Jianfeng Ren</font></td>
+  <td align="right" bgcolor="#C0C0C0"><font color="#000000">30</font></td>
+</tr>
+</tbody></table>
+<!-- END OBJECT-CELL -->
+    </td>
+    <td colspan="2" rowspan="1">
+<!-- START OBJECT-CELL -->
+<table bgcolor="#C0C0C0" cellspacing="0" border="0" width="100%">
+  <colgroup><col align="left">
+</colgroup><tbody><tr>
+  <td align="left" bgcolor="#C0C0C0"><font color="#000000">COMP2049/S1 (Spring) one off_QM/01</font></td>
+</tr>
+</tbody></table>
+<table bgcolor="#C0C0C0" cellspacing="0" border="0" width="100%">
+  <colgroup><col align="left">
+</colgroup><tbody><tr>
+  <td align="left" bgcolor="#C0C0C0"><font color="#000000">COMP/2049/01</font></td>
+</tr>
+</tbody></table>
+<table bgcolor="#C0C0C0" cellspacing="0" border="0" width="100%">
+  <colgroup><col align="left">
+  <col align="center">
+  <col align="right">
+</colgroup><tbody><tr>
+  <td align="left" bgcolor="#C0C0C0"><font color="#000000">IAMET-406(COMP)+</font></td>
+  <td align="center" bgcolor="#C0C0C0"><font color="#000000">Yuan Yao</font></td>
+  <td align="right" bgcolor="#C0C0C0"><font color="#000000">30</font></td>
+</tr>
+</tbody></table>
+<!-- END OBJECT-CELL -->
+    </td>
+    <td colspan="2" rowspan="1">
+<!-- START OBJECT-CELL -->
+<table bgcolor="#C0C0C0" cellspacing="0" border="0" width="100%">
+  <colgroup><col align="left">
+</colgroup><tbody><tr>
+  <td align="left" bgcolor="#C0C0C0"><font color="#000000">COMP2048/S1 (Spring)/02</font></td>
+</tr>
+</tbody></table>
+<table bgcolor="#C0C0C0" cellspacing="0" border="0" width="100%">
+  <colgroup><col align="left">
+</colgroup><tbody><tr>
+  <td align="left" bgcolor="#C0C0C0"><font color="#000000">COMP/2048/01</font></td>
+</tr>
+</tbody></table>
+<table bgcolor="#C0C0C0" cellspacing="0" border="0" width="100%">
+  <colgroup><col align="left">
+  <col align="center">
+  <col align="right">
+</colgroup><tbody><tr>
+  <td align="left" bgcolor="#C0C0C0"><font color="#000000">IAMET-405+</font></td>
+  <td align="center" bgcolor="#C0C0C0"><font color="#000000">Heshan Du, Jianfeng Ren</font></td>
+  <td align="right" bgcolor="#C0C0C0"><font color="#000000">25, 27, 29, 31, 33</font></td>
+</tr>
+</tbody></table>
+<!-- END OBJECT-CELL -->
+    </td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+</tr>
+
+<!-- END ROW OUTPUT -->
+</tbody></table>
+
+<!-- START REPORT FOOTER -->
+<table border="0" cellspacing="0" width="100%"><tbody><tr>
+<td>
+<table cellspacing="0" border="0" width="100%">
+<colgroup><col align="left"><col align="center"><col align="right">
+  </colgroup><tbody><tr>
+    <td>Print Date : 18 Feb 2024</td><td>Timetable for C6UCPUSCN/02/F/LOO/Leon Yang/526</td><td></td>
+  </tr>
+</tbody></table>
+</td>
+</tr>
+</tbody></table>
+<!-- END REPORT FOOTER -->
+<hr><hr><table width="100%" cellspacing="0" border="0">
+<tbody><tr>
+<td></td>
+<td align="center"><b><font size="5" color="#FF0000">Scientia®</font> Web Server</b> for <b>Course Planner™</b> - <b>University of Nottingham</b></td>
+<td align="right"></td>
+</tr>
+</tbody></table>
+
+
+        </main>
+    </div>
+
+
+
+    
+
+
+<div id="forest-ext-shadow-host"><template shadowrootmode="open"><head></head><div id="root"></div></template></div></body></html>

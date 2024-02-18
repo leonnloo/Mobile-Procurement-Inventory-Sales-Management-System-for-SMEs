@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:prototype/app/authenticate/start_screen.dart';
+import 'package:prototype/app/authenticate/screens/start_screen.dart';
 
 class UserProfileScreen extends StatelessWidget {
   @override
