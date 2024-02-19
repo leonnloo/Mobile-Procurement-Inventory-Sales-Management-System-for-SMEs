@@ -27,19 +27,20 @@ class HomeWidgets extends StatelessWidget {
 
     return SingleChildScrollView(
       child: Padding(
-        padding: EdgeInsets.all(26.0),
+        padding: const EdgeInsets.all(26.0),
         child:
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              /* ---------------FIRST WIDGET------------------*/
               GestureDetector(
                 onTap: () {
 
                 },
                 child: Card(
                   elevation: 4.0,
-                  margin: EdgeInsets.all(16.0),
+                  margin: const EdgeInsets.all(16.0),
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: Column( // Wrap the Text widgets in a Column
@@ -50,29 +51,32 @@ class HomeWidgets extends StatelessWidget {
                         ),
                         Text(
                           '\$$totalProfits',
-                          style: TextStyle(fontSize: 32, color: Colors.green),
+                          style: const TextStyle(fontSize: 32, color: Colors.green),
                         ),
                         const SizedBox(height: 25),
                         const ProductSalesPieChart(),
-                        const SizedBox(height: 15),
                       ],
                     ),
                   ),
                 ),
               ),
+
+              /* ---------------SECOND WIDGET------------------*/
               GestureDetector(
                 onTap: () {
                 },
                 child: const Card(
+                  
                   elevation: 4.0,
                   margin: EdgeInsets.all(16.0),
                   child: Padding(
-                    padding: const EdgeInsets.all(16.0),
+                    padding: EdgeInsets.all(16.0),
                     child: MonthlySalesBarChart(),
                   ),
                 ),
               ),
-              const SizedBox(height: 15),
+
+              /* ---------------THIRD, FOURTH WIDGET------------------*/
               Row(
                 children: [
                   GestureDetector(
@@ -87,7 +91,7 @@ class HomeWidgets extends StatelessWidget {
                   ),
                   Card(
                     elevation: 4.0,
-                    margin: EdgeInsets.all(16.0),
+                    margin: const EdgeInsets.all(16.0),
                     child: GestureDetector(
                       onTap: () {
                         // add order

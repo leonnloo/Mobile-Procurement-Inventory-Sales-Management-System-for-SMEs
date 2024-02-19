@@ -22,17 +22,18 @@ class ForgetPasswordMailScreen extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(
-                    'Reset Password by Mail',
-                    style: TextStyle(
-                      fontSize: 24.0,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
+              const Text(
+                'Reset Password by Mail',
+                style: TextStyle(
+                  fontSize: 30.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const Text(
+                'Please enter your email address.',
+                style: TextStyle(
+                  fontSize: 16.0,
+                ),
               ),
               const SizedBox(height: 30.0),
               TextField(

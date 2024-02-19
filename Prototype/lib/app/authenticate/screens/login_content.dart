@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:prototype/app/authenticate/screens/forget_password/option/forget_password_option.dart';
+import 'package:prototype/app/authenticate/screens/option/forget_password_option.dart';
 import 'package:prototype/app/authenticate/screens/register_content.dart';
 import 'package:prototype/app/home/home.dart';
 import 'package:prototype/widgets/fade_in_animation/animation_design.dart';
@@ -40,24 +40,26 @@ class LoginContent extends StatelessWidget {
                 rightAfter: 0,
                 rightBefore: 0
               ),
-              child: Container(
-                padding: const EdgeInsets.all(30.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SizedBox(height: size.height * 0.04,),
-                    /*------ LABEL ------*/
-                    Image.asset(
-                      'images/login.jpg',
-                      height: size.height * 0.2,
-                    ),
-                    const SizedBox(height: 25.0,),
-                    Text('Welcome back to our app!', style: Theme.of(context).textTheme.headlineLarge),
-                    const SizedBox(height: 25.0,),
-                    /*------ FORM ------*/
-                    _loginForm(context),
-                    const SizedBox(height: 25.0),
-                  ],
+              child: SingleChildScrollView(
+                child: Container(
+                  padding: const EdgeInsets.all(30.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(height: size.height * 0.04,),
+                      /*------ LABEL ------*/
+                      Image.asset(
+                        'images/login.jpg',
+                        height: size.height * 0.2,
+                      ),
+                      const SizedBox(height: 25.0,),
+                      Text('Welcome back to our app!', style: Theme.of(context).textTheme.headlineLarge),
+                      const SizedBox(height: 25.0,),
+                      /*------ FORM ------*/
+                      _loginForm(context),
+                      const SizedBox(height: 25.0),
+                    ],
+                  ),
                 ),
               ),
             ),
