@@ -62,6 +62,12 @@ $ flutter upgrade
 $ flutter pub get
 $ flutter run
 ```
+如果 `flutter pub get` 不能运行（学校网可以运行），打开powershell输入：
+```
+setx PUB_HOSTED_URL "https://pub.flutter-io.cn"
+setx FLUTTER_STORAGE_BASE_URL "https://storage.flutter-io.cn"
+```
+然后重启个人使用的IDE，打开再 `flutter pub get` 应该就行了
 ## Reference
 1. 这是网上的例子，应该是运行不了，可以当作参考:\
 https://github.com/hemanta212/Flutter-Inventory-App
@@ -77,12 +83,10 @@ https://github.com/imaNNeo/fl_chart/blob/main/repo_files/documentations/bar_char
 4. Quick hands on practice\
 https://www.youtube.com/watch?v=D4nhaszNW4o&ab_channel=FlutterGuys
 
-5. State Management - BLoC\
-https://www.youtube.com/watch?v=1j_hO0t7IcI&list=PLjyxas0TsCplfGRa-YNJc-t9d2qMbvcBX&ab_channel=FlutterGuys
-\
-\
-Quick hands on practice demo\
-https://www.youtube.com/watch?v=Ep6R7U9wa0U&ab_channel=FlutterMapp
+5. State Management - Get\
+我已经加入get的dependency了，直接用就行
+https://pub.dev/packages/get
+
 
 
 6. Highly recommended to check out material 3 to plan out your design\
