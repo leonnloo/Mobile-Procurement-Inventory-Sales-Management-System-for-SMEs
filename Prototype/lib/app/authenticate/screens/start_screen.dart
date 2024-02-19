@@ -11,8 +11,6 @@ class StartScreen extends StatelessWidget {
 
   final String login = 'Login';
   final String signup = 'Sign Up';
-  
-  
 
   @override
   Widget build(BuildContext context) {

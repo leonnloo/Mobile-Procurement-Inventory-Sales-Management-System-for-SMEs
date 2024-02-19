@@ -7,12 +7,7 @@ import 'package:prototype/widgets/fade_in_animation/animation_design.dart';
 import 'package:prototype/widgets/fade_in_animation/fade_in_animation_model.dart';
 import 'package:prototype/widgets/fade_in_animation/fade_in_controller.dart';
 
-class LoginContent extends StatefulWidget {
-  @override
-  _LoginContentState createState() => _LoginContentState();
-}
-
-class _LoginContentState extends State<LoginContent> {
+class LoginContent extends StatelessWidget {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
@@ -37,7 +32,7 @@ class _LoginContentState extends State<LoginContent> {
               durantionInMs: 1000,
               animate: AnimatePosition(
                 bottomAfter: 0,
-                bottomBefore: -100,
+                bottomBefore: 0,
                 topAfter: 0,
                 topBefore: 0,
                 leftAfter: 0,

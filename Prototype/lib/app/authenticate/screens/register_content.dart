@@ -6,12 +6,7 @@ import 'package:prototype/widgets/fade_in_animation/animation_design.dart';
 import 'package:prototype/widgets/fade_in_animation/fade_in_animation_model.dart';
 import 'package:prototype/widgets/fade_in_animation/fade_in_controller.dart';
 
-class RegisterContent extends StatefulWidget {
-  @override
-  _RegisterContentState createState() => _RegisterContentState();
-}
-
-class _RegisterContentState extends State<RegisterContent> {
+class RegisterContent extends StatelessWidget {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
@@ -46,7 +41,7 @@ class _RegisterContentState extends State<RegisterContent> {
               durantionInMs: 1000,
               animate: AnimatePosition(
                 bottomAfter: 0,
-                bottomBefore: -100,
+                bottomBefore: 0,
                 topAfter: 0,
                 topBefore: 0,
                 leftAfter: 0,

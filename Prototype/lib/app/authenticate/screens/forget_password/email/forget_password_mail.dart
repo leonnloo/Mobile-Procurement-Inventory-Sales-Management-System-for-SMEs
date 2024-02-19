@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:prototype/app/authenticate/screens/forget_password/email/otp.dart';
 
 class ForgetPasswordMailScreen extends StatelessWidget {
   // Change super.key to Key? key
@@ -53,7 +55,9 @@ class ForgetPasswordMailScreen extends StatelessWidget {
                                 shape: const RoundedRectangleBorder(),
                                 padding: const EdgeInsets.symmetric(vertical: 15.0)
                               ),
-                  onPressed: () {},
+                  onPressed: () {
+                    Get.to(() => const OTPScreen());
+                  },
                   child: const Text('Next'),
                 ),
               )
