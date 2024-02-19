@@ -117,7 +117,7 @@ class HomeWidgets extends StatelessWidget {
               ),
             ],
           ),
-      )
+      ),
     );
   }
 }

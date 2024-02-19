@@ -149,7 +149,7 @@ class LoginContent extends StatelessWidget {
                       print('Login successful!');
                       Navigator.pushReplacement(
                         context,
-                        MaterialPageRoute(builder: (context) => HomeScreen()),
+                        MaterialPageRoute(builder: (context) => const HomeScreen()),
                       );
                     // }
                   }
