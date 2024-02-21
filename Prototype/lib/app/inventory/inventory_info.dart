@@ -12,13 +12,13 @@ void navigateToItemDetail(BuildContext context, InventoryItem item) {
 class ItemDetailScreen extends StatelessWidget {
   final InventoryItem item;
 
-  ItemDetailScreen({required this.item});
+  const ItemDetailScreen({super.key, required this.item});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Item Detail'),
+        title: const Text('Item Detail'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -26,12 +26,12 @@ class ItemDetailScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _buildDetailRow('Item ID', item.itemID.toString()),
-            _buildDetailRow('Item Name', item.itemName ?? 'N/A'),
-            _buildDetailRow('Category', item.category ?? 'N/A'),
-            _buildDetailRow('Quantity', item.quantity?.toString() ?? 'N/A'),
+            _buildDetailRow('Item Name', item.itemName),
+            _buildDetailRow('Category', item.category),
+            _buildDetailRow('Quantity', item.quantity.toString()),
             _buildDetailRow('Unit Price', '\$${item.unitPrice.toString()}'),
             _buildDetailRow('Total Price', '\$${item.totalPrice.toString()}'),
-            _buildDetailRow('Status', item.status ?? 'N/A'),
+            _buildDetailRow('Status', item.status),
           ],
         ),
       ),
@@ -44,8 +44,8 @@ class ItemDetailScreen extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(label, style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold)),
-          Text(value, style: TextStyle(fontSize: 18.0)),
+          Text(label, style: const TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold)),
+          Text(value, style: const TextStyle(fontSize: 18.0)),
         ],
       ),
     );

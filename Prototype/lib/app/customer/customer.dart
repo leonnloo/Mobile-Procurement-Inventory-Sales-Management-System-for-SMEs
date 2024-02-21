@@ -4,6 +4,8 @@ import 'package:prototype/models/customerdata.dart';
 import 'package:prototype/app/customer/customer_info.dart';
 
 class CustomerManagementScreen extends StatelessWidget {
+  const CustomerManagementScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,19 +35,19 @@ class CustomerManagementScreen extends StatelessWidget {
                     },
                   ),
                   DataCell(
-                    Text(customer.customerName ?? 'N/A'),
+                    Text(customer.customerName),
                     onTap: () {
                       navigateToCustomerDetail(context, customer);
                     },
                   ),
                   DataCell(
-                    Text(customer.contactPerson ?? 'N/A'),
+                    Text(customer.contactPerson),
                     onTap: () {
                       navigateToCustomerDetail(context, customer);
                     },
                   ),
                   DataCell(
-                    Text(customer.email ?? 'N/A'),
+                    Text(customer.email),
                     onTap: () {
                       navigateToCustomerDetail(context, customer);
                     },
@@ -79,11 +81,11 @@ class CustomerManagementScreen extends StatelessWidget {
           // Navigate to a screen for adding new customer info
           Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (context) => AddCustomerScreen(),
+              builder: (context) => const AddCustomerScreen(),
             ),
           );
         },
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
       ),
     );
   }

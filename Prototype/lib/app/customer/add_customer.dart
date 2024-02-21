@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:prototype/models/customerdata.dart';
 
 class AddCustomerScreen extends StatefulWidget {
+  const AddCustomerScreen({super.key});
+
   @override
-  _AddCustomerScreenState createState() => _AddCustomerScreenState();
+  AddCustomerScreenState createState() => AddCustomerScreenState();
 }
 
-class _AddCustomerScreenState extends State<AddCustomerScreen> {
+class AddCustomerScreenState extends State<AddCustomerScreen> {
   final _formKey = GlobalKey<FormState>();
 
   late TextEditingController _customerNameController;
@@ -62,7 +64,7 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Add Customer'),
+        title: const Text('Add Customer'),
       ),
       body: 
       SingleChildScrollView(
@@ -74,7 +76,7 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
             children: [
               TextFormField(
                 controller: _customerNameController,
-                decoration: InputDecoration(labelText: 'Customer Name'),
+                decoration: const InputDecoration(labelText: 'Customer Name'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter customer name';
@@ -84,7 +86,7 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
               ),
               TextFormField(
                 controller: _contactPersonController,
-                decoration: InputDecoration(labelText: 'Contact Person'),
+                decoration: const InputDecoration(labelText: 'Contact Person'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter contact person';
@@ -94,7 +96,7 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
               ),
               TextFormField(
                 controller: _emailController,
-                decoration: InputDecoration(labelText: 'Email'),
+                decoration: const InputDecoration(labelText: 'Email'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter email';
@@ -104,7 +106,7 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
               ),
               TextFormField(
                 controller: _phoneNoController,
-                decoration: InputDecoration(labelText: 'Phone No'),
+                decoration: const InputDecoration(labelText: 'Phone No'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter phone number';
@@ -114,7 +116,7 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
               ),
               TextFormField(
                 controller: _billingAddressController,
-                decoration: InputDecoration(labelText: 'Billing Address'),
+                decoration: const InputDecoration(labelText: 'Billing Address'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter billing address';
@@ -124,7 +126,7 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
               ),
               TextFormField(
                 controller: _shippingAddressController,
-                decoration: InputDecoration(labelText: 'Shipping Address'),
+                decoration: const InputDecoration(labelText: 'Shipping Address'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter shipping address';
@@ -132,10 +134,10 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
                   return null;
                 },
               ),
-              SizedBox(height: 16.0),
+              const SizedBox(height: 16.0),
               ElevatedButton(
                 onPressed: _submitForm,
-                child: Text('Submit'),
+                child: const Text('Submit'),
               ),
             ],
           ),

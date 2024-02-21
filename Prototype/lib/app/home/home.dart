@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_typing_uninitialized_variables
-
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:prototype/app/customer/add_customer.dart';
@@ -29,36 +27,36 @@ class HomeScreen extends StatefulWidget {
 class HomeScreenState extends State<HomeScreen> {
   var currentPage = DrawerSections.dashboard;
   final isDialOpen = ValueNotifier(false);
+  late Widget container;
+  late String currentTitle;
   @override
   Widget build(BuildContext context) {
-    var container;
-    var currentTitle;
     if (currentPage == DrawerSections.dashboard) {
       container = const HomeWidgets();
       currentTitle = "Dashboard";
     } else if (currentPage == DrawerSections.salesOrder) {
-      container = SalesOrderScreen();
+      container = const SalesOrderScreen();
       currentTitle = "Sales Order (Design how you see fit)";
     } else if (currentPage == DrawerSections.salesManagement) {
-      container = SalesManagementScreen();
+      container = const SalesManagementScreen();
       currentTitle = "Sales Management (Design how you see fit)";
     } else if (currentPage == DrawerSections.inventory) {
-      container = InventoryScreen();
+      container = const InventoryScreen();
       currentTitle = "Inventory (Design how you see fit)";
     } else if (currentPage == DrawerSections.product) {
-      container = ProductManagementScreen();
+      container = const ProductManagementScreen();
       currentTitle = "Product";
     } else if (currentPage == DrawerSections.procurement) {
-      container = ProcurementScreen();
+      container = const ProcurementScreen();
       currentTitle = "Procurement (Design how you see fit)";
     } else if (currentPage == DrawerSections.supplier) {
-      container = SupplierManagementScreen();
+      container = const SupplierManagementScreen();
       currentTitle = "Supplier";
     } else if (currentPage == DrawerSections.customer) {
-      container = CustomerManagementScreen();
+      container = const CustomerManagementScreen();
       currentTitle = "Customer";
     } else if (currentPage == DrawerSections.settings) {
-      container = SettingsScreen();
+      container = const SettingsScreen();
       currentTitle = "Settings";
     }
     return PopScope(
@@ -81,7 +79,7 @@ class HomeScreenState extends State<HomeScreen> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                HeaderDrawer(),
+                const HeaderDrawer(),
                 drawerList()
               ],
             ),
@@ -112,7 +110,7 @@ class HomeScreenState extends State<HomeScreen> {
               onTap: () {
                 setState(() {
                   Navigator.push(context, MaterialPageRoute(
-                    builder: (context) => AddCustomerScreen(),
+                    builder: (context) => const AddCustomerScreen(),
                     ),
                   );               
                 });
@@ -127,7 +125,7 @@ class HomeScreenState extends State<HomeScreen> {
               onTap: () {
                 setState(() {
                   Navigator.push(context, MaterialPageRoute(
-                    builder: (context) => AddSupplierScreen(),
+                    builder: (context) => const AddSupplierScreen(),
                     ),
                   );               
                 });
@@ -142,7 +140,7 @@ class HomeScreenState extends State<HomeScreen> {
               onTap: () {
                 setState(() {
                   Navigator.push(context, MaterialPageRoute(
-                    builder: (context) => AddOrderScreen(),
+                    builder: (context) => const AddOrderScreen(),
                     ),
                   );               
                 });
@@ -157,7 +155,7 @@ class HomeScreenState extends State<HomeScreen> {
               onTap: () {
                 setState(() {
                   Navigator.push(context, MaterialPageRoute(
-                    builder: (context) => AddProcurementScreen(),
+                    builder: (context) => const AddProcurementScreen(),
                     ),
                   );               
                 });
@@ -172,7 +170,7 @@ class HomeScreenState extends State<HomeScreen> {
               onTap: () {
                 setState(() {
                   Navigator.push(context, MaterialPageRoute(
-                    builder: (context) => AddProductScreen(),
+                    builder: (context) => const AddProductScreen(),
                     ),
                   );               
                 });
@@ -187,7 +185,7 @@ class HomeScreenState extends State<HomeScreen> {
               onTap: () {
                 setState(() {
                   Navigator.push(context, MaterialPageRoute(
-                    builder: (context) => AddInventoryScreen(),
+                    builder: (context) => const AddInventoryScreen(),
                     ),
                   );               
                 });

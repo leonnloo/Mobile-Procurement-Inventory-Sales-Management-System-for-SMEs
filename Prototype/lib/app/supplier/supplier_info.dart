@@ -1,7 +1,6 @@
 import "dart:math";
 
 import "package:flutter/material.dart";
-import 'package:prototype/models/customerdata.dart';
 import 'package:prototype/models/supplierdata.dart';
 
 void navigateToSupplierDetail(BuildContext context, SupplierData supplier) {
@@ -15,13 +14,13 @@ void navigateToSupplierDetail(BuildContext context, SupplierData supplier) {
 class SupplierDetailScreen extends StatelessWidget {
   final SupplierData supplierData;
 
-  SupplierDetailScreen({required this.supplierData});
+  const SupplierDetailScreen({super.key, required this.supplierData});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Supplier Detail'),
+        title: const Text('Supplier Detail'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -29,19 +28,19 @@ class SupplierDetailScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _buildDetailRow('Supplier ID', supplierData.supplierID.toString()),
-            _buildDetailRow('Supplier Name', supplierData.supplierName ?? 'N/A'),
-            _buildDetailRow('Contact Person', supplierData.contactPerson ?? 'N/A'),
-            _buildDetailRow('Email', supplierData.email ?? 'N/A'),
-            _buildDetailRow('Phone number', supplierData.phoneno ?? 'N/A'),
-            _buildDetailRow('Address', supplierData.address ?? 'N/A'),
+            _buildDetailRow('Supplier Name', supplierData.supplierName),
+            _buildDetailRow('Contact Person', supplierData.contactPerson),
+            _buildDetailRow('Email', supplierData.email),
+            _buildDetailRow('Phone number', supplierData.phoneno),
+            _buildDetailRow('Address', supplierData.address),
 
-            SizedBox(height: 6.0), // Add some spacing
+            const SizedBox(height: 6.0), // Add some spacing
             _buildNotes(),
             
-            SizedBox(height: 6.0),
+            const SizedBox(height: 6.0),
             _buildHistory(),
 
-            SizedBox(height: 6.0),
+            const SizedBox(height: 6.0),
             _buildPastOrders()
           ],
         ),
@@ -58,13 +57,13 @@ class SupplierDetailScreen extends StatelessWidget {
         children: [
           Text(
             label,
-            style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+            style: const TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
           ),
-          SizedBox(width: 30.0), // Increase the spacing between label and text
+          const SizedBox(width: 30.0), // Increase the spacing between label and text
           Flexible(
             child: Text(
               value,
-              style: TextStyle(fontSize: 18.0),
+              style: const TextStyle(fontSize: 18.0),
             ),
           ),
         ],
@@ -73,7 +72,7 @@ class SupplierDetailScreen extends StatelessWidget {
   }
   Widget _buildNotes(){
     return Padding(
-      padding: EdgeInsets.all(16.0),
+      padding: const EdgeInsets.all(16.0),
       child: 
       // Section for User's Remark
       Align(
@@ -83,20 +82,20 @@ class SupplierDetailScreen extends StatelessWidget {
               color: Colors.grey, // You can set the color of the border
               width: 1.0,
             ),
-            borderRadius: BorderRadius.all(Radius.circular(8.0)),
+            borderRadius: const BorderRadius.all(Radius.circular(8.0)),
           ),
-          padding: EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
+              const Text(
                 'Note:                                                           ',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
-              SizedBox(height: 8.0),
+              const SizedBox(height: 8.0),
               Text(
                 supplierData.remark ?? 'No remark available',
-                style: TextStyle(fontSize: 16),
+                style: const TextStyle(fontSize: 16),
               ),
             ],
           ),
@@ -110,9 +109,9 @@ class SupplierDetailScreen extends StatelessWidget {
 List<String> generateRandomHistory() {
   final Random random = Random();
   final List<String> historyList = [
-    'Placed an order on ${DateTime.now().subtract(Duration(days: 5)).toString().split(' ')[0]}',
-    'Received a delivery on ${DateTime.now().subtract(Duration(days: 3)).toString().split(' ')[0]}',
-    'Returned a product on ${DateTime.now().subtract(Duration(days: 2)).toString().split(' ')[0]}',
+    'Placed an order on ${DateTime.now().subtract(const Duration(days: 5)).toString().split(' ')[0]}',
+    'Received a delivery on ${DateTime.now().subtract(const Duration(days: 3)).toString().split(' ')[0]}',
+    'Returned a product on ${DateTime.now().subtract(const Duration(days: 2)).toString().split(' ')[0]}',
     // Add more history entries as needed
   ];
 
@@ -131,8 +130,8 @@ Widget _buildHistory() {
       children: historyEntries.map((history) {
         return Row(
           children: [
-            Icon(Icons.history, color: Colors.blue),
-            SizedBox(width: 8.0),
+            const Icon(Icons.history, color: Colors.blue),
+            const SizedBox(width: 8.0),
             Text(history),
           ],
         );
@@ -141,7 +140,7 @@ Widget _buildHistory() {
   );
 }
 List<PastOrder> generatePastOrders() {
-  final Random random = Random();
+  // final Random random = Random();
 
   return List.generate(5, (index) {
     return PastOrder(
@@ -158,19 +157,19 @@ Widget _buildPastOrders() {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-      Text(
+      const Text(
         'Past Orders:',
         style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
       ),
-      SizedBox(height: 8.0),
+      const SizedBox(height: 8.0),
       Column(
         children: pastOrders.map((order) {
           return Padding(
             padding: const EdgeInsets.symmetric(vertical: 4.0),
             child: Row(
               children: [
-                Icon(Icons.shopping_cart, color: Colors.green),
-                SizedBox(width: 8.0),
+                const Icon(Icons.shopping_cart, color: Colors.green),
+                const SizedBox(width: 8.0),
                 Text('Order ${order.orderNumber} - ${order.orderDate} - \$${order.totalAmount.toStringAsFixed(2)}'),
               ],
             ),

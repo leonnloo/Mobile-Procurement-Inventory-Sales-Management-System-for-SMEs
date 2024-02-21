@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:prototype/models/orderdata.dart';
 
 class AddProductScreen extends StatefulWidget {
+  const AddProductScreen({super.key});
+
   @override
-  _AddProductScreenState createState() => _AddProductScreenState();
+  AddProductScreenState createState() => AddProductScreenState();
 }
 
-class _AddProductScreenState extends State<AddProductScreen> {
+class AddProductScreenState extends State<AddProductScreen> {
   final _formKey = GlobalKey<FormState>();
 
   // late TextEditingController _procurementNameController;
@@ -82,7 +84,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Add Product'),
+        title: const Text('Add Product'),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -94,7 +96,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
               children: [
                 TextFormField(
                   // controller: _orderNoController,
-                  decoration: InputDecoration(labelText: 'Product'),
+                  decoration: const InputDecoration(labelText: 'Product'),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter product ID';
@@ -104,7 +106,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                 ),
                 TextFormField(
                   controller: _customerIDController,
-                  decoration: InputDecoration(labelText: 'Unit Price'),
+                  decoration: const InputDecoration(labelText: 'Unit Price'),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter supplier ID';
@@ -114,7 +116,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                 ),
                 TextFormField(
                   controller: _dateController,
-                  decoration: InputDecoration(labelText: 'Selling Price'),
+                  decoration: const InputDecoration(labelText: 'Selling Price'),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter order date';
@@ -127,7 +129,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                 ),
                 TextFormField(
                   controller: _productID,
-                  decoration: InputDecoration(labelText: 'Quantity'),
+                  decoration: const InputDecoration(labelText: 'Quantity'),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter delivery date';
@@ -137,7 +139,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                 ),
                 TextFormField(
                   controller: _totalPriceController,
-                  decoration: InputDecoration(labelText: 'Weight'),
+                  decoration: const InputDecoration(labelText: 'Weight'),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter total price';
@@ -165,10 +167,10 @@ class _AddProductScreenState extends State<AddProductScreen> {
                 //     return null;
                 //   },
                 // ),
-                SizedBox(height: 16.0),
+                const SizedBox(height: 16.0),
                 ElevatedButton(
                   onPressed: _submitForm,
-                  child: Text('Submit'),
+                  child: const Text('Submit'),
                 ),
               ],
             ),

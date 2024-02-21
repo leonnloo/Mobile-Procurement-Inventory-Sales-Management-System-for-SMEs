@@ -27,14 +27,28 @@ class HomeWidgets extends StatelessWidget {
 
     return SingleChildScrollView(
       child: Padding(
-        padding: const EdgeInsets.all(26.0),
+        padding: const EdgeInsets.all(12.0),
         child:
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               /* ---------------FIRST WIDGET------------------*/
+              SizedBox(
+                width: double.infinity,
+                child: GestureDetector(
+                  onTap: () {
+                  },
+                  child:
+                    InventoryStatusWidget(
+                      inStockCount: inStockCount, 
+                      lowStockCount: lowStockCount,
+                      outOfStockCount: outOfStockCount,
+                    ),
+                ),
+              ),
               GestureDetector(
+              /* ---------------SECOND WIDGET------------------*/
                 onTap: () {
 
                 },
@@ -61,7 +75,7 @@ class HomeWidgets extends StatelessWidget {
                 ),
               ),
 
-              /* ---------------SECOND WIDGET------------------*/
+              /* ---------------THIRD WIDGET------------------*/
               GestureDetector(
                 onTap: () {
                 },
@@ -76,45 +90,6 @@ class HomeWidgets extends StatelessWidget {
                 ),
               ),
 
-              /* ---------------THIRD, FOURTH WIDGET------------------*/
-              Row(
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                    },
-                    child:
-                      InventoryStatusWidget(
-                        inStockCount: inStockCount, 
-                        lowStockCount: lowStockCount,
-                        outOfStockCount: outOfStockCount,
-                      ),
-                  ),
-                  Card(
-                    elevation: 4.0,
-                    margin: const EdgeInsets.all(16.0),
-                    child: GestureDetector(
-                      onTap: () {
-                        // add order
-                      },
-                      child: const Padding(
-                        padding: EdgeInsets.all(16.0),
-                        child: Column(
-                          children: [
-                            Text(
-                              "Add Order",
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            Icon(Icons.add),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
             ],
           ),
       ),

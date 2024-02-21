@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:prototype/app/authenticate/screens/option/forget_password_option.dart';
+import 'package:prototype/app/authenticate/screens/forget_password/option/forget_password_option.dart';
 import 'package:prototype/app/authenticate/screens/register_content.dart';
 import 'package:prototype/app/home/home.dart';
 import 'package:prototype/widgets/fade_in_animation/animation_design.dart';
@@ -10,6 +10,8 @@ import 'package:prototype/widgets/fade_in_animation/fade_in_controller.dart';
 class LoginContent extends StatelessWidget {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+
+  LoginContent({super.key});
 
   String? _validateTextField(String value, String fieldName) {
     if (value.isEmpty) {
@@ -130,6 +132,10 @@ class LoginContent extends StatelessWidget {
                         backgroundColor: Colors.red,
                       ),
                     );
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (context) => const HomeScreen()),
+                      );
                   } else {
                     String email = _emailController.text;
                     String password = _passwordController.text;
