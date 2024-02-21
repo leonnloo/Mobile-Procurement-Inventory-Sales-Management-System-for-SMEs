@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-class InventoryStatusWidget extends StatelessWidget {
+class ProductStatusWidget extends StatelessWidget {
   final int inStockCount;
   final int lowStockCount;
   final int outOfStockCount;
 
-  const InventoryStatusWidget({super.key, 
+  const ProductStatusWidget({super.key, 
     required this.inStockCount,
     required this.lowStockCount,
     required this.outOfStockCount,
@@ -17,7 +17,7 @@ class InventoryStatusWidget extends StatelessWidget {
     String currentDate = DateFormat('MMMM d').format(DateTime.now());
     return Card(
       elevation: 4.0,
-      color: Color.fromARGB(255, 11, 238, 181),
+      color: const Color.fromARGB(255, 11, 238, 181),
       margin: const EdgeInsets.all(16.0),
       child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -25,18 +25,18 @@ class InventoryStatusWidget extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: EdgeInsets.only(left: 10.0, right: 10.0),
+                padding: const EdgeInsets.only(left: 10.0, right: 10.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     const Text(
-                      'Inventory',
-                      style: TextStyle(fontSize: 23.0, fontWeight: FontWeight.bold),
+                      'Product Overview',
+                      style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(width: 10.0,),
                     Text(
                       currentDate,
-                      style: const TextStyle(fontSize: 20.0,),
+                      style: const TextStyle(fontSize: 16.0,),
                     ),
                   ],
                 ),

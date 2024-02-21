@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:prototype/app/sales_management/management.dart';
+import 'package:prototype/models/productdata.dart';
 import 'package:prototype/widgets/inventory_status.dart';
 import 'package:prototype/widgets/product_sales_pie.dart';
-import 'package:prototype/models/inventorydata.dart';
 import 'package:prototype/app/sales_management/monthly_sales_bar.dart';
 
 
@@ -13,15 +15,15 @@ class HomeWidgets extends StatelessWidget {
     // Add logic to calculate total profits
     double totalProfits = 50000.00; // Replace your actual calculation
     // Calculate counts based on inventory status
-    int inStockCount = inventoryItems
+    int inStockCount = products
         .where((item) => item.status == 'In Stock')
         .length;
 
-    int lowStockCount = inventoryItems
+    int lowStockCount = products
         .where((item) => item.status == 'Low Stock')
         .length;
 
-    int outOfStockCount = inventoryItems
+    int outOfStockCount = products
         .where((item) => item.status == 'Out of Stock')
         .length;
 
@@ -40,17 +42,17 @@ class HomeWidgets extends StatelessWidget {
                   onTap: () {
                   },
                   child:
-                    InventoryStatusWidget(
+                    ProductStatusWidget(
                       inStockCount: inStockCount, 
                       lowStockCount: lowStockCount,
                       outOfStockCount: outOfStockCount,
                     ),
                 ),
               ),
-              GestureDetector(
               /* ---------------SECOND WIDGET------------------*/
+              GestureDetector(
                 onTap: () {
-
+                  Get.to(() => const SalesManagementScreen());
                 },
                 child: Card(
                   elevation: 4.0,

@@ -14,7 +14,7 @@ class HeaderDrawerState extends State<HeaderDrawer> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Get.to(const UserProfileScreen());
+        Get.to(() => const UserProfileScreen());
       },
       child: Container(
         color: Colors.red[400],

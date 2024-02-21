@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:get/get.dart';
 import 'package:prototype/app/customer/add_customer.dart';
 import 'package:prototype/app/customer/customer.dart';
 import 'package:prototype/app/inventory/add_inventory.dart';
@@ -14,7 +15,10 @@ import 'package:prototype/app/sale_orders/order.dart';
 import 'package:prototype/app/settings/settings.dart';
 import 'package:prototype/app/supplier/add_supplier.dart';
 import 'package:prototype/app/supplier/supplier.dart';
-import 'package:prototype/widgets/drawer_header.dart';
+import 'package:prototype/widgets/drawer/drawer_controller.dart';
+import 'package:prototype/widgets/drawer/drawer_header.dart';
+import 'package:prototype/widgets/drawer/drawer_list.dart';
+import 'package:prototype/widgets/drawer/drawer_sections.dart';
 import 'package:prototype/widgets/home_widgets.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -25,277 +29,177 @@ class HomeScreen extends StatefulWidget {
 }
 
 class HomeScreenState extends State<HomeScreen> {
-  var currentPage = DrawerSections.dashboard;
   final isDialOpen = ValueNotifier(false);
-  late Widget container;
-  late String currentTitle;
+  Widget container = const HomeWidgets();
+  String currentTitle = 'Dashboard';
+  final controller = Get.put(CustomDrawerController());
   @override
   Widget build(BuildContext context) {
-    if (currentPage == DrawerSections.dashboard) {
-      container = const HomeWidgets();
-      currentTitle = "Dashboard";
-    } else if (currentPage == DrawerSections.salesOrder) {
-      container = const SalesOrderScreen();
-      currentTitle = "Sales Order (Design how you see fit)";
-    } else if (currentPage == DrawerSections.salesManagement) {
-      container = const SalesManagementScreen();
-      currentTitle = "Sales Management (Design how you see fit)";
-    } else if (currentPage == DrawerSections.inventory) {
-      container = const InventoryScreen();
-      currentTitle = "Inventory (Design how you see fit)";
-    } else if (currentPage == DrawerSections.product) {
-      container = const ProductManagementScreen();
-      currentTitle = "Product";
-    } else if (currentPage == DrawerSections.procurement) {
-      container = const ProcurementScreen();
-      currentTitle = "Procurement (Design how you see fit)";
-    } else if (currentPage == DrawerSections.supplier) {
-      container = const SupplierManagementScreen();
-      currentTitle = "Supplier";
-    } else if (currentPage == DrawerSections.customer) {
-      container = const CustomerManagementScreen();
-      currentTitle = "Customer";
-    } else if (currentPage == DrawerSections.settings) {
-      container = const SettingsScreen();
-      currentTitle = "Settings";
-    }
-    return PopScope(
-      canPop: false,
-      onPopInvoked: (bool isDialOpen) async {
-        if (isDialOpen) {
-          isDialOpen = false;
-          return;
-        }
-        Navigator.of(context).pop();
-      },
-      child: Scaffold(
-        appBar: AppBar(
-          toolbarHeight: 60.0,
-          backgroundColor: Colors.red[400],
-          title: Text(currentTitle),
-        ),
-        body: container,
+    return Obx(() {
+      if (controller.currentPage.value == DrawerSections.dashboard) {
+        container = const HomeWidgets();
+        currentTitle = "Dashboard";
+      } else if (controller.currentPage.value == DrawerSections.salesOrder) {
+        container = const SalesOrderScreen();
+        currentTitle = "Sales Order (Design how you see fit)";
+      } else if (controller.currentPage.value == DrawerSections.salesManagement) {
+        container = const SalesManagementScreen();
+        currentTitle = "Sales Management (Design how you see fit)";
+      } else if (controller.currentPage.value == DrawerSections.inventory) {
+        container = const InventoryScreen();
+        currentTitle = "Inventory (Design how you see fit)";
+      } else if (controller.currentPage.value == DrawerSections.product) {
+        container = const ProductManagementScreen();
+        currentTitle = "Product";
+      } else if (controller.currentPage.value == DrawerSections.procurement) {
+        container = const ProcurementScreen();
+        currentTitle = "Procurement (Design how you see fit)";
+      } else if (controller.currentPage.value == DrawerSections.supplier) {
+        container = const SupplierManagementScreen();
+        currentTitle = "Supplier";
+      } else if (controller.currentPage.value == DrawerSections.customer) {
+        container = const CustomerManagementScreen();
+        currentTitle = "Customer";
+      } else if (controller.currentPage.value == DrawerSections.settings) {
+        container = const SettingsScreen();
+        currentTitle = "Settings";
+      }
+      return PopScope(
+        canPop: false,
+        onPopInvoked: (bool isDialOpen) async {
+          if (isDialOpen) {
+            isDialOpen = false;
+            return;
+          }
+          Navigator.of(context).pop();
+        },
+        child: Scaffold(
+          appBar: AppBar(
+            toolbarHeight: 60.0,
+            backgroundColor: Colors.red[400],
+            title: Text(currentTitle),
+          ),
+          body: container,
         drawer: Drawer(
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                const HeaderDrawer(),
-                drawerList()
-              ],
+            child: SingleChildScrollView(
+              child: Column(
+                  children: [
+                    const HeaderDrawer(),
+                    drawerList(context),
+                  ],
+              ),
             ),
           ),
+          floatingActionButton: homeSpeedDial(context),
         ),
-        floatingActionButton: homeSpeedDial(context),
-      ),
-    );
+      );
+    });
   }
 
   Visibility homeSpeedDial(BuildContext context) {
     return Visibility(
-        visible: currentPage == DrawerSections.dashboard,
-        child: SpeedDial(
-          icon: Icons.add_outlined,
-          backgroundColor: Colors.black,
-          foregroundColor: Colors.white,
-          spaceBetweenChildren: 10,
-          overlayOpacity: 0.5,
-          openCloseDial: isDialOpen,
-          children: [
-            SpeedDialChild(
-              child: const Icon(Icons.people),
-              backgroundColor: Colors.black,
-              foregroundColor: Colors.white,
-              shape: const CircleBorder(),
-              label: 'Add Customer',
-              onTap: () {
-                setState(() {
-                  Navigator.push(context, MaterialPageRoute(
-                    builder: (context) => const AddCustomerScreen(),
-                    ),
-                  );               
-                });
-              }
-            ),
-            SpeedDialChild(
-              child: const Icon(Icons.supervised_user_circle),
-              backgroundColor: Colors.black,
-              foregroundColor: Colors.white,
-              shape: const CircleBorder(),
-              label: 'Add Supplier',
-              onTap: () {
-                setState(() {
-                  Navigator.push(context, MaterialPageRoute(
-                    builder: (context) => const AddSupplierScreen(),
-                    ),
-                  );               
-                });
-              }
-            ),
-            SpeedDialChild(
-              child: const Icon(Icons.shopping_bag),
-              backgroundColor: Colors.black,
-              foregroundColor: Colors.white,
-              shape: const CircleBorder(),
-              label: 'Add Orders',
-              onTap: () {
-                setState(() {
-                  Navigator.push(context, MaterialPageRoute(
-                    builder: (context) => const AddOrderScreen(),
-                    ),
-                  );               
-                });
-              }
-            ),
-            SpeedDialChild(
-              child: const Icon(Icons.shopping_cart),
-              backgroundColor: Colors.black,
-              foregroundColor: Colors.white,
-              shape: const CircleBorder(),
-              label: 'Add Purchase',
-              onTap: () {
-                setState(() {
-                  Navigator.push(context, MaterialPageRoute(
-                    builder: (context) => const AddProcurementScreen(),
-                    ),
-                  );               
-                });
-              }
-            ),
-            SpeedDialChild(
-              child: const Icon(Icons.category),
-              backgroundColor: Colors.black,
-              foregroundColor: Colors.white,
-              shape: const CircleBorder(),
-              label: 'Add Product',
-              onTap: () {
-                setState(() {
-                  Navigator.push(context, MaterialPageRoute(
-                    builder: (context) => const AddProductScreen(),
-                    ),
-                  );               
-                });
-              }
-            ),
-            SpeedDialChild(
-              child: const Icon(Icons.inventory),
-              backgroundColor: Colors.black,
-              foregroundColor: Colors.white,
-              shape: const CircleBorder(),
-              label: 'Add Inventory',
-              onTap: () {
-                setState(() {
-                  Navigator.push(context, MaterialPageRoute(
-                    builder: (context) => const AddInventoryScreen(),
-                    ),
-                  );               
-                });
-              }
-            ),
-          ],
-          
-        ),
-      );
-  }
-
-   Widget drawerList() {
-    return Container(
-      padding: const EdgeInsets.only(
-        top: 15,
-      ),
-      child: Column(
-        // shows the list of menu drawer
+      visible: controller.currentPage.value == DrawerSections.dashboard,
+      child: SpeedDial(
+        icon: Icons.add_outlined,
+        backgroundColor: Colors.black,
+        foregroundColor: Colors.white,
+        spaceBetweenChildren: 10,
+        overlayOpacity: 0.5,
+        openCloseDial: isDialOpen,
         children: [
-          menuItem(1, "Dashboard", Icons.dashboard_outlined,
-              currentPage == DrawerSections.dashboard ? true : false),
-          menuItem(2, "Sales Order", Icons.shopping_bag,
-              currentPage == DrawerSections.salesOrder ? true : false),
-          menuItem(3, "Sales Management", Icons.business,
-              currentPage == DrawerSections.salesManagement ? true : false),
-          const Divider(),
-          menuItem(4, "Inventory", Icons.inventory,
-              currentPage == DrawerSections.inventory ? true : false),
-          menuItem(5, "Product", Icons.category,
-              currentPage == DrawerSections.product ? true : false),
-          menuItem(6, "Procurement", Icons.shopping_cart,
-              currentPage == DrawerSections.procurement ? true : false),
-          const Divider(),
-          menuItem(7, "Supplier", Icons.supervised_user_circle,
-              currentPage == DrawerSections.supplier ? true : false),
-          menuItem(8, "Customer", Icons.people,
-              currentPage == DrawerSections.customer ? true : false),
-          const Divider(),
-          menuItem(9, "Settings", Icons.settings,
-              currentPage == DrawerSections.settings ? true : false),
-        ],
-      ),
-    );
-  }
-
-  Widget menuItem(int id, String title, IconData icon, bool selected) {
-    return Material(
-      color: selected ? Colors.grey[300] : Colors.transparent,
-      child: InkWell(
-        onTap: () {
-          Navigator.pop(context);
-          setState(() {
-            if (id == 1) {
-              currentPage = DrawerSections.dashboard;
-            } else if (id == 2) {
-              currentPage = DrawerSections.salesOrder;
-            } else if (id == 3) {
-              currentPage = DrawerSections.salesManagement;
-            } else if (id == 4) {
-              currentPage = DrawerSections.inventory;
-            } else if (id == 5) {
-              currentPage = DrawerSections.product;
-            } else if (id == 6) {
-              currentPage = DrawerSections.procurement;
-            } else if (id == 7) {
-              currentPage = DrawerSections.supplier;
-            } else if (id == 8) {
-              currentPage = DrawerSections.customer;
-            } else if (id == 9) {
-              currentPage = DrawerSections.settings;
-            }
-          });
-        },
-        child: Padding(
-          padding: const EdgeInsets.all(15.0),
-          child: Row(
-            children: [
-              Expanded(
-                child: Icon(
-                  icon,
-                  size: 20,
-                  color: Colors.black,
-                ),
-              ),
-              Expanded(
-                flex: 3,
-                child: Text(
-                  title,
-                  style: const TextStyle(
-                    color: Colors.black,
-                    fontSize: 16,
+          SpeedDialChild(
+            child: const Icon(Icons.people),
+            backgroundColor: Colors.black,
+            foregroundColor: Colors.white,
+            shape: const CircleBorder(),
+            label: 'Add Customer',
+            onTap: () {
+              setState(() {
+                Navigator.push(context, MaterialPageRoute(
+                  builder: (context) => const AddCustomerScreen(),
                   ),
-                ),
-              ),
-            ],
+                );               
+              });
+            }
           ),
-        ),
+          SpeedDialChild(
+            child: const Icon(Icons.supervised_user_circle),
+            backgroundColor: Colors.black,
+            foregroundColor: Colors.white,
+            shape: const CircleBorder(),
+            label: 'Add Supplier',
+            onTap: () {
+              setState(() {
+                Navigator.push(context, MaterialPageRoute(
+                  builder: (context) => const AddSupplierScreen(),
+                  ),
+                );               
+              });
+            }
+          ),
+          SpeedDialChild(
+            child: const Icon(Icons.shopping_bag),
+            backgroundColor: Colors.black,
+            foregroundColor: Colors.white,
+            shape: const CircleBorder(),
+            label: 'Add Orders',
+            onTap: () {
+              setState(() {
+                Navigator.push(context, MaterialPageRoute(
+                  builder: (context) => const AddOrderScreen(),
+                  ),
+                );               
+              });
+            }
+          ),
+          SpeedDialChild(
+            child: const Icon(Icons.shopping_cart),
+            backgroundColor: Colors.black,
+            foregroundColor: Colors.white,
+            shape: const CircleBorder(),
+            label: 'Add Purchase',
+            onTap: () {
+              setState(() {
+                Navigator.push(context, MaterialPageRoute(
+                  builder: (context) => const AddProcurementScreen(),
+                  ),
+                );               
+              });
+            }
+          ),
+          SpeedDialChild(
+            child: const Icon(Icons.category),
+            backgroundColor: Colors.black,
+            foregroundColor: Colors.white,
+            shape: const CircleBorder(),
+            label: 'Add Product',
+            onTap: () {
+              setState(() {
+                Navigator.push(context, MaterialPageRoute(
+                  builder: (context) => const AddProductScreen(),
+                  ),
+                );               
+              });
+            }
+          ),
+          SpeedDialChild(
+            child: const Icon(Icons.inventory),
+            backgroundColor: Colors.black,
+            foregroundColor: Colors.white,
+            shape: const CircleBorder(),
+            label: 'Add Inventory',
+            onTap: () {
+              setState(() {
+                Navigator.push(context, MaterialPageRoute(
+                  builder: (context) => const AddInventoryScreen(),
+                  ),
+                );               
+              });
+            }
+          ),
+        ],
+        
       ),
     );
   }
-}
-
-enum DrawerSections {
-  dashboard,
-  salesOrder,
-  salesManagement,
-  inventory,
-  product,
-  procurement,
-  supplier,
-  customer,
-  settings
 }

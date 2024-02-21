@@ -18,6 +18,12 @@ class ProcurementScreenState extends State<ProcurementScreen> {
         length: 2,
         child: Column(
           children: [
+            TabBar(
+              tabs: [
+                Tab(text: 'Past'),
+                Tab(text: 'Present'),
+              ],
+            ),
             Expanded(
               child: TabBarView(
                 children: [
@@ -25,12 +31,6 @@ class ProcurementScreenState extends State<ProcurementScreen> {
                   ProcurementTab(category: 'Present'),
                 ],
               ),
-            ),
-            TabBar(
-              tabs: [
-                Tab(text: 'Past'),
-                Tab(text: 'Present'),
-              ],
             ),
           ],
         ),
