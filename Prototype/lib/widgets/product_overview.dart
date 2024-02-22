@@ -35,7 +35,7 @@ class ProductStatusWidget extends StatelessWidget {
                   children: [
                     const Text(
                       'Product Overview',
-                      style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
+                      style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(width: 10.0,),
                     Text(
