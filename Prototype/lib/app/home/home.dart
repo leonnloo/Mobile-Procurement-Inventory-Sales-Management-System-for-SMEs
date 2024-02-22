@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:get/get.dart';
@@ -33,6 +35,8 @@ class HomeScreenState extends State<HomeScreen> {
   Widget container = const HomeWidgets();
   String currentTitle = 'Dashboard';
   final controller = Get.put(CustomDrawerController());
+  DateTime? currentBackPressTime;
+
   @override
   Widget build(BuildContext context) {
     return Obx(() {
@@ -71,7 +75,24 @@ class HomeScreenState extends State<HomeScreen> {
             isDialOpen = false;
             return;
           }
-          Navigator.of(context).pop();
+          if (controller.currentPage.value != DrawerSections.dashboard){
+            controller.changePage(DrawerSections.dashboard);
+            isDialOpen = false;
+            return;
+          } 
+          // Handle double press to exit
+          DateTime now = DateTime.now();
+          if (currentBackPressTime == null || now.difference(currentBackPressTime!) > const Duration(seconds: 2)) {
+            currentBackPressTime = now;
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Press back again to exit'),
+              ),
+            );
+            return;
+          } else {
+            exit(0);
+          }
         },
         child: Scaffold(
           appBar: AppBar(
