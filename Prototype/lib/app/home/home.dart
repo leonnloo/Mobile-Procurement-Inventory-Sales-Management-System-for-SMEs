@@ -19,7 +19,7 @@ import 'package:prototype/widgets/drawer/drawer_controller.dart';
 import 'package:prototype/widgets/drawer/drawer_header.dart';
 import 'package:prototype/widgets/drawer/drawer_list.dart';
 import 'package:prototype/widgets/drawer/drawer_sections.dart';
-import 'package:prototype/widgets/home_widgets.dart';
+import 'package:prototype/widgets/home/home_widgets.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -76,8 +76,19 @@ class HomeScreenState extends State<HomeScreen> {
         child: Scaffold(
           appBar: AppBar(
             toolbarHeight: 60.0,
+            leading: Builder(
+            builder: (context) => IconButton(
+              icon: const Icon(
+                Icons.notes, // Replace with the desired icon
+                size: 30.0,
+              ),
+              onPressed: () {
+                Scaffold.of(context).openDrawer();
+              },
+            ),
+          ),
             backgroundColor: Colors.red[400],
-            title: Text(currentTitle),
+            title: Text(controller.currentPage.value == DrawerSections.dashboard ? '' : currentTitle),
           ),
           body: container,
         drawer: Drawer(
@@ -101,6 +112,7 @@ class HomeScreenState extends State<HomeScreen> {
       visible: controller.currentPage.value == DrawerSections.dashboard,
       child: SpeedDial(
         icon: Icons.add_outlined,
+        activeIcon: Icons.close_outlined,
         backgroundColor: Colors.black,
         foregroundColor: Colors.white,
         spaceBetweenChildren: 10,
@@ -114,12 +126,7 @@ class HomeScreenState extends State<HomeScreen> {
             shape: const CircleBorder(),
             label: 'Add Customer',
             onTap: () {
-              setState(() {
-                Navigator.push(context, MaterialPageRoute(
-                  builder: (context) => const AddCustomerScreen(),
-                  ),
-                );               
-              });
+              Get.to(() => const AddCustomerScreen());
             }
           ),
           SpeedDialChild(
@@ -129,12 +136,7 @@ class HomeScreenState extends State<HomeScreen> {
             shape: const CircleBorder(),
             label: 'Add Supplier',
             onTap: () {
-              setState(() {
-                Navigator.push(context, MaterialPageRoute(
-                  builder: (context) => const AddSupplierScreen(),
-                  ),
-                );               
-              });
+              Get.to(() => const AddSupplierScreen());
             }
           ),
           SpeedDialChild(
@@ -144,12 +146,7 @@ class HomeScreenState extends State<HomeScreen> {
             shape: const CircleBorder(),
             label: 'Add Orders',
             onTap: () {
-              setState(() {
-                Navigator.push(context, MaterialPageRoute(
-                  builder: (context) => const AddOrderScreen(),
-                  ),
-                );               
-              });
+              Get.to(() => const AddOrderScreen());
             }
           ),
           SpeedDialChild(
@@ -159,12 +156,7 @@ class HomeScreenState extends State<HomeScreen> {
             shape: const CircleBorder(),
             label: 'Add Purchase',
             onTap: () {
-              setState(() {
-                Navigator.push(context, MaterialPageRoute(
-                  builder: (context) => const AddProcurementScreen(),
-                  ),
-                );               
-              });
+              Get.to(() => const AddProcurementScreen());
             }
           ),
           SpeedDialChild(
@@ -174,12 +166,7 @@ class HomeScreenState extends State<HomeScreen> {
             shape: const CircleBorder(),
             label: 'Add Product',
             onTap: () {
-              setState(() {
-                Navigator.push(context, MaterialPageRoute(
-                  builder: (context) => const AddProductScreen(),
-                  ),
-                );               
-              });
+              Get.to(() => const AddProductScreen());
             }
           ),
           SpeedDialChild(
@@ -189,12 +176,7 @@ class HomeScreenState extends State<HomeScreen> {
             shape: const CircleBorder(),
             label: 'Add Inventory',
             onTap: () {
-              setState(() {
-                Navigator.push(context, MaterialPageRoute(
-                  builder: (context) => const AddInventoryScreen(),
-                  ),
-                );               
-              });
+              Get.to(() => const AddInventoryScreen());
             }
           ),
         ],

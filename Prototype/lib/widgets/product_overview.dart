@@ -1,17 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:prototype/models/productdata.dart';
 
 class ProductStatusWidget extends StatelessWidget {
-  final int inStockCount;
-  final int lowStockCount;
-  final int outOfStockCount;
-
-  const ProductStatusWidget({super.key, 
-    required this.inStockCount,
-    required this.lowStockCount,
-    required this.outOfStockCount,
-  });
+  ProductStatusWidget({super.key});
   
+  final int inStockCount = products
+    .where((item) => item.status == 'In Stock')
+    .length;
+
+  final int lowStockCount = products
+    .where((item) => item.status == 'Low Stock')
+    .length;
+
+  final int outOfStockCount = products
+    .where((item) => item.status == 'Out of Stock')
+    .length;
   @override
   Widget build(BuildContext context) {
     String currentDate = DateFormat('MMMM d').format(DateTime.now());
