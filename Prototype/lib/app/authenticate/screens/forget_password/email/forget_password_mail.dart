@@ -4,7 +4,7 @@ import 'package:prototype/app/authenticate/screens/forget_password/email/otp.dar
 
 class ForgetPasswordMailScreen extends StatelessWidget {
   // Change super.key to Key? key
-  ForgetPasswordMailScreen({Key? key}) : super(key: key);
+  ForgetPasswordMailScreen({super.key});
 
   final TextEditingController _forgetEmailController = TextEditingController();
   String? _validateTextField(String value, String fieldName) {

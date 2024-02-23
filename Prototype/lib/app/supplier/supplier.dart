@@ -5,6 +5,8 @@ import 'package:prototype/app/supplier/supplier_info.dart';
 
 
 class SupplierManagementScreen extends StatelessWidget {
+  const SupplierManagementScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,19 +35,19 @@ class SupplierManagementScreen extends StatelessWidget {
                     },
                   ),
                   DataCell(
-                    Text(supplier.supplierName ?? 'N/A'),
+                    Text(supplier.supplierName),
                     onTap: () {
                       navigateToSupplierDetail(context, supplier);
                     },
                   ),
                   DataCell(
-                    Text(supplier.contactPerson ?? 'N/A'),
+                    Text(supplier.contactPerson),
                     onTap: () {
                       navigateToSupplierDetail(context, supplier);
                     },
                   ),
                   DataCell(
-                    Text(supplier.email ?? 'N/A'),
+                    Text(supplier.email),
                     onTap: () {
                       navigateToSupplierDetail(context, supplier);
                     },
@@ -73,11 +75,11 @@ class SupplierManagementScreen extends StatelessWidget {
           // Navigate to a screen for adding new supplier info
           Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (context) => AddSupplierScreen(),
+              builder: (context) => const AddSupplierScreen(),
             ),
           );
         },
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
       ),
     );
   }

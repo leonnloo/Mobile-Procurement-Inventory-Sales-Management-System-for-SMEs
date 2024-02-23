@@ -4,25 +4,25 @@ import 'package:prototype/models/procurementdata.dart';
 import 'package:prototype/app/procurement/procurement_info.dart';
 
 class ProcurementScreen extends StatefulWidget {
+  const ProcurementScreen({super.key});
+
   @override
-  _ProcurementScreenState createState() => _ProcurementScreenState();
+  ProcurementScreenState createState() => ProcurementScreenState();
 }
 
-class _ProcurementScreenState extends State<ProcurementScreen> {
+class ProcurementScreenState extends State<ProcurementScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: DefaultTabController(
+      body: const DefaultTabController(
         length: 2,
         child: Column(
           children: [
-            Container(
-              child: TabBar(
-                tabs: [
-                  Tab(text: 'Past'),
-                  Tab(text: 'Present'),
-                ],
-              ),
+            TabBar(
+              tabs: [
+                Tab(text: 'Past'),
+                Tab(text: 'Present'),
+              ],
             ),
             Expanded(
               child: TabBarView(
@@ -40,11 +40,11 @@ class _ProcurementScreenState extends State<ProcurementScreen> {
           // Navigate to a screen for adding new customer info
           Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (context) => AddProcurementScreen(),
+              builder: (context) => const AddProcurementScreen(),
             ),
           );
         },
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
       ),
     );
   }
@@ -53,7 +53,7 @@ class _ProcurementScreenState extends State<ProcurementScreen> {
 class ProcurementTab extends StatelessWidget {
   final String category;
 
-  ProcurementTab({required this.category});
+  const ProcurementTab({super.key, required this.category});
 
   @override
   Widget build(BuildContext context) {

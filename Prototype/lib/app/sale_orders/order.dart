@@ -5,6 +5,8 @@ import 'package:prototype/app/sale_orders/order_info.dart';
 
 
 class SalesOrderScreen extends StatelessWidget {
+  const SalesOrderScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,19 +40,19 @@ class SalesOrderScreen extends StatelessWidget {
                     },
                   ),
                   DataCell(
-                    Text(order.date ?? 'N/A'),
+                    Text(order.date),
                     onTap: () {
                       navigateToOrderDetail(context, order);
                     },
                   ),
                   DataCell(
-                    Text(order.customerID.toString() ?? 'N/A'),
+                    Text(order.customerID.toString()),
                     onTap: () {
                       navigateToOrderDetail(context, order);
                     },
                   ),
                   DataCell(
-                    Text(order.productID.toString() ?? 'N/A'),
+                    Text(order.productID.toString()),
                     onTap: () {
                       navigateToOrderDetail(context, order);
                     },
@@ -68,7 +70,7 @@ class SalesOrderScreen extends StatelessWidget {
                     },
                   ),
                   DataCell(
-                    Text(order.status ?? 'N/A'),
+                    Text(order.status),
                     onTap: () {
                       navigateToOrderDetail(context, order);
                     },
@@ -85,11 +87,11 @@ class SalesOrderScreen extends StatelessWidget {
           // Navigate to a screen for adding new customer info
           Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (context) => AddOrderScreen(),
+              builder: (context) => const AddOrderScreen(),
             ),
           );
         },
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
       ),
     );
   }

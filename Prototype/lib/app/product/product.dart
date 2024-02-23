@@ -6,6 +6,8 @@ import 'package:prototype/app/product/product_info.dart';
 
 
 class ProductManagementScreen extends StatelessWidget {
+  const ProductManagementScreen({super.key});
+
 @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -78,11 +80,11 @@ class ProductManagementScreen extends StatelessWidget {
           // Navigate to a screen for adding new customer info
           Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (context) => AddProductScreen(),
+              builder: (context) => const AddProductScreen(),
             ),
           );
         },
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
       ),
     );
   }

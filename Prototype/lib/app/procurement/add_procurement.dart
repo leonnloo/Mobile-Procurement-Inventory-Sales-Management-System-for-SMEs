@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:prototype/models/procurementdata.dart';
 
 class AddProcurementScreen extends StatefulWidget {
+  const AddProcurementScreen({super.key});
+
   @override
-  _AddProcurementScreenState createState() => _AddProcurementScreenState();
+  AddProcurementScreenState createState() => AddProcurementScreenState();
 }
 
-class _AddProcurementScreenState extends State<AddProcurementScreen> {
+class AddProcurementScreenState extends State<AddProcurementScreen> {
   final _formKey = GlobalKey<FormState>();
 
   // late TextEditingController _procurementNameController;
@@ -96,7 +98,7 @@ class _AddProcurementScreenState extends State<AddProcurementScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Add Procurement'),
+        title: const Text('Add Procurement'),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -108,7 +110,7 @@ class _AddProcurementScreenState extends State<AddProcurementScreen> {
               children: [
                 TextFormField(
                   controller: _productIDController,
-                  decoration: InputDecoration(labelText: 'Product ID'),
+                  decoration: const InputDecoration(labelText: 'Product ID'),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter product ID';
@@ -118,7 +120,7 @@ class _AddProcurementScreenState extends State<AddProcurementScreen> {
                 ),
                 TextFormField(
                   controller: _supplierIDController,
-                  decoration: InputDecoration(labelText: 'Supplier ID'),
+                  decoration: const InputDecoration(labelText: 'Supplier ID'),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter supplier ID';
@@ -128,7 +130,7 @@ class _AddProcurementScreenState extends State<AddProcurementScreen> {
                 ),
                 TextFormField(
                   controller: _orderDateController,
-                  decoration: InputDecoration(labelText: 'Order date'),
+                  decoration: const InputDecoration(labelText: 'Order date'),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter order date';
@@ -141,7 +143,7 @@ class _AddProcurementScreenState extends State<AddProcurementScreen> {
                 ),
                 TextFormField(
                   controller: _deliveryDateController,
-                  decoration: InputDecoration(labelText: 'Delivery date'),
+                  decoration: const InputDecoration(labelText: 'Delivery date'),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter delivery date';
@@ -154,7 +156,7 @@ class _AddProcurementScreenState extends State<AddProcurementScreen> {
                 ),
                 TextFormField(
                   controller: _totalPriceController,
-                  decoration: InputDecoration(labelText: 'Total Price'),
+                  decoration: const InputDecoration(labelText: 'Total Price'),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter total price';
@@ -164,7 +166,7 @@ class _AddProcurementScreenState extends State<AddProcurementScreen> {
                 ),
                 TextFormField(
                   controller: _quantityController,
-                  decoration: InputDecoration(labelText: 'Quantity'),
+                  decoration: const InputDecoration(labelText: 'Quantity'),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter quantity';
@@ -174,7 +176,7 @@ class _AddProcurementScreenState extends State<AddProcurementScreen> {
                 ),
                 TextFormField(
                   controller: _quantityController,
-                  decoration: InputDecoration(labelText: 'Status'),
+                  decoration: const InputDecoration(labelText: 'Status'),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter status';
@@ -182,10 +184,10 @@ class _AddProcurementScreenState extends State<AddProcurementScreen> {
                     return null;
                   },
                 ),
-                SizedBox(height: 16.0),
+                const SizedBox(height: 16.0),
                 ElevatedButton(
                   onPressed: _submitForm,
-                  child: Text('Submit'),
+                  child: const Text('Submit'),
                 ),
               ],
             ),

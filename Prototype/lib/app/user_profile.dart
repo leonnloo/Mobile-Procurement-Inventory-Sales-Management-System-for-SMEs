@@ -1,69 +1,93 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:prototype/app/authenticate/screens/start_screen.dart';
+import 'package:prototype/widgets/fade_in_animation/fade_in_controller.dart';
 
 class UserProfileScreen extends StatelessWidget {
+  const UserProfileScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
+    final controller = Get.put(FadeInController());
+    final size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        title: Text('User Profile'),
+        title: const Text('User Profile'),
         actions: [
           IconButton(
-            icon: Icon(Icons.logout),
+            iconSize: 30.0,
+            icon: const Icon(Icons.logout),
             onPressed: () {
+              controller.resetAnimation();
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(builder: (context) => StartScreen()),
+                MaterialPageRoute(builder: (context) => const StartScreen()),
               );
             },
           ),
         ],
       ),
       body: ListView(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         children: [
-          CircleAvatar(
-            radius: 50.0,
-            backgroundImage: AssetImage('images/user.jpg'), // Replace with your user's profile image
+          Container(
+            margin: const EdgeInsets.only(bottom: 10),
+            height: size.height * 0.13,
+            decoration: const BoxDecoration(
+              shape: BoxShape.circle,
+              image: DecorationImage(
+                image: AssetImage('images/nottingham.jpg'),
+              ),
+            ),
           ),
-          SizedBox(height: 16.0),
-          Text(
-            'Nottingham',
+          const SizedBox(height: 16.0),
+          const Text(
+            'Notts',
             style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
           ),
-          SizedBox(height: 8.0),
-          Text(
-            'example@nottingham.edu.cn',
+          const SizedBox(height: 8.0),
+          const Text(
+            'notts@nottingham.edu.cn',
             style: TextStyle(fontSize: 16.0, color: Colors.grey),
           ),
-          SizedBox(height: 16.0),
-          Divider(),
-          ListTile(
+          const SizedBox(height: 16.0),
+          const Divider(),
+          const ListTile(
             leading: Icon(Icons.person),
             title: Text('Role'),
             subtitle: Text('Manager'), // Replace with the user's phone number
           ),
-          ListTile(
+          const ListTile(
             leading: Icon(Icons.phone),
             title: Text('Phone Number'),
             subtitle: Text('+123 456 7890'), // Replace with the user's phone number
           ),
-          ListTile(
+          const ListTile(
             leading: Icon(Icons.location_on),
             title: Text('Location'),
             subtitle: Text('Ningbo, China'), // Replace with the user's location
           ),
           // Add more ListTile widgets for additional user details
 
-          SizedBox(height: 16.0),
-          ElevatedButton(
-            onPressed: () {
-              // Handle the edit functionality here
-              // You can navigate to an edit screen or show a dialog for editing
-              // For now, let's print a message
-              print('Edit button pressed');
-            },
-            child: Text('Edit'),
+          const SizedBox(height: 16.0),
+          SizedBox(
+            width: double.infinity,
+            child: ElevatedButton(
+              onPressed: () {
+                // Handle the edit functionality here
+                // You can navigate to an edit screen or show a dialog for editing
+                // For now, let's print a message
+                print('Edit button pressed');
+              },
+              style: TextButton.styleFrom(
+                            foregroundColor: Colors.white,
+                            backgroundColor: Colors.black,
+                            side: const BorderSide(color: Colors.black),
+                            shape: const RoundedRectangleBorder(),
+                            padding: const EdgeInsets.symmetric(vertical: 10.0)
+                          ),
+              child: const Text('Edit', style: TextStyle(fontSize: 16.0),),
+            ),
           ),
         ],
       ),

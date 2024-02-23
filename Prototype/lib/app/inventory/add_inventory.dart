@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:prototype/models/orderdata.dart';
 
 class AddInventoryScreen extends StatefulWidget {
+  const AddInventoryScreen({super.key});
+
   @override
-  _AddInventoryScreenState createState() => _AddInventoryScreenState();
+  AddInventoryScreenState createState() => AddInventoryScreenState();
 }
 
-class _AddInventoryScreenState extends State<AddInventoryScreen> {
+class AddInventoryScreenState extends State<AddInventoryScreen> {
   final _formKey = GlobalKey<FormState>();
 
   // late TextEditingController _procurementNameController;
@@ -81,7 +82,7 @@ class _AddInventoryScreenState extends State<AddInventoryScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Add Item'),
+        title: const Text('Add Item'),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -93,7 +94,7 @@ class _AddInventoryScreenState extends State<AddInventoryScreen> {
               children: [
                 TextFormField(
                   // controller: _itemIDController,
-                  decoration: InputDecoration(labelText: 'Item Name'),
+                  decoration: const InputDecoration(labelText: 'Item Name'),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter product ID';
@@ -103,7 +104,7 @@ class _AddInventoryScreenState extends State<AddInventoryScreen> {
                 ),
                 TextFormField(
                   controller: _categoryController,
-                  decoration: InputDecoration(labelText: 'Category'),
+                  decoration: const InputDecoration(labelText: 'Category'),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter supplier ID';
@@ -113,7 +114,7 @@ class _AddInventoryScreenState extends State<AddInventoryScreen> {
                 ),
                 TextFormField(
                   controller: _itemNameController,
-                  decoration: InputDecoration(labelText: 'Quantity'),
+                  decoration: const InputDecoration(labelText: 'Quantity'),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter order date';
@@ -126,7 +127,7 @@ class _AddInventoryScreenState extends State<AddInventoryScreen> {
                 ),
                 TextFormField(
                   controller: _unitPriceController,
-                  decoration: InputDecoration(labelText: 'Unit Price'),
+                  decoration: const InputDecoration(labelText: 'Unit Price'),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter delivery date';
@@ -136,7 +137,7 @@ class _AddInventoryScreenState extends State<AddInventoryScreen> {
                 ),
                 TextFormField(
                   controller: _totalPriceController,
-                  decoration: InputDecoration(labelText: 'Total Price'),
+                  decoration: const InputDecoration(labelText: 'Total Price'),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter total price';
@@ -146,7 +147,7 @@ class _AddInventoryScreenState extends State<AddInventoryScreen> {
                 ),
                 TextFormField(
                   controller: _quantityController,
-                  decoration: InputDecoration(labelText: 'Low Stock Reminder'),
+                  decoration: const InputDecoration(labelText: 'Low Stock Reminder'),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter quantity';
@@ -164,10 +165,10 @@ class _AddInventoryScreenState extends State<AddInventoryScreen> {
                 //     return null;
                 //   },
                 // ),
-                SizedBox(height: 16.0),
+                const SizedBox(height: 16.0),
                 ElevatedButton(
                   onPressed: _submitForm,
-                  child: Text('Submit'),
+                  child: const Text('Submit'),
                 ),
               ],
             ),
