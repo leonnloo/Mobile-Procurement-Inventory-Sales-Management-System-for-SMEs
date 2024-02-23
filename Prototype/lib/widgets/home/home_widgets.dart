@@ -47,7 +47,7 @@ class HomeWidgets extends StatelessWidget {
                     child: GestureDetector(
                       onTap: () {
                         print('object');
-                        Get.to(() => HomeSearch());
+                        Get.to(() => const HomeSearch());
                       },
                       child: const TextField(
                         decoration: InputDecoration(

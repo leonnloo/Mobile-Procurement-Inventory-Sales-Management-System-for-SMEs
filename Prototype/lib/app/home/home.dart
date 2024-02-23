@@ -7,6 +7,7 @@ import 'package:prototype/app/customer/add_customer.dart';
 import 'package:prototype/app/customer/customer.dart';
 import 'package:prototype/app/inventory/add_inventory.dart';
 import 'package:prototype/app/inventory/inventory.dart';
+import 'package:prototype/app/notification_screen.dart';
 import 'package:prototype/app/procurement/add_procurement.dart';
 import 'package:prototype/app/procurement/procurement.dart';
 import 'package:prototype/app/product/add_product.dart';
@@ -106,8 +107,11 @@ class HomeScreenState extends State<HomeScreen> {
               onPressed: () {
                 Scaffold.of(context).openDrawer();
               },
+              ),
             ),
-          ),
+            actions: [
+              IconButton(onPressed: () {Get.to(() => const NotificationScreen());}, icon: const Icon(Icons.notifications, size: 30.0,),),
+            ],
             backgroundColor: Colors.red[400],
             title: Text(controller.currentPage.value == DrawerSections.dashboard ? '' : currentTitle),
           ),
