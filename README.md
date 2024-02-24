@@ -1,6 +1,6 @@
 # Mobile-Procurement-Inventory-Sales-Management-System-for-SMEs
 
-## GRP TEAM-14 (最后一次更新 - 2/2/2024)
+## GRP TEAM-14 (最后一次更新 - 24/2/2024)
 
 ### Team Members:
 Leon Loo Yang\
@@ -87,8 +87,6 @@ https://www.youtube.com/watch?v=D4nhaszNW4o&ab_channel=FlutterGuys
 我已经加入get的dependency了，直接用就行
 https://pub.dev/packages/get
 
-
-
 6. Highly recommended to check out material 3 to plan out your design\
 https://m3.material.io/
 
@@ -103,18 +101,27 @@ https://m3.material.io/
 This repo is a guide to flutter widgets with sample codes and pictures 
 - https://github.com/material-components/material-components-flutter
 
-## Tasks (截至 - 开学那个星期，到时候出来约出来讨论)
+## Tasks
 程序在进入lib里
 记得跟着folder的名字归类
 有什么问题就直接问
 
 ### 1) Tianpu
-- class diagram
+PRODUCTS:
+- filter system
+- safety quantity (critical level)
+- markup (based on cost price, determine selling price to raise margin), margin (based on selling price, determine profit)
+
+SUPPLIER & CUSTOMER:
+filter system
+obtain numbers from contacts (import from contacts)
+
+### 2) Leon
+BACKEND:
 - sql tables - look how to achieve every company have their own datasets, each employee has sales record (number of sales, revenue)
 - learn how to link mongodb -> flask -> flutter
 - CRUD (create, read, update, delete)
 
-### 2) Leon
 LOGIN:
 - authentication 
 - register (only new company can register, employees have to be added by admin or people in authority to the database in settings)
@@ -138,6 +145,8 @@ SALES:
 - individual employee sales
 
 ### 4) Zeyu
+- Design themes for the app\
+\
 ORDER:
 - order dispatch and delivery (packed, shipped, delivered)
 - customer claims and refunds - form, history
