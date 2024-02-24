@@ -13,13 +13,13 @@ void navigateToCustomerDetail(BuildContext context, CustomerData customer) {
 class CustomerDetailScreen extends StatelessWidget {
   final CustomerData customer;
 
-  CustomerDetailScreen({required this.customer});
+  const CustomerDetailScreen({super.key, required this.customer});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Customer Detail'),
+        title: const Text('Customer Detail'),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
@@ -27,20 +27,20 @@ class CustomerDetailScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _buildDetailRow('Customer ID', customer.customerID.toString()),
-            _buildDetailRow('Customer Name', customer.customerName ?? 'N/A'),
-            _buildDetailRow('Contact Person', customer.contactPerson ?? 'N/A'),
-            _buildDetailRow('Email', customer.email ?? 'N/A'),
-            _buildDetailRow('Phone number', customer.phoneno ?? 'N/A'),
-            _buildDetailRow('Billing address', customer.billingAddress ?? 'N/A'),
-            _buildDetailRow('Shipping Address', customer.shippingAddress ?? 'N/A'),
+            _buildDetailRow('Customer Name', customer.customerName),
+            _buildDetailRow('Contact Person', customer.contactPerson),
+            _buildDetailRow('Email', customer.email),
+            _buildDetailRow('Phone number', customer.phoneno),
+            _buildDetailRow('Billing address', customer.billingAddress),
+            _buildDetailRow('Shipping Address', customer.shippingAddress),
 
-            SizedBox(height: 6.0), // Add some spacing
+            const SizedBox(height: 6.0), // Add some spacing
             _buildNotes(),
             
-            SizedBox(height: 6.0),
+            const SizedBox(height: 6.0),
             _buildHistory(),
 
-            SizedBox(height: 6.0),
+            const SizedBox(height: 6.0),
             _buildPastOrders()
           ],
         ),
@@ -57,13 +57,13 @@ class CustomerDetailScreen extends StatelessWidget {
         children: [
           Text(
             label,
-            style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+            style: const TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
           ),
-          SizedBox(width: 30.0), // Increase the spacing between label and text
+          const SizedBox(width: 30.0), // Increase the spacing between label and text
           Flexible(
             child: Text(
               value,
-              style: TextStyle(fontSize: 18.0),
+              style: const TextStyle(fontSize: 18.0),
             ),
           ),
         ],
@@ -74,7 +74,7 @@ class CustomerDetailScreen extends StatelessWidget {
 
   Widget _buildNotes(){
     return Padding(
-      padding: EdgeInsets.all(16.0),
+      padding: const EdgeInsets.all(16.0),
       child: 
       // Section for User's Remark
       Align(
@@ -84,20 +84,20 @@ class CustomerDetailScreen extends StatelessWidget {
               color: Colors.grey, // You can set the color of the border
               width: 1.0,
             ),
-            borderRadius: BorderRadius.all(Radius.circular(8.0)),
+            borderRadius: const BorderRadius.all(Radius.circular(8.0)),
           ),
-          padding: EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
+              const Text(
                 'Note:                                                           ',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
-              SizedBox(height: 8.0),
+              const SizedBox(height: 8.0),
               Text(
                 customer.remark ?? 'No remark available',
-                style: TextStyle(fontSize: 16),
+                style: const TextStyle(fontSize: 16),
               ),
             ],
           ),
@@ -110,9 +110,9 @@ class CustomerDetailScreen extends StatelessWidget {
 List<String> generateRandomHistory() {
   final Random random = Random();
   final List<String> historyList = [
-    'Placed an order on ${DateTime.now().subtract(Duration(days: 5)).toString().split(' ')[0]}',
-    'Received a delivery on ${DateTime.now().subtract(Duration(days: 3)).toString().split(' ')[0]}',
-    'Returned a product on ${DateTime.now().subtract(Duration(days: 2)).toString().split(' ')[0]}',
+    'Placed an order on ${DateTime.now().subtract(const Duration(days: 5)).toString().split(' ')[0]}',
+    'Received a delivery on ${DateTime.now().subtract(const Duration(days: 3)).toString().split(' ')[0]}',
+    'Returned a product on ${DateTime.now().subtract(const Duration(days: 2)).toString().split(' ')[0]}',
     // Add more history entries as needed
   ];
 
@@ -131,8 +131,8 @@ Widget _buildHistory() {
       children: historyEntries.map((history) {
         return Row(
           children: [
-            Icon(Icons.history, color: Colors.blue),
-            SizedBox(width: 8.0),
+            const Icon(Icons.history, color: Colors.blue),
+            const SizedBox(width: 8.0),
             Text(history),
           ],
         );
@@ -158,7 +158,7 @@ List<PastOrder> generatePastOrders() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
+        const Text(
           'Past Orders:',
           style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
@@ -169,8 +169,8 @@ List<PastOrder> generatePastOrders() {
               padding: const EdgeInsets.symmetric(vertical: 4.0),
               child: Row(
                 children: [
-                  Icon(Icons.shopping_cart, color: Colors.green),
-                  SizedBox(width: 8.0),
+                  const Icon(Icons.shopping_cart, color: Colors.green),
+                  const SizedBox(width: 8.0),
                   Text('Order ${order.orderNumber} - ${order.orderDate} - \$${order.totalAmount.toStringAsFixed(2)}'),
                 ],
               ),

@@ -20,6 +20,8 @@ class RegisterContent extends StatelessWidget {
     '+1', '+44', '+91', // Add more country codes as needed
   ];
 
+  RegisterContent({super.key});
+
   String? _validateTextField(String value, String fieldName) {
     if (value.isEmpty) {
       return '$fieldName is required';
@@ -207,7 +209,7 @@ class RegisterContent extends StatelessWidget {
                     print('Register successful!');
                     Navigator.pushReplacement(
                       context,
-                      MaterialPageRoute(builder: (context) => HomeScreen()),
+                      MaterialPageRoute(builder: (context) => const HomeScreen()),
                     );
                   }
                 }

@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:prototype/models/supplierdata.dart';
 
 class AddSupplierScreen extends StatefulWidget {
+  const AddSupplierScreen({super.key});
+
   @override
-  _AddSupplierScreenState createState() => _AddSupplierScreenState();
+  AddSupplierScreenState createState() => AddSupplierScreenState();
 }
 
-class _AddSupplierScreenState extends State<AddSupplierScreen> {
+class AddSupplierScreenState extends State<AddSupplierScreen> {
   final _formKey = GlobalKey<FormState>();
 
   late TextEditingController _supplierNameController;
@@ -58,7 +60,7 @@ class _AddSupplierScreenState extends State<AddSupplierScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Add Supplier'),
+        title: const Text('Add Supplier'),
       ),
       body: 
       SingleChildScrollView(
@@ -70,7 +72,7 @@ class _AddSupplierScreenState extends State<AddSupplierScreen> {
             children: [
               TextFormField(
                 controller: _supplierNameController,
-                decoration: InputDecoration(labelText: 'Supplier Name'),
+                decoration: const InputDecoration(labelText: 'Supplier Name'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter supplier name';
@@ -80,7 +82,7 @@ class _AddSupplierScreenState extends State<AddSupplierScreen> {
               ),
               TextFormField(
                 controller: _contactPersonController,
-                decoration: InputDecoration(labelText: 'Contact Person'),
+                decoration: const InputDecoration(labelText: 'Contact Person'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter contact person';
@@ -90,7 +92,7 @@ class _AddSupplierScreenState extends State<AddSupplierScreen> {
               ),
               TextFormField(
                 controller: _emailController,
-                decoration: InputDecoration(labelText: 'Email'),
+                decoration: const InputDecoration(labelText: 'Email'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter email';
@@ -100,7 +102,7 @@ class _AddSupplierScreenState extends State<AddSupplierScreen> {
               ),
               TextFormField(
                 controller: _phoneNoController,
-                decoration: InputDecoration(labelText: 'Phone No'),
+                decoration: const InputDecoration(labelText: 'Phone No'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter phone number';
@@ -110,7 +112,7 @@ class _AddSupplierScreenState extends State<AddSupplierScreen> {
               ),
               TextFormField(
                 controller: _addressController,
-                decoration: InputDecoration(labelText: 'Shipping Address'),
+                decoration: const InputDecoration(labelText: 'Shipping Address'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter shipping address';
@@ -118,10 +120,10 @@ class _AddSupplierScreenState extends State<AddSupplierScreen> {
                   return null;
                 },
               ),
-              SizedBox(height: 16.0),
+              const SizedBox(height: 16.0),
               ElevatedButton(
                 onPressed: _submitForm,
-                child: Text('Submit'),
+                child: const Text('Submit'),
               ),
             ],
           ),

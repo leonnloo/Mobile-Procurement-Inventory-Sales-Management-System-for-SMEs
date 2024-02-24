@@ -4,6 +4,8 @@ import 'package:prototype/models/inventorydata.dart';
 import 'package:prototype/app/inventory/inventory_info.dart';
 
 class InventoryScreen extends StatelessWidget {
+  const InventoryScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     // Filter inventory items into inStock, lowStock, and outOfStock lists
@@ -40,11 +42,11 @@ class InventoryScreen extends StatelessWidget {
           // Navigate to a screen for adding new customer info
           Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (context) => AddInventoryScreen(),
+              builder: (context) => const AddInventoryScreen(),
             ),
           );
         },
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
       ),
     );
   }
@@ -57,7 +59,7 @@ class InventoryScreen extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           child: Text(
             sectionTitle,
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
         ),
         SingleChildScrollView(
@@ -84,13 +86,13 @@ class InventoryScreen extends StatelessWidget {
                     },
                   ),
                   DataCell(
-                    Text(item.itemName ?? 'N/A'),
+                    Text(item.itemName),
                     onTap: () {
                       navigateToItemDetail(context, item);
                     },
                   ),
                   DataCell(
-                    Text(item.category ?? 'N/A'),
+                    Text(item.category),
                     onTap: () {
                       navigateToItemDetail(context, item);
                     },
@@ -114,7 +116,7 @@ class InventoryScreen extends StatelessWidget {
                     },
                   ),
                   DataCell(
-                    Text(item.status ?? 'N/A'),
+                    Text(item.status),
                     onTap: () {
                       navigateToItemDetail(context, item);
                     },
@@ -138,7 +140,7 @@ class ItemSearch extends SearchDelegate<InventoryItem> {
   List<Widget> buildActions(BuildContext context) {
     return [
       IconButton(
-        icon: Icon(Icons.clear),
+        icon: const Icon(Icons.clear),
         onPressed: () {
           query = '';
         },
@@ -149,7 +151,7 @@ class ItemSearch extends SearchDelegate<InventoryItem> {
   @override
   Widget buildLeading(BuildContext context) {
     return IconButton(
-      icon: Icon(Icons.arrow_back),
+      icon: const Icon(Icons.arrow_back),
       onPressed: () {
         // close(context, null);
       },
@@ -172,7 +174,7 @@ class ItemSearch extends SearchDelegate<InventoryItem> {
             item.itemName.toLowerCase().contains(query.toLowerCase()))
         .toList();
 
-    return SingleChildScrollView(
+    return const SingleChildScrollView(
       child: Column(
         children: [
           // Display search results using the same inventory section widget

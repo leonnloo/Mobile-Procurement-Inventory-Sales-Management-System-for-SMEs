@@ -12,13 +12,13 @@ void navigateToProductDetail(BuildContext context, Product product) {
 class ProductDetailScreen extends StatelessWidget {
   final Product product;
 
-  ProductDetailScreen({required this.product});
+  const ProductDetailScreen({super.key, required this.product});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Product Detail'),
+        title: const Text('Product Detail'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -45,8 +45,8 @@ class ProductDetailScreen extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(label, style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold)),
-          Text(value, style: TextStyle(fontSize: 18.0)),
+          Text(label, style: const TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold)),
+          Text(value, style: const TextStyle(fontSize: 18.0)),
         ],
       ),
     );

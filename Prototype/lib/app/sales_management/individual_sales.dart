@@ -52,19 +52,19 @@ class _IndividualSalesState extends State<IndividualSales> {
   Widget build(BuildContext context) {
     return Card(
       elevation: 4.0,
-      margin: EdgeInsets.all(16.0),
+      margin: const EdgeInsets.all(16.0),
       child: Padding(
         padding: const EdgeInsets.all(24),
         child: Column(
           children: [
-            Text(
+            const Text(
               'Sales by Individual',
               style: TextStyle(
                 fontSize: 28,
                 fontWeight: FontWeight.bold,
               ),
               ),
-            SizedBox(height: 10.0),
+            const SizedBox(height: 10.0),
             AspectRatio(
               aspectRatio: 1.4,
               child: BarChart(
@@ -144,7 +144,7 @@ class _IndividualSalesState extends State<IndividualSales> {
                         int rodIndex,
                       ) {
                         return BarTooltipItem(
-                          rod.toY.toString() + " Name",
+                          "${rod.toY} Name",
                           TextStyle(
                             fontWeight: FontWeight.bold,
                             color: rod.color,
