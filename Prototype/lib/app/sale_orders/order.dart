@@ -87,7 +87,7 @@ class SalesOrderScreen extends StatelessWidget {
           // Navigate to a screen for adding new customer info
           Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (context) => const AddOrderScreen(),
+              builder: (context) => AddOrderScreen(),
             ),
           );
         },
