@@ -1,5 +1,7 @@
 from typing import List
 from pydantic import BaseModel
+from models.sales_order_model import SaleOrder
+
 
 class NotesInfo(BaseModel):
     date: str
@@ -12,5 +14,6 @@ class SupplierInfo(BaseModel):
     email: str
     phone_number: str
     address: str
-    notes: List[NotesInfo]
+    past_order: List[SaleOrder] | None
+    notes: List[NotesInfo] | None
 
