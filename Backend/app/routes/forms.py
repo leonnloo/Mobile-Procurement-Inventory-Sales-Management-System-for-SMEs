@@ -5,7 +5,7 @@ from models.supplier_model import SupplierInfo
 from models.procurement_model import Procurement 
 from models.product_model import ProductItem 
 from models.inventory_model import InventoryItem  
-from config.database import customers_db, suppliers_db, sales_order_db, procurement_db, product_db, inventory_db
+from config.database import *
 from fastapi.security import OAuth2PasswordBearer
 
 form_router = APIRouter()
