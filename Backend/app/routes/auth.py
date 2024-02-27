@@ -1,7 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from models.users_model import User
 from config.database import users_db
-from schema.schemas import list_serial
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from bson import ObjectId
 
@@ -28,8 +27,5 @@ def login(form_data: OAuth2PasswordRequestForm = Depends()):
         headers={"WWW-Authenticate": "Bearer"},
     )
 
-@auth_router.get("/spend")
-def spend_history(token: str = Depends(oauth_scheme)):
-    return {"hi": "hi"}
 
 

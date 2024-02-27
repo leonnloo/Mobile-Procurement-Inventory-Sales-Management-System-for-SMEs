@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 
 class InventoryItem(BaseModel):
-    item_id: int
+    item_id: str
     item_name: str
     category: str
     quantity: int
