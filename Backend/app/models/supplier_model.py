@@ -15,5 +15,5 @@ class SupplierInfo(BaseModel):
     phone_number: str
     address: str
     past_order: List[SaleOrder] | None
-    notes: List[NotesInfo] | None
+    notes: NotesInfo | None
 

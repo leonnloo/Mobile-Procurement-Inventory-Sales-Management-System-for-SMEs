@@ -124,3 +124,11 @@ def company_monthly_sales_dict_serial(sale) -> dict:
 def company_monthly_sales_serial(sales) -> list:
     return [company_monthly_sales_dict_serial(sale) for sale in sales]
 
+
+# ---------------------------------------- Notes ----------------------------------------
+def note_dict_serial(note) -> dict:
+    return {
+        "note_id": str(note["note_id"]),
+        "date": note["date"],
+        "memo": note["memo"]
+    }

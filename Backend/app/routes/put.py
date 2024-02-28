@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from config.database import *
 from models.customer_model import CustomerInfo
 from models.sales_order_model import SaleOrder
-from models.supplier_model import SupplierInfo
+from models.supplier_model import SupplierInfo, NotesInfo
 from models.procurement_model import Procurement 
 from models.product_model import ProductItem 
 from models.inventory_model import InventoryItem  
@@ -40,7 +40,6 @@ def update_customer(customer: CustomerInfo):
             detail="Customer not found",
             headers={"WWW-Authenticate": "Bearer"},
         )
-
 # ----------------------------------------- Supplier Update ----------------------------------------------
 @put_router.put("/update_supplier/{supplier_id}")
 def update_supplier(supplier: SupplierInfo):
@@ -64,6 +63,8 @@ def update_supplier(supplier: SupplierInfo):
             detail="Supplier not found",
             headers={"WWW-Authenticate": "Bearer"},
         )
+
+
 
 
 # ----------------------------------------- Sales Order Update ----------------------------------------------
