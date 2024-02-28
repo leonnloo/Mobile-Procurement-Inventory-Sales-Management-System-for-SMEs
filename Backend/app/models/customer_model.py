@@ -13,4 +13,4 @@ class CustomerInfo(BaseModel):
     shipping_address: str
     past_order: List[SaleOrder] | None
     refunds: List[SaleOrder] | None
-    notes: List[NotesInfo] | None
+    notes: NotesInfo | None
