@@ -98,7 +98,7 @@ def inventory_serial(inventories) -> list:
     return [inventory_dict_serial(inventory) for inventory in inventories]
 
 # ---------------------------------------- Sales Order ----------------------------------------
-def sale_order_dict(sale_order) -> dict:
+def sale_order_dict_serial(sale_order) -> dict:
     return {
         "order_no": sale_order["order_no"],
         "date": sale_order["date"],
@@ -111,7 +111,7 @@ def sale_order_dict(sale_order) -> dict:
     }
 
 def sale_order_serial(sale_orders) -> list:
-    return [sale_order_dict(sale_order) for sale_order in sale_orders]
+    return [sale_order_dict_serial(sale_order) for sale_order in sale_orders]
 
 # ---------------------------------------- Sales Management ----------------------------------------
 def company_monthly_sales_dict_serial(sale) -> dict:

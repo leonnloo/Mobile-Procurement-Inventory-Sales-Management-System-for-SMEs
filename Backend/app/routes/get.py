@@ -1,5 +1,4 @@
 from fastapi import APIRouter, Depends, HTTPException, status
-from models.users_model import User
 from config.database import *
 from models.customer_model import CustomerInfo
 from models.sales_order_model import SaleOrder
@@ -15,7 +14,8 @@ from fastapi.security import OAuth2PasswordBearer
 get_router = APIRouter()
 oauth_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
-
+# TODO: try removing all docs in db to see what'll return to flutter, and handle the logic from there on or here
+# it'll return empty list
 # ---------------------------------------- Customer ----------------------------------------
 @get_router.get("/get_customers")
 def get_customers():
@@ -52,4 +52,9 @@ def get_inventory():
     inventory = inventory_serial(inventory_db.find())
     return inventory
 
+# ---------------------------------------- Sale Management ----------------------------------------
+@get_router.get("/get_company_monthly_sales")
+def get_company_monthly_sales():
+    sales = company_monthly_sales_serial(sales_management_db.find())
+    return sales
 
