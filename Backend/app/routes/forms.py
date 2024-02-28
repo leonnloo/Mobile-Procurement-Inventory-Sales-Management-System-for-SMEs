@@ -99,7 +99,7 @@ def register(supplier: SupplierInfo):
     suppliers_db.insert_one(dict(updated_supplier))
     return {"Message": "Supplier successfully registered"}
 
-
+# ! Update monthly sales when inputting a new order
 # ----------------------------------------- Sales Form ----------------------------------------- 
 @form_router.post("/sales_order_form")
 def register(order: SaleOrder):
@@ -150,8 +150,7 @@ def register(procurement: Procurement):
     procurement_db.insert_one(dict(updated_procurement))
     return {"Message": "Procurement successfully registered"}
 
-
-# product form
+# ----------------------------------------- Product Form ----------------------------------------------
 @form_router.post("/product_form")
 def register(product: ProductItem):
     if product_db.find_one({"product_name": product.product_name}):

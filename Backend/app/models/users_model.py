@@ -9,6 +9,7 @@ class User(BaseModel):
     employee_id: int | None
     email: str 
     password: str
+    phone_number: str
     role: str | None
     sales_record: List[EmployeeMonthlySales] | None
     # company: str
