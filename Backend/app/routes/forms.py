@@ -181,6 +181,7 @@ def register(product: ProductItem):
     product_db.insert_one(dict(updated_product))
     return {"Message": "Product successfully registered"}
 
+# ! item
 # ----------------------------------------- Inventory Form ----------------------------------------------
 @form_router.post("/inventory_form")
 def register(inventory: InventoryItem):

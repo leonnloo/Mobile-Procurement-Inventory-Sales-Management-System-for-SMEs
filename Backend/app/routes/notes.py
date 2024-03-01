@@ -1,7 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from config.database import *
-from models.customer_model import CustomerInfo
-from models.supplier_model import SupplierInfo, NotesInfo
+from models.supplier_model import NotesInfo
 from models import *
 from schema.schemas import *
 from fastapi.security import OAuth2PasswordBearer

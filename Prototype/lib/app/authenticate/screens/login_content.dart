@@ -1,12 +1,16 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:prototype/app/authenticate/screens/forget_password/option/forget_password_option.dart';
 import 'package:prototype/app/authenticate/screens/register_content.dart';
 import 'package:prototype/app/home/home.dart';
+import 'package:prototype/util/request_util.dart';
 import 'package:prototype/widgets/fade_in_animation/animation_design.dart';
 import 'package:prototype/widgets/fade_in_animation/fade_in_animation_model.dart';
 import 'package:prototype/widgets/fade_in_animation/fade_in_controller.dart';
-
+import 'package:http/http.dart' as http;
+final RequestUtil requestUtil = RequestUtil();
 class LoginContent extends StatelessWidget {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
@@ -119,7 +123,7 @@ class LoginContent extends StatelessWidget {
                             shape: const RoundedRectangleBorder(),
                             padding: const EdgeInsets.symmetric(vertical: 15.0)
                           ),
-              onPressed: () {
+              onPressed: () async {
                 // Add your authentication logic here
                 String? emailError = _validateTextField(_emailController.text, 'Email');
                 String? passwordError = _validateTextField(_passwordController.text, 'Password');
@@ -132,32 +136,40 @@ class LoginContent extends StatelessWidget {
                         backgroundColor: Colors.red,
                       ),
                     );
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(builder: (context) => const HomeScreen()),
-                      );
+                      // Navigator.pushReplacement(
+                      //   context,
+                      //   MaterialPageRoute(builder: (context) => const HomeScreen()),
+                      // );
                   } else {
                     String email = _emailController.text;
                     String password = _passwordController.text;
-
-                    // TO DO: compare email and password to the ones in the database
-                    print(email);
-                    print(password);
-                    // if (emailError == null || passwordError == null){
-                    //   ScaffoldMessenger.of(context).showSnackBar(
-                    //     const SnackBar(
-                    //       content: Text('Email or password is incorrect.'),
-                    //       backgroundColor: Colors.red,
-                    //     ),
-                    //   );
-                    // } else {
-                      // Add logic for login
-                      print('Login successful!');
+                    final response = await requestUtil.login(
+                      _emailController.text,
+                      _passwordController.text,
+                    );
+                    if (response.statusCode == 200) {
+                      // Successful login
+                      print("Login successful!");
+                      print("Access Token: ${jsonDecode(response.body)['access_token']}");
+                      
+                      // Navigate to the home screen or perform other actions
                       Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(builder: (context) => const HomeScreen()),
                       );
-                    // }
+                    } else {
+                      // Failed login
+                      print("Login failed");
+                      print("Error: ${response.body}");
+                      
+                      // Display an error message to the user
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Email or password is incorrect.'),
+                          backgroundColor: Colors.red,
+                        ),
+                      );
+                    }
                   }
               },
               child: const Text('LOGIN'),
