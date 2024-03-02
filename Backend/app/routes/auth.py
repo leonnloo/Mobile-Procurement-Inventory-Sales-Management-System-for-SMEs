@@ -2,7 +2,6 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from models.users_model import User
 from config.database import users_db
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
-from bson import ObjectId
 
 auth_router = APIRouter()
 oauth_scheme = OAuth2PasswordBearer(tokenUrl="token")
@@ -23,7 +22,7 @@ def login(form_data: OAuth2PasswordRequestForm = Depends()):
     raise HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         
-        detail="Invalid credentials",
+        detail="Invalid credentials NOOB",
         headers={"WWW-Authenticate": "Bearer"},
     )
 
