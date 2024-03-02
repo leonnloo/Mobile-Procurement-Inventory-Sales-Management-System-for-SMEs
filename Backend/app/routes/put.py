@@ -123,6 +123,7 @@ def update_inventory(item: InventoryItem):
             headers={"WWW-Authenticate": "Bearer"},
         )
     
+    
 # ----------------------------------------- Sales Management Update ----------------------------------------------
 @put_router.put("/update_company_monthly_sales/{year}")
 def update_company_monthly_sales(sales_by_month: CompanyMonthlySales):

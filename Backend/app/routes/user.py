@@ -8,13 +8,18 @@ from fastapi.security import OAuth2PasswordBearer
 user_router = APIRouter()
 oauth_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
-@user_router.get("/get_user")
+@user_router.get("/get_users")
 async def get_users():
     users = user_serial(users_db.find())
     return users
 
-@user_router.post("/register_user")
-def register(user: User):
+@user_router.get("/get_user/{id}")
+async def get_user(id: str):
+    user = user_serial(users_db.find_one({"employee_id": id}))
+    return user
+
+@user_router.post("/create_user")
+def create_user(user: User):
 # async def register(user: User, token: str = Depends(oauth_scheme)):
     existing_email_user = users_db.find_one({"email": user.email})
     if existing_email_user:
@@ -51,17 +56,18 @@ def register(user: User):
     users_db.insert_one(dict(updated_user))
     return {"Message": "Successfully registered"}
 
-
+# ! add logic so that only admin can change employee's role
 @user_router.put("/{id}")
-def put_user(user: User):
-    old_user = users_db.find_one({"employee_id": user.employee_id})
+def put_user(id: str, user: User):
+    old_user = users_db.find_one({"employee_id": id})
     if old_user:
         updated_supplier = User(
-            employee_id = user.employee_id,
+            employee_id = old_user["employee_id"],
             employee_name = user.employee_name,
             email = user.email,
+            password = user.password,
             phone_number = user.phone_number,
-            role = old_user["role"],
+            role = user.role,
             sales_record = old_user["sales_record"],
         )
         users_db.update_one({"employee_id": user.employee_id}, {"$set": dict(updated_supplier)})
