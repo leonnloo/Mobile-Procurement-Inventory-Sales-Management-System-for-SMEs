@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:http/http.dart' as http;
 import 'dart:io';
 
@@ -12,6 +14,7 @@ class RequestUtil {
     endpoint = "http://$ipAddress:$port/";
   }
 
+  // ----------------------------------------- LOGIN ----------------------------------------------
   Future<http.Response> login(String username, String password) async {
     return http.post(
       Uri.parse("${endpoint}token"),
@@ -22,16 +25,14 @@ class RequestUtil {
     );
   }
 
-  Future<http.Response> register(String username, String email, String phoneNumber, String password, String role) async {
-    return http.post(
-      Uri.parse("${endpoint}register"),
-      body: {
-        'username': username,
-        'email': email,
-        'phoneNumber': phoneNumber,
-        'password': password,
-        'role': role,
-      },
+  Future<http.Response> getToken(String username) async {
+    return http.get(Uri.parse("${endpoint}token/$username"));
+  }
+
+  // ----------------------------------------- USER (Employee's info, Registering) ----------------------------------------------
+  Future<http.Response> getUser(String id) async {
+    return http.get(
+      Uri.parse("${endpoint}get_user/$id"),
     );
   }
 
@@ -41,9 +42,31 @@ class RequestUtil {
     );
   }
 
-  Future<http.Response> getUser(String id) async {
-    return http.get(
-      Uri.parse("${endpoint}get_user/$id"),
+  Future<http.Response> createUser(String username, String email, String phoneNumber, String password) async {
+    final response = await http.post(
+    Uri.parse("${endpoint}create_user"),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({
+        'employee_name': username,
+        'email': email,
+        'phone_number': phoneNumber,
+        'password': password,
+      }),
+    );
+
+    return response;
+  }
+
+  Future<http.Response> updateUser(String id, String username, String email, String password, String phoneNumber, String role) async {
+    return http.put(
+      Uri.parse("${endpoint}update_user/$id"),
+      body: {
+        'employee_name': username,
+        'password': password,
+        'email': email,
+        'phone_number': phoneNumber,
+        'role': role,
+      },
     );
   }
 
@@ -53,28 +76,25 @@ class RequestUtil {
     );
   }
 
-  Future<http.Response> updateUser(String id, String username, String email, String password, String phoneNumber, String role) async {
-    return http.put(
-      Uri.parse("${endpoint}update_user/$id"),
+
+  // ----------------------------------------- CUSTOMER ----------------------------------------------
+  Future<http.Response> newCustomer(String businessName, String contactPerson, String email, String phoneNumber, String billingAddress, String shippingAddress) async {
+    return http.post(
+      Uri.parse("${endpoint}customer_form"),
       body: {
-        'username': username,
+        'customer_id': null,
+        'business_name': businessName,
+        'contact_person': contactPerson,
         'email': email,
-        'password': password,
-        'phoneNumber': phoneNumber,
-        'role': role,
-      },
+        'phone_number': phoneNumber,
+        'billing_address': billingAddress,
+        'shipping_address': shippingAddress,
+        
+      }
     );
   }
 
-  Future<http.Response> createUser(String username, String email, String password, String phoneNumber) async {
-    return http.post(
-      Uri.parse("${endpoint}create_user"),
-      body: {
-        'username': username,
-        'email': email,
-        'password': password,
-        'phoneNumber': phoneNumber,
-      },
-    );
-  }
+
+
+
 }

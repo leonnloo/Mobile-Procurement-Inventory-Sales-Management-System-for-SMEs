@@ -1,15 +1,15 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:prototype/app/authenticate/screens/forget_password/option/forget_password_option.dart';
 import 'package:prototype/app/authenticate/screens/register_content.dart';
 import 'package:prototype/app/home/home.dart';
 import 'package:prototype/util/request_util.dart';
+import 'package:prototype/util/user_controller.dart';
 import 'package:prototype/widgets/fade_in_animation/animation_design.dart';
 import 'package:prototype/widgets/fade_in_animation/fade_in_animation_model.dart';
 import 'package:prototype/widgets/fade_in_animation/fade_in_controller.dart';
 import 'package:http/http.dart' as http;
+
 final RequestUtil requestUtil = RequestUtil();
 class LoginContent extends StatelessWidget {
   final TextEditingController _emailController = TextEditingController();
@@ -76,7 +76,8 @@ class LoginContent extends StatelessWidget {
   }
 
   Form _loginForm(context) {
-    final controller = Get.put(FadeInController());
+    final fadeInController = Get.put(FadeInController());
+    final userController = Get.put(UserLoggedInController());
     return Form(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -85,8 +86,8 @@ class LoginContent extends StatelessWidget {
             controller: _emailController,
             decoration: const InputDecoration(
               prefixIcon: Icon(Icons.person_outline_outlined),
-              labelText: 'Email',
-              hintText: 'Email',
+              labelText: 'Email / Username',
+              hintText: 'Email / Username',
               border: OutlineInputBorder()
             ),
           ),
@@ -141,27 +142,23 @@ class LoginContent extends StatelessWidget {
                       //   MaterialPageRoute(builder: (context) => const HomeScreen()),
                       // );
                   } else {
-                    String email = _emailController.text;
-                    String password = _passwordController.text;
+                    // String email = _emailController.text;
+                    // String password = _passwordController.text;
                     final response = await requestUtil.login(
                       _emailController.text,
                       _passwordController.text,
                     );
                     if (response.statusCode == 200) {
                       // Successful login
-                      print("Login successful!");
-                      print("Access Token: ${jsonDecode(response.body)['access_token']}");
-                      
+                      // print("Login successful!");
+                      // print("Access Token: ${jsonDecode(response.body)['access_token']}");
+                      userController.updateUser(_emailController.text);
                       // Navigate to the home screen or perform other actions
                       Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(builder: (context) => const HomeScreen()),
                       );
                     } else {
-                      // Failed login
-                      print("Login failed");
-                      print("Error: ${response.body}");
-                      
                       // Display an error message to the user
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
@@ -180,7 +177,7 @@ class LoginContent extends StatelessWidget {
             alignment: Alignment.center,
             child: TextButton(
               onPressed: () {
-                controller.resetAnimation();
+                fadeInController.resetAnimation();
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(builder: (context) => RegisterContent()),
@@ -193,6 +190,4 @@ class LoginContent extends StatelessWidget {
       )
     );
   }
-
-  
 }
