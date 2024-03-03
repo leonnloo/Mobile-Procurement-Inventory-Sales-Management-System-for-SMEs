@@ -30,7 +30,7 @@ def processNextID(query: str) -> str:
 
 # ----------------------------------------- Customer Form ----------------------------------------------
 @form_router.post("/customer_form")
-def register(customer: CustomerInfo):
+def register_customer(customer: CustomerInfo):
     existing_customer = customers_db.find_one({"business_name": customer.business_name})
     if existing_customer:
         raise HTTPException(

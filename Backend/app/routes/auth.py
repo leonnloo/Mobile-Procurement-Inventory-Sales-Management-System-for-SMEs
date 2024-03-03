@@ -22,9 +22,12 @@ def login(form_data: OAuth2PasswordRequestForm = Depends()):
     raise HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         
-        detail="Invalid credentials NOOB",
+        detail="Invalid credentials",
         headers={"WWW-Authenticate": "Bearer"},
     )
 
-
+@auth_router.get("/token/{username}")
+def get_token(username: str = Depends(oauth_scheme)):
+    print(username)
+    return {"access_token": username, "token_type": "bearer"}
 

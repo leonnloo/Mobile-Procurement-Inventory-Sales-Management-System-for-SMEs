@@ -5,6 +5,7 @@ def user_dict_serial(user) -> dict:
         "employee_name": user["employee_name"],
         "employee_id": user["employee_id"],
         "email": user["email"],
+        "phone_number": user["phone_number"],
         "password": user["password"],
         "role": user["role"],
         "sales_record": user["sales_record"]
@@ -12,7 +13,7 @@ def user_dict_serial(user) -> dict:
 
 def user_serial(users) -> list:
     return [user_dict_serial(user) for user in users]
-
+ 
 # ---------------------------------------- Supplier ----------------------------------------
 def supplier_dict_serial(supplier) -> dict:
     return {

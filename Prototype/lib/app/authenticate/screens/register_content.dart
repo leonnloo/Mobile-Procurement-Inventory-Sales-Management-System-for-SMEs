@@ -1,7 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:prototype/app/authenticate/screens/login_content.dart';
 import 'package:prototype/app/home/home.dart';
+import 'package:prototype/util/request_util.dart';
 import 'package:prototype/widgets/fade_in_animation/animation_design.dart';
 import 'package:prototype/widgets/fade_in_animation/fade_in_animation_model.dart';
 import 'package:prototype/widgets/fade_in_animation/fade_in_controller.dart';
@@ -79,6 +82,7 @@ class RegisterContent extends StatelessWidget {
     );
   }
   Form _registerForm(context) {
+    final RequestUtil requestUtil = RequestUtil();
     final controller = Get.put(FadeInController());
     return Form(
       child: Column(
@@ -167,7 +171,7 @@ class RegisterContent extends StatelessWidget {
                             shape: const RoundedRectangleBorder(),
                             padding: const EdgeInsets.symmetric(vertical: 15.0)
                           ),
-              onPressed: () {
+              onPressed: () async {
                 // Add your authentication logic here
                 String? usernameError = _validateTextField(_usernameController.text, 'Full Name');
                 String? emailError = _validateTextField(_emailController.text, 'Email');
@@ -187,7 +191,6 @@ class RegisterContent extends StatelessWidget {
                       backgroundColor: Colors.red,
                     ),
                   );
-                  print(_phoneNumberController.text);
                 } else {
                   // All fields are filled, proceed with registration logic
                   String username = _usernameController.text;
@@ -196,20 +199,38 @@ class RegisterContent extends StatelessWidget {
                   String password = _passwordController.text;
                   String confirmPassword = _confirmPasswordController.text;
             
-                  // TO DO: CHECK ALL THE FIELDS ARE DONE
                   if (password == confirmPassword){
+                    final response = await requestUtil.createUser(
+                      username, email, phoneNumber, password
+                    );
+                    if (response.statusCode == 200) {
+                      // Successful login
+                      // print("Register successful!");
+                      // Navigate to the home screen or perform other actions
+                      controller.resetAnimation();
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (context) => LoginContent()),
+                      );
+                    } else {
+                      // Failed login
+                      // print("Register failed");
+                      // print("Error: ${response.body}");
+                      
+                      // Display an error message to the user
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(jsonDecode(response.body)['detail']),
+                          backgroundColor: Colors.red,
+                        ),
+                      );
+                    }
+                  } else {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
                         content: Text('Password does not match.'),
                         backgroundColor: Colors.red,
                       )
-                    );
-                  } else {
-                    // Add logic for registering
-                    print('Register successful!');
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(builder: (context) => const HomeScreen()),
                     );
                   }
                 }
