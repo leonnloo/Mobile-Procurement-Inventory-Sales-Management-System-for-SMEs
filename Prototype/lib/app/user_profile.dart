@@ -23,7 +23,6 @@ class UserProfileScreen extends StatelessWidget {
           print('object');
           return Text('Error: ${snapshot.error}');
         } else {
-          // Use the retrieved data to build your UI
           final user = snapshot.data;
           print("HEY");
           if (user != null) {
