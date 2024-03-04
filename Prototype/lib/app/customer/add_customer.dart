@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:prototype/models/customerdata.dart';
+import 'package:prototype/util/request_util.dart';
 
 class AddCustomerScreen extends StatefulWidget {
   const AddCustomerScreen({super.key});
@@ -10,18 +13,18 @@ class AddCustomerScreen extends StatefulWidget {
 
 class AddCustomerScreenState extends State<AddCustomerScreen> {
   final _formKey = GlobalKey<FormState>();
+  final RequestUtil requestUtil = RequestUtil();
 
-  late TextEditingController _customerNameController;
+  late TextEditingController _businessNameController;
   late TextEditingController _contactPersonController;
   late TextEditingController _emailController;
   late TextEditingController _phoneNoController;
   late TextEditingController _billingAddressController;
   late TextEditingController _shippingAddressController;
-
   @override
   void initState() {
     super.initState();
-    _customerNameController = TextEditingController();
+    _businessNameController = TextEditingController();
     _contactPersonController = TextEditingController();
     _emailController = TextEditingController();
     _phoneNoController = TextEditingController();
@@ -31,33 +34,13 @@ class AddCustomerScreenState extends State<AddCustomerScreen> {
 
   @override
   void dispose() {
-    _customerNameController.dispose();
+    _businessNameController.dispose();
     _contactPersonController.dispose();
     _emailController.dispose();
     _phoneNoController.dispose();
     _billingAddressController.dispose();
     _shippingAddressController.dispose();
     super.dispose();
-  }
-
-  void _submitForm() {
-    if (_formKey.currentState?.validate() ?? false) {
-      CustomerData newCustomer = CustomerData(
-        customerID: 0, // Assign a unique ID (can generate or get from a database)
-        customerName: _customerNameController.text,
-        contactPerson: _contactPersonController.text,
-        email: _emailController.text,
-        phoneno: _phoneNoController.text,
-        billingAddress: _billingAddressController.text,
-        shippingAddress: _shippingAddressController.text,
-      );
-
-
-      print(newCustomer);
-
-      // Close the screen
-      Navigator.of(context).pop();
-    }
   }
 
   @override
@@ -75,7 +58,7 @@ class AddCustomerScreenState extends State<AddCustomerScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               TextFormField(
-                controller: _customerNameController,
+                controller: _businessNameController,
                 decoration: const InputDecoration(labelText: 'Customer Name'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -135,9 +118,60 @@ class AddCustomerScreenState extends State<AddCustomerScreen> {
                 },
               ),
               const SizedBox(height: 16.0),
-              ElevatedButton(
-                onPressed: _submitForm,
-                child: const Text('Submit'),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  style: TextButton.styleFrom(
+                                foregroundColor: Colors.white,
+                                backgroundColor: Colors.black,
+                                side: const BorderSide(color: Colors.black),
+                                shape: const RoundedRectangleBorder(),
+                                padding: const EdgeInsets.symmetric(vertical: 15.0)
+                              ),
+                  onPressed: () async {
+                    // Add your authentication logic here
+                    String? businessName = _businessNameController.text;
+                    String? contactPerson = _contactPersonController.text;
+                    String? email = _emailController.text;
+                    String? phoneNumber = _phoneNoController.text;
+                    String? billingAddress = _billingAddressController.text;
+                    String? shippingAddress = _shippingAddressController.text;
+                    if (businessName != null ||
+                        contactPerson != null ||
+                        email != null ||
+                        phoneNumber != null ||
+                        billingAddress != null ||
+                        shippingAddress != null) {
+                      // Display validation error messages
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Please fill in all the required fields.'),
+                          backgroundColor: Colors.red,
+                        ),
+                      );
+                    } else {                
+                      final response = await requestUtil.newCustomer(
+                        businessName, contactPerson, email, phoneNumber, billingAddress, shippingAddress
+                      );
+                      if (response.statusCode == 200) {
+                        Navigator.pop(context);
+                      } else {
+                        // Failed login
+                        // print("Register failed");
+                        // print("Error: ${response.body}");
+                        
+                        // Display an error message to the user
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(jsonDecode(response.body)['detail']),
+                            backgroundColor: Colors.red,
+                          ),
+                        );
+                      }
+                    }
+                  },
+                  child: const Text('SIGN UP')
+                ),
               ),
             ],
           ),

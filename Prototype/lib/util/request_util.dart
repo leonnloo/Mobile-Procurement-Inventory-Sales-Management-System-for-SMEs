@@ -82,14 +82,12 @@ class RequestUtil {
     return http.post(
       Uri.parse("${endpoint}customer_form"),
       body: {
-        'customer_id': null,
         'business_name': businessName,
         'contact_person': contactPerson,
         'email': email,
         'phone_number': phoneNumber,
         'billing_address': billingAddress,
         'shipping_address': shippingAddress,
-        
       }
     );
   }

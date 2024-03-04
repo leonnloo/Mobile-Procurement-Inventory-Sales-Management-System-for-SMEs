@@ -14,3 +14,11 @@ class CustomerInfo(BaseModel):
     past_order: List[SaleOrder] | None
     refunds: List[SaleOrder] | None
     notes: NotesInfo | None
+
+class NewCustomer(BaseModel):
+    business_name: str
+    contact_person: str
+    email: str
+    phone_number: str
+    billing_address: str
+    shipping_address: str
