@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:prototype/app/authenticate/screens/login_content.dart';
-import 'package:prototype/app/home/home.dart';
 import 'package:prototype/util/request_util.dart';
 import 'package:prototype/widgets/fade_in_animation/animation_design.dart';
 import 'package:prototype/widgets/fade_in_animation/fade_in_animation_model.dart';
