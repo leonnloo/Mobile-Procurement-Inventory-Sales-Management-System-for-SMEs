@@ -1,10 +1,10 @@
 from fastapi import APIRouter, Depends, HTTPException, status
-from models.customer_model import CustomerInfo
-from models.sales_order_model import SaleOrder
-from models.supplier_model import SupplierInfo
-from models.procurement_model import Procurement 
-from models.product_model import ProductItem 
-from models.inventory_model import InventoryItem  
+from models.customer_model import *
+from models.sales_order_model import *
+from models.supplier_model import *
+from models.procurement_model import *
+from models.product_model import *
+from models.inventory_model import *
 from config.database import *
 from fastapi.security import OAuth2PasswordBearer
 
@@ -30,7 +30,7 @@ def processNextID(query: str) -> str:
 
 # ----------------------------------------- Customer Form ----------------------------------------------
 @form_router.post("/customer_form")
-def create_customer(customer: CustomerInfo):
+def create_customer(customer: NewCustomer):
     existing_customer = customers_db.find_one({"business_name": customer.business_name})
     if existing_customer:
         raise HTTPException(

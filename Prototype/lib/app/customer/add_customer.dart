@@ -1,7 +1,5 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:prototype/models/customerdata.dart';
 import 'package:prototype/util/request_util.dart';
 
 class AddCustomerScreen extends StatefulWidget {
@@ -41,6 +39,19 @@ class AddCustomerScreenState extends State<AddCustomerScreen> {
     _billingAddressController.dispose();
     _shippingAddressController.dispose();
     super.dispose();
+  }
+
+  String? _validateTextField(String value, String fieldName) {
+    if (value.isEmpty) {
+      // ScaffoldMessenger.of(context).showSnackBar(
+      //   SnackBar(
+      //     content: Text('$fieldName is required'),
+      //     backgroundColor: Colors.red,
+      //   ),
+      // );
+      return null;
+    }
+    return value;
   }
 
   @override
@@ -129,19 +140,18 @@ class AddCustomerScreenState extends State<AddCustomerScreen> {
                                 padding: const EdgeInsets.symmetric(vertical: 15.0)
                               ),
                   onPressed: () async {
-                    // Add your authentication logic here
-                    String? businessName = _businessNameController.text;
-                    String? contactPerson = _contactPersonController.text;
-                    String? email = _emailController.text;
-                    String? phoneNumber = _phoneNoController.text;
-                    String? billingAddress = _billingAddressController.text;
-                    String? shippingAddress = _shippingAddressController.text;
-                    if (businessName != null ||
-                        contactPerson != null ||
-                        email != null ||
-                        phoneNumber != null ||
-                        billingAddress != null ||
-                        shippingAddress != null) {
+                    String? businessName = _validateTextField(_businessNameController.text, 'Business name');
+                    String? contactPerson = _validateTextField(_contactPersonController.text, 'Contact person');
+                    String? email = _validateTextField(_emailController.text, 'Email');
+                    String? phoneNumber = _validateTextField(_phoneNoController.text, 'Phone number');
+                    String? billingAddress = _validateTextField(_billingAddressController.text, 'Billing address');
+                    String? shippingAddress = _validateTextField(_shippingAddressController.text, 'Shipping address');
+                    if (businessName == null ||
+                        contactPerson == null ||
+                        email == null ||
+                        phoneNumber == null ||
+                        billingAddress == null ||
+                        shippingAddress == null) {
                       // Display validation error messages
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
@@ -153,13 +163,12 @@ class AddCustomerScreenState extends State<AddCustomerScreen> {
                       final response = await requestUtil.newCustomer(
                         businessName, contactPerson, email, phoneNumber, billingAddress, shippingAddress
                       );
+                      
                       if (response.statusCode == 200) {
                         Navigator.pop(context);
                       } else {
-                        // Failed login
-                        // print("Register failed");
-                        // print("Error: ${response.body}");
-                        
+                        print(response.statusCode);
+                        print(response.body);
                         // Display an error message to the user
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
@@ -170,7 +179,7 @@ class AddCustomerScreenState extends State<AddCustomerScreen> {
                       }
                     }
                   },
-                  child: const Text('SIGN UP')
+                  child: const Text('DONE')
                 ),
               ),
             ],
