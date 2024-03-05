@@ -19,10 +19,44 @@ class HeaderDrawerState extends State<HeaderDrawer> {
       future: _fetchUserData(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const CircularProgressIndicator(); // or a loading indicator
+          return Container(
+            height: 240,
+            width: double.infinity,
+            color: Colors.red[400],
+            child: const Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                SizedBox(height: 26.0),
+                CircularProgressIndicator(
+                  backgroundColor: Colors.white,
+                  color: Colors.red,
+                ),
+                SizedBox(height: 16.0),
+                Text(
+                  'Loading...',
+                  style: TextStyle(fontSize: 16.0, color: Colors.white),
+                ),
+              ],
+            ),
+          );
         } else if (snapshot.hasError) {
-          print('object');
-          return Text('Error: ${snapshot.error}');
+          return Container(
+                color: Colors.red[400],
+                width: double.infinity,
+                height: 220,
+                padding: const EdgeInsets.only(top: 20.0),
+                child: const Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    // TO DO: user information
+                    Text(           
+                      "Unable to load user data",
+                      style: TextStyle(color: Colors.white, fontSize: 20),
+                    ),
+                  ],
+                ),
+              );
         } else {
           final user = snapshot.data;
           if (user != null) {
@@ -51,7 +85,7 @@ class HeaderDrawerState extends State<HeaderDrawer> {
                     // TO DO: user information
                     Text(           
                       user['employee_name'],
-                      style: TextStyle(color: Colors.white, fontSize: 20),
+                      style: const TextStyle(color: Colors.white, fontSize: 20),
                     ),
                     Text(
                       user["email"],
@@ -93,7 +127,12 @@ class HeaderDrawerState extends State<HeaderDrawer> {
     try {
       print(userController.currentUser.value);
       final user = await requestUtil.getUser(userController.currentUser.value);
-      return jsonDecode(user.body);
+      if (user.statusCode == 200){
+        return jsonDecode(user.body);
+      }
+      else {
+        throw Exception('Unable to fetch user data.');
+      }
       // final tokenResponse = await requestUtil.getToken(userController.currentUser.value);
 
       // if (tokenResponse == null || tokenResponse.body == null) {

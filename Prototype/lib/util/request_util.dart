@@ -31,6 +31,8 @@ class RequestUtil {
 
   // ----------------------------------------- USER (Employee's info, Registering) ----------------------------------------------
   Future<http.Response> getUser(String id) async {
+    // await Future.delayed(const Duration(seconds: 50));
+
     return http.get(
       Uri.parse("${endpoint}get_user/$id"),
     );
@@ -81,14 +83,15 @@ class RequestUtil {
   Future<http.Response> newCustomer(String businessName, String contactPerson, String email, String phoneNumber, String billingAddress, String shippingAddress) async {
     return http.post(
       Uri.parse("${endpoint}customer_form"),
-      body: {
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({
         'business_name': businessName,
         'contact_person': contactPerson,
         'email': email,
         'phone_number': phoneNumber,
         'billing_address': billingAddress,
         'shipping_address': shippingAddress,
-      }
+      })
     );
   }
 

@@ -137,10 +137,10 @@ class LoginContent extends StatelessWidget {
                         backgroundColor: Colors.red,
                       ),
                     );
-                      // Navigator.pushReplacement(
-                      //   context,
-                      //   MaterialPageRoute(builder: (context) => const HomeScreen()),
-                      // );
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (context) => const HomeScreen()),
+                      );
                   } else {
                     // String email = _emailController.text;
                     // String password = _passwordController.text;

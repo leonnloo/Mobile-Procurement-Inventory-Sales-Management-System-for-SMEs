@@ -15,20 +15,20 @@ class RegisterContent extends StatelessWidget {
   final TextEditingController _confirmPasswordController = TextEditingController();
   final TextEditingController _phoneNumberController = TextEditingController();
 
-  final String _selectedCountryCode = '+1'; // Default country code
+  // final String _selectedCountryCode = '+1'; // Default country code
 
-  // TO DO: add in a table in mongodb for a list of country codes
-  final List<String> _countryCodes = [
-    '+1', '+44', '+91', // Add more country codes as needed
-  ];
+  // // TO DO: add in a table in mongodb for a list of country codes
+  // final List<String> _countryCodes = [
+  //   '+1', '+44', '+91', // Add more country codes as needed
+  // ];
 
   RegisterContent({super.key});
 
   String? _validateTextField(String value, String fieldName) {
     if (value.isEmpty) {
-      return '$fieldName is required';
+      return null;
     }
-    return null;
+    return value;
   }
 
   @override
