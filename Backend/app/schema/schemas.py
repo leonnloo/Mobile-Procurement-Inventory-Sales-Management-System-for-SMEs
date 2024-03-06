@@ -8,7 +8,7 @@ def user_dict_serial(user) -> dict:
         "phone_number": user["phone_number"],
         "password": user["password"],
         "role": user["role"],
-        "sales_record": user["sales_record"]
+        "sales_record": user["sales_record"],
     }
 
 def user_serial(users) -> list:
@@ -33,7 +33,7 @@ def supplier_serial(suppliers) -> list:
 # ---------------------------------------- Customer ----------------------------------------
 def customer_dict_serial(customer) -> dict:
     return {
-        "customer_id": str(customer["customer_id"]),
+        "customer_id": customer["customer_id"],
         "business_name": customer["business_name"],
         "contact_person": customer["contact_person"],
         "email": customer["email"],
@@ -41,7 +41,6 @@ def customer_dict_serial(customer) -> dict:
         "billing_address": customer["billing_address"],
         "shipping_address": customer["shipping_address"],
         "past_order": customer["past_order"],
-        "refunds": customer["refunds"],
         "notes": customer["notes"]
     }
 
@@ -51,7 +50,7 @@ def customer_serial(customers) -> list:
 # ---------------------------------------- Product ----------------------------------------
 def product_dict_serial(product) -> dict:
     return {
-        "product_id": str(product["product_id"]),
+        "product_id": product["product_id"],
         "product_name": product["product_name"],
         "unit_price": product["unit_price"],
         "selling_price": product["selling_price"],

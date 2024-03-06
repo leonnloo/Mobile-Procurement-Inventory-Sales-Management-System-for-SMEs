@@ -125,7 +125,6 @@ class HeaderDrawerState extends State<HeaderDrawer> {
   Future<Map<String, dynamic>> _fetchUserData() async {
     final userController = Get.put(UserLoggedInController());
     try {
-      print(userController.currentUser.value);
       final user = await requestUtil.getUser(userController.currentUser.value);
       if (user.statusCode == 200){
         return jsonDecode(user.body);

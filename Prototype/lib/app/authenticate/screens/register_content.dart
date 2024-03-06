@@ -178,11 +178,11 @@ class RegisterContent extends StatelessWidget {
                 String? passwordError = _validateTextField(_passwordController.text, 'Password');
                 String? confirmPasswordError = _validateTextField(_confirmPasswordController.text, 'Confirm Password');
             
-                if (usernameError != null ||
-                    emailError != null ||
-                    phoneNumberError != null ||
-                    passwordError != null ||
-                    confirmPasswordError != null) {
+                if (usernameError == null ||
+                    emailError == null ||
+                    phoneNumberError == null ||
+                    passwordError == null ||
+                    confirmPasswordError == null) {
                   // Display validation error messages
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(

@@ -1,6 +1,9 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:prototype/util/request_util.dart';
+import 'package:prototype/widgets/drawer/drawer_controller.dart';
+import 'package:prototype/widgets/drawer/drawer_sections.dart';
 
 class AddCustomerScreen extends StatefulWidget {
   const AddCustomerScreen({super.key});
@@ -56,6 +59,7 @@ class AddCustomerScreenState extends State<AddCustomerScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.put(CustomDrawerController());
     return Scaffold(
       appBar: AppBar(
         title: const Text('Add Customer'),
@@ -166,6 +170,13 @@ class AddCustomerScreenState extends State<AddCustomerScreen> {
                       
                       if (response.statusCode == 200) {
                         Navigator.pop(context);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Customer added successfully.'),
+                            backgroundColor: Colors.green,
+                          ),
+                        );
+                        controller.changePage(DrawerSections.customer);
                       } else {
                         print(response.statusCode);
                         print(response.body);

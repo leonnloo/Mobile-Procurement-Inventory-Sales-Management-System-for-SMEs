@@ -80,6 +80,19 @@ class RequestUtil {
 
 
   // ----------------------------------------- CUSTOMER ----------------------------------------------
+  Future<http.Response> getCustomers(String token) async {
+    return http.get(
+      Uri.parse("${endpoint}get_customers"),
+      headers: {"Authorization": "Bearer $token"}
+    );
+  }
+  Future<http.Response> getCustomer(String id, String token) async {
+    return http.get(
+      Uri.parse("${endpoint}get_customer/$id/$token"),
+    );
+  }
+  
+
   Future<http.Response> newCustomer(String businessName, String contactPerson, String email, String phoneNumber, String billingAddress, String shippingAddress) async {
     return http.post(
       Uri.parse("${endpoint}customer_form"),

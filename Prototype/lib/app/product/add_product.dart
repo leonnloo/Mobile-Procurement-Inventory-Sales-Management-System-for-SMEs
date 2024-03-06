@@ -49,13 +49,13 @@ class AddProductScreenState extends State<AddProductScreen> {
   void _submitForm() {
     if (_formKey.currentState?.validate() ?? false) {
       SalesOrder newOrder = SalesOrder(
-        orderNo: int.tryParse(_orderNoController.text) ?? 0,
+        orderNo: _orderNoController.text,
         date: _customerIDController.text,
-        customerID: int.tryParse(_customerIDController.text) ?? 0,
-        productID: int.tryParse(_productID.text) ?? 0,
+        customerID: _customerIDController.text,
+        productID: _productID.text,
         quantity: int.tryParse(_quantityController.text) ?? 0,
         totalPrice: double.tryParse(_totalPriceController.text) ?? 0,
-        status: _statusController.text,
+        status: _statusController.text, productName: '',
       );
 
 

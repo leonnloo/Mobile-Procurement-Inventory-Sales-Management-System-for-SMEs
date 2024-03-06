@@ -18,9 +18,14 @@ oauth_scheme = OAuth2PasswordBearer(tokenUrl="token")
 # it'll return empty list
 # ---------------------------------------- Customer ----------------------------------------
 @get_router.get("/get_customers")
-def get_customers():
+def get_customers(token: str = Depends(oauth_scheme)):
     customers = customer_serial(customers_db.find())
     return customers
+
+@get_router.get("/get_customer/{id}")
+def get_customer(id: str, token: str = Depends(oauth_scheme)):
+    customer = customer_dict_serial(customers_db.find_one({'customer_id': id}))
+    return customer
 
 # ---------------------------------------- Supplier ----------------------------------------
 @get_router.get("/get_supplier")
