@@ -28,6 +28,5 @@ def login(form_data: OAuth2PasswordRequestForm = Depends()):
 
 @auth_router.get("/token/{username}")
 def get_token(username: str = Depends(oauth_scheme)):
-    print(username)
     return {"access_token": username, "token_type": "bearer"}
 

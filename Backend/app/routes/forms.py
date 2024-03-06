@@ -58,7 +58,6 @@ def create_customer(customer: NewCustomer):
         billing_address = customer.billing_address,
         shipping_address = customer.shipping_address,
         past_order = None,
-        refunds = None,
         notes = None,
     )
 

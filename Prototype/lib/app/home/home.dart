@@ -37,6 +37,7 @@ class HomeScreenState extends State<HomeScreen> {
   String currentTitle = 'Dashboard';
   final controller = Get.put(CustomDrawerController());
   DateTime? currentBackPressTime;
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
@@ -63,7 +64,7 @@ class HomeScreenState extends State<HomeScreen> {
         container = const SupplierManagementScreen();
         currentTitle = "Supplier";
       } else if (controller.currentPage.value == DrawerSections.customer) {
-        container = const CustomerManagementScreen();
+        container = CustomerManagementScreen();
         currentTitle = "Customer";
       } else if (controller.currentPage.value == DrawerSections.settings) {
         container = const SettingsScreen();
@@ -72,15 +73,25 @@ class HomeScreenState extends State<HomeScreen> {
       return PopScope(
         canPop: false,
         onPopInvoked: (bool isDialOpen) async {
+          // If the dial is open and the back button is pressed, close the dial.
           if (isDialOpen) {
             isDialOpen = false;
             return;
           }
+
+          // If current page is not dashboard, press back button to go back to dashboard.
           if (controller.currentPage.value != DrawerSections.dashboard){
             controller.changePage(DrawerSections.dashboard);
             isDialOpen = false;
             return;
           } 
+
+          // If the drawer is open, close it
+          if (_scaffoldKey.currentState?.isDrawerOpen ?? false) {
+            _scaffoldKey.currentState?.openEndDrawer();
+            return;
+          }
+
           // Handle double press to exit
           DateTime now = DateTime.now();
           if (currentBackPressTime == null || now.difference(currentBackPressTime!) > const Duration(seconds: 2)) {
@@ -96,6 +107,7 @@ class HomeScreenState extends State<HomeScreen> {
           }
         },
         child: Scaffold(
+          key: _scaffoldKey,
           appBar: AppBar(
             toolbarHeight: 60.0,
             leading: Builder(

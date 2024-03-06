@@ -27,10 +27,10 @@ class CustomerDetailScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _buildDetailRow('Customer ID', customer.customerID.toString()),
-            _buildDetailRow('Customer Name', customer.customerName),
+            _buildDetailRow('Customer Name', customer.businessName),
             _buildDetailRow('Contact Person', customer.contactPerson),
             _buildDetailRow('Email', customer.email),
-            _buildDetailRow('Phone number', customer.phoneno),
+            _buildDetailRow('Phone number', customer.phoneNo),
             _buildDetailRow('Billing address', customer.billingAddress),
             _buildDetailRow('Shipping Address', customer.shippingAddress),
 
@@ -96,7 +96,7 @@ class CustomerDetailScreen extends StatelessWidget {
               ),
               const SizedBox(height: 8.0),
               Text(
-                customer.remark ?? 'No remark available',
+                customer.notes ?? 'No remark available',
                 style: const TextStyle(fontSize: 16),
               ),
             ],

@@ -12,7 +12,6 @@ class CustomerInfo(BaseModel):
     billing_address: str
     shipping_address: str 
     past_order: List[SaleOrder] | None
-    refunds: List[SaleOrder] | None
     notes: NotesInfo | None
 
 class NewCustomer(BaseModel):
