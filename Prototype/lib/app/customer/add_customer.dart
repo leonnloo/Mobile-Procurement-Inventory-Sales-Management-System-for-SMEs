@@ -1,9 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:prototype/util/request_util.dart';
-import 'package:prototype/widgets/drawer/drawer_controller.dart';
-import 'package:prototype/widgets/drawer/drawer_sections.dart';
 
 class AddCustomerScreen extends StatefulWidget {
   const AddCustomerScreen({super.key});
@@ -46,12 +43,6 @@ class AddCustomerScreenState extends State<AddCustomerScreen> {
 
   String? _validateTextField(String value, String fieldName) {
     if (value.isEmpty) {
-      // ScaffoldMessenger.of(context).showSnackBar(
-      //   SnackBar(
-      //     content: Text('$fieldName is required'),
-      //     backgroundColor: Colors.red,
-      //   ),
-      // );
       return null;
     }
     return value;
@@ -59,7 +50,6 @@ class AddCustomerScreenState extends State<AddCustomerScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(CustomDrawerController());
     return Scaffold(
       appBar: AppBar(
         title: const Text('Add Customer'),
@@ -74,7 +64,7 @@ class AddCustomerScreenState extends State<AddCustomerScreen> {
             children: [
               TextFormField(
                 controller: _businessNameController,
-                decoration: const InputDecoration(labelText: 'Customer Name'),
+                decoration: const InputDecoration(labelText: 'Business Name'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter customer name';
@@ -176,10 +166,7 @@ class AddCustomerScreenState extends State<AddCustomerScreen> {
                             backgroundColor: Colors.green,
                           ),
                         );
-                        controller.changePage(DrawerSections.customer);
                       } else {
-                        print(response.statusCode);
-                        print(response.body);
                         // Display an error message to the user
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(

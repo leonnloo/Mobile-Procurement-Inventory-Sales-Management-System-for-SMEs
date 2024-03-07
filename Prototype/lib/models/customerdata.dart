@@ -25,7 +25,6 @@ class CustomerData {
   });
 
   factory CustomerData.fromJson(Map<String, dynamic> json) {
-    print(json);
     return CustomerData(
       customerID: json['customer_id'],
       businessName: json['business_name'],

@@ -108,6 +108,36 @@ class RequestUtil {
     );
   }
 
+  // ----------------------------------------- SUPPLIER ----------------------------------------------
+  Future<http.Response> getSuppliers(String token) async {
+    return http.get(
+      Uri.parse("${endpoint}get_suppliers"),
+      headers: {"Authorization": "Bearer $token"}
+    );
+  }
+
+  Future<http.Response> getSupplier(String id, String token) async {
+    return http.get(
+      Uri.parse("${endpoint}get_supplier/$id"),
+      headers: {"Authorization": "Bearer $token"}
+    );
+  }
+
+
+  Future<http.Response> newSupplier(String businessName, String contactPerson, String email, String phoneNumber, String address) async {
+    return http.post(
+      Uri.parse("${endpoint}supplier_form"),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({
+        'business_name': businessName,
+        'contact_person': contactPerson,
+        'email': email,
+        'phone_number': phoneNumber,
+        'address': address,
+      })
+    );
+  }
+
 
 
 

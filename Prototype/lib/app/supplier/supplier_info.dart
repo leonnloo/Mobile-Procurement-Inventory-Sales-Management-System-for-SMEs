@@ -28,10 +28,10 @@ class SupplierDetailScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _buildDetailRow('Supplier ID', supplierData.supplierID.toString()),
-            _buildDetailRow('Supplier Name', supplierData.supplierName),
+            _buildDetailRow('Supplier Name', supplierData.businessName),
             _buildDetailRow('Contact Person', supplierData.contactPerson),
             _buildDetailRow('Email', supplierData.email),
-            _buildDetailRow('Phone number', supplierData.phoneno),
+            _buildDetailRow('Phone number', supplierData.phoneNo),
             _buildDetailRow('Address', supplierData.address),
 
             const SizedBox(height: 6.0), // Add some spacing
@@ -94,7 +94,7 @@ class SupplierDetailScreen extends StatelessWidget {
               ),
               const SizedBox(height: 8.0),
               Text(
-                supplierData.remark ?? 'No remark available',
+                supplierData.notes ?? 'No remark available',
                 style: const TextStyle(fontSize: 16),
               ),
             ],
