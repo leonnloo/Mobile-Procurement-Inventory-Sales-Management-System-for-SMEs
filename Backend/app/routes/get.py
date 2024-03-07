@@ -28,38 +28,43 @@ def get_customer(id: str, token: str = Depends(oauth_scheme)):
     return customer
 
 # ---------------------------------------- Supplier ----------------------------------------
-@get_router.get("/get_supplier")
-def get_supplier():
+@get_router.get("/get_suppliers")
+def get_suppliers(token: str = Depends(oauth_scheme)):
     suppliers = supplier_serial(suppliers_db.find())
+    return suppliers
+
+@get_router.get("/get_supplier/{id}")
+def get_suppliers(id:str, token: str = Depends(oauth_scheme)):
+    suppliers = supplier_serial(suppliers_db.find_one({'supplier_id': id}))
     return suppliers
 
 # ---------------------------------------- Sales Order ----------------------------------------
 @get_router.get("/get_sale_order")
-def get_sale_order():
+def get_sale_order(token: str = Depends(oauth_scheme)):
     sale_orders = sale_order_serial(sales_order_db.find())
     return sale_orders
 
 # ---------------------------------------- Procurement ----------------------------------------
 @get_router.get("/get_procurement")
-def get_procurement():
+def get_procurement(token: str = Depends(oauth_scheme)):
     procurements = procurement_serial(procurement_db.find())
     return procurements
 
 # ---------------------------------------- Product ----------------------------------------
 @get_router.get("/get_product")
-def get_product():
+def get_product(token: str = Depends(oauth_scheme)):
     product = product_serial(product_db.find())
     return product
 
 # ---------------------------------------- Inventory ----------------------------------------
 @get_router.get("/get_inventory")
-def get_inventory():
+def get_inventory(token: str = Depends(oauth_scheme)):
     inventory = inventory_serial(inventory_db.find())
     return inventory
 
 # ---------------------------------------- Sale Management ----------------------------------------
 @get_router.get("/get_company_monthly_sales")
-def get_company_monthly_sales():
+def get_company_monthly_sales(token: str = Depends(oauth_scheme)):
     sales = company_monthly_sales_serial(sales_management_db.find())
     return sales
 

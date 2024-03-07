@@ -1,5 +1,6 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:prototype/models/supplierdata.dart';
+import 'package:prototype/util/request_util.dart';
 
 class AddSupplierScreen extends StatefulWidget {
   const AddSupplierScreen({super.key});
@@ -10,8 +11,9 @@ class AddSupplierScreen extends StatefulWidget {
 
 class AddSupplierScreenState extends State<AddSupplierScreen> {
   final _formKey = GlobalKey<FormState>();
+  final RequestUtil requestUtil = RequestUtil();
 
-  late TextEditingController _supplierNameController;
+  late TextEditingController _businessNameController;
   late TextEditingController _contactPersonController;
   late TextEditingController _emailController;
   late TextEditingController _phoneNoController;
@@ -20,7 +22,7 @@ class AddSupplierScreenState extends State<AddSupplierScreen> {
   @override
   void initState() {
     super.initState();
-    _supplierNameController = TextEditingController();
+    _businessNameController = TextEditingController();
     _contactPersonController = TextEditingController();
     _emailController = TextEditingController();
     _phoneNoController = TextEditingController();
@@ -29,7 +31,7 @@ class AddSupplierScreenState extends State<AddSupplierScreen> {
 
   @override
   void dispose() {
-    _supplierNameController.dispose();
+    _businessNameController.dispose();
     _contactPersonController.dispose();
     _emailController.dispose();
     _phoneNoController.dispose();
@@ -37,23 +39,11 @@ class AddSupplierScreenState extends State<AddSupplierScreen> {
     super.dispose();
   }
 
-  void _submitForm() {
-    if (_formKey.currentState?.validate() ?? false) {
-      SupplierData newSupplier = SupplierData(
-        supplierID: 0, // Assign a unique ID (can generate or get from a database)
-        supplierName: _supplierNameController.text,
-        contactPerson: _contactPersonController.text,
-        email: _emailController.text,
-        phoneno: _phoneNoController.text,
-        address: _addressController.text,
-      );
-
-
-      print(newSupplier);
-
-      // Close the screen
-      Navigator.of(context).pop();
+  String? _validateTextField(String value, String fieldName) {
+    if (value.isEmpty) {
+      return null;
     }
+    return value;
   }
 
   @override
@@ -71,11 +61,11 @@ class AddSupplierScreenState extends State<AddSupplierScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               TextFormField(
-                controller: _supplierNameController,
-                decoration: const InputDecoration(labelText: 'Supplier Name'),
+                controller: _businessNameController,
+                decoration: const InputDecoration(labelText: 'Business Name'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter supplier name';
+                    return 'Please enter customer name';
                   }
                   return null;
                 },
@@ -112,18 +102,69 @@ class AddSupplierScreenState extends State<AddSupplierScreen> {
               ),
               TextFormField(
                 controller: _addressController,
-                decoration: const InputDecoration(labelText: 'Shipping Address'),
+                decoration: const InputDecoration(labelText: 'Address'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter shipping address';
+                    return 'Please enter address';
                   }
                   return null;
                 },
               ),
-              const SizedBox(height: 16.0),
-              ElevatedButton(
-                onPressed: _submitForm,
-                child: const Text('Submit'),
+              const SizedBox(height: 40.0),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  style: TextButton.styleFrom(
+                                foregroundColor: Colors.white,
+                                backgroundColor: Colors.black,
+                                side: const BorderSide(color: Colors.black),
+                                shape: const RoundedRectangleBorder(),
+                                padding: const EdgeInsets.symmetric(vertical: 15.0)
+                              ),
+                  onPressed: () async {
+                    String? businessName = _validateTextField(_businessNameController.text, 'Business name');
+                    String? contactPerson = _validateTextField(_contactPersonController.text, 'Contact person');
+                    String? email = _validateTextField(_emailController.text, 'Email');
+                    String? phoneNumber = _validateTextField(_phoneNoController.text, 'Phone number');
+                    String? address = _validateTextField(_addressController.text, 'Address');
+                    if (businessName == null ||
+                        contactPerson == null ||
+                        email == null ||
+                        phoneNumber == null ||
+                        address == null) {
+                      // Display validation error messages
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Please fill in all the required fields.'),
+                          backgroundColor: Colors.red,
+                        ),
+                      );
+                    } else {                
+                      final response = await requestUtil.newSupplier(
+                        businessName, contactPerson, email, phoneNumber, address
+                      );
+                      
+                      if (response.statusCode == 200) {
+                        Navigator.pop(context);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Supplier added successfully.'),
+                            backgroundColor: Colors.green,
+                          ),
+                        );
+                      } else {
+                        // Display an error message to the user
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(jsonDecode(response.body)['detail']),
+                            backgroundColor: Colors.red,
+                          ),
+                        );
+                      }
+                    }
+                  },
+                  child: const Text('DONE')
+                ),
               ),
             ],
           ),

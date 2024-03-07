@@ -20,7 +20,7 @@ class CustomerManagementScreen extends StatelessWidget {
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Container(
-              height: 240,
+              height: double.infinity,
               width: double.infinity,
               color: Colors.red[400],
               child: const Column(
@@ -44,7 +44,7 @@ class CustomerManagementScreen extends StatelessWidget {
             return Container(
               color: Colors.red[400],
               width: double.infinity,
-              height: 220,
+              height: double.infinity,
               padding: const EdgeInsets.only(top: 20.0),
               child: const Column(
                 mainAxisAlignment: MainAxisAlignment.center,

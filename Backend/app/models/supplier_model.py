@@ -17,3 +17,9 @@ class SupplierInfo(BaseModel):
     past_order: List[SaleOrder] | None
     notes: NotesInfo | None
 
+class NewSupplier(BaseModel):
+    business_name: str
+    contact_person: str
+    email: str
+    phone_number: str
+    address: str

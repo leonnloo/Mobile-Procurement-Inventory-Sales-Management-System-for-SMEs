@@ -66,7 +66,7 @@ def create_customer(customer: NewCustomer):
 
 # ----------------------------------------- Supplier Form ----------------------------------------------
 @form_router.post("/supplier_form")
-def register(supplier: SupplierInfo):
+def register(supplier: NewSupplier):
     existing_supplier = suppliers_db.find_one({"business_name": supplier.business_name})
     if existing_supplier:
         raise HTTPException(

@@ -61,7 +61,7 @@ class HomeScreenState extends State<HomeScreen> {
         container = const ProcurementScreen();
         currentTitle = "Procurement (Design how you see fit)";
       } else if (controller.currentPage.value == DrawerSections.supplier) {
-        container = const SupplierManagementScreen();
+        container = SupplierManagementScreen();
         currentTitle = "Supplier";
       } else if (controller.currentPage.value == DrawerSections.customer) {
         container = CustomerManagementScreen();
