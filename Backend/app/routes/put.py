@@ -1,11 +1,11 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from config.database import *
-from models.customer_model import CustomerInfo
-from models.sales_order_model import SaleOrder
-from models.supplier_model import SupplierInfo, NotesInfo
-from models.procurement_model import Procurement 
-from models.product_model import ProductItem 
-from models.inventory_model import InventoryItem  
+from models.customer_model import *
+from models.sales_order_model import *
+from models.supplier_model import *
+from models.procurement_model import * 
+from models.product_model import * 
+from models.inventory_model import *  
 from models.sales_management_model import CompanyMonthlySales
 from models import *
 from schema.schemas import *
@@ -17,11 +17,11 @@ oauth_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 # ----------------------------------------- Customer Update ----------------------------------------------
 @put_router.put("/update_customer/{customer_id}")
-def update_customer(customer: CustomerInfo):
+def update_customer(customer: NewCustomer):
     old_customer = customers_db.find_one({"customer_id": customer.customer_id})
     if old_customer:
         updated_customer = CustomerInfo(
-            customer_id = customer.customer_id,
+            customer_id = old_customer["customer_id"],
             business_name = customer.business_name,
             contact_person = customer.contact_person,
             email = customer.email,
@@ -42,11 +42,11 @@ def update_customer(customer: CustomerInfo):
         )
 # ----------------------------------------- Supplier Update ----------------------------------------------
 @put_router.put("/update_supplier/{supplier_id}")
-def update_supplier(supplier: SupplierInfo):
+def update_supplier(supplier: NewSupplier):
     old_supplier = suppliers_db.find_one({"supplier_id": supplier.supplier_id})
     if old_supplier:
         updated_supplier = SupplierInfo(
-            supplier_id = supplier.supplier_id,
+            supplier_id = old_supplier["supplier_id"],
             business_name = supplier.business_name,
             contact_person = supplier.contact_person,
             email = supplier.email,
