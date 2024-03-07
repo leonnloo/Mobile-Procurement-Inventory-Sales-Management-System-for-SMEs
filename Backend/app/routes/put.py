@@ -16,9 +16,9 @@ oauth_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 
 # ----------------------------------------- Customer Update ----------------------------------------------
-@put_router.put("/update_customer/{customer_id}")
-def update_customer(customer: NewCustomer):
-    old_customer = customers_db.find_one({"customer_id": customer.customer_id})
+@put_router.put("/update_customer/{customerID}")
+def update_customer(customer: NewCustomer, customerID: str):
+    old_customer = customers_db.find_one({"customer_id": customerID})
     if old_customer:
         updated_customer = CustomerInfo(
             customer_id = old_customer["customer_id"],
@@ -29,11 +29,10 @@ def update_customer(customer: NewCustomer):
             billing_address = customer.billing_address,
             shipping_address = customer.shipping_address,
             past_order = old_customer["past_order"],
-            refunds = old_customer["refunds"],
             notes = old_customer["notes"],
         )
-        customers_db.update_one({"customer_id": customer.customer_id}, {"$set": dict(updated_customer)})
-        return customer_dict_serial(customers_db.find_one({"customer_id": customer.customer_id}))
+        customers_db.update_one({"customer_id": customerID}, {"$set": dict(updated_customer)})
+        return customer_dict_serial(customers_db.find_one({"customer_id": customerID}))
     else:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,

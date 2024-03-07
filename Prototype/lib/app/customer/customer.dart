@@ -155,9 +155,7 @@ class CustomerManagementScreen extends StatelessWidget {
         List<dynamic> jsonData = jsonDecode(customer.body);
         
         // Map each dynamic object to CustomerData
-        print("hey"); 
         List<CustomerData> customerData = jsonData.map((data) => CustomerData.fromJson(data)).toList();
-        print(customerData); 
         return customerData;
       } else {
         throw Exception('Unable to fetch customer data.');

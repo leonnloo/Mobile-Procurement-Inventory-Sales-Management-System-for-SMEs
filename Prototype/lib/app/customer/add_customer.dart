@@ -1,6 +1,9 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:prototype/util/request_util.dart';
+import 'package:prototype/util/validate_text.dart';
+import 'package:prototype/widgets/appbar/common_appbar.dart';
+import 'package:prototype/widgets/text_field.dart';
 
 class AddCustomerScreen extends StatefulWidget {
   const AddCustomerScreen({super.key});
@@ -41,19 +44,10 @@ class AddCustomerScreenState extends State<AddCustomerScreen> {
     super.dispose();
   }
 
-  String? _validateTextField(String value, String fieldName) {
-    if (value.isEmpty) {
-      return null;
-    }
-    return value;
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Add Customer'),
-      ),
+      appBar: CommonAppBar(currentTitle: 'Add Customer'),
       body: 
       SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
@@ -62,66 +56,18 @@ class AddCustomerScreenState extends State<AddCustomerScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              TextFormField(
-                controller: _businessNameController,
-                decoration: const InputDecoration(labelText: 'Business Name'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter customer name';
-                  }
-                  return null;
-                },
-              ),
-              TextFormField(
-                controller: _contactPersonController,
-                decoration: const InputDecoration(labelText: 'Contact Person'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter contact person';
-                  }
-                  return null;
-                },
-              ),
-              TextFormField(
-                controller: _emailController,
-                decoration: const InputDecoration(labelText: 'Email'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter email';
-                  }
-                  return null;
-                },
-              ),
-              TextFormField(
-                controller: _phoneNoController,
-                decoration: const InputDecoration(labelText: 'Phone No'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter phone number';
-                  }
-                  return null;
-                },
-              ),
-              TextFormField(
-                controller: _billingAddressController,
-                decoration: const InputDecoration(labelText: 'Billing Address'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter billing address';
-                  }
-                  return null;
-                },
-              ),
-              TextFormField(
-                controller: _shippingAddressController,
-                decoration: const InputDecoration(labelText: 'Shipping Address'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter shipping address';
-                  }
-                  return null;
-                },
-              ),
+              const SizedBox(height: 16.0),
+              BuildTextField(controller: _businessNameController, labelText: 'Business Name'),
+              const SizedBox(height: 16.0),
+              BuildTextField(controller: _contactPersonController, labelText: 'Contact Person'),
+              const SizedBox(height: 16.0),
+              BuildTextField(controller: _emailController, labelText: 'Email'),
+              const SizedBox(height: 16.0),
+              BuildTextField(controller: _phoneNoController, labelText: 'Phone Number'),
+              const SizedBox(height: 16.0),
+              BuildTextField(controller: _billingAddressController, labelText: 'Billing Address'),
+              const SizedBox(height: 16.0),
+              BuildTextField(controller: _shippingAddressController, labelText: 'Shipping Address'),
               const SizedBox(height: 16.0),
               SizedBox(
                 width: double.infinity,
@@ -134,12 +80,12 @@ class AddCustomerScreenState extends State<AddCustomerScreen> {
                                 padding: const EdgeInsets.symmetric(vertical: 15.0)
                               ),
                   onPressed: () async {
-                    String? businessName = _validateTextField(_businessNameController.text, 'Business name');
-                    String? contactPerson = _validateTextField(_contactPersonController.text, 'Contact person');
-                    String? email = _validateTextField(_emailController.text, 'Email');
-                    String? phoneNumber = _validateTextField(_phoneNoController.text, 'Phone number');
-                    String? billingAddress = _validateTextField(_billingAddressController.text, 'Billing address');
-                    String? shippingAddress = _validateTextField(_shippingAddressController.text, 'Shipping address');
+                    String? businessName = validateTextField(_businessNameController.text, 'Business name');
+                    String? contactPerson = validateTextField(_contactPersonController.text, 'Contact person');
+                    String? email = validateTextField(_emailController.text, 'Email');
+                    String? phoneNumber = validateTextField(_phoneNoController.text, 'Phone number');
+                    String? billingAddress = validateTextField(_billingAddressController.text, 'Billing address');
+                    String? shippingAddress = validateTextField(_shippingAddressController.text, 'Shipping address');
                     if (businessName == null ||
                         contactPerson == null ||
                         email == null ||
