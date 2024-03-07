@@ -108,6 +108,27 @@ class RequestUtil {
     );
   }
 
+  Future<http.Response> updateCustomer(String id, String businessName, String contactPerson, String email, String phoneNumber, String billingAddress, String shippingAddress) async {
+    return http.put(
+      Uri.parse("${endpoint}update_customer/$id"),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({
+        'business_name': businessName,
+        'contact_person': contactPerson,
+        'email': email,
+        'phone_number': phoneNumber,
+        'billing_address': billingAddress,
+        'shipping_address': shippingAddress,
+      })
+    );
+  }
+
+  Future<http.Response> deleteCustomer(String id, String token) async {
+    return http.delete(
+      Uri.parse("${endpoint}delete_customer/$id"),
+      headers: {"Authorization": "Bearer $token"},
+    );
+  }
   // ----------------------------------------- SUPPLIER ----------------------------------------------
   Future<http.Response> getSuppliers(String token) async {
     return http.get(
@@ -138,7 +159,26 @@ class RequestUtil {
     );
   }
 
+  Future<http.Response> updateSupplier(String id, String businessName, String contactPerson, String email, String phoneNumber, String address) async {
+    return http.put(
+      Uri.parse("${endpoint}update_supplier/$id"),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({
+        'business_name': businessName,
+        'contact_person': contactPerson,
+        'email': email,
+        'phone_number': phoneNumber,
+        'address': address,
+      })
+    );
+  }
 
+  Future<http.Response> deleteSupplier(String id, String token) async {
+    return http.delete(
+      Uri.parse("${endpoint}delete_supplier/$id"),
+      headers: {"Authorization": "Bearer $token"},
+    );
+  }
 
 
 }
