@@ -111,14 +111,14 @@ class HomeScreenState extends State<HomeScreen> {
           appBar: AppBar(
             toolbarHeight: 60.0,
             leading: Builder(
-            builder: (context) => IconButton(
-              icon: const Icon(
-                Icons.notes, // Replace with the desired icon
-                size: 30.0,
-              ),
-              onPressed: () {
-                Scaffold.of(context).openDrawer();
-              },
+              builder: (context) => IconButton(
+                icon: const Icon(
+                  Icons.notes, // Replace with the desired icon
+                  size: 30.0,
+                ),
+                onPressed: () {
+                  Scaffold.of(context).openDrawer();
+                },
               ),
             ),
             actions: [
@@ -222,3 +222,5 @@ class HomeScreenState extends State<HomeScreen> {
     );
   }
 }
+
+

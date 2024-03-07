@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:prototype/app/authenticate/screens/login_content.dart';
 import 'package:prototype/util/request_util.dart';
+import 'package:prototype/util/validate_text.dart';
 import 'package:prototype/widgets/fade_in_animation/animation_design.dart';
 import 'package:prototype/widgets/fade_in_animation/fade_in_animation_model.dart';
 import 'package:prototype/widgets/fade_in_animation/fade_in_controller.dart';
@@ -23,13 +24,6 @@ class RegisterContent extends StatelessWidget {
   // ];
 
   RegisterContent({super.key});
-
-  String? _validateTextField(String value, String fieldName) {
-    if (value.isEmpty) {
-      return null;
-    }
-    return value;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -172,11 +166,11 @@ class RegisterContent extends StatelessWidget {
                           ),
               onPressed: () async {
                 // Add your authentication logic here
-                String? usernameError = _validateTextField(_usernameController.text, 'Full Name');
-                String? emailError = _validateTextField(_emailController.text, 'Email');
-                String? phoneNumberError = _validateTextField(_phoneNumberController.text, 'Phone Number');
-                String? passwordError = _validateTextField(_passwordController.text, 'Password');
-                String? confirmPasswordError = _validateTextField(_confirmPasswordController.text, 'Confirm Password');
+                String? usernameError = validateTextField(_usernameController.text, 'Full Name');
+                String? emailError = validateTextField(_emailController.text, 'Email');
+                String? phoneNumberError = validateTextField(_phoneNumberController.text, 'Phone Number');
+                String? passwordError = validateTextField(_passwordController.text, 'Password');
+                String? confirmPasswordError = validateTextField(_confirmPasswordController.text, 'Confirm Password');
             
                 if (usernameError == null ||
                     emailError == null ||

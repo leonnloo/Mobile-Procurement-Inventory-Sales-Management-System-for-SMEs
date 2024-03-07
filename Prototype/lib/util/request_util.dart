@@ -62,6 +62,7 @@ class RequestUtil {
   Future<http.Response> updateUser(String id, String username, String email, String password, String phoneNumber, String role) async {
     return http.put(
       Uri.parse("${endpoint}update_user/$id"),
+      headers: {'Content-Type': 'application/json'},
       body: {
         'employee_name': username,
         'password': password,
@@ -108,9 +109,9 @@ class RequestUtil {
     );
   }
 
-  Future<http.Response> updateCustomer(String id, String businessName, String contactPerson, String email, String phoneNumber, String billingAddress, String shippingAddress) async {
+  Future<http.Response> updateCustomer(String customerID, String businessName, String contactPerson, String email, String phoneNumber, String billingAddress, String shippingAddress) async {
     return http.put(
-      Uri.parse("${endpoint}update_customer/$id"),
+      Uri.parse("${endpoint}update_customer/$customerID"),
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode({
         'business_name': businessName,
@@ -119,7 +120,7 @@ class RequestUtil {
         'phone_number': phoneNumber,
         'billing_address': billingAddress,
         'shipping_address': shippingAddress,
-      })
+      }) 
     );
   }
 
@@ -180,5 +181,27 @@ class RequestUtil {
     );
   }
 
+  // ----------------------------------------- NOTE ----------------------------------------------
+  Future<http.Response> getSupplierNote(String id, String token) async {
+    return http.get(
+      Uri.parse("${endpoint}get_supplier_note/$id"),
+      headers: {"Authorization": "Bearer $token"}
+    );
+  }
+  Future<http.Response> getCustomerNote(String id, String token) async {
+    return http.get(
+      Uri.parse("${endpoint}get_customer_note/$id"),
+      headers: {"Authorization": "Bearer $token"}
+    );
+  }
+  Future<http.Response> updateNote(String id, String note, String token) async {
+    return http.put(
+      Uri.parse("${endpoint}update_note/$note/$id"),
+      headers: {"Authorization": "Bearer $token", 'Content-Type': 'application/json'},
+      // body: jsonEncode({
+      //   note: note,
+      // })
+    );
+  }
 
 }

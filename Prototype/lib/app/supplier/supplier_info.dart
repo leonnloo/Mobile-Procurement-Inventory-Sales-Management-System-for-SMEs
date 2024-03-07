@@ -2,6 +2,7 @@ import "dart:math";
 
 import "package:flutter/material.dart";
 import 'package:prototype/models/supplierdata.dart';
+import 'package:prototype/widgets/appbar/info_appbar.dart';
 
 void navigateToSupplierDetail(BuildContext context, SupplierData supplier) {
   Navigator.of(context).push(
@@ -19,9 +20,7 @@ class SupplierDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Supplier Detail'),
-      ),
+      appBar: InfoAppBar(currentTitle: 'Supplier Detail', currentData: supplierData),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
