@@ -194,13 +194,12 @@ class RequestUtil {
       headers: {"Authorization": "Bearer $token"}
     );
   }
+
+  // ! passing in "/" within note will disrupt the url
   Future<http.Response> updateNote(String id, String note, String token) async {
     return http.put(
       Uri.parse("${endpoint}update_note/$note/$id"),
       headers: {"Authorization": "Bearer $token", 'Content-Type': 'application/json'},
-      // body: jsonEncode({
-      //   note: note,
-      // })
     );
   }
 

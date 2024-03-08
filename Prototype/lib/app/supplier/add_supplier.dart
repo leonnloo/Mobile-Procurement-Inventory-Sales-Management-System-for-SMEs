@@ -69,12 +69,12 @@ class AddSupplierScreenState extends State<AddSupplierScreen> {
                 width: double.infinity,
                 child: ElevatedButton(
                   style: TextButton.styleFrom(
-                                foregroundColor: Colors.white,
-                                backgroundColor: Colors.black,
-                                side: const BorderSide(color: Colors.black),
-                                shape: const RoundedRectangleBorder(),
-                                padding: const EdgeInsets.symmetric(vertical: 15.0)
-                              ),
+                    foregroundColor: Colors.white,
+                    backgroundColor: Colors.black,
+                    side: const BorderSide(color: Colors.black),
+                    shape: const RoundedRectangleBorder(),
+                    padding: const EdgeInsets.symmetric(vertical: 15.0)
+                  ),
                   onPressed: () async {
                     String? businessName = validateTextField(_businessNameController.text, 'Business name');
                     String? contactPerson = validateTextField(_contactPersonController.text, 'Contact person');

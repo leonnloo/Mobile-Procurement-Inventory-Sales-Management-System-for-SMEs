@@ -1,7 +1,10 @@
 import "dart:math";
 
 import "package:flutter/material.dart";
+import 'package:get/get.dart';
 import 'package:prototype/models/supplierdata.dart';
+import 'package:prototype/util/request_util.dart';
+import 'package:prototype/util/user_controller.dart';
 import 'package:prototype/widgets/appbar/info_appbar.dart';
 
 void navigateToSupplierDetail(BuildContext context, SupplierData supplier) {
@@ -20,8 +23,8 @@ class SupplierDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: InfoAppBar(currentTitle: 'Supplier Detail', currentData: supplierData),
-      body: Padding(
+      appBar: InfoAppBar(currentTitle: 'Supplier Details', currentData: supplierData),
+      body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -32,13 +35,13 @@ class SupplierDetailScreen extends StatelessWidget {
             _buildDetailRow('Email', supplierData.email),
             _buildDetailRow('Phone number', supplierData.phoneNo),
             _buildDetailRow('Address', supplierData.address),
-
+                
             const SizedBox(height: 6.0), // Add some spacing
-            _buildNotes(),
+            _buildNotes(context),
             
             const SizedBox(height: 6.0),
             _buildHistory(),
-
+                
             const SizedBox(height: 6.0),
             _buildPastOrders()
           ],
@@ -69,37 +72,79 @@ class SupplierDetailScreen extends StatelessWidget {
       ),
     );
   }
-  Widget _buildNotes(){
+  Widget _buildNotes(BuildContext context){
+    final TextEditingController notesController = TextEditingController();
+    notesController.text = supplierData.notes!;
+    final userController = Get.put(UserLoggedInController());
+
+    final RequestUtil requestUtil = RequestUtil();
     return Padding(
       padding: const EdgeInsets.all(16.0),
-      child: 
-      // Section for User's Remark
-      Align(
-        child: Container(
-          decoration: BoxDecoration(
-            border: Border.all(
-              color: Colors.grey, // You can set the color of the border
-              width: 1.0,
+      child: Align(
+          child: Container(
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: Colors.grey, // You can set the color of the border
+                width: 1.0,
+              ),
+              borderRadius: const BorderRadius.all(Radius.circular(8.0)),
             ),
-            borderRadius: const BorderRadius.all(Radius.circular(8.0)),
-          ),
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                'Note:                                                           ',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 8.0),
-              Text(
-                supplierData.notes ?? 'No remark available',
-                style: const TextStyle(fontSize: 16),
-              ),
-            ],
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  width: double.infinity,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const SizedBox(
+                        child: Text(
+                          'Note:',
+                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      SizedBox(
+                        child: TextButton(
+                          onPressed: () async {
+                            final response = await requestUtil.updateNote(supplierData.supplierID, notesController.text, userController.currentUser.value);
+                            if (response.statusCode == 200) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text('Note saved!'),
+                                  backgroundColor: Colors.green,
+                                ),
+                              );
+                              return;
+                            }
+                            else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text('Note save failed!'),
+                                  backgroundColor: Colors.red,
+                                ),
+                              );
+                            }
+                          }, 
+                          child: const Text('Save'),
+                        )
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 8.0),
+                TextFormField(
+                  controller: notesController,
+                  maxLines: null, // Allow text to wrap to multiple lines
+                  minLines: 1,    // Set the minimum number of lines to show
+                  decoration: const InputDecoration(
+                    border: InputBorder.none,
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
-      ),
     );
   }
 }

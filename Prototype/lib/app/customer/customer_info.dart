@@ -29,7 +29,7 @@ class CustomerDetailScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildDetailRow('Customer ID', customer.customerID.toString()),
+            _buildDetailRow('Customer ID', customer.customerID),
             _buildDetailRow('Business Name', customer.businessName),
             _buildDetailRow('Contact Person', customer.contactPerson),
             _buildDetailRow('Email', customer.email),
