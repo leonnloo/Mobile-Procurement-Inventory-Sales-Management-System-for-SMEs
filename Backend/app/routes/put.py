@@ -40,9 +40,9 @@ def update_customer(customer: NewCustomer, customerID: str):
             headers={"WWW-Authenticate": "Bearer"},
         )
 # ----------------------------------------- Supplier Update ----------------------------------------------
-@put_router.put("/update_supplier/{supplier_id}")
-def update_supplier(supplier: NewSupplier):
-    old_supplier = suppliers_db.find_one({"supplier_id": supplier.supplier_id})
+@put_router.put("/update_supplier/{supplierID}")
+def update_supplier(supplier: NewSupplier, supplierID: str):
+    old_supplier = suppliers_db.find_one({"supplier_id": supplierID})
     if old_supplier:
         updated_supplier = SupplierInfo(
             supplier_id = old_supplier["supplier_id"],
@@ -54,8 +54,8 @@ def update_supplier(supplier: NewSupplier):
             past_order = old_supplier["past_order"],
             notes = old_supplier["notes"],
         )
-        suppliers_db.update_one({"supplier_id": supplier.supplier_id}, {"$set": dict(updated_supplier)})
-        return supplier_dict_serial(suppliers_db.find_one({"supplier_id": supplier.supplier_id}))
+        suppliers_db.update_one({"supplier_id": supplierID}, {"$set": dict(updated_supplier)})
+        return supplier_dict_serial(suppliers_db.find_one({"supplier_id": supplierID}))
     else:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,

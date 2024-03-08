@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:prototype/app/customer/edit_customer.dart';
 import 'package:prototype/app/notification_screen.dart';
+import 'package:prototype/app/supplier/edit_supplier.dart';
 
 class InfoAppBar extends StatelessWidget implements PreferredSizeWidget {
   InfoAppBar({super.key, required this.currentTitle, required this.currentData});
@@ -24,7 +25,7 @@ class InfoAppBar extends StatelessWidget implements PreferredSizeWidget {
                   if (currentTitle == 'Customer Details') {
                     Get.to(() => EditCustomer(customerData: currentData));
                   } else if (currentTitle == 'Supplier Details') {
-                    Get.to(() => EditCustomer(customerData: currentData));
+                    Get.to(() => EditSupplier(supplierData: currentData));
                   }
                 },
                 icon: const Icon(

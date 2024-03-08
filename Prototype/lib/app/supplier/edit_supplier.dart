@@ -1,39 +1,37 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:prototype/models/customerdata.dart';
+import 'package:prototype/models/supplierdata.dart';
 import 'package:prototype/util/request_util.dart';
 import 'package:prototype/util/user_controller.dart';
 import 'package:prototype/util/validate_text.dart';
 import 'package:prototype/widgets/text_field.dart';
 
-class EditCustomer extends StatefulWidget {
-  final CustomerData customerData;
+class EditSupplier extends StatefulWidget {
+  final SupplierData supplierData;
 
-  const EditCustomer({super.key, required this.customerData});
+  const EditSupplier({super.key, required this.supplierData});
 
   @override
-  EditCustomerState createState() => EditCustomerState();
+  EditSupplierState createState() => EditSupplierState();
 }
 
-class EditCustomerState extends State<EditCustomer> {
+class EditSupplierState extends State<EditSupplier> {
   final TextEditingController _businessNameController = TextEditingController();
   final TextEditingController _contactPersonController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _phoneNoController = TextEditingController();
-  final TextEditingController _billingAddressController = TextEditingController();
-  final TextEditingController _shippingAddressController = TextEditingController();
+  final TextEditingController _addressController = TextEditingController();
   final RequestUtil requestUtil = RequestUtil();
   final UserLoggedInController userLoggedInController = UserLoggedInController();
   @override
   void initState() {
     super.initState();
-    _businessNameController.text = widget.customerData.businessName ?? '';
-    _contactPersonController.text = widget.customerData.contactPerson ?? '';
-    _emailController.text = widget.customerData.email ?? '';
-    _phoneNoController.text = widget.customerData.phoneNo ?? '';
-    _billingAddressController.text = widget.customerData.billingAddress ?? '';
-    _shippingAddressController.text = widget.customerData.shippingAddress ?? '';
+    _businessNameController.text = widget.supplierData.businessName ?? '';
+    _contactPersonController.text = widget.supplierData.contactPerson ?? '';
+    _emailController.text = widget.supplierData.email ?? '';
+    _phoneNoController.text = widget.supplierData.phoneNo ?? '';
+    _addressController.text = widget.supplierData.address ?? '';
   }
 
 
@@ -44,7 +42,7 @@ class EditCustomerState extends State<EditCustomer> {
       appBar: AppBar(
         toolbarHeight: 60.0,
         backgroundColor: Colors.red[400],
-        title: const Text('Edit Customer'),
+        title: const Text('Edit Supplier'),
         actions: [
           IconButton(
             onPressed: () => _showDeleteConfirmationDialog(context),
@@ -64,17 +62,15 @@ class EditCustomerState extends State<EditCustomer> {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                BuildTextField(controller: _businessNameController, labelText: 'Business Name', data: widget.customerData.businessName),
+                BuildTextField(controller: _businessNameController, labelText: 'Business Name', data: widget.supplierData.businessName),
                 const SizedBox(height: 16.0),
-                BuildTextField(controller: _contactPersonController, labelText: 'Contact Person', data: widget.customerData.contactPerson),
+                BuildTextField(controller: _contactPersonController, labelText: 'Contact Person', data: widget.supplierData.contactPerson),
                 const SizedBox(height: 16.0),
-                BuildTextField(controller: _emailController, labelText: 'Email', data: widget.customerData.email),
+                BuildTextField(controller: _emailController, labelText: 'Email', data: widget.supplierData.email),
                 const SizedBox(height: 16.0),
-                BuildTextField(controller: _phoneNoController, labelText: 'Phone Number', data: widget.customerData.phoneNo),
+                BuildTextField(controller: _phoneNoController, labelText: 'Phone Number', data: widget.supplierData.phoneNo),
                 const SizedBox(height: 16.0),
-                BuildTextField(controller: _billingAddressController, labelText: 'Billing Address', data: widget.customerData.billingAddress),
-                const SizedBox(height: 16.0),
-                BuildTextField(controller: _shippingAddressController, labelText: 'Shipping Address', data: widget.customerData.shippingAddress),
+                BuildTextField(controller: _addressController, labelText: 'Address', data: widget.supplierData.address),
                 const SizedBox(height: 16.0),
                 SizedBox(
                     width: double.infinity,
@@ -91,14 +87,12 @@ class EditCustomerState extends State<EditCustomer> {
                         String? contactPerson = validateTextField(_contactPersonController.text, 'Contact person');
                         String? email = validateTextField(_emailController.text, 'Email');
                         String? phoneNumber = validateTextField(_phoneNoController.text, 'Phone number');
-                        String? billingAddress = validateTextField(_billingAddressController.text, 'Billing address');
-                        String? shippingAddress = validateTextField(_shippingAddressController.text, 'Shipping address');
+                        String? address = validateTextField(_addressController.text, 'Address');
                         if (businessName == null ||
                             contactPerson == null ||
                             email == null ||
                             phoneNumber == null ||
-                            billingAddress == null ||
-                            shippingAddress == null) {
+                            address == null) {
                           // Display validation error messages
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
@@ -107,8 +101,8 @@ class EditCustomerState extends State<EditCustomer> {
                             ),
                           );
                         } else {                
-                          final response = await requestUtil.updateCustomer(
-                            widget.customerData.customerID, businessName, contactPerson, email, phoneNumber, billingAddress, shippingAddress
+                          final response = await requestUtil.updateSupplier(
+                            widget.supplierData.supplierID, businessName, contactPerson, email, phoneNumber, address
                           );
                           
                           if (response.statusCode == 200) {
@@ -161,13 +155,13 @@ class EditCustomerState extends State<EditCustomer> {
                 // Handle the deletion logic here
                 // You can call a function to perform the deletion or any other action
                 // For now, just close the dialog
-                final response = await requestUtil.deleteCustomer(widget.customerData.customerID, userLoggedInController.currentUser.value);
+                final response = await requestUtil.deleteSupplier(widget.supplierData.supplierID, userLoggedInController.currentUser.value);
                 
                 if (response.statusCode == 200) {
                   Navigator.pop(context);
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
-                      content: Text('Customer deleted successfully.'),
+                      content: Text('Supplier deleted successfully.'),
                       backgroundColor: Colors.green,
                     ),
                   );
