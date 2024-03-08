@@ -17,7 +17,7 @@ def user_serial(users) -> list:
 # ---------------------------------------- Supplier ----------------------------------------
 def supplier_dict_serial(supplier) -> dict:
     return {
-        "supplier_id": str(supplier["supplier_id"]),
+        "supplier_id": supplier["supplier_id"],
         "business_name": supplier["business_name"],
         "contact_person": supplier["contact_person"],
         "email": supplier["email"],
@@ -29,6 +29,15 @@ def supplier_dict_serial(supplier) -> dict:
 
 def supplier_serial(suppliers) -> list:
     return [supplier_dict_serial(supplier) for supplier in suppliers]
+
+def supplier_dict_name(supplier) -> str:
+    if isinstance(supplier, dict):
+        return supplier.get("business_name", "")
+    return str(supplier)
+
+def supplier_name_serial(suppliers) -> list:
+    return [supplier_dict_name(supplier) for supplier in suppliers]
+
 
 # ---------------------------------------- Customer ----------------------------------------
 def customer_dict_serial(customer) -> dict:
@@ -63,16 +72,24 @@ def product_dict_serial(product) -> dict:
 def product_serial(products) -> list:
     return [product_dict_serial(product) for product in products]
 
+def product_dict_name(product) -> str:
+    if isinstance(product, dict):
+        return product.get("product_name", "")
+    return str(product)
+
+def product_name_serial(products) -> list:
+    return [supplier_dict_name(product) for product in products]
 
 # ---------------------------------------- Procurement ----------------------------------------
 def procurement_dict_serial(purchase) -> dict:
     return {
         "purchase_no": purchase["purchase_no"],
         "item_name": purchase["item_name"],
-        "supplier": purchase["supplier"],
+        "supplier_name": purchase["supplier_name"],
         "order_date": purchase["order_date"],
         "delivery_date": purchase["delivery_date"],
-        "cost": purchase["cost"],
+        "unit_price": purchase["unit_price"],
+        "total_price": purchase["total_price"],
         "quantity": purchase["quantity"],
         "status": purchase["status"]
     }
@@ -96,6 +113,14 @@ def inventory_dict_serial(inventory) -> dict:
 
 def inventory_serial(inventories) -> list:
     return [inventory_dict_serial(inventory) for inventory in inventories]
+
+def inventory_dict_name(item) -> str:
+    if isinstance(item, dict):
+        return item.get("item_name", "")
+    return str(item)
+
+def inventory_name_serial(items) -> list:
+    return [inventory_dict_name(item) for item in items]
 
 # ---------------------------------------- Sales Order ----------------------------------------
 def sale_order_dict_serial(sale_order) -> dict:

@@ -1,10 +1,8 @@
 import "dart:math";
 
 import "package:flutter/material.dart";
-import 'package:get/get.dart';
 import 'package:prototype/models/supplierdata.dart';
 import 'package:prototype/util/request_util.dart';
-import 'package:prototype/util/user_controller.dart';
 import 'package:prototype/widgets/appbar/info_appbar.dart';
 
 void navigateToSupplierDetail(BuildContext context, SupplierData supplier) {
@@ -75,7 +73,6 @@ class SupplierDetailScreen extends StatelessWidget {
   Widget _buildNotes(BuildContext context){
     final TextEditingController notesController = TextEditingController();
     notesController.text = supplierData.notes!;
-    final userController = Get.put(UserLoggedInController());
 
     final RequestUtil requestUtil = RequestUtil();
     return Padding(
@@ -107,7 +104,7 @@ class SupplierDetailScreen extends StatelessWidget {
                       SizedBox(
                         child: TextButton(
                           onPressed: () async {
-                            final response = await requestUtil.updateNote(supplierData.supplierID, notesController.text, userController.currentUser.value);
+                            final response = await requestUtil.updateNote(supplierData.supplierID, notesController.text);
                             if (response.statusCode == 200) {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(

@@ -1,17 +1,18 @@
 import 'dart:convert';
-
 import 'package:http/http.dart' as http;
-import 'dart:io';
+import 'package:prototype/util/user_controller.dart';
 
 class RequestUtil {
   late final String ipAddress;
   final int port = 8000;
   late final String endpoint;
-
+  var token = '';
+  final UserLoggedInController userLoggedInController = UserLoggedInController();
   RequestUtil() {
     // ipAddress = InternetAddress.loopbackIPv4.address;
     ipAddress = "10.0.2.2";
     endpoint = "http://$ipAddress:$port/";
+    token = userLoggedInController.currentUser.value;
   }
 
   // ----------------------------------------- LOGIN ----------------------------------------------
@@ -81,15 +82,16 @@ class RequestUtil {
 
 
   // ----------------------------------------- CUSTOMER ----------------------------------------------
-  Future<http.Response> getCustomers(String token) async {
+  Future<http.Response> getCustomers() async {
     return http.get(
       Uri.parse("${endpoint}get_customers"),
       headers: {"Authorization": "Bearer $token"}
     );
   }
-  Future<http.Response> getCustomer(String id, String token) async {
+  Future<http.Response> getCustomer(String id) async {
     return http.get(
-      Uri.parse("${endpoint}get_customer/$id/$token"),
+      Uri.parse("${endpoint}get_customer/$id"),
+      headers: {"Authorization": "Bearer $token"}
     );
   }
   
@@ -97,7 +99,7 @@ class RequestUtil {
   Future<http.Response> newCustomer(String businessName, String contactPerson, String email, String phoneNumber, String billingAddress, String shippingAddress) async {
     return http.post(
       Uri.parse("${endpoint}customer_form"),
-      headers: {'Content-Type': 'application/json'},
+      headers: {"Authorization": "Bearer $token", 'Content-Type': 'application/json'},
       body: jsonEncode({
         'business_name': businessName,
         'contact_person': contactPerson,
@@ -112,7 +114,7 @@ class RequestUtil {
   Future<http.Response> updateCustomer(String customerID, String businessName, String contactPerson, String email, String phoneNumber, String billingAddress, String shippingAddress) async {
     return http.put(
       Uri.parse("${endpoint}update_customer/$customerID"),
-      headers: {'Content-Type': 'application/json'},
+      headers: {"Authorization": "Bearer $token", 'Content-Type': 'application/json'},
       body: jsonEncode({
         'business_name': businessName,
         'contact_person': contactPerson,
@@ -124,32 +126,38 @@ class RequestUtil {
     );
   }
 
-  Future<http.Response> deleteCustomer(String id, String token) async {
+  Future<http.Response> deleteCustomer(String id) async {
     return http.delete(
       Uri.parse("${endpoint}delete_customer/$id"),
       headers: {"Authorization": "Bearer $token"},
     );
   }
   // ----------------------------------------- SUPPLIER ----------------------------------------------
-  Future<http.Response> getSuppliers(String token) async {
+  Future<http.Response> getSuppliers() async {
     return http.get(
       Uri.parse("${endpoint}get_suppliers"),
       headers: {"Authorization": "Bearer $token"}
     );
   }
 
-  Future<http.Response> getSupplier(String id, String token) async {
+  Future<http.Response> getSupplier(String id) async {
     return http.get(
       Uri.parse("${endpoint}get_supplier/$id"),
       headers: {"Authorization": "Bearer $token"}
     );
   }
 
+  Future<http.Response> getSuppliersName() async {
+    return http.get(
+      Uri.parse("${endpoint}get_suppliers_name"),
+      headers: {"Authorization": "Bearer $token"}
+    );
+  }
 
   Future<http.Response> newSupplier(String businessName, String contactPerson, String email, String phoneNumber, String address) async {
     return http.post(
       Uri.parse("${endpoint}supplier_form"),
-      headers: {'Content-Type': 'application/json'},
+      headers: {"Authorization": "Bearer $token", 'Content-Type': 'application/json'},
       body: jsonEncode({
         'business_name': businessName,
         'contact_person': contactPerson,
@@ -163,7 +171,7 @@ class RequestUtil {
   Future<http.Response> updateSupplier(String id, String businessName, String contactPerson, String email, String phoneNumber, String address) async {
     return http.put(
       Uri.parse("${endpoint}update_supplier/$id"),
-      headers: {'Content-Type': 'application/json'},
+      headers: {"Authorization": "Bearer $token", 'Content-Type': 'application/json'},
       body: jsonEncode({
         'business_name': businessName,
         'contact_person': contactPerson,
@@ -174,7 +182,7 @@ class RequestUtil {
     );
   }
 
-  Future<http.Response> deleteSupplier(String id, String token) async {
+  Future<http.Response> deleteSupplier(String id) async {
     return http.delete(
       Uri.parse("${endpoint}delete_supplier/$id"),
       headers: {"Authorization": "Bearer $token"},
@@ -182,13 +190,13 @@ class RequestUtil {
   }
 
   // ----------------------------------------- NOTE ----------------------------------------------
-  Future<http.Response> getSupplierNote(String id, String token) async {
+  Future<http.Response> getSupplierNote(String id) async {
     return http.get(
       Uri.parse("${endpoint}get_supplier_note/$id"),
       headers: {"Authorization": "Bearer $token"}
     );
   }
-  Future<http.Response> getCustomerNote(String id, String token) async {
+  Future<http.Response> getCustomerNote(String id) async {
     return http.get(
       Uri.parse("${endpoint}get_customer_note/$id"),
       headers: {"Authorization": "Bearer $token"}
@@ -196,11 +204,66 @@ class RequestUtil {
   }
 
   // ! passing in "/" within note will disrupt the url
-  Future<http.Response> updateNote(String id, String note, String token) async {
+  Future<http.Response> updateNote(String id, String note) async {
     return http.put(
       Uri.parse("${endpoint}update_note/$note/$id"),
       headers: {"Authorization": "Bearer $token", 'Content-Type': 'application/json'},
     );
   }
 
+  // ----------------------------------------- PROCUREMENT ----------------------------------------------
+  Future<http.Response> newProcurement(dynamic itemName, dynamic supplierName, dynamic orderDate, dynamic deliveryDate, dynamic unitPrice, dynamic totalPrice, dynamic quantity, dynamic status) async { return
+  http.post(
+    Uri.parse("${endpoint}procurement_form"),
+    headers: {"Authorization": "Bearer $token", 'Content-Type': 'application/json'},
+    body: jsonEncode({
+        'item_name': itemName,
+        'supplier_name': supplierName,
+        'order_date': orderDate,
+        'delivery_date': deliveryDate,
+        'unit_price': unitPrice,
+        'total_price':  totalPrice,
+        'quantity': quantity,
+        'status': status
+      })
+  ); }
+
+  Future<http.Response> getProcurement(){
+    return http.get(
+      Uri.parse("${endpoint}get_procurement"),
+      headers: {"Authorization": "Bearer $token"}
+    );
+  }
+
+  // ----------------------------------------- PRODUCT ----------------------------------------------
+  Future<http.Response> getProductName() async {
+    return http.get(
+      Uri.parse("${endpoint}get_product_name"),
+      headers: {"Authorization": "Bearer $token"}
+    );
+  }
+
+  Future<http.Response> getProductUnitPrice(String item) async {
+    return http.get(
+      Uri.parse("${endpoint}get_product_unit_price/$item"),
+      headers: {"Authorization": "Bearer $token"}
+    );
+  }
+
+
+  // ----------------------------------------- INVENTORY ----------------------------------------------
+  Future<http.Response> getInventoryName() async {
+    return http.get(
+      Uri.parse("${endpoint}get_inventory_name"),
+      headers: {"Authorization": "Bearer $token"}
+    );
+  }
+
+  Future<http.Response> getInventoryUnitPrice(String item) async {
+    return http.get(
+      Uri.parse("${endpoint}get_inventory_unit_price/$item"),
+      headers: {"Authorization": "Bearer $token"}
+    );
+  }
 }
+

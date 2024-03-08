@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:prototype/util/request_util.dart';
 import 'package:prototype/util/validate_text.dart';
 import 'package:prototype/widgets/appbar/common_appbar.dart';
-import 'package:prototype/widgets/text_field.dart';
+import 'package:prototype/widgets/forms/text_field.dart';
 
 class AddSupplierScreen extends StatefulWidget {
   const AddSupplierScreen({super.key});
@@ -76,11 +76,11 @@ class AddSupplierScreenState extends State<AddSupplierScreen> {
                     padding: const EdgeInsets.symmetric(vertical: 15.0)
                   ),
                   onPressed: () async {
-                    String? businessName = validateTextField(_businessNameController.text, 'Business name');
-                    String? contactPerson = validateTextField(_contactPersonController.text, 'Contact person');
-                    String? email = validateTextField(_emailController.text, 'Email');
-                    String? phoneNumber = validateTextField(_phoneNoController.text, 'Phone number');
-                    String? address = validateTextField(_addressController.text, 'Address');
+                    String? businessName = validateTextField(_businessNameController.text);
+                    String? contactPerson = validateTextField(_contactPersonController.text);
+                    String? email = validateTextField(_emailController.text);
+                    String? phoneNumber = validateTextField(_phoneNoController.text);
+                    String? address = validateTextField(_addressController.text);
                     if (businessName == null ||
                         contactPerson == null ||
                         email == null ||

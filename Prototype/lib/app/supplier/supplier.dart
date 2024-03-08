@@ -143,7 +143,7 @@ class SupplierManagementScreen extends StatelessWidget {
   Future<List<SupplierData>> _fetchSupplierData() async {
     final userController = Get.put(UserLoggedInController());
     try {
-      final customer = await requestUtil.getSuppliers('Bearer ${userController.currentUser.value}');
+      final customer = await requestUtil.getSuppliers();
       if (customer.statusCode == 200) {
         // Assuming the JSON response is a list of objects
         List<dynamic> jsonData = jsonDecode(customer.body);
@@ -155,7 +155,7 @@ class SupplierManagementScreen extends StatelessWidget {
         throw Exception('Unable to fetch supplier data.');
       }
     } catch (error) {
-      print('Error in _fetchSupplierData: $error');
+      // print('Error in _fetchSupplierData: $error');
       rethrow; // Rethrow the error to be caught by FutureBuilder
     }
   }

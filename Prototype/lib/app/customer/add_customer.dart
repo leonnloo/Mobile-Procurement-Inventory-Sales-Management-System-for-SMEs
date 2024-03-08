@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:prototype/util/request_util.dart';
 import 'package:prototype/util/validate_text.dart';
 import 'package:prototype/widgets/appbar/common_appbar.dart';
-import 'package:prototype/widgets/text_field.dart';
+import 'package:prototype/widgets/forms/text_field.dart';
 
 class AddCustomerScreen extends StatefulWidget {
   const AddCustomerScreen({super.key});
@@ -80,12 +80,12 @@ class AddCustomerScreenState extends State<AddCustomerScreen> {
                     padding: const EdgeInsets.symmetric(vertical: 15.0)
                   ),
                   onPressed: () async {
-                    String? businessName = validateTextField(_businessNameController.text, 'Business name');
-                    String? contactPerson = validateTextField(_contactPersonController.text, 'Contact person');
-                    String? email = validateTextField(_emailController.text, 'Email');
-                    String? phoneNumber = validateTextField(_phoneNoController.text, 'Phone number');
-                    String? billingAddress = validateTextField(_billingAddressController.text, 'Billing address');
-                    String? shippingAddress = validateTextField(_shippingAddressController.text, 'Shipping address');
+                    String? businessName = validateTextField(_businessNameController.text);
+                    String? contactPerson = validateTextField(_contactPersonController.text);
+                    String? email = validateTextField(_emailController.text);
+                    String? phoneNumber = validateTextField(_phoneNoController.text);
+                    String? billingAddress = validateTextField(_billingAddressController.text);
+                    String? shippingAddress = validateTextField(_shippingAddressController.text);
                     if (businessName == null ||
                         contactPerson == null ||
                         email == null ||
@@ -93,6 +93,7 @@ class AddCustomerScreenState extends State<AddCustomerScreen> {
                         billingAddress == null ||
                         shippingAddress == null) {
                       // Display validation error messages
+                      _formKey.currentState?.validate();
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
                           content: Text('Please fill in all the required fields.'),
