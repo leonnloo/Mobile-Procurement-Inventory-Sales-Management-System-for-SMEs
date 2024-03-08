@@ -1,12 +1,10 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:prototype/app/customer/add_customer.dart';
 import 'package:prototype/models/customerdata.dart';
 import 'package:prototype/app/customer/customer_info.dart';
 import 'package:prototype/util/request_util.dart';
-import 'package:prototype/util/user_controller.dart';
 
 class CustomerManagementScreen extends StatelessWidget {
   CustomerManagementScreen({super.key});
@@ -80,7 +78,7 @@ class CustomerManagementScreen extends StatelessWidget {
                     return DataRow(
                       cells: [
                         DataCell(
-                          Text(customer.customerID.toString()),
+                          Text(customer.customerID),
                           onTap: () {
                             navigateToCustomerDetail(context, customer);
                           },
@@ -147,9 +145,8 @@ class CustomerManagementScreen extends StatelessWidget {
   }
 
   Future<List<CustomerData>> _fetchCustomerData() async {
-    final userController = Get.put(UserLoggedInController());
     try {
-      final customer = await requestUtil.getCustomers('Bearer ${userController.currentUser.value}');
+      final customer = await requestUtil.getCustomers();
       if (customer.statusCode == 200) {
         // Assuming the JSON response is a list of objects
         List<dynamic> jsonData = jsonDecode(customer.body);
@@ -161,7 +158,7 @@ class CustomerManagementScreen extends StatelessWidget {
         throw Exception('Unable to fetch customer data.');
       }
     } catch (error) {
-      print('Error in _fetchCustomerData: $error');
+      // print('Error in _fetchCustomerData: $error');
       rethrow; // Rethrow the error to be caught by FutureBuilder
     }
   }

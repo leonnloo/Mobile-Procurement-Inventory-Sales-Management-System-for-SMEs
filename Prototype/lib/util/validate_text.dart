@@ -1,4 +1,4 @@
-String? validateTextField(String value, String fieldName) {
+String? validateTextField(String value) {
   if (value.isEmpty) {
     return null;
   }

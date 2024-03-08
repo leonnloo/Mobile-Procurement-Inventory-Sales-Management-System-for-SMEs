@@ -3,9 +3,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:prototype/models/supplierdata.dart';
 import 'package:prototype/util/request_util.dart';
-import 'package:prototype/util/user_controller.dart';
 import 'package:prototype/util/validate_text.dart';
-import 'package:prototype/widgets/text_field.dart';
+import 'package:prototype/widgets/forms/text_field.dart';
 
 class EditSupplier extends StatefulWidget {
   final SupplierData supplierData;
@@ -23,15 +22,14 @@ class EditSupplierState extends State<EditSupplier> {
   final TextEditingController _phoneNoController = TextEditingController();
   final TextEditingController _addressController = TextEditingController();
   final RequestUtil requestUtil = RequestUtil();
-  final UserLoggedInController userLoggedInController = UserLoggedInController();
   @override
   void initState() {
     super.initState();
-    _businessNameController.text = widget.supplierData.businessName ?? '';
-    _contactPersonController.text = widget.supplierData.contactPerson ?? '';
-    _emailController.text = widget.supplierData.email ?? '';
-    _phoneNoController.text = widget.supplierData.phoneNo ?? '';
-    _addressController.text = widget.supplierData.address ?? '';
+    _businessNameController.text = widget.supplierData.businessName;
+    _contactPersonController.text = widget.supplierData.contactPerson;
+    _emailController.text = widget.supplierData.email;
+    _phoneNoController.text = widget.supplierData.phoneNo;
+    _addressController.text = widget.supplierData.address;
   }
 
 
@@ -83,11 +81,11 @@ class EditSupplierState extends State<EditSupplier> {
                                     padding: const EdgeInsets.symmetric(vertical: 15.0)
                                   ),
                       onPressed: () async {
-                        String? businessName = validateTextField(_businessNameController.text, 'Business name');
-                        String? contactPerson = validateTextField(_contactPersonController.text, 'Contact person');
-                        String? email = validateTextField(_emailController.text, 'Email');
-                        String? phoneNumber = validateTextField(_phoneNoController.text, 'Phone number');
-                        String? address = validateTextField(_addressController.text, 'Address');
+                        String? businessName = validateTextField(_businessNameController.text);
+                        String? contactPerson = validateTextField(_contactPersonController.text);
+                        String? email = validateTextField(_emailController.text);
+                        String? phoneNumber = validateTextField(_phoneNoController.text);
+                        String? address = validateTextField(_addressController.text);
                         if (businessName == null ||
                             contactPerson == null ||
                             email == null ||
@@ -155,7 +153,7 @@ class EditSupplierState extends State<EditSupplier> {
                 // Handle the deletion logic here
                 // You can call a function to perform the deletion or any other action
                 // For now, just close the dialog
-                final response = await requestUtil.deleteSupplier(widget.supplierData.supplierID, userLoggedInController.currentUser.value);
+                final response = await requestUtil.deleteSupplier(widget.supplierData.supplierID);
                 
                 if (response.statusCode == 200) {
                   Navigator.pop(context);

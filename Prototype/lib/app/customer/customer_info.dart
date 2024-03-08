@@ -1,9 +1,7 @@
 import "package:flutter/material.dart";
-import 'package:get/get.dart';
 import 'package:prototype/models/customerdata.dart';
 import 'package:prototype/models/orderdata.dart';
 import 'package:prototype/util/request_util.dart';
-import 'package:prototype/util/user_controller.dart';
 import 'dart:math';
 import 'package:prototype/widgets/appbar/info_appbar.dart';
 
@@ -78,7 +76,6 @@ class CustomerDetailScreen extends StatelessWidget {
   Widget _buildNotes(BuildContext context){
     final TextEditingController notesController = TextEditingController();
     notesController.text = customer.notes!;
-    final userController = Get.put(UserLoggedInController());
 
     final RequestUtil requestUtil = RequestUtil();
     return Padding(
@@ -110,7 +107,7 @@ class CustomerDetailScreen extends StatelessWidget {
                       SizedBox(
                         child: TextButton(
                           onPressed: () async {
-                            final response = await requestUtil.updateNote(customer.customerID, notesController.text, userController.currentUser.value);
+                            final response = await requestUtil.updateNote(customer.customerID, notesController.text);
                             if (response.statusCode == 200) {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
@@ -189,7 +186,6 @@ Widget _buildHistory() {
 
 
 List<PastOrder> generatePastOrders() {
-    final Random random = Random();
 
     return List.generate(5, (index) {
       return PastOrder(

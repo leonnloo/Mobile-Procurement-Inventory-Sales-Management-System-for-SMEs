@@ -35,14 +35,19 @@ def get_suppliers(token: str = Depends(oauth_scheme)):
 
 @get_router.get("/get_supplier/{id}")
 def get_suppliers(id:str, token: str = Depends(oauth_scheme)):
-    suppliers = supplier_serial(suppliers_db.find_one({'supplier_id': id}))
+    suppliers = supplier_dict_serial(suppliers_db.find_one({'business_name': id}))
+    return suppliers
+
+@get_router.get("/get_suppliers_name")
+def get_suppliers_name(token: str = Depends(oauth_scheme)):
+    suppliers = supplier_name_serial(suppliers_db.distinct('business_name'))
     return suppliers
 
 # ---------------------------------------- Sales Order ----------------------------------------
 @get_router.get("/get_sale_order")
 def get_sale_order(token: str = Depends(oauth_scheme)):
     sale_orders = sale_order_serial(sales_order_db.find())
-    return sale_orders
+    return sale_orders 
 
 # ---------------------------------------- Procurement ----------------------------------------
 @get_router.get("/get_procurement")
@@ -56,11 +61,34 @@ def get_product(token: str = Depends(oauth_scheme)):
     product = product_serial(product_db.find())
     return product
 
+@get_router.get("/get_product_name")
+def get_product_name(token: str = Depends(oauth_scheme)):
+    product = product_name_serial(product_db.distinct('product_name'))
+    # product = product_db.find({}, {'product_name': 1})
+    # product_names = [item['product_name'] for item in product]
+    # return product_names
+    return product
+
+@get_router.get("/get_product_unit_price/{item}")
+def get_product_unit_price(item: str, token: str = Depends(oauth_scheme)):
+    product = product_db.find_one({'product_name': item}, {'unit_price': 1})
+    return product['unit_price']
+
 # ---------------------------------------- Inventory ----------------------------------------
 @get_router.get("/get_inventory")
 def get_inventory(token: str = Depends(oauth_scheme)):
     inventory = inventory_serial(inventory_db.find())
     return inventory
+
+@get_router.get("/get_inventory_name")
+def get_inventory_name(token: str = Depends(oauth_scheme)):
+    inventory = inventory_name_serial(inventory_db.distinct('item_name'))
+    return inventory
+
+@get_router.get("/inventory_unit_price/{item}")
+def inventory_unit_price(item: str, token: str = Depends(oauth_scheme)):
+    inventory = inventory_db.find_one({'item_name': item}, {'unit_price': 1})
+    return inventory['unit_price']
 
 # ---------------------------------------- Sale Management ----------------------------------------
 @get_router.get("/get_company_monthly_sales")

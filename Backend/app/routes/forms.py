@@ -126,7 +126,7 @@ def register(order: SaleOrder):
 
 # ----------------------------------------- Procurement Form ----------------------------------------------
 @form_router.post("/procurement_form")
-def register(procurement: Procurement):
+def register(procurement: NewProcurement, token: str = Depends(oauth_scheme)):
     latest_id_document = procurement_db.find_one(sort=[("purchase_no", -1)])
 
     if latest_id_document:
@@ -137,11 +137,12 @@ def register(procurement: Procurement):
 
     updated_procurement = Procurement(
         purchase_no = next_purchase_no,
-        supplier = procurement.supplier,
         item_name = procurement.item_name,
+        supplier_name = procurement.supplier_name,
         order_date = procurement.order_date,
         delivery_date = procurement.delivery_date,
-        cost = procurement.cost,
+        unit_price = procurement.unit_price,
+        total_price = procurement.total_price,
         quantity = procurement.quantity,
         status = procurement.status,
     )

@@ -166,11 +166,11 @@ class RegisterContent extends StatelessWidget {
                           ),
               onPressed: () async {
                 // Add your authentication logic here
-                String? usernameError = validateTextField(_usernameController.text, 'Full Name');
-                String? emailError = validateTextField(_emailController.text, 'Email');
-                String? phoneNumberError = validateTextField(_phoneNumberController.text, 'Phone Number');
-                String? passwordError = validateTextField(_passwordController.text, 'Password');
-                String? confirmPasswordError = validateTextField(_confirmPasswordController.text, 'Confirm Password');
+                String? usernameError = validateTextField(_usernameController.text);
+                String? emailError = validateTextField(_emailController.text);
+                String? phoneNumberError = validateTextField(_phoneNumberController.text);
+                String? passwordError = validateTextField(_passwordController.text);
+                String? confirmPasswordError = validateTextField(_confirmPasswordController.text);
             
                 if (usernameError == null ||
                     emailError == null ||

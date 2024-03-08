@@ -5,7 +5,7 @@ import 'package:prototype/models/customerdata.dart';
 import 'package:prototype/util/request_util.dart';
 import 'package:prototype/util/user_controller.dart';
 import 'package:prototype/util/validate_text.dart';
-import 'package:prototype/widgets/text_field.dart';
+import 'package:prototype/widgets/forms/text_field.dart';
 
 class EditCustomer extends StatefulWidget {
   final CustomerData customerData;
@@ -28,12 +28,12 @@ class EditCustomerState extends State<EditCustomer> {
   @override
   void initState() {
     super.initState();
-    _businessNameController.text = widget.customerData.businessName ?? '';
-    _contactPersonController.text = widget.customerData.contactPerson ?? '';
-    _emailController.text = widget.customerData.email ?? '';
-    _phoneNoController.text = widget.customerData.phoneNo ?? '';
-    _billingAddressController.text = widget.customerData.billingAddress ?? '';
-    _shippingAddressController.text = widget.customerData.shippingAddress ?? '';
+    _businessNameController.text = widget.customerData.businessName;
+    _contactPersonController.text = widget.customerData.contactPerson;
+    _emailController.text = widget.customerData.email;
+    _phoneNoController.text = widget.customerData.phoneNo;
+    _billingAddressController.text = widget.customerData.billingAddress;
+    _shippingAddressController.text = widget.customerData.shippingAddress;
   }
 
 
@@ -80,19 +80,19 @@ class EditCustomerState extends State<EditCustomer> {
                     width: double.infinity,
                     child: ElevatedButton(
                       style: TextButton.styleFrom(
-                                    foregroundColor: Colors.white,
-                                    backgroundColor: Colors.black,
-                                    side: const BorderSide(color: Colors.black),
-                                    shape: const RoundedRectangleBorder(),
-                                    padding: const EdgeInsets.symmetric(vertical: 15.0)
-                                  ),
+                        foregroundColor: Colors.white,
+                        backgroundColor: Colors.black,
+                        side: const BorderSide(color: Colors.black),
+                        shape: const RoundedRectangleBorder(),
+                        padding: const EdgeInsets.symmetric(vertical: 15.0)
+                      ),
                       onPressed: () async {
-                        String? businessName = validateTextField(_businessNameController.text, 'Business name');
-                        String? contactPerson = validateTextField(_contactPersonController.text, 'Contact person');
-                        String? email = validateTextField(_emailController.text, 'Email');
-                        String? phoneNumber = validateTextField(_phoneNoController.text, 'Phone number');
-                        String? billingAddress = validateTextField(_billingAddressController.text, 'Billing address');
-                        String? shippingAddress = validateTextField(_shippingAddressController.text, 'Shipping address');
+                        String? businessName = validateTextField(_businessNameController.text);
+                        String? contactPerson = validateTextField(_contactPersonController.text);
+                        String? email = validateTextField(_emailController.text);
+                        String? phoneNumber = validateTextField(_phoneNoController.text);
+                        String? billingAddress = validateTextField(_billingAddressController.text);
+                        String? shippingAddress = validateTextField(_shippingAddressController.text);
                         if (businessName == null ||
                             contactPerson == null ||
                             email == null ||
@@ -161,7 +161,7 @@ class EditCustomerState extends State<EditCustomer> {
                 // Handle the deletion logic here
                 // You can call a function to perform the deletion or any other action
                 // For now, just close the dialog
-                final response = await requestUtil.deleteCustomer(widget.customerData.customerID, userLoggedInController.currentUser.value);
+                final response = await requestUtil.deleteCustomer(widget.customerData.customerID);
                 
                 if (response.statusCode == 200) {
                   Navigator.pop(context);

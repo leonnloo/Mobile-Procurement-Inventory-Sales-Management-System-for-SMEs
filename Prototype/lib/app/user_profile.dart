@@ -138,7 +138,7 @@ class UserProfileScreen extends StatelessWidget {
   Future<Map<String, dynamic>> _fetchUserData() async {
     final userController = Get.put(UserLoggedInController());
     try {
-      print(userController.currentUser.value);
+      // print(userController.currentUser.value);
       final user = await requestUtil.getUser(userController.currentUser.value);
       return jsonDecode(user.body);
       // final tokenResponse = await requestUtil.getToken(userController.currentUser.value);
@@ -156,7 +156,7 @@ class UserProfileScreen extends StatelessWidget {
 
       // return {'token': tokenData['access_token'], 'user': user};
     } catch (error) {
-      print('Error in _fetchUserData: $error');
+      // print('Error in _fetchUserData: $error');
       throw error; // Rethrow the error to be caught by FutureBuilder
     }
   }

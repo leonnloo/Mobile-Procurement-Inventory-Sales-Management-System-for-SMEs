@@ -5,10 +5,10 @@ import 'package:prototype/app/authenticate/screens/register_content.dart';
 import 'package:prototype/app/home/home.dart';
 import 'package:prototype/util/request_util.dart';
 import 'package:prototype/util/user_controller.dart';
+import 'package:prototype/util/validate_text.dart';
 import 'package:prototype/widgets/fade_in_animation/animation_design.dart';
 import 'package:prototype/widgets/fade_in_animation/fade_in_animation_model.dart';
 import 'package:prototype/widgets/fade_in_animation/fade_in_controller.dart';
-import 'package:http/http.dart' as http;
 
 final RequestUtil requestUtil = RequestUtil();
 class LoginContent extends StatelessWidget {
@@ -16,13 +16,6 @@ class LoginContent extends StatelessWidget {
   final TextEditingController _passwordController = TextEditingController();
 
   LoginContent({super.key});
-
-  String? _validateTextField(String value, String fieldName) {
-    if (value.isEmpty) {
-      return '$fieldName is required';
-    }
-    return null;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -126,10 +119,10 @@ class LoginContent extends StatelessWidget {
                           ),
               onPressed: () async {
                 // Add your authentication logic here
-                String? emailError = _validateTextField(_emailController.text, 'Email');
-                String? passwordError = _validateTextField(_passwordController.text, 'Password');
+                String? emailError = validateTextField(_emailController.text);
+                String? passwordError = validateTextField(_passwordController.text);
                 // Add logic for logging in
-                if (emailError != null || passwordError != null) {
+                if (emailError == null || passwordError == null) {
                     // Display validation error messages
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(

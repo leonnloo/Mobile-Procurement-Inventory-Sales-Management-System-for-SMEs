@@ -1,5 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
-import 'package:prototype/models/procurementdata.dart';
+import 'package:prototype/util/request_util.dart';
+import 'package:prototype/util/validate_text.dart';
+import 'package:prototype/widgets/appbar/common_appbar.dart';
+import 'package:prototype/widgets/forms/dropdown_field.dart';
+import 'package:prototype/widgets/forms/number_field.dart';
+import 'package:prototype/widgets/forms/text_field.dart';
 
 class AddProcurementScreen extends StatefulWidget {
   const AddProcurementScreen({super.key});
@@ -10,24 +17,27 @@ class AddProcurementScreen extends StatefulWidget {
 
 class AddProcurementScreenState extends State<AddProcurementScreen> {
   final _formKey = GlobalKey<FormState>();
+  final RequestUtil requestUtil = RequestUtil();
 
   // late TextEditingController _procurementNameController;
-  late TextEditingController _productIDController;
-  late TextEditingController _supplierIDController;
+  late TextEditingController _itemNameController;
+  late TextEditingController _supplierNameController;
   late TextEditingController _orderDateController;
   late TextEditingController _deliveryDateController;
+  late TextEditingController _unitPriceController;
   late TextEditingController _totalPriceController;
   late TextEditingController _quantityController;
   late TextEditingController _statusController;
+  late String type = 'Product';
 
   @override
   void initState() {
     super.initState();
-    // _procurementNameController = TextEditingController();
-    _productIDController = TextEditingController();
-    _supplierIDController = TextEditingController();
+    _itemNameController = TextEditingController();
+    _supplierNameController = TextEditingController();
     _orderDateController = TextEditingController();
     _deliveryDateController = TextEditingController();
+    _unitPriceController = TextEditingController();
     _totalPriceController = TextEditingController();
     _quantityController = TextEditingController();
     _statusController = TextEditingController();
@@ -36,8 +46,8 @@ class AddProcurementScreenState extends State<AddProcurementScreen> {
   @override
   void dispose() {
     // _procurementNameController.dispose();
-    _productIDController.dispose();
-    _supplierIDController.dispose();
+    _itemNameController.dispose();
+    _supplierNameController.dispose();
     _orderDateController.dispose();
     _deliveryDateController.dispose();
     _totalPriceController.dispose();
@@ -45,61 +55,11 @@ class AddProcurementScreenState extends State<AddProcurementScreen> {
     _statusController.dispose();
     super.dispose();
   }
-
-  void _submitForm() {
-    if (_formKey.currentState?.validate() ?? false) {
-      PurchasingOrder newProcurement = PurchasingOrder(
-        // orderNumber: 0, // Assign a unique ID (can generate or get from a database)
-        productID: int.tryParse(_productIDController.text) ?? 0,
-        supplierID: int.tryParse(_supplierIDController.text) ?? 0,
-        orderDate: _orderDateController.text,
-        deliveryDate: _deliveryDateController.text,
-        totalPrice: double.tryParse(_totalPriceController.text) ?? 0,
-        quantity: int.tryParse(_quantityController.text) ?? 0,
-        status: _statusController.text,
-      );
-
-
-      print(newProcurement);
-
-      // Close the screen
-      Navigator.of(context).pop();
-    }
-  }
-
-  Future<void> _selectOrderDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2101),
-    );
-    if (picked != null && picked != DateTime.now()) {
-      setState(() {
-        _orderDateController.text = picked.toLocal().toString().split(' ')[0];
-      });
-    }
-  }
-  Future<void> _selectDeliveryDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2101),
-    );
-    if (picked != null && picked != DateTime.now()) {
-      setState(() {
-        _deliveryDateController.text = picked.toLocal().toString().split(' ')[0];
-      });
-    }
-  }
-
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Add Procurement'),
-      ),
+      appBar: CommonAppBar(currentTitle: 'Add Purchase'),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -108,86 +68,118 @@ class AddProcurementScreenState extends State<AddProcurementScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                TextFormField(
-                  controller: _productIDController,
-                  decoration: const InputDecoration(labelText: 'Product ID'),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter product ID';
-                    }
-                    return null;
-                  },
+                const SizedBox(height: 16.0),
+                DropdownTextField(
+                  labelText: 'Type', 
+                  options: _getTypeList(), 
+                  onChanged: (value){
+                    setState(() {
+                      type = value!;
+                  });},
+                  defaultSelected: true,
                 ),
-                TextFormField(
-                  controller: _supplierIDController,
-                  decoration: const InputDecoration(labelText: 'Supplier ID'),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter supplier ID';
-                    }
-                    return null;
-                  },
+                const SizedBox(height: 16.0),
+                DropdownTextField(
+                  labelText: 'Item', 
+                  options: _getItemList(type), 
+                  onChanged: (value){
+                      _itemNameController.text = value!;
+                      _changeUnitPrice(type, _itemNameController.text);
+                    },
+                  defaultSelected: false,
                 ),
-                TextFormField(
-                  controller: _orderDateController,
-                  decoration: const InputDecoration(labelText: 'Order date'),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter order date';
-                    }
-                    return null;
-                  },
-                  onTap: () async {
-                    await _selectOrderDate(context);
-                  },
+                const SizedBox(height: 16.0),
+                DropdownTextField(
+                  labelText: 'Supplier', 
+                  options: _getSupplierList(), 
+                  onChanged: (value){_supplierNameController.text = value!;},
+                  defaultSelected: false,
                 ),
-                TextFormField(
-                  controller: _deliveryDateController,
-                  decoration: const InputDecoration(labelText: 'Delivery date'),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter delivery date';
-                    }
-                    return null;
-                  },
-                  onTap: () async {
-                    await _selectDeliveryDate(context);
-                  },
-                ),
-                TextFormField(
-                  controller: _totalPriceController,
-                  decoration: const InputDecoration(labelText: 'Total Price'),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter total price';
-                    }
-                    return null;
-                  },
-                ),
-                TextFormField(
-                  controller: _quantityController,
-                  decoration: const InputDecoration(labelText: 'Quantity'),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter quantity';
-                    }
-                    return null;
-                  },
-                ),
-                TextFormField(
-                  controller: _quantityController,
-                  decoration: const InputDecoration(labelText: 'Status'),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter status';
-                    }
-                    return null;
+                const SizedBox(height: 16.0),
+                BuildTextField(controller: _orderDateController, labelText: 'Order Date'),
+                const SizedBox(height: 16.0),
+                BuildTextField(controller: _deliveryDateController, labelText: 'Delivery Date'),
+                const SizedBox(height: 16.0),
+                IntegerTextField(
+                  controller: _quantityController, 
+                  labelText: 'Quantity', 
+                  onChanged: (value) {
+                    _updateTotalPrice();
                   },
                 ),
                 const SizedBox(height: 16.0),
-                ElevatedButton(
-                  onPressed: _submitForm,
-                  child: const Text('Submit'),
+                BuildTextField(controller: _unitPriceController, labelText: 'Unit Price'),
+                const SizedBox(height: 16.0),
+                BuildTextField(controller: _totalPriceController, labelText: 'Total Price'),
+                const SizedBox(height: 16.0),
+                DropdownTextField(
+                  labelText: 'Status', 
+                  options: _getStatusList(), 
+                  onChanged: (value){_statusController.text = value!;},
+                  defaultSelected: false,
+                ),
+                const SizedBox(height: 16.0),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    style: TextButton.styleFrom(
+                      foregroundColor: Colors.white,
+                      backgroundColor: Colors.black,
+                      side: const BorderSide(color: Colors.black),
+                      shape: const RoundedRectangleBorder(),
+                      padding: const EdgeInsets.symmetric(vertical: 15.0)
+                    ),
+                    onPressed: () async {
+                      String? itemName = validateTextField(_itemNameController.text);
+                      String? supplierName = validateTextField(_supplierNameController.text);
+                      String? orderDate= validateTextField(_orderDateController.text);
+                      String? deliveryDate = validateTextField(_deliveryDateController.text);
+                      String? unitPrice = validateTextField(_unitPriceController.text);
+                      String? totalPrice = validateTextField(_totalPriceController.text);
+                      String? quantity = validateTextField(_quantityController.text);
+                      String? status = validateTextField(_statusController.text);
+                      if (itemName == null
+                        || supplierName == null
+                        || orderDate == null
+                        || deliveryDate == null
+                        || unitPrice == null
+                        || totalPrice == null
+                        || quantity == null
+                        || status == null) {
+                        // Display validation error messages
+                        _formKey.currentState?.validate();
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Please fill in all the required fields.'),
+                            backgroundColor: Colors.red,
+                          ),
+                        );
+                      } else {                
+                        final response = await requestUtil.newProcurement(
+                          itemName, supplierName, orderDate, deliveryDate, unitPrice, totalPrice, quantity, status
+                        );
+                        
+                        if (response.statusCode == 200) {
+                          Navigator.pop(context);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Procurement added successfully.'),
+                              backgroundColor: Colors.green,
+                            ),
+                          );
+                        } else {
+                          // Display an error message to the user
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Procurement added failed'),
+                              backgroundColor: Colors.red,
+                            ),
+                          );
+                        }
+                      }
+                    },
+                    child: const Text('DONE')
+                  ),
                 ),
               ],
             ),
@@ -195,5 +187,56 @@ class AddProcurementScreenState extends State<AddProcurementScreen> {
         ),
       ),
     );
+  }
+  
+  Future<List<String>> _getSupplierList() async {
+    final response = await requestUtil.getSuppliersName();
+    final List<dynamic> suppliers = jsonDecode(response.body);
+    final List<String> suppliersList = suppliers.cast<String>();
+    return suppliersList;
+  }
+  
+  Future<List<String>> _getTypeList() async {
+    return ['Product', 'Inventory'];
+  }
+
+  Future<List<String>> _getItemList(String type) async {
+    if (type == 'Product') {
+      final response = await requestUtil.getProductName();
+      final List<dynamic> items = jsonDecode(response.body);
+      final List<String> itemsList = items.cast<String>();
+      return itemsList;
+    } else if (type == 'Inventory') {
+      final response = await requestUtil.getInventoryName();
+      final List<dynamic> items = jsonDecode(response.body);
+      final List<String> itemsList = items.cast<String>();
+      return itemsList;
+    }
+    return [];
+  }
+  
+  void _changeUnitPrice(String type, String item) async {
+    if (type == 'Product') {
+      final response = await requestUtil.getProductUnitPrice(item);
+      final items = jsonDecode(response.body);
+      _unitPriceController.text = items.toString();
+      _updateTotalPrice();
+    } else if (type == 'Inventory') {
+      final response = await requestUtil.getInventoryUnitPrice(item);
+      final items = jsonDecode(response.body);
+      _unitPriceController.text = items.toString();
+      _updateTotalPrice();
+    }
+  }
+
+  void _updateTotalPrice(){
+    if (_unitPriceController.text != '' && _quantityController.text != '') {
+      final totalPrice = double.parse(_unitPriceController.text) * double.parse(_quantityController.text);
+      _totalPriceController.text = totalPrice.toString();
+    }
+  }
+  
+  Future<List<String>> _getStatusList() async {
+    return ['Delivering', 'Completed'];
   }
 }
