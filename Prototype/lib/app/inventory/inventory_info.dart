@@ -1,5 +1,5 @@
 import "package:flutter/material.dart";
-import 'package:prototype/models/inventorydata.dart';
+import 'package:prototype/models/inventory_model.dart';
 
 void navigateToItemDetail(BuildContext context, InventoryItem item) {
   Navigator.of(context).push(

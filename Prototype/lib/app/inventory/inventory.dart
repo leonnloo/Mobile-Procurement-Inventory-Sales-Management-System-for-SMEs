@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:prototype/app/inventory/add_inventory.dart';
-import 'package:prototype/models/inventorydata.dart';
+import 'package:prototype/models/inventory_model.dart';
 import 'package:prototype/app/inventory/inventory_info.dart';
 
 class InventoryScreen extends StatelessWidget {

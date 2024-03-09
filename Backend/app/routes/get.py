@@ -54,6 +54,14 @@ def get_sale_order(token: str = Depends(oauth_scheme)):
 def get_procurement(token: str = Depends(oauth_scheme)):
     procurements = procurement_serial(procurement_db.find())
     return procurements
+@get_router.get("/get_past_procurement/{category}")
+def get_past_procurement(category: str, token: str = Depends(oauth_scheme)):
+    procurements = procurement_serial(procurement_db.find({'status': category}))
+    return procurements
+@get_router.get("/get_present_procurement/{category}")
+def get_present_procurement(category: str, token: str = Depends(oauth_scheme)):
+    procurements = procurement_serial(procurement_db.find({'status': category}))
+    return procurements
 
 # ---------------------------------------- Product ----------------------------------------
 @get_router.get("/get_product")

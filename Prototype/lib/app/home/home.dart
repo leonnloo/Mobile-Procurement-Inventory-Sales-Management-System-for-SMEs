@@ -21,7 +21,7 @@ import 'package:prototype/app/supplier/supplier.dart';
 import 'package:prototype/widgets/drawer/drawer_controller.dart';
 import 'package:prototype/widgets/drawer/drawer_header.dart';
 import 'package:prototype/widgets/drawer/drawer_list.dart';
-import 'package:prototype/widgets/drawer/drawer_sections.dart';
+import 'package:prototype/models/drawer_sections.dart';
 import 'package:prototype/widgets/home/home_widgets.dart';
 
 class HomeScreen extends StatefulWidget {

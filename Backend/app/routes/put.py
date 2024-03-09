@@ -82,11 +82,11 @@ def update_sale_order(order: SaleOrder):
     
 # ----------------------------------------- Procurement Update ----------------------------------------------
 @put_router.put("/update_procurement/{procurement_no}")
-def update_procurement(purchase: Procurement):
-    old_purchase = procurement_db.find_one({"purchase_no": purchase.purchase_no})
+def update_procurement(purchase: NewProcurement, procurement_no: str):
+    old_purchase = procurement_db.find_one({"purchase_no": procurement_no})
     if old_purchase:
-        procurement_db.update_one({"purchase_no": purchase.purchase_no}, {"$set": dict(purchase)})
-        return procurement_dict_serial(procurement_db.find_one({"purchase_no": purchase.purchase_no}))
+        procurement_db.update_one({"purchase_no": procurement_no}, {"$set": dict(purchase)})
+        return procurement_dict_serial(procurement_db.find_one({"purchase_no": procurement_no}))
     else:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,

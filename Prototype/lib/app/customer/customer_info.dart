@@ -1,11 +1,12 @@
 import "package:flutter/material.dart";
-import 'package:prototype/models/customerdata.dart';
-import 'package:prototype/models/orderdata.dart';
+import 'package:prototype/models/customer_model.dart';
+import 'package:prototype/models/edit_type.dart';
+import 'package:prototype/models/order_model.dart';
 import 'package:prototype/util/request_util.dart';
 import 'dart:math';
 import 'package:prototype/widgets/appbar/info_appbar.dart';
 
-void navigateToCustomerDetail(BuildContext context, CustomerData customer) {
+void navigateToCustomerDetail(BuildContext context, PurchasingOrder customer) {
   Navigator.of(context).push(
     MaterialPageRoute(
       builder: (context) => CustomerDetailScreen(customer: customer),
@@ -14,14 +15,14 @@ void navigateToCustomerDetail(BuildContext context, CustomerData customer) {
 }
 
 class CustomerDetailScreen extends StatelessWidget {
-  final CustomerData customer;
+  final PurchasingOrder customer;
 
   const CustomerDetailScreen({super.key, required this.customer});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: InfoAppBar(currentTitle: 'Customer Details', currentData: customer),
+      appBar: InfoAppBar(currentTitle: 'Customer Details', currentData: customer, editType: EditType.customer,),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(

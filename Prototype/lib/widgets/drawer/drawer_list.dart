@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:prototype/widgets/drawer/drawer_controller.dart';
-import 'package:prototype/widgets/drawer/drawer_sections.dart';
+import 'package:prototype/models/drawer_sections.dart';
 
 final controller = Get.put(CustomDrawerController());
 Widget drawerList(BuildContext context) {

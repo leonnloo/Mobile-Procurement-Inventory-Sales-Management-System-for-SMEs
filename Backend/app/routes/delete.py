@@ -48,7 +48,7 @@ def delete_sale_order(id: str, token: str = Depends(oauth_scheme)):
 # ---------------------------------------- Procurement ----------------------------------------
 @delete_router.delete("/delete_procurement/{id}")
 def delete_procurement(id: str, token: str = Depends(oauth_scheme)):
-    result = procurement_db.delete_one({'procurement_id': id})
+    result = procurement_db.delete_one({'purchase_no': id})
 
     if result.deleted_count > 0:
         return {"message": f"Procurement with id {id} deleted successfully"}

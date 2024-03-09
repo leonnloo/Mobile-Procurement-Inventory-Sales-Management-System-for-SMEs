@@ -1,7 +1,8 @@
 import "dart:math";
 
 import "package:flutter/material.dart";
-import 'package:prototype/models/supplierdata.dart';
+import 'package:prototype/models/edit_type.dart';
+import 'package:prototype/models/supplier_model.dart';
 import 'package:prototype/util/request_util.dart';
 import 'package:prototype/widgets/appbar/info_appbar.dart';
 
@@ -21,7 +22,7 @@ class SupplierDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: InfoAppBar(currentTitle: 'Supplier Details', currentData: supplierData),
+      appBar: InfoAppBar(currentTitle: 'Supplier Details', currentData: supplierData, editType: EditType.supplier,),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(

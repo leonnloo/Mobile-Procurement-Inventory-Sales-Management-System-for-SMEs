@@ -1,14 +1,13 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:prototype/models/customerdata.dart';
+import 'package:prototype/models/customer_model.dart';
 import 'package:prototype/util/request_util.dart';
-import 'package:prototype/util/user_controller.dart';
 import 'package:prototype/util/validate_text.dart';
 import 'package:prototype/widgets/forms/text_field.dart';
 
 class EditCustomer extends StatefulWidget {
-  final CustomerData customerData;
+  final PurchasingOrder customerData;
 
   const EditCustomer({super.key, required this.customerData});
 
@@ -24,7 +23,6 @@ class EditCustomerState extends State<EditCustomer> {
   final TextEditingController _billingAddressController = TextEditingController();
   final TextEditingController _shippingAddressController = TextEditingController();
   final RequestUtil requestUtil = RequestUtil();
-  final UserLoggedInController userLoggedInController = UserLoggedInController();
   @override
   void initState() {
     super.initState();

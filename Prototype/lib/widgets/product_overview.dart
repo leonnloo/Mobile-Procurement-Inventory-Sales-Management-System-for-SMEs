@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:prototype/models/productdata.dart';
+import 'package:prototype/models/product_model.dart';
 
 class ProductStatusWidget extends StatelessWidget {
   ProductStatusWidget({super.key});

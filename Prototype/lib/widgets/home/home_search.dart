@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:prototype/models/inventorydata.dart';
+import 'package:prototype/models/inventory_model.dart';
 
 class HomeSearch extends StatefulWidget {
   const HomeSearch({super.key});
