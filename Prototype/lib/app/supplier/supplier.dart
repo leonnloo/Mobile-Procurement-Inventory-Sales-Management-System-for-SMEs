@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:prototype/app/supplier/add_supplier.dart';
-import 'package:prototype/models/supplierdata.dart';
+import 'package:prototype/models/supplier_model.dart';
 import 'package:prototype/app/supplier/supplier_info.dart';
 import 'package:prototype/util/request_util.dart';
 import 'package:prototype/util/user_controller.dart';

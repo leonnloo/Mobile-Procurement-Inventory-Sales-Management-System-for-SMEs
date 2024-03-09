@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:prototype/models/orderdata.dart';
+import 'package:prototype/models/order_model.dart';
 
 class AddOrderScreen extends StatefulWidget {
   const AddOrderScreen({super.key});

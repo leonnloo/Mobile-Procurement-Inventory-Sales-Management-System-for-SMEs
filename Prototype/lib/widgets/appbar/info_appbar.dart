@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:prototype/app/customer/edit_customer.dart';
+import 'package:prototype/app/procurement/edit_procurement.dart';
 import 'package:prototype/app/supplier/edit_supplier.dart';
+import 'package:prototype/models/edit_type.dart';
 
 class InfoAppBar extends StatelessWidget implements PreferredSizeWidget {
   // InfoAppBar({super.key, required this.currentTitle, required this.currentData});
@@ -9,8 +11,9 @@ class InfoAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String currentTitle;
   final dynamic currentData;
   final bool isNoti;
+  final EditType editType;
 
-  const InfoAppBar({super.key, required this.currentTitle, required this.currentData})
+  const InfoAppBar({super.key, required this.currentTitle, required this.currentData, required this.editType})
       : isNoti = currentTitle == 'Notifications';
   @override
   Widget build(BuildContext context) {
@@ -21,10 +24,12 @@ class InfoAppBar extends StatelessWidget implements PreferredSizeWidget {
           : [
               IconButton(
                 onPressed: () {
-                  if (currentTitle == 'Customer Details') {
+                  if (editType == EditType.customer) {
                     Get.to(() => EditCustomer(customerData: currentData));
-                  } else if (currentTitle == 'Supplier Details') {
+                  } else if (editType == EditType.supplier) {
                     Get.to(() => EditSupplier(supplierData: currentData));
+                  } else if (editType == EditType.procurement) {
+                    Get.to(() => EditProcurement(procurementData: currentData));
                   }
                 },
                 icon: const Icon(

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:prototype/widgets/drawer/drawer_controller.dart';
-import 'package:prototype/widgets/drawer/drawer_sections.dart';
+import 'package:prototype/models/drawer_sections.dart';
 import 'package:prototype/widgets/home/home_search.dart';
 import 'package:prototype/widgets/inventory_overview.dart';
 import 'package:prototype/widgets/product_overview.dart';

@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:prototype/app/procurement/add_procurement.dart';
-import 'package:prototype/models/procurementdata.dart';
+import 'package:prototype/models/procurement_model.dart';
 import 'package:prototype/app/procurement/procurement_info.dart';
 import 'package:prototype/util/request_util.dart';
 
@@ -68,7 +68,6 @@ class ProcurementTab extends StatelessWidget {
             return Container(
               height: double.infinity,
               width: double.infinity,
-              color: Colors.red[400],
               child: const Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -195,16 +194,34 @@ class ProcurementTab extends StatelessWidget {
   }
   Future<List<PurchasingOrder>> _fetchProcurementData(String category) async {
     try {
-      final procurement = await requestUtil.getProcurement();
-      if (procurement.statusCode == 200) {
-        // Assuming the JSON response is a list of objects
-        List<dynamic> jsonData = jsonDecode(procurement.body);
-        
-        // Map each dynamic object to PurchasingOrder
-        List<PurchasingOrder> procurementData = jsonData.map((data) => PurchasingOrder.fromJson(data)).toList();
-        return procurementData;
-      } else {
-        throw Exception('Unable to fetch customer data.');
+      if (category == 'Past'){
+        final procurement = await requestUtil.getCompletedProcurement('Completed');
+        if (procurement.statusCode == 200) {
+          // Assuming the JSON response is a list of objects
+          List<dynamic> jsonData = jsonDecode(procurement.body);
+          
+          // Map each dynamic object to PurchasingOrder
+          List<PurchasingOrder> procurementData = jsonData.map((data) => PurchasingOrder.fromJson(data)).toList();
+          return procurementData;
+        } else {
+          throw Exception('Unable to fetch procurement data.');
+        }
+      }
+      else if (category == 'Present'){
+        final procurement = await requestUtil.getDeliveringProcurement('Delivering');
+        if (procurement.statusCode == 200) {
+          // Assuming the JSON response is a list of objects
+          List<dynamic> jsonData = jsonDecode(procurement.body);
+          
+          // Map each dynamic object to PurchasingOrder
+          List<PurchasingOrder> procurementData = jsonData.map((data) => PurchasingOrder.fromJson(data)).toList();
+          return procurementData;
+        } else {
+          throw Exception('Unable to fetch procurement data.');
+        }
+      }
+      else {
+        throw Exception('Unable to fetch procurement data.');
       }
     } catch (error) {
       // print('Error in _fetchCustomerData: $error');

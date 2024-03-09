@@ -228,10 +228,46 @@ class RequestUtil {
       })
   ); }
 
-  Future<http.Response> getProcurement(){
+  Future<http.Response> updateProcurement(String id, dynamic itemName, dynamic supplierName, dynamic orderDate, dynamic deliveryDate, dynamic unitPrice, dynamic totalPrice, dynamic quantity, dynamic status) async {
+    return http.put(
+      Uri.parse("${endpoint}update_procurement/$id"),
+      headers: {"Authorization": "Bearer $token", 'Content-Type': 'application/json'},
+      body: jsonEncode({
+        'item_name': itemName,
+        'supplier_name': supplierName,
+        'order_date': orderDate,
+        'delivery_date': deliveryDate,
+        'unit_price': unitPrice,
+        'total_price':  totalPrice,
+        'quantity': quantity,
+        'status': status
+      })
+    );
+  }
+
+  Future<http.Response> getProcurement(String category){
     return http.get(
-      Uri.parse("${endpoint}get_procurement"),
+      Uri.parse("${endpoint}get_procurement/$category"),
       headers: {"Authorization": "Bearer $token"}
+    );
+  }
+  Future<http.Response> getCompletedProcurement(String category){
+    return http.get(
+      Uri.parse("${endpoint}get_past_procurement/$category"),
+      headers: {"Authorization": "Bearer $token"}
+    );
+  }
+  Future<http.Response> getDeliveringProcurement(String category){
+    return http.get(
+      Uri.parse("${endpoint}get_present_procurement/$category"),
+      headers: {"Authorization": "Bearer $token"}
+    );
+  }
+
+  Future<http.Response> deleteProcurement(String id) async {
+    return http.delete(
+      Uri.parse("${endpoint}delete_procurement/$id"),
+      headers: {"Authorization": "Bearer $token"},
     );
   }
 

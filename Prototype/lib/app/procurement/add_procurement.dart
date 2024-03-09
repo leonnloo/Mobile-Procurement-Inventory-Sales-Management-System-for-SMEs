@@ -1,9 +1,9 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
+import 'package:prototype/app/procurement/get_procurement.dart';
 import 'package:prototype/util/request_util.dart';
 import 'package:prototype/util/validate_text.dart';
 import 'package:prototype/widgets/appbar/common_appbar.dart';
+import 'package:prototype/widgets/forms/date_field.dart';
 import 'package:prototype/widgets/forms/dropdown_field.dart';
 import 'package:prototype/widgets/forms/number_field.dart';
 import 'package:prototype/widgets/forms/text_field.dart';
@@ -18,8 +18,6 @@ class AddProcurementScreen extends StatefulWidget {
 class AddProcurementScreenState extends State<AddProcurementScreen> {
   final _formKey = GlobalKey<FormState>();
   final RequestUtil requestUtil = RequestUtil();
-
-  // late TextEditingController _procurementNameController;
   late TextEditingController _itemNameController;
   late TextEditingController _supplierNameController;
   late TextEditingController _orderDateController;
@@ -45,7 +43,6 @@ class AddProcurementScreenState extends State<AddProcurementScreen> {
 
   @override
   void dispose() {
-    // _procurementNameController.dispose();
     _itemNameController.dispose();
     _supplierNameController.dispose();
     _orderDateController.dispose();
@@ -71,7 +68,7 @@ class AddProcurementScreenState extends State<AddProcurementScreen> {
                 const SizedBox(height: 16.0),
                 DropdownTextField(
                   labelText: 'Type', 
-                  options: _getTypeList(), 
+                  options: getTypeList(), 
                   onChanged: (value){
                     setState(() {
                       type = value!;
@@ -81,40 +78,46 @@ class AddProcurementScreenState extends State<AddProcurementScreen> {
                 const SizedBox(height: 16.0),
                 DropdownTextField(
                   labelText: 'Item', 
-                  options: _getItemList(type), 
+                  options: getItemList(type), 
                   onChanged: (value){
                       _itemNameController.text = value!;
-                      _changeUnitPrice(type, _itemNameController.text);
+                      changeUnitPrice(type, _itemNameController.text, _unitPriceController, _quantityController, _totalPriceController);
                     },
                   defaultSelected: false,
                 ),
                 const SizedBox(height: 16.0),
                 DropdownTextField(
                   labelText: 'Supplier', 
-                  options: _getSupplierList(), 
+                  options: getSupplierList(), 
                   onChanged: (value){_supplierNameController.text = value!;},
                   defaultSelected: false,
                 ),
                 const SizedBox(height: 16.0),
-                BuildTextField(controller: _orderDateController, labelText: 'Order Date'),
+                BuildDateField(controller: _orderDateController, labelText: 'Order Date'),
                 const SizedBox(height: 16.0),
-                BuildTextField(controller: _deliveryDateController, labelText: 'Delivery Date'),
+                BuildDateField(controller: _deliveryDateController, labelText: 'Delivery Date'),
                 const SizedBox(height: 16.0),
                 IntegerTextField(
                   controller: _quantityController, 
                   labelText: 'Quantity', 
                   onChanged: (value) {
-                    _updateTotalPrice();
+                    updateTotalPrice(_unitPriceController, _quantityController, _totalPriceController);
                   },
                 ),
                 const SizedBox(height: 16.0),
-                BuildTextField(controller: _unitPriceController, labelText: 'Unit Price'),
+                IntegerTextField(
+                  controller: _unitPriceController, 
+                  labelText: 'Unit Price', 
+                  onChanged: (value) {
+                    updateTotalPrice(_unitPriceController, _quantityController, _totalPriceController);
+                  },
+                ),
                 const SizedBox(height: 16.0),
                 BuildTextField(controller: _totalPriceController, labelText: 'Total Price'),
                 const SizedBox(height: 16.0),
                 DropdownTextField(
                   labelText: 'Status', 
-                  options: _getStatusList(), 
+                  options: getStatusList(), 
                   onChanged: (value){_statusController.text = value!;},
                   defaultSelected: false,
                 ),
@@ -189,54 +192,5 @@ class AddProcurementScreenState extends State<AddProcurementScreen> {
     );
   }
   
-  Future<List<String>> _getSupplierList() async {
-    final response = await requestUtil.getSuppliersName();
-    final List<dynamic> suppliers = jsonDecode(response.body);
-    final List<String> suppliersList = suppliers.cast<String>();
-    return suppliersList;
-  }
-  
-  Future<List<String>> _getTypeList() async {
-    return ['Product', 'Inventory'];
-  }
 
-  Future<List<String>> _getItemList(String type) async {
-    if (type == 'Product') {
-      final response = await requestUtil.getProductName();
-      final List<dynamic> items = jsonDecode(response.body);
-      final List<String> itemsList = items.cast<String>();
-      return itemsList;
-    } else if (type == 'Inventory') {
-      final response = await requestUtil.getInventoryName();
-      final List<dynamic> items = jsonDecode(response.body);
-      final List<String> itemsList = items.cast<String>();
-      return itemsList;
-    }
-    return [];
-  }
-  
-  void _changeUnitPrice(String type, String item) async {
-    if (type == 'Product') {
-      final response = await requestUtil.getProductUnitPrice(item);
-      final items = jsonDecode(response.body);
-      _unitPriceController.text = items.toString();
-      _updateTotalPrice();
-    } else if (type == 'Inventory') {
-      final response = await requestUtil.getInventoryUnitPrice(item);
-      final items = jsonDecode(response.body);
-      _unitPriceController.text = items.toString();
-      _updateTotalPrice();
-    }
-  }
-
-  void _updateTotalPrice(){
-    if (_unitPriceController.text != '' && _quantityController.text != '') {
-      final totalPrice = double.parse(_unitPriceController.text) * double.parse(_quantityController.text);
-      _totalPriceController.text = totalPrice.toString();
-    }
-  }
-  
-  Future<List<String>> _getStatusList() async {
-    return ['Delivering', 'Completed'];
-  }
 }

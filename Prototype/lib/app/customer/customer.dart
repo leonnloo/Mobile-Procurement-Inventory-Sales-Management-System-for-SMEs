@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:prototype/app/customer/add_customer.dart';
-import 'package:prototype/models/customerdata.dart';
+import 'package:prototype/models/customer_model.dart';
 import 'package:prototype/app/customer/customer_info.dart';
 import 'package:prototype/util/request_util.dart';
 
@@ -56,7 +56,7 @@ class CustomerManagementScreen extends StatelessWidget {
             );
           } else if (snapshot.hasData) {
             // Assuming snapshot.data is a List<CustomerData>
-            List<CustomerData> customerData = snapshot.data as List<CustomerData>;
+            List<PurchasingOrder> customerData = snapshot.data as List<PurchasingOrder>;
       
             return SingleChildScrollView(
               scrollDirection: Axis.horizontal,
@@ -74,7 +74,7 @@ class CustomerManagementScreen extends StatelessWidget {
                     DataColumn(label: Text('Billing Address')),
                     DataColumn(label: Text('Shipping Address')),
                   ],
-                  rows: customerData.map((CustomerData customer) {
+                  rows: customerData.map((PurchasingOrder customer) {
                     return DataRow(
                       cells: [
                         DataCell(
@@ -144,7 +144,7 @@ class CustomerManagementScreen extends StatelessWidget {
     );
   }
 
-  Future<List<CustomerData>> _fetchCustomerData() async {
+  Future<List<PurchasingOrder>> _fetchCustomerData() async {
     try {
       final customer = await requestUtil.getCustomers();
       if (customer.statusCode == 200) {
@@ -152,7 +152,7 @@ class CustomerManagementScreen extends StatelessWidget {
         List<dynamic> jsonData = jsonDecode(customer.body);
         
         // Map each dynamic object to CustomerData
-        List<CustomerData> customerData = jsonData.map((data) => CustomerData.fromJson(data)).toList();
+        List<PurchasingOrder> customerData = jsonData.map((data) => PurchasingOrder.fromJson(data)).toList();
         return customerData;
       } else {
         throw Exception('Unable to fetch customer data.');

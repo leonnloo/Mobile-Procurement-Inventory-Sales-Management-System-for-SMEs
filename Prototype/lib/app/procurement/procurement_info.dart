@@ -1,8 +1,9 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:prototype/models/procurementdata.dart';
-import 'package:prototype/models/supplierdata.dart';
+import 'package:prototype/models/edit_type.dart';
+import 'package:prototype/models/procurement_model.dart';
+import 'package:prototype/models/supplier_model.dart';
 import 'package:prototype/util/request_util.dart';
 import 'package:prototype/widgets/appbar/info_appbar.dart';
 
@@ -15,7 +16,7 @@ class OrderDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: InfoAppBar(currentTitle: 'Purchase Details', currentData: order),
+      appBar: InfoAppBar(currentTitle: 'Purchase Details', currentData: order, editType: EditType.procurement),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: SingleChildScrollView(
