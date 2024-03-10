@@ -68,7 +68,7 @@ class AddProcurementScreenState extends State<AddProcurementScreen> {
                 const SizedBox(height: 16.0),
                 DropdownTextField(
                   labelText: 'Type', 
-                  options: getTypeList(), 
+                  options: getProcurementTypeList(), 
                   onChanged: (value){
                     setState(() {
                       type = value!;
@@ -113,11 +113,15 @@ class AddProcurementScreenState extends State<AddProcurementScreen> {
                   },
                 ),
                 const SizedBox(height: 16.0),
-                BuildTextField(controller: _totalPriceController, labelText: 'Total Price'),
+                IntegerTextField(
+                  controller: _totalPriceController, 
+                  labelText: 'Total Price', 
+                  onChanged: (value) {},
+                ),
                 const SizedBox(height: 16.0),
                 DropdownTextField(
                   labelText: 'Status', 
-                  options: getStatusList(), 
+                  options: getProcurementStatusList(), 
                   onChanged: (value){_statusController.text = value!;},
                   defaultSelected: false,
                 ),

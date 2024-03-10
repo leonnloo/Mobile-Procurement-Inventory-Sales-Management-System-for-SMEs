@@ -73,7 +73,8 @@ class HomeWidgets extends StatelessWidget {
                     controller.changePage(DrawerSections.inventory);
                   },
                   child:
-                    ProductStatusWidget(),
+                    // ProductStatusWidget(),
+                    Container()
                 ),
               ),
 

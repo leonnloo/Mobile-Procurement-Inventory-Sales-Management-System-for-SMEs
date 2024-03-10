@@ -52,10 +52,10 @@ class HomeScreenState extends State<HomeScreen> {
         container = const SalesManagementScreen();
         currentTitle = "Sales Management (Design how you see fit)";
       } else if (controller.currentPage.value == DrawerSections.inventory) {
-        container = const InventoryScreen();
+        container = InventoryScreen();
         currentTitle = "Inventory (Design how you see fit)";
       } else if (controller.currentPage.value == DrawerSections.product) {
-        container = const ProductManagementScreen();
+        container = ProductManagementScreen();
         currentTitle = "Product";
       } else if (controller.currentPage.value == DrawerSections.procurement) {
         container = const ProcurementScreen();

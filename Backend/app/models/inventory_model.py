@@ -5,7 +5,11 @@ class InventoryItem(BaseModel):
     item_name: str
     category: str
     quantity: int
-    unit_price: int
-    total_price: int
-    supplier: str
+    unit_price: float
+    total_price: float
     status: str
+
+class NewInventoryItem(BaseModel):
+    item_name: str
+    category: str
+    unit_price: float

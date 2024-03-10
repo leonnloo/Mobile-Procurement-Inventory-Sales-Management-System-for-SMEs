@@ -163,6 +163,7 @@ class EditCustomerState extends State<EditCustomer> {
                 
                 if (response.statusCode == 200) {
                   Navigator.pop(context);
+                  Navigator.of(context).pop();
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
                       content: Text('Customer deleted successfully.'),
@@ -178,7 +179,6 @@ class EditCustomerState extends State<EditCustomer> {
                     ),
                   );
                 }
-                Navigator.of(context).pop();
                 Navigator.of(context).pop();
               },
               child: const Text("Delete"),

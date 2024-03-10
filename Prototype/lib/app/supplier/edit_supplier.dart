@@ -156,6 +156,7 @@ class EditSupplierState extends State<EditSupplier> {
                 final response = await requestUtil.deleteSupplier(widget.supplierData.supplierID);
                 
                 if (response.statusCode == 200) {
+                  Navigator.of(context).pop();
                   Navigator.pop(context);
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
@@ -172,7 +173,6 @@ class EditSupplierState extends State<EditSupplier> {
                     ),
                   );
                 }
-                Navigator.of(context).pop();
                 Navigator.of(context).pop();
               },
               child: const Text("Delete"),

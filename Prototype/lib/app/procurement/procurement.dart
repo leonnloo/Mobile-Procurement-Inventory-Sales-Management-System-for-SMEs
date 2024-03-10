@@ -95,7 +95,7 @@ class ProcurementTab extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    "Unable to load customer data",
+                    "Unable to load procurement data",
                     style: TextStyle(color: Colors.white, fontSize: 20),
                   ),
                 ],
@@ -162,13 +162,13 @@ class ProcurementTab extends StatelessWidget {
                           },
                         ),
                         DataCell(
-                          Text(order.unitPrice.toString()),
+                          Text(order.unitPrice.toStringAsFixed(2).toString()),
                           onTap: () {
                             navigateToOrderDetail(context, order);
                           },
                         ),
                         DataCell(
-                          Text(order.totalPrice.toString()),
+                          Text(order.totalPrice.toStringAsFixed(2).toString()),
                           onTap: () {
                             navigateToOrderDetail(context, order);
                           },
