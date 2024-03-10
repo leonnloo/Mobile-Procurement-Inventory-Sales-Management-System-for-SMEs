@@ -6,7 +6,6 @@ import 'package:prototype/widgets/appbar/common_appbar.dart';
 import 'package:prototype/widgets/forms/date_field.dart';
 import 'package:prototype/widgets/forms/dropdown_field.dart';
 import 'package:prototype/widgets/forms/number_field.dart';
-import 'package:prototype/widgets/forms/text_field.dart';
 
 class AddProcurementScreen extends StatefulWidget {
   const AddProcurementScreen({super.key});
@@ -103,6 +102,7 @@ class AddProcurementScreenState extends State<AddProcurementScreen> {
                   onChanged: (value) {
                     updateTotalPrice(_unitPriceController, _quantityController, _totalPriceController);
                   },
+                  floatData: false,
                 ),
                 const SizedBox(height: 16.0),
                 IntegerTextField(
@@ -111,12 +111,14 @@ class AddProcurementScreenState extends State<AddProcurementScreen> {
                   onChanged: (value) {
                     updateTotalPrice(_unitPriceController, _quantityController, _totalPriceController);
                   },
+                  floatData: true,
                 ),
                 const SizedBox(height: 16.0),
                 IntegerTextField(
                   controller: _totalPriceController, 
                   labelText: 'Total Price', 
                   onChanged: (value) {},
+                  floatData: true,
                 ),
                 const SizedBox(height: 16.0),
                 DropdownTextField(

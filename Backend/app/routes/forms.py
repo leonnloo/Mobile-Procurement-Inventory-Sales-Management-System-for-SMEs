@@ -206,7 +206,7 @@ def register(inventory: NewInventoryItem, token: str = Depends(oauth_scheme)):
         quantity = 0,
         unit_price = inventory.unit_price,
         total_price = 0,
-        status = "Out of stock",
+        status = "Out of Stock",
     )
 
     inventory_db.insert_one(dict(updated_inventory))
