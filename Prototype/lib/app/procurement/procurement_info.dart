@@ -160,11 +160,11 @@ class OrderInformation extends StatelessWidget {
         ),
         ListTile(
           leading: const Icon(Icons.attach_money),
-          title: Text('Unit Price: \$${order.unitPrice.toString()}'), // Corrected to totalPrice
+          title: Text('Unit Price: \$${order.unitPrice.toStringAsFixed(2).toString()}'), // Corrected to totalPrice
         ),
         ListTile(
           leading: const Icon(Icons.attach_money),
-          title: Text('Total Amount: \$${order.totalPrice.toString()}'), // Corrected to totalPrice
+          title: Text('Total Amount: \$${order.totalPrice.toStringAsFixed(2).toString()}'), // Corrected to totalPrice
         ),
         ListTile(
           leading: const Icon(Icons.shopping_bag),

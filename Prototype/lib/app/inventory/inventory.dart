@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:prototype/app/inventory/add_inventory.dart';
 import 'package:prototype/models/inventory_model.dart';
 import 'package:prototype/app/inventory/inventory_info.dart';
+import 'package:prototype/util/request_util.dart';
 
 class InventoryScreen extends StatelessWidget {
-  const InventoryScreen({super.key});
+  InventoryScreen({super.key});
+  final RequestUtil requestUtil = RequestUtil();
 
   @override
   Widget build(BuildContext context) {

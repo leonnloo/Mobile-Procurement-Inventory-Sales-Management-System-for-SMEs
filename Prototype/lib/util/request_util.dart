@@ -272,6 +272,14 @@ class RequestUtil {
   }
 
   // ----------------------------------------- PRODUCT ----------------------------------------------
+
+  Future<http.Response> getProducts(){
+    return http.get(
+      Uri.parse("${endpoint}get_products"),
+      headers: {"Authorization": "Bearer $token"}
+    );
+  }
+
   Future<http.Response> getProductName() async {
     return http.get(
       Uri.parse("${endpoint}get_product_name"),
@@ -286,6 +294,38 @@ class RequestUtil {
     );
   }
 
+  Future<http.Response> newProduct(dynamic productName, dynamic unitPrice, dynamic sellingPrice, dynamic margin, dynamic markup) async { return
+  http.post(
+    Uri.parse("${endpoint}product_form"),
+    headers: {"Authorization": "Bearer $token", 'Content-Type': 'application/json'},
+    body: jsonEncode({
+        'product_name': productName,
+        'unit_price': unitPrice,
+        'selling_price':  sellingPrice,
+        'markup': markup,
+        'margin': margin,
+      })
+  ); }
+  
+  Future<http.Response> updateProduct(String productID, dynamic productName, dynamic unitPrice, dynamic sellingPrice, dynamic margin, dynamic markup) async { return
+  http.put(
+    Uri.parse("${endpoint}update_product/$productID"),
+    headers: {"Authorization": "Bearer $token", 'Content-Type': 'application/json'},
+    body: jsonEncode({
+        'product_name': productName,
+        'unit_price': unitPrice,
+        'selling_price':  sellingPrice,
+        'markup': markup,
+        'margin': margin,
+      })
+  ); }
+
+  Future<http.Response> deleteProduct(String id) async {
+    return http.delete(
+      Uri.parse("${endpoint}delete_product/$id"),
+      headers: {"Authorization": "Bearer $token"},
+    );
+  }
 
   // ----------------------------------------- INVENTORY ----------------------------------------------
   Future<http.Response> getInventoryName() async {

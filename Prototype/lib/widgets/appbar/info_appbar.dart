@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:prototype/app/customer/edit_customer.dart';
 import 'package:prototype/app/procurement/edit_procurement.dart';
+import 'package:prototype/app/product/edit_product.dart';
 import 'package:prototype/app/supplier/edit_supplier.dart';
 import 'package:prototype/models/edit_type.dart';
 
@@ -30,6 +31,8 @@ class InfoAppBar extends StatelessWidget implements PreferredSizeWidget {
                     Get.to(() => EditSupplier(supplierData: currentData));
                   } else if (editType == EditType.procurement) {
                     Get.to(() => EditProcurement(procurementData: currentData));
+                  } else if (editType == EditType.product) {
+                    Get.to(() => EditProduct(productData: currentData));
                   }
                 },
                 icon: const Icon(

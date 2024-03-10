@@ -152,7 +152,7 @@ def register(procurement: NewProcurement, token: str = Depends(oauth_scheme)):
 
 # ----------------------------------------- Product Form ----------------------------------------------
 @form_router.post("/product_form")
-def register(product: ProductItem):
+def register(product: NewProduct, token: str = Depends(oauth_scheme)):
     if product_db.find_one({"product_name": product.product_name}):
         raise HTTPException(
             status_code = status.HTTP_403_FORBIDDEN,
@@ -163,19 +163,19 @@ def register(product: ProductItem):
 
     if latest_id_document:
         query_id = latest_id_document.get("product_id", "-1")
-        next_product_no = processNextID(query_id)
+        next_product_id = processNextID(query_id)
     else:           
-        next_product_no = "PD1"
+        next_product_id = "PD1"
 
     updated_product = ProductItem(
-        product_id = next_product_no,
+        product_id = next_product_id,
         product_name = product.product_name,
         unit_price = product.unit_price,
         selling_price = product.selling_price,
-        quantity = product.quantity,
         markup = product.markup,
         margin = product.margin,
-        status = product.status,
+        quantity = 0,
+        status = "Out of stock",
     )
 
     product_db.insert_one(dict(updated_product))
@@ -184,7 +184,7 @@ def register(product: ProductItem):
 # ! item
 # ----------------------------------------- Inventory Form ----------------------------------------------
 @form_router.post("/inventory_form")
-def register(inventory: InventoryItem):
+def register(inventory: NewInventoryItem, token: str = Depends(oauth_scheme)):
     if inventory_db.find_one({"item_name": inventory.item_name}):
         raise HTTPException(
             status_code = status.HTTP_403_FORBIDDEN,
@@ -203,11 +203,10 @@ def register(inventory: InventoryItem):
         item_id = next_inventory_no,
         item_name = inventory.item_name,
         category = inventory.category,
-        quantity = inventory.quantity,
+        quantity = 0,
         unit_price = inventory.unit_price,
-        total_price = inventory.total_price,
-        supplier = inventory.supplier,
-        status = inventory.status,
+        total_price = 0,
+        status = "Out of stock",
     )
 
     inventory_db.insert_one(dict(updated_inventory))

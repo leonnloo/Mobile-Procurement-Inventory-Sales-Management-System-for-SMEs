@@ -64,10 +64,10 @@ def get_present_procurement(category: str, token: str = Depends(oauth_scheme)):
     return procurements
 
 # ---------------------------------------- Product ----------------------------------------
-@get_router.get("/get_product")
+@get_router.get("/get_products")
 def get_product(token: str = Depends(oauth_scheme)):
-    product = product_serial(product_db.find())
-    return product
+    products = product_serial(product_db.find())
+    return products
 
 @get_router.get("/get_product_name")
 def get_product_name(token: str = Depends(oauth_scheme)):
@@ -83,7 +83,7 @@ def get_product_unit_price(item: str, token: str = Depends(oauth_scheme)):
     return product['unit_price']
 
 # ---------------------------------------- Inventory ----------------------------------------
-@get_router.get("/get_inventory")
+@get_router.get("/get_inventories")
 def get_inventory(token: str = Depends(oauth_scheme)):
     inventory = inventory_serial(inventory_db.find())
     return inventory
