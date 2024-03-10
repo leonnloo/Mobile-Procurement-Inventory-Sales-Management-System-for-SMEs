@@ -328,6 +328,13 @@ class RequestUtil {
   }
 
   // ----------------------------------------- INVENTORY ----------------------------------------------
+  Future<http.Response> getInventoryType(String category) async {
+    return http.get(
+      Uri.parse("${endpoint}get_inventory_category/$category"),
+      headers: {"Authorization": "Bearer $token"}
+    );
+  }
+
   Future<http.Response> getInventoryName() async {
     return http.get(
       Uri.parse("${endpoint}get_inventory_name"),
@@ -341,5 +348,46 @@ class RequestUtil {
       headers: {"Authorization": "Bearer $token"}
     );
   }
+
+  Future<http.Response> newInventory(dynamic itemName, dynamic category, dynamic unitPrice) async { return
+  http.post(
+    Uri.parse("${endpoint}inventory_form"),
+    headers: {"Authorization": "Bearer $token", 'Content-Type': 'application/json'},
+    body: jsonEncode({
+        'item_name': itemName,
+        'category': category,
+        'unit_price': unitPrice,
+      })
+  ); }
+  Future<http.Response> updateInventory(String itemID, dynamic itemName, dynamic category, dynamic unitPrice, dynamic quantity) async { return
+  http.put(
+    Uri.parse("${endpoint}update_inventory/$itemID"),
+    headers: {"Authorization": "Bearer $token", 'Content-Type': 'application/json'},
+    body: jsonEncode({
+        'item_name': itemName,
+        'category': category,
+        'unit_price': unitPrice,
+        'quantity': quantity
+      })
+  ); }
+
+  Future<http.Response> deleteInventory(String id) async {
+    return http.delete(
+      Uri.parse("${endpoint}delete_inventory/$id"),
+      headers: {"Authorization": "Bearer $token"},
+    );
+  }
+
+  Future<http.Response> stockInOutInventory(String itemName, dynamic quantity) async {
+    return http.put(
+      Uri.parse("${endpoint}stock_in_out_inventory"),
+      headers: {"Authorization": "Bearer $token", 'Content-Type': 'application/json'},
+      body: jsonEncode({
+        'item_name': itemName,
+        'quantity': quantity,
+      })
+    );
+  }
+  
 }
 

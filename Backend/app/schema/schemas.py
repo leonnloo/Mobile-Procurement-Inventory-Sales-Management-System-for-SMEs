@@ -107,7 +107,6 @@ def inventory_dict_serial(inventory) -> dict:
         "quantity": inventory["quantity"],
         "unit_price": inventory["unit_price"],
         "total_price": inventory["total_price"],
-        "supplier": inventory["supplier"],
         "status": inventory["status"]
     }
 

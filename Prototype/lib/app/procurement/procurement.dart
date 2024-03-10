@@ -65,10 +65,10 @@ class ProcurementTab extends StatelessWidget {
       future: _fetchProcurementData(category),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-            return Container(
+            return const SizedBox(
               height: double.infinity,
               width: double.infinity,
-              child: const Column(
+              child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
@@ -106,88 +106,101 @@ class ProcurementTab extends StatelessWidget {
             return SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: SingleChildScrollView(
-              scrollDirection: Axis.vertical,
-              child: 
-                DataTable(
-                  columnSpacing: 16.0, // Adjust the spacing between columns
-                  horizontalMargin: 16.0, // Adjust the horizontal margin
-                  columns: const [
-                    DataColumn(label: Text('Order No'),),
-                    DataColumn(label: Text('Item'),),
-                    DataColumn(label: Text('Supplier'),),
-                    DataColumn(label: Text('Order Date'),),
-                    DataColumn(label: Text('Delivery Date'),),
-                    DataColumn(label: Text('Quantity'),),
-                    DataColumn(label: Text('Unit Price'),),
-                    DataColumn(label: Text('Total Price'),),
-                    DataColumn(label: Text('Status'),),
-                  ],
-                  rows: orders.map((order) {
-                    return DataRow(
-                      cells: [
-                        DataCell(
-                          Text(order.purchaseNo!),
-                          onTap: () {
-                            navigateToOrderDetail(context, order);
-                          },
-                        ),
-                        DataCell(
-                          Text(order.itemName),
-                          onTap: () {
-                            navigateToOrderDetail(context, order);
-                          },
-                        ),
-                        DataCell(
-                          Text(order.supplierName),
-                          onTap: () {
-                            navigateToOrderDetail(context, order);
-                          },
-                        ),
-                        DataCell(
-                          Text(order.orderDate),
-                          onTap: () {
-                            navigateToOrderDetail(context, order);
-                          },
-                        ),
-                        DataCell(
-                          Text(order.deliveryDate),
-                          onTap: () {
-                            navigateToOrderDetail(context, order);
-                          },
-                        ),
-                        DataCell(
-                          Text(order.quantity.toString()),
-                          onTap: () {
-                            navigateToOrderDetail(context, order);
-                          },
-                        ),
-                        DataCell(
-                          Text(order.unitPrice.toStringAsFixed(2).toString()),
-                          onTap: () {
-                            navigateToOrderDetail(context, order);
-                          },
-                        ),
-                        DataCell(
-                          Text(order.totalPrice.toStringAsFixed(2).toString()),
-                          onTap: () {
-                            navigateToOrderDetail(context, order);
-                          },
-                        ),
-                        DataCell(
-                          Text(order.status),
-                          onTap: () {
-                            navigateToOrderDetail(context, order);
-                          },
-                        ),
-                      ],
-                    );
-                  }).toList(),
+                scrollDirection: Axis.vertical,
+                child: 
+                  DataTable(
+                    columnSpacing: 16.0, // Adjust the spacing between columns
+                    horizontalMargin: 16.0, // Adjust the horizontal margin
+                    columns: const [
+                      DataColumn(label: Text('Order No'),),
+                      DataColumn(label: Text('Item'),),
+                      DataColumn(label: Text('Supplier'),),
+                      DataColumn(label: Text('Order Date'),),
+                      DataColumn(label: Text('Delivery Date'),),
+                      DataColumn(label: Text('Quantity'),),
+                      DataColumn(label: Text('Unit Price'),),
+                      DataColumn(label: Text('Total Price'),),
+                      DataColumn(label: Text('Status'),),
+                    ],
+                    rows: orders.map((order) {
+                      return DataRow(
+                        cells: [
+                          DataCell(
+                            Text(order.purchaseNo!),
+                            onTap: () {
+                              navigateToOrderDetail(context, order);
+                            },
+                          ),
+                          DataCell(
+                            Text(order.itemName),
+                            onTap: () {
+                              navigateToOrderDetail(context, order);
+                            },
+                          ),
+                          DataCell(
+                            Text(order.supplierName),
+                            onTap: () {
+                              navigateToOrderDetail(context, order);
+                            },
+                          ),
+                          DataCell(
+                            Text(order.orderDate),
+                            onTap: () {
+                              navigateToOrderDetail(context, order);
+                            },
+                          ),
+                          DataCell(
+                            Text(order.deliveryDate),
+                            onTap: () {
+                              navigateToOrderDetail(context, order);
+                            },
+                          ),
+                          DataCell(
+                            Text(order.quantity.toString()),
+                            onTap: () {
+                              navigateToOrderDetail(context, order);
+                            },
+                          ),
+                          DataCell(
+                            Text(order.unitPrice.toStringAsFixed(2).toString()),
+                            onTap: () {
+                              navigateToOrderDetail(context, order);
+                            },
+                          ),
+                          DataCell(
+                            Text(order.totalPrice.toStringAsFixed(2).toString()),
+                            onTap: () {
+                              navigateToOrderDetail(context, order);
+                            },
+                          ),
+                          DataCell(
+                            Text(order.status),
+                            onTap: () {
+                              navigateToOrderDetail(context, order);
+                            },
+                          ),
+                        ],
+                      );
+                    }).toList(),
+                  ),
                 ),
-              ),
             );
           }
           else {
-            return Container();
+            return Container(
+              width: double.infinity,
+              height: double.infinity,
+              padding: const EdgeInsets.only(top: 20.0),
+              child: const Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "Unable to load procurement data",
+                    style: TextStyle(color: Colors.white, fontSize: 20),
+                  ),
+                ],
+              ),
+            );
           }
       }
     );

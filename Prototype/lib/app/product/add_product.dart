@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:prototype/app/product/get_product.dart';
-import 'package:prototype/models/order_model.dart';
 import 'package:prototype/util/request_util.dart';
 import 'package:prototype/util/validate_text.dart';
 import 'package:prototype/widgets/appbar/common_appbar.dart';
-import 'package:prototype/widgets/forms/dropdown_field.dart';
 import 'package:prototype/widgets/forms/number_field.dart';
 import 'package:prototype/widgets/forms/text_field.dart';
 
@@ -70,6 +68,7 @@ class AddProductScreenState extends State<AddProductScreen> {
                     _marginController.text = '${_marginController.text}%';
                     _markupController.text = '${_markupController.text}%';
                   },
+                  floatData: true,
                 ),
                 const SizedBox(height: 16.0),
                 IntegerTextField(
@@ -80,6 +79,7 @@ class AddProductScreenState extends State<AddProductScreen> {
                     _marginController.text = '${_marginController.text}%';
                     _markupController.text = '${_markupController.text}%';
                   },
+                  floatData: true,
                 ),
                 const SizedBox(height: 16.0),
                 IntegerTextField(
@@ -87,7 +87,8 @@ class AddProductScreenState extends State<AddProductScreen> {
                   labelText: 'Markup', 
                   onChanged: (value){
                     calculateSellingPrice(_unitPriceController, _sellingPriceController, _markupController);
-                  }
+                  },
+                  floatData: true,
                 ),
                 const SizedBox(height: 16.0),
                 IntegerTextField(
@@ -95,7 +96,8 @@ class AddProductScreenState extends State<AddProductScreen> {
                   labelText: 'Margin', 
                   onChanged: (value){
                     calculateSellingPrice(_unitPriceController, _sellingPriceController, _markupController);
-                  }
+                  },
+                  floatData: true,
                 ),
                 const SizedBox(height: 16.0),
                 SizedBox(

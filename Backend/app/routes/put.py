@@ -119,18 +119,31 @@ def update_product(product: NewProduct, productID: str, token: str = Depends(oau
         )
     
 # ----------------------------------------- Inventory Update ----------------------------------------------
+    # ! critical level update
 @put_router.put("/update_inventory/{item_id}")
-def update_inventory(item: NewInventoryItem, item_id: str, token: str = Depends(oauth_scheme)):
+def update_inventory(item: EditInventoryItem, item_id: str, token: str = Depends(oauth_scheme)):
     old_item = inventory_db.find_one({"item_id": item_id})
     if old_item:
+        if item.quantity < 0:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Quantity cannot be negative",
+                headers={"WWW-Authenticate": "Bearer"},
+            )
+        
+        if item.quantity > 0:
+            new_status = "In Stock"
+        elif item.quantity == 0:
+            new_status = "Out of Stock";
+
         updated_item = InventoryItem(
             item_id = item_id,
             item_name = item.item_name,
             category = item.category,
-            quantity = old_item["quantity"],
+            quantity = item.quantity,
             unit_price = item.unit_price,
-            total_price = old_item["total_price"],
-            status = old_item["status"],
+            total_price = item.unit_price * item.quantity,
+            status = new_status,
         )
 
         inventory_db.update_one({"item_id": item_id}, {"$set": dict(updated_item)})
@@ -141,6 +154,44 @@ def update_inventory(item: NewInventoryItem, item_id: str, token: str = Depends(
             detail="Inventory item not found",
             headers={"WWW-Authenticate": "Bearer"},
         )
+
+@put_router.put("/stock_in_out_inventory")
+def stock_in_out_inventory(item: StockInOutInventoryItem, token: str = Depends(oauth_scheme)):
+    old_item = inventory_db.find_one({"item_name": item.item_name})
+    if old_item:
+        new_quantity = old_item["quantity"] + item.quantity
+        if new_quantity < 0:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Quantity cannot be negative",
+                headers={"WWW-Authenticate": "Bearer"},
+            )
+
+        if new_quantity > 0:
+            new_status = "In Stock"
+        elif new_quantity == 0:
+            new_status = "Out of Stock";  
+        
+        updated_item = InventoryItem(
+            item_id = old_item["item_id"],
+            item_name = item.item_name,
+            category = old_item["category"],
+            quantity = new_quantity,
+            unit_price = old_item["unit_price"],
+            total_price = old_item["unit_price"] * new_quantity,
+            status = new_status,
+        )
+
+        inventory_db.update_one({"item_name": item.item_name}, {"$set": dict(updated_item)})
+        return inventory_dict_serial(inventory_db.find_one({"item_name": item.item_name}))
+    else:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Inventory item not found",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    
+
     
     
 # ----------------------------------------- Sales Management Update ----------------------------------------------

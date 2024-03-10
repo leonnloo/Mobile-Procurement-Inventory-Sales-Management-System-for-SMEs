@@ -75,7 +75,7 @@ def delete_product(id: str, token: str = Depends(oauth_scheme)):
 # ---------------------------------------- Inventory ----------------------------------------
 @delete_router.delete("/delete_inventory/{id}")
 def delete_inventory(id: str, token: str = Depends(oauth_scheme)):
-    result = inventory_db.delete_one({'inventory_id': id})
+    result = inventory_db.delete_one({'item_id': id})
 
     if result.deleted_count > 0:
         return {"message": f"Inventory item with id {id} deleted successfully"}

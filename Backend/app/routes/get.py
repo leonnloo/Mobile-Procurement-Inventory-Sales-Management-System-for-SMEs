@@ -88,6 +88,11 @@ def get_inventory(token: str = Depends(oauth_scheme)):
     inventory = inventory_serial(inventory_db.find())
     return inventory
 
+@get_router.get("/get_inventory_category/{category}")
+def get_inventory_category(category: str, token: str = Depends(oauth_scheme)):
+    inventory = inventory_serial(inventory_db.find({'status': category}))
+    return inventory
+
 @get_router.get("/get_inventory_name")
 def get_inventory_name(token: str = Depends(oauth_scheme)):
     inventory = inventory_name_serial(inventory_db.distinct('item_name'))

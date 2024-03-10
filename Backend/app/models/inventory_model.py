@@ -13,3 +13,13 @@ class NewInventoryItem(BaseModel):
     item_name: str
     category: str
     unit_price: float
+
+class StockInOutInventoryItem(BaseModel):
+    item_name: str
+    quantity: int
+
+class EditInventoryItem(BaseModel):
+    item_name: str
+    category: str
+    unit_price: float
+    quantity: int
