@@ -179,11 +179,38 @@ def update_inventory(item: EditInventoryItem, item_id: str, token: str = Depends
             headers={"WWW-Authenticate": "Bearer"},
         )
 
-@put_router.put("/stock_in_out_inventory")
-def stock_in_out_inventory(item: StockInOutInventoryItem, token: str = Depends(oauth_scheme)):
+@put_router.put("/stock_in_inventory")
+def stock_in_inventory(item: StockInOutInventoryItem, token: str = Depends(oauth_scheme)):
     old_item = inventory_db.find_one({"item_name": item.item_name})
     if old_item:
         new_quantity = old_item["quantity"] + item.quantity
+        
+        # ! critical lvl
+        new_status = old_item['status']
+        updated_item = InventoryItem(
+            item_id = old_item["item_id"],
+            item_name = item.item_name,
+            category = old_item["category"],
+            quantity = new_quantity,
+            unit_price = old_item["unit_price"],
+            total_price = old_item["unit_price"] * new_quantity,
+            status = new_status,
+        )
+
+        inventory_db.update_one({"item_name": item.item_name}, {"$set": dict(updated_item)})
+        return inventory_dict_serial(inventory_db.find_one({"item_name": item.item_name}))
+    else:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Inventory item not found",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+
+@put_router.put("/stock_out_inventory")
+def stock_out_inventory(item: StockInOutInventoryItem, token: str = Depends(oauth_scheme)):
+    old_item = inventory_db.find_one({"item_name": item.item_name})
+    if old_item:
+        new_quantity = old_item["quantity"] - item.quantity
         if new_quantity < 0:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
@@ -191,6 +218,7 @@ def stock_in_out_inventory(item: StockInOutInventoryItem, token: str = Depends(o
                 headers={"WWW-Authenticate": "Bearer"},
             )
 
+        # ! critical lvl
         if new_quantity > 0:
             new_status = "In Stock"
         elif new_quantity == 0:
@@ -198,7 +226,7 @@ def stock_in_out_inventory(item: StockInOutInventoryItem, token: str = Depends(o
         
         updated_item = InventoryItem(
             item_id = old_item["item_id"],
-            item_name = item.item_name,
+            item_name = old_item["item_name"],
             category = old_item["category"],
             quantity = new_quantity,
             unit_price = old_item["unit_price"],

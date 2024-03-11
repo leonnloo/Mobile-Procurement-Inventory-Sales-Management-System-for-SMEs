@@ -428,9 +428,20 @@ class RequestUtil {
     );
   }
 
-  Future<http.Response> stockInOutInventory(String itemName, dynamic quantity) async {
+  Future<http.Response> stockInInventory(String itemName, dynamic quantity) async {
     return http.put(
-      Uri.parse("${endpoint}stock_in_out_inventory"),
+      Uri.parse("${endpoint}stock_in_inventory"),
+      headers: {"Authorization": "Bearer $token", 'Content-Type': 'application/json'},
+      body: jsonEncode({
+        'item_name': itemName,
+        'quantity': quantity,
+      })
+    );
+  }
+  
+  Future<http.Response> stockOutInventory(String itemName, dynamic quantity) async {
+    return http.put(
+      Uri.parse("${endpoint}stock_out_inventory"),
       headers: {"Authorization": "Bearer $token", 'Content-Type': 'application/json'},
       body: jsonEncode({
         'item_name': itemName,
