@@ -18,11 +18,9 @@ class InventoryScreen extends StatelessWidget {
           children: [
             // In Stock Section
             buildInventorySection(context, 'In Stock'),
-            const Divider(),
           
             // Low Stock Section
             buildInventorySection(context, 'Low Stock'),
-            const Divider(),
         
             // Out of Stock Section
             buildInventorySection(context, 'Out of Stock'),
@@ -30,17 +28,6 @@ class InventoryScreen extends StatelessWidget {
         ),
       ),
       floatingActionButton: inventorySpeedDial(context),
-      // FloatingActionButton(
-      //   onPressed: () {
-      //     // Navigate to a screen for adding new customer info
-      //     Navigator.of(context).push(
-      //       MaterialPageRoute(
-      //         builder: (context) => const AddInventoryScreen(),
-      //       ),
-      //     );
-      //   },
-      //   child: const Icon(Icons.add),
-      // ),
     );
   }
 
@@ -145,13 +132,13 @@ class InventoryScreen extends StatelessWidget {
                                 },
                               ),
                               DataCell(
-                                Text('\$${item.unitPrice.toStringAsFixed(2).toString()}'),
+                                Text('\$${item.unitPrice.toStringAsFixed(2)}'),
                                 onTap: () {
                                   navigateToItemDetail(context, item);
                                 },
                               ),
                               DataCell(
-                                Text('\$${item.totalPrice.toStringAsFixed(2).toString()}'),
+                                Text('\$${item.totalPrice.toStringAsFixed(2)}'),
                                 onTap: () {
                                   navigateToItemDetail(context, item);
                                 },
@@ -167,6 +154,7 @@ class InventoryScreen extends StatelessWidget {
                         }).toList(),
                       ),
                     ),
+                    const Divider(),
                   ],
                 );
               }
