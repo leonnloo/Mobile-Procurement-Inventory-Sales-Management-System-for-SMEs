@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:prototype/util/user_controller.dart';
 
@@ -7,13 +8,18 @@ class RequestUtil {
   final int port = 8000;
   late final String endpoint;
   var token = '';
-  final UserLoggedInController userLoggedInController = UserLoggedInController();
+  var currentUser = '';
+  var currentUserID = '';
+  final userLoggedInController = Get.put(UserLoggedInController());
   RequestUtil() {
     // ipAddress = InternetAddress.loopbackIPv4.address;
     ipAddress = "10.0.2.2";
     endpoint = "http://$ipAddress:$port/";
     token = userLoggedInController.currentUser.value;
+    currentUser = userLoggedInController.currentUser.value;
+    currentUserID = userLoggedInController.currentUserID.value;
   }
+
 
   // ----------------------------------------- LOGIN ----------------------------------------------
   Future<http.Response> login(String username, String password) async {
@@ -33,7 +39,6 @@ class RequestUtil {
   // ----------------------------------------- USER (Employee's info, Registering) ----------------------------------------------
   Future<http.Response> getUser(String id) async {
     // await Future.delayed(const Duration(seconds: 50));
-
     return http.get(
       Uri.parse("${endpoint}get_user/$id"),
     );
@@ -42,6 +47,13 @@ class RequestUtil {
   Future<http.Response> getUsers() async {
     return http.get(
       Uri.parse("${endpoint}get_users"),
+      headers: {"Authorization": "Bearer $token"}
+    );
+  }
+
+  Future<http.Response> getUserID(String userName) async {
+    return http.get(
+      Uri.parse("${endpoint}get_user_id/$userName"),
     );
   }
 
@@ -63,7 +75,7 @@ class RequestUtil {
   Future<http.Response> updateUser(String id, String username, String email, String password, String phoneNumber, String role) async {
     return http.put(
       Uri.parse("${endpoint}update_user/$id"),
-      headers: {'Content-Type': 'application/json'},
+      headers: {'Content-Type': 'application/json', "Authorization": "Bearer $token"},
       body: {
         'employee_name': username,
         'password': password,
@@ -77,6 +89,7 @@ class RequestUtil {
   Future<http.Response> deleteUser(String id) async {
     return http.delete(
       Uri.parse("${endpoint}delete_user/$id"),
+      headers: {"Authorization": "Bearer $token"}
     );
   }
 
@@ -95,6 +108,19 @@ class RequestUtil {
     );
   }
   
+  Future<http.Response> getCustomersName() async {
+    return http.get(
+      Uri.parse("${endpoint}get_customers_name"),
+      headers: {"Authorization": "Bearer $token"}
+    );
+  }
+  
+  Future<http.Response> getCustomerID(String customerName) async {
+    return http.get(
+      Uri.parse("${endpoint}get_customer_id/$customerName"),
+      headers: {"Authorization": "Bearer $token"}
+    );
+  }
 
   Future<http.Response> newCustomer(String businessName, String contactPerson, String email, String phoneNumber, String billingAddress, String shippingAddress) async {
     return http.post(
@@ -280,9 +306,15 @@ class RequestUtil {
     );
   }
 
-  Future<http.Response> getProductName() async {
+  Future<http.Response> getProductsName() async {
     return http.get(
-      Uri.parse("${endpoint}get_product_name"),
+      Uri.parse("${endpoint}get_products_name"),
+      headers: {"Authorization": "Bearer $token"}
+    );
+  }
+  Future<http.Response> getProductID(String productName) async {
+    return http.get(
+      Uri.parse("${endpoint}get_product_id/$productName"),
       headers: {"Authorization": "Bearer $token"}
     );
   }
@@ -293,7 +325,12 @@ class RequestUtil {
       headers: {"Authorization": "Bearer $token"}
     );
   }
-
+  Future<http.Response> getProductSellingPrice(String itemName) async {
+    return http.get(
+      Uri.parse("${endpoint}get_product_selling_price/$itemName"),
+      headers: {"Authorization": "Bearer $token"}
+    );
+  }
   Future<http.Response> newProduct(dynamic productName, dynamic unitPrice, dynamic sellingPrice, dynamic margin, dynamic markup) async { return
   http.post(
     Uri.parse("${endpoint}product_form"),
@@ -342,9 +379,9 @@ class RequestUtil {
     );
   }
 
-  Future<http.Response> getInventoryUnitPrice(String item) async {
+  Future<http.Response> getInventoryUnitPrice(String itemName) async {
     return http.get(
-      Uri.parse("${endpoint}get_inventory_unit_price/$item"),
+      Uri.parse("${endpoint}get_inventory_unit_price/$itemName"),
       headers: {"Authorization": "Bearer $token"}
     );
   }
@@ -389,5 +426,58 @@ class RequestUtil {
     );
   }
   
+  // ----------------------------------------- SALES ORDER ----------------------------------------------
+  Future<http.Response> getSaleOrders() async {
+    return http.get(
+      Uri.parse("${endpoint}get_sale_orders"),
+      headers: {"Authorization": "Bearer $token"}
+    );
+  }
+
+
+  Future<http.Response> newOrder(dynamic customerName, dynamic customerID, dynamic productName, dynamic productID, dynamic orderDate, dynamic unitPrice, dynamic totalPrice, dynamic quantity, dynamic status) async { return
+  http.post(
+    Uri.parse("${endpoint}sales_order_form"),
+    headers: {"Authorization": "Bearer $token", 'Content-Type': 'application/json'},
+    body: jsonEncode({
+        'customer_name': customerName,
+        'customer_id': customerID,
+        'product_name': productName,
+        'product_id': productID,
+        'order_date': orderDate,
+        'unit_price': unitPrice,
+        'total_price':  totalPrice,
+        'quantity': quantity,
+        'status': status,
+        'employee': currentUser,
+        'employee_id': currentUserID,
+      })
+  ); }
+  Future<http.Response> updateSaleOrder(String orderID, dynamic customerName, dynamic customerID, dynamic productName, dynamic productID, dynamic orderDate, dynamic unitPrice, dynamic totalPrice, dynamic quantity, dynamic status, dynamic employee, dynamic employeeID) async { return
+  http.put(
+    Uri.parse("${endpoint}update_sale_order/$orderID"),
+    headers: {"Authorization": "Bearer $token", 'Content-Type': 'application/json'},
+    body: jsonEncode({
+        'customer_name': customerName,
+        'customer_id': customerID,
+        'product_name': productName,
+        'product_id': productID,
+        'order_date': orderDate,
+        'unit_price': unitPrice,
+        'total_price':  totalPrice,
+        'quantity': quantity,
+        'status': status,
+        'employee': employee,
+        'employee_id': employeeID,
+      })
+  ); }
+
+  Future<http.Response> deleteOrder(String id) async {
+    return http.delete(
+      Uri.parse("${endpoint}delete_sale_order/$id"),
+      headers: {"Authorization": "Bearer $token"},
+    );
+  }
 }
+
 

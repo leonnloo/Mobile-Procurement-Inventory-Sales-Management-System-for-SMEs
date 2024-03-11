@@ -106,13 +106,13 @@ class ProductManagementScreen extends StatelessWidget {
                           }              
                         ),
                         DataCell(
-                          Text('${product.margin.toString()}%'),
+                          Text(product.margin),
                           onTap: () {
                             navigateToProductDetail(context, product);
                           }              
                         ),
                         DataCell(
-                          Text('${product.markup.toString()}%'),
+                          Text(product.markup),
                           onTap: () {
                             navigateToProductDetail(context, product);
                           }              

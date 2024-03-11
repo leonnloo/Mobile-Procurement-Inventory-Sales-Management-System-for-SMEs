@@ -1,14 +1,13 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from config.database import *
-from models.customer_model import CustomerInfo
-from models.sales_order_model import SaleOrder
-from models.supplier_model import SupplierInfo
-from models.procurement_model import Procurement 
-from models.product_model import ProductItem 
-from models.inventory_model import InventoryItem  
+from models.customer_model import *
+from models.sales_order_model import *
+from models.supplier_model import *
+from models.procurement_model import * 
+from models.product_model import * 
+from models.inventory_model import *  
 from models import *
 from schema.schemas import *
-from bson import ObjectId
 from fastapi.security import OAuth2PasswordBearer
 
 get_router = APIRouter()
@@ -27,6 +26,16 @@ def get_customer(id: str, token: str = Depends(oauth_scheme)):
     customer = customer_dict_serial(customers_db.find_one({'customer_id': id}))
     return customer
 
+@get_router.get("/get_customers_name")
+def get_customers_name(token: str = Depends(oauth_scheme)):
+    customers = customer_name_serial(customers_db.distinct('business_name'))
+    return customers
+
+@get_router.get("/get_customer_id/{customer_name}")
+def get_customers_name(customer_name: str, token: str = Depends(oauth_scheme)):
+    customer = customers_db.find_one({'business_name': customer_name}, {'customer_id': 1})
+    return customer['customer_id']
+
 # ---------------------------------------- Supplier ----------------------------------------
 @get_router.get("/get_suppliers")
 def get_suppliers(token: str = Depends(oauth_scheme)):
@@ -44,8 +53,8 @@ def get_suppliers_name(token: str = Depends(oauth_scheme)):
     return suppliers
 
 # ---------------------------------------- Sales Order ----------------------------------------
-@get_router.get("/get_sale_order")
-def get_sale_order(token: str = Depends(oauth_scheme)):
+@get_router.get("/get_sale_orders")
+def get_sale_orders(token: str = Depends(oauth_scheme)):
     sale_orders = sale_order_serial(sales_order_db.find())
     return sale_orders 
 
@@ -69,7 +78,7 @@ def get_product(token: str = Depends(oauth_scheme)):
     products = product_serial(product_db.find())
     return products
 
-@get_router.get("/get_product_name")
+@get_router.get("/get_products_name")
 def get_product_name(token: str = Depends(oauth_scheme)):
     product = product_name_serial(product_db.distinct('product_name'))
     # product = product_db.find({}, {'product_name': 1})
@@ -77,10 +86,20 @@ def get_product_name(token: str = Depends(oauth_scheme)):
     # return product_names
     return product
 
+@get_router.get("/get_product_id/{productName}")
+def get_product_name(productName: str, token: str = Depends(oauth_scheme)):
+    productid = product_db.find_one({'product_name': productName}, {'product_id': 1})
+    return productid['product_id']
+
 @get_router.get("/get_product_unit_price/{item}")
 def get_product_unit_price(item: str, token: str = Depends(oauth_scheme)):
     product = product_db.find_one({'product_name': item}, {'unit_price': 1})
     return product['unit_price']
+
+@get_router.get("/get_product_selling_price/{item}")
+def get_product_selling_price(item: str, token: str = Depends(oauth_scheme)):
+    product = product_db.find_one({'product_name': item}, {'selling_price': 1})
+    return product['selling_price']
 
 # ---------------------------------------- Inventory ----------------------------------------
 @get_router.get("/get_inventories")

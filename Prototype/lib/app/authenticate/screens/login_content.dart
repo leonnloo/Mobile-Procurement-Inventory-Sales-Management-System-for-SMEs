@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:prototype/app/authenticate/screens/forget_password/option/forget_password_option.dart';
@@ -146,6 +148,11 @@ class LoginContent extends StatelessWidget {
                       // print("Login successful!");
                       // print("Access Token: ${jsonDecode(response.body)['access_token']}");
                       userController.updateUser(_emailController.text);
+                      final idresponse = await requestUtil.getUserID(_emailController.text);
+                      if (idresponse.statusCode == 200) {
+                        final dynamic userID = jsonDecode(idresponse.body);
+                        userController.updateUserID(userID);
+                      }
                       // Navigate to the home screen or perform other actions
                       Navigator.pushReplacement(
                         context,
