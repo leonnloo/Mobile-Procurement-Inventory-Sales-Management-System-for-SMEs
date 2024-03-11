@@ -74,6 +74,7 @@ def product_dict_serial(product) -> dict:
         "quantity": product["quantity"],
         "markup": product["markup"],
         "margin": product["margin"],
+        "critical_level": product["critical_level"],
         "status": product["status"]
     } 
 
@@ -117,6 +118,7 @@ def inventory_dict_serial(inventory) -> dict:
         "quantity": inventory["quantity"],
         "unit_price": inventory["unit_price"],
         "total_price": inventory["total_price"],
+        "critical_level": inventory["critical_level"],
         "status": inventory["status"]
     }
 

@@ -32,6 +32,7 @@ class ItemDetailScreen extends StatelessWidget {
             _buildDetailRow('Unit Price', '\$${item.unitPrice.toStringAsFixed(2).toString()}'),
             _buildDetailRow('Total Price', '\$${item.totalPrice.toStringAsFixed(2).toString()}'),
             _buildDetailRow('Status', item.status),
+            _buildDetailRow('Critical Level', item.criticalLvl.toString()),
           ],
         ),
       ),

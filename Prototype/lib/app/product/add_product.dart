@@ -23,6 +23,7 @@ class AddProductScreenState extends State<AddProductScreen> {
   late TextEditingController _sellingPriceController;
   late TextEditingController _markupController;
   late TextEditingController _marginController;
+  late TextEditingController _criticalLevelController;
 
   @override
   void initState() {
@@ -33,6 +34,7 @@ class AddProductScreenState extends State<AddProductScreen> {
     _sellingPriceController = TextEditingController();
     _markupController = TextEditingController();
     _marginController = TextEditingController();
+    _criticalLevelController = TextEditingController();
   }
 
   @override
@@ -43,6 +45,7 @@ class AddProductScreenState extends State<AddProductScreen> {
     _sellingPriceController.dispose();
     _markupController.dispose();
     _marginController.dispose();
+    _criticalLevelController.dispose();
     super.dispose();
   }
 
@@ -100,6 +103,13 @@ class AddProductScreenState extends State<AddProductScreen> {
                   floatData: true,
                 ),
                 const SizedBox(height: 16.0),
+                IntegerTextField(
+                  controller: _criticalLevelController, 
+                  labelText: 'Critical Level',  
+                  onChanged: (value){},
+                  floatData: false,
+                ),
+                const SizedBox(height: 16.0),
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
@@ -116,11 +126,13 @@ class AddProductScreenState extends State<AddProductScreen> {
                       String? sellingPrice= validateTextField(_sellingPriceController.text);
                       String? margin = validateTextField(_marginController.text);
                       String? markup = validateTextField(_markupController.text);
+                      String? criticalLevel = validateTextField(_criticalLevelController.text);
                       if (productName == null
                         || unitPrice == null
                         || sellingPrice == null
                         || margin == null
-                        || markup == null) {
+                        || markup == null
+                        || criticalLevel == null) {
                         // Display validation error messages
                         _formKey.currentState?.validate();
                         ScaffoldMessenger.of(context).showSnackBar(
@@ -131,7 +143,7 @@ class AddProductScreenState extends State<AddProductScreen> {
                         );
                       } else {                
                         final response = await requestUtil.newProduct(
-                          productName, unitPrice, sellingPrice, margin, markup
+                          productName, unitPrice, sellingPrice, margin, markup, criticalLevel
                         );
                         
                         if (response.statusCode == 200) {

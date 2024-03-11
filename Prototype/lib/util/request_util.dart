@@ -336,7 +336,7 @@ class RequestUtil {
       headers: {"Authorization": "Bearer $token"}
     );
   }
-  Future<http.Response> newProduct(dynamic productName, dynamic unitPrice, dynamic sellingPrice, dynamic margin, dynamic markup) async { return
+  Future<http.Response> newProduct(dynamic productName, dynamic unitPrice, dynamic sellingPrice, dynamic margin, dynamic markup, dynamic criticalLevel) async { return
   http.post(
     Uri.parse("${endpoint}product_form"),
     headers: {"Authorization": "Bearer $token", 'Content-Type': 'application/json'},
@@ -346,10 +346,11 @@ class RequestUtil {
         'selling_price':  sellingPrice,
         'markup': markup,
         'margin': margin,
+        'critical_level': criticalLevel
       })
   ); }
   
-  Future<http.Response> updateProduct(String productID, dynamic productName, dynamic quantity, dynamic unitPrice, dynamic sellingPrice, dynamic margin, dynamic markup) async { return
+  Future<http.Response> updateProduct(String productID, dynamic productName, dynamic quantity, dynamic unitPrice, dynamic sellingPrice, dynamic margin, dynamic markup, dynamic criticalLevel) async { return
   http.put(
     Uri.parse("${endpoint}update_product/$productID"),
     headers: {"Authorization": "Bearer $token", 'Content-Type': 'application/json'},
@@ -360,6 +361,7 @@ class RequestUtil {
         'selling_price':  sellingPrice,
         'markup': markup,
         'margin': margin,
+        'critical_level': criticalLevel,
       })
   ); }
 
@@ -399,7 +401,7 @@ class RequestUtil {
     );
   }
 
-  Future<http.Response> newInventory(dynamic itemName, dynamic category, dynamic unitPrice) async { return
+  Future<http.Response> newInventory(dynamic itemName, dynamic category, dynamic unitPrice, dynamic criticalLevel) async { return
   http.post(
     Uri.parse("${endpoint}inventory_form"),
     headers: {"Authorization": "Bearer $token", 'Content-Type': 'application/json'},
@@ -407,9 +409,10 @@ class RequestUtil {
         'item_name': itemName,
         'category': category,
         'unit_price': unitPrice,
+        'critical_level': criticalLevel
       })
   ); }
-  Future<http.Response> updateInventory(String itemID, dynamic itemName, dynamic category, dynamic unitPrice, dynamic quantity) async { return
+  Future<http.Response> updateInventory(String itemID, dynamic itemName, dynamic category, dynamic unitPrice, dynamic quantity, dynamic criticalLevel) async { return
   http.put(
     Uri.parse("${endpoint}update_inventory/$itemID"),
     headers: {"Authorization": "Bearer $token", 'Content-Type': 'application/json'},
@@ -417,7 +420,8 @@ class RequestUtil {
         'item_name': itemName,
         'category': category,
         'unit_price': unitPrice,
-        'quantity': quantity
+        'quantity': quantity,
+        'critical_level': criticalLevel
       })
   ); }
 

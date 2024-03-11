@@ -91,7 +91,6 @@ def supplier_form(supplier: NewSupplier):
         email = supplier.email,
         phone_number = supplier.phone_number,
         address = supplier.address,
-        past_order = None,
         notes = None,
     )
 
@@ -127,14 +126,23 @@ def sales_order_form(order: NewSaleOrder, token: str = Depends(oauth_scheme)):
             employee = order.employee,
             employee_id = order.employee_id
         )
-        sales_order_db.insert_one(dict(updated_order))
+        
         product['quantity'] = left_product
+        if product['quantity'] > 0 and product['quantity'] >= product['critical_level']:
+            new_status = 'In Stock'
+        elif product['quantity'] > 0 and product['quantity'] < product['critical_level']:
+            new_status = 'Low Stock'
+        else:
+            new_status = 'Out of Stock'
+        product['status'] = new_status
         product_db.update_one({"product_id": order.product_id}, {"$set": product})
+        
+        sales_order_db.insert_one(dict(updated_order))
         return {"Message": "Sales order successfully registered"}
     else:
         raise HTTPException(
         status_code = status.HTTP_403_FORBIDDEN,
-        detail = "Product not available",
+        detail = "Product ran out of stock",
         )
 
 # ----------------------------------------- Procurement Form ----------------------------------------------
@@ -147,6 +155,48 @@ def procurement_form(procurement: NewProcurement, token: str = Depends(oauth_sch
         next_purchase_id = processNextID(query_id)
     else:
         next_purchase_id = "PR1"
+
+    if procurement.status == "Completed":
+        if procurement.item_type == "Product":
+            product = product_db.find_one({"product_id": procurement.item_id})
+            left_product = product["quantity"] - procurement.quantity
+            if left_product >= 0:
+                product['quantity'] = left_product
+                if product['quantity'] > 0 and product['quantity'] >= product['critical_level']:
+                    new_status = 'In Stock'
+                elif product['quantity'] > 0 and product['quantity'] < product['critical_level']:
+                    new_status = 'Low Stock'
+                else:
+                    new_status = 'Out of Stock'
+                
+                product['status'] = new_status
+                product_db.update_one({"product_id": procurement.item_id}, {"$set": product})
+            else:
+                raise HTTPException(
+                status_code = status.HTTP_403_FORBIDDEN,
+                detail = "Product ran out of stock",
+                )
+        elif procurement.item_type == "Inventory":
+            item = inventory_db.find_one({"item_id": procurement.item_id})
+            left_item = item["quantity"] - procurement.quantity
+            if left_item >= 0:
+                item['quantity'] = left_item
+                if item['quantity'] > 0 and item['quantity'] >= item['critical_level']:
+                    new_status = 'In Stock'
+                elif item['quantity'] > 0 and item['quantity'] < item['critical_level']:
+                    new_status = 'Low Stock'
+                else:
+                    new_status = 'Out of Stock'
+                
+                item['status'] = new_status
+                inventory_db.update_one({"item_id": procurement.item_id}, {"$set": item})
+            else:
+                raise HTTPException(
+                status_code = status.HTTP_403_FORBIDDEN,
+                detail = "Inventory item ran out of stock",
+                )
+
+
 
     updated_procurement = Procurement(
         purchase_id = next_purchase_id,
@@ -190,13 +240,13 @@ def product_form(product: NewProduct, token: str = Depends(oauth_scheme)):
         markup = product.markup,
         margin = product.margin,
         quantity = 0,
-        status = "Out of stock",
+        critical_level = product.critical_level,
+        status = "Out of Stock",
     )
 
     product_db.insert_one(dict(updated_product))
     return {"Message": "Product successfully registered"}
 
-# ! item
 # ----------------------------------------- Inventory Form ----------------------------------------------
 @form_router.post("/inventory_form")
 def inventory_form(inventory: NewInventoryItem, token: str = Depends(oauth_scheme)):
@@ -210,17 +260,18 @@ def inventory_form(inventory: NewInventoryItem, token: str = Depends(oauth_schem
 
     if latest_id_document:
         query_id = latest_id_document.get("item_id", "-1")
-        next_inventory_no = processNextID(query_id)
+        next_inventory_id = processNextID(query_id)
     else:
-        next_inventory_no = "IV1"
+        next_inventory_id = "IV1"
 
     updated_inventory = InventoryItem(
-        item_id = next_inventory_no,
+        item_id = next_inventory_id,
         item_name = inventory.item_name,
         category = inventory.category,
         quantity = 0,
         unit_price = inventory.unit_price,
         total_price = 0,
+        critical_level = inventory.critical_level,
         status = "Out of Stock",
     )
 

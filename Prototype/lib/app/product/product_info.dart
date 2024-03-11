@@ -33,6 +33,7 @@ class ProductDetailScreen extends StatelessWidget {
             _buildDetailRow('Margin', product.margin),
             _buildDetailRow('Markup', product.markup),
             _buildDetailRow('Status', product.status),
+            _buildDetailRow('Critical Level', product.criticalLvl.toString()),
             // Add more details based on your product data model
           ],
         ),

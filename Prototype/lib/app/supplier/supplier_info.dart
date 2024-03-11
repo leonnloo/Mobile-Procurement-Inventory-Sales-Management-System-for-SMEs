@@ -28,7 +28,7 @@ class SupplierDetailScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildDetailRow('Supplier ID', supplierData.supplierID.toString()),
+            _buildDetailRow('Supplier ID', supplierData.supplierID),
             _buildDetailRow('Supplier Name', supplierData.businessName),
             _buildDetailRow('Contact Person', supplierData.contactPerson),
             _buildDetailRow('Email', supplierData.email),

@@ -147,7 +147,7 @@ class HeaderDrawerState extends State<HeaderDrawer> {
 
       // return {'token': tokenData['access_token'], 'user': user};
     } catch (error) {
-      print('Error in _fetchUserData: $error');
+      // print('Error in _fetchUserData: $error');
       rethrow; // Rethrow the error to be caught by FutureBuilder
     }
   }

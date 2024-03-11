@@ -21,6 +21,7 @@ class AddInventoryScreenState extends State<AddInventoryScreen> {
   late TextEditingController _itemNameController;
   late TextEditingController _categoryController;
   late TextEditingController _unitPriceController;
+  late TextEditingController _criticalLevelController;
 
   @override
   void initState() {
@@ -28,6 +29,7 @@ class AddInventoryScreenState extends State<AddInventoryScreen> {
     _itemNameController = TextEditingController();
     _categoryController = TextEditingController();
     _unitPriceController = TextEditingController();
+    _criticalLevelController = TextEditingController();
   }
 
   @override
@@ -36,6 +38,7 @@ class AddInventoryScreenState extends State<AddInventoryScreen> {
     _itemNameController.dispose();
     _categoryController.dispose();
     _unitPriceController.dispose();
+    _criticalLevelController.dispose();
     super.dispose();
   }
 
@@ -67,6 +70,13 @@ class AddInventoryScreenState extends State<AddInventoryScreen> {
                   floatData: true,
                 ),
                 const SizedBox(height: 16.0),
+                IntegerTextField(
+                  controller: _criticalLevelController, 
+                  labelText: 'Critical Level',  
+                  onChanged: (value) {},
+                  floatData: false,
+                ),
+                const SizedBox(height: 16.0),
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
@@ -81,9 +91,11 @@ class AddInventoryScreenState extends State<AddInventoryScreen> {
                       String? itemName = validateTextField(_itemNameController.text);
                       String? category = validateTextField(_categoryController.text);
                       String? unitPrice = validateTextField(_unitPriceController.text);
+                      String? criticalLevel = validateTextField(_criticalLevelController.text);
                       if (itemName == null
                         || category == null
-                        || unitPrice == null) {
+                        || unitPrice == null
+                        || criticalLevel == null) {
                         // Display validation error messages
                         _formKey.currentState?.validate();
                         ScaffoldMessenger.of(context).showSnackBar(
@@ -94,7 +106,7 @@ class AddInventoryScreenState extends State<AddInventoryScreen> {
                         );
                       } else {                
                         final response = await requestUtil.newInventory(
-                          itemName, category, unitPrice
+                          itemName, category, unitPrice, criticalLevel
                         );
                         
                         if (response.statusCode == 200) {

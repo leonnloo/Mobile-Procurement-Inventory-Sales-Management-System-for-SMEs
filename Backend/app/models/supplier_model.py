@@ -9,7 +9,6 @@ class SupplierInfo(BaseModel):
     email: str
     phone_number: str
     address: str
-    past_order: List[SaleOrder] | None
     notes: str | None
 
 class NewSupplier(BaseModel):

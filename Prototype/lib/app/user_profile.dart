@@ -20,11 +20,9 @@ class UserProfileScreen extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const CircularProgressIndicator(); // or a loading indicator
         } else if (snapshot.hasError) {
-          print('object');
           return Text('Error: ${snapshot.error}');
         } else {
           final user = snapshot.data;
-          print("HEY");
           if (user != null) {
             return Scaffold(
               appBar: AppBar(

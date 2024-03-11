@@ -51,7 +51,6 @@ def update_supplier(supplier: NewSupplier, supplierID: str, token: str = Depends
             email = supplier.email,
             phone_number = supplier.phone_number,
             address = supplier.address,
-            past_order = old_supplier["past_order"],
             notes = old_supplier["notes"],
         )
         suppliers_db.update_one({"supplier_id": supplierID}, {"$set": dict(updated_supplier)})
@@ -73,7 +72,6 @@ def update_sale_order(order: NewSaleOrder, order_id, token: str = Depends(oauth_
     product = product_db.find_one({"product_id": order.product_id})
     left_product = product["quantity"] - (order.quantity - old_order["quantity"])
     if (left_product >= 0):
-    
         if old_order:
             updated_order = SaleOrder(
                 order_id = order_id,
@@ -89,9 +87,18 @@ def update_sale_order(order: NewSaleOrder, order_id, token: str = Depends(oauth_
                 employee = order.employee,
                 employee_id = order.employee_id
             )
-            sales_order_db.update_one({"order_id": order_id}, {"$set": dict(updated_order)})
+
             product['quantity'] = left_product
+            if product['quantity'] > 0 and product['quantity'] >= product['critical_level']:
+                new_status = 'In Stock'
+            elif product['quantity'] > 0 and product['quantity'] < product['critical_level']:
+                new_status = 'Low Stock'
+            else:
+                new_status = 'Out of Stock'
+            product['status'] = new_status
             product_db.update_one({"product_id": order.product_id}, {"$set": product})
+
+            sales_order_db.update_one({"order_id": order_id}, {"$set": dict(updated_order)})
             return sale_order_dict_serial(sales_order_db.find_one({"order_id": order_id}))
         else:
             raise HTTPException(
@@ -109,6 +116,46 @@ def update_sale_order(order: NewSaleOrder, order_id, token: str = Depends(oauth_
 def update_procurement(purchase: NewProcurement, procurement_id: str, token: str = Depends(oauth_scheme)):
     old_purchase = procurement_db.find_one({"purchase_id": procurement_id})
     if old_purchase:
+        if purchase.status == "Completed":
+            if purchase.item_type == "Product":
+                product = product_db.find_one({"product_id": purchase.item_id})
+                left_product = product["quantity"] - purchase.quantity
+                if left_product >= 0:
+                    product['quantity'] = left_product
+                    if product['quantity'] > 0 and product['quantity'] >= product['critical_level']:
+                        new_status = 'In Stock'
+                    elif product['quantity'] > 0 and product['quantity'] < product['critical_level']:
+                        new_status = 'Low Stock'
+                    else:
+                        new_status = 'Out of Stock'
+                    
+                    product['status'] = new_status
+                    product_db.update_one({"product_id": purchase.item_id}, {"$set": product})
+                else:
+                    raise HTTPException(
+                    status_code = status.HTTP_403_FORBIDDEN,
+                    detail = "Product ran out of stock",
+                    )
+            elif purchase.item_type == "Inventory":
+                item = inventory_db.find_one({"item_id": purchase.item_id})
+                left_item = item["quantity"] - purchase.quantity
+                if left_item >= 0:
+                    item['quantity'] = left_item
+                    if item['quantity'] > 0 and item['quantity'] >= item['critical_level']:
+                        new_status = 'In Stock'
+                    elif item['quantity'] > 0 and item['quantity'] < item['critical_level']:
+                        new_status = 'Low Stock'
+                    else:
+                        new_status = 'Out of Stock'
+                    
+                    item['status'] = new_status
+                    inventory_db.update_one({"item_id": purchase.item_id}, {"$set": item})
+                else:
+                    raise HTTPException(
+                    status_code = status.HTTP_403_FORBIDDEN,
+                    detail = "Inventory item ran out of stock",
+                    )
+                
         procurement_db.update_one({"purchase_id": procurement_id}, {"$set": dict(purchase)})
         return procurement_dict_serial(procurement_db.find_one({"purchase_id": procurement_id}))
     else:
@@ -120,9 +167,24 @@ def update_procurement(purchase: NewProcurement, procurement_id: str, token: str
     
 # ----------------------------------------- Product Update ----------------------------------------------
 @put_router.put("/update_product/{productID}")
-def update_product(product: NewProduct, productID: str, token: str = Depends(oauth_scheme)):
+def update_product(product: EditProduct, productID: str, token: str = Depends(oauth_scheme)):
     old_product = product_db.find_one({"product_id": productID})
+
     if old_product:
+        if product.quantity > 0 and product.quantity >= product.critical_level:
+            new_status = 'In Stock'
+        elif product.quantity > 0 and product.quantity < product.critical_level:
+            new_status = 'Low Stock'
+        else:
+            new_status = 'Out of Stock'
+
+        if product.quantity < 0:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Quantity cannot be negative",
+                headers={"WWW-Authenticate": "Bearer"},
+            )
+        
         updated_product = ProductItem(
             product_id = old_product["product_id"],
             product_name = product.product_name,
@@ -131,7 +193,8 @@ def update_product(product: NewProduct, productID: str, token: str = Depends(oau
             markup = product.markup,
             margin = product.margin,
             quantity = product.quantity,
-            status = old_product["status"],
+            critical_level = product.critical_level,
+            status = new_status,
         )
         product_db.update_one({"product_id": productID}, {"$set": dict(updated_product)})
         return product_dict_serial(product_db.find_one({"product_id": productID}))
@@ -143,22 +206,24 @@ def update_product(product: NewProduct, productID: str, token: str = Depends(oau
         )
     
 # ----------------------------------------- Inventory Update ----------------------------------------------
-    # ! critical level update
 @put_router.put("/update_inventory/{item_id}")
 def update_inventory(item: EditInventoryItem, item_id: str, token: str = Depends(oauth_scheme)):
     old_item = inventory_db.find_one({"item_id": item_id})
+
     if old_item:
+        if item.quantity > 0 and item.quantity >= item.critical_level:
+            new_status = 'In Stock'
+        elif item.quantity > 0 and item.quantity < item.critical_level:
+            new_status = 'Low Stock'
+        else:
+            new_status = 'Out of Stock'
+
         if item.quantity < 0:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail="Quantity cannot be negative",
                 headers={"WWW-Authenticate": "Bearer"},
             )
-        
-        if item.quantity > 0:
-            new_status = "In Stock"
-        elif item.quantity == 0:
-            new_status = "Out of Stock";
 
         updated_item = InventoryItem(
             item_id = item_id,
@@ -167,6 +232,7 @@ def update_inventory(item: EditInventoryItem, item_id: str, token: str = Depends
             quantity = item.quantity,
             unit_price = item.unit_price,
             total_price = item.unit_price * item.quantity,
+            critical_level = item.critical_level,
             status = new_status,
         )
 
@@ -185,7 +251,13 @@ def stock_in_inventory(item: StockInOutInventoryItem, token: str = Depends(oauth
     if old_item:
         new_quantity = old_item["quantity"] + item.quantity
         
-        # ! critical lvl
+        if new_quantity > 0 and new_quantity >= old_item["critical_level"]:
+            new_status = 'In Stock'
+        elif new_quantity > 0 and new_quantity < old_item["critical_level"]:
+            new_status = 'Low Stock'
+        else:
+            new_status = 'Out of Stock'
+
         new_status = old_item['status']
         updated_item = InventoryItem(
             item_id = old_item["item_id"],
@@ -218,11 +290,12 @@ def stock_out_inventory(item: StockInOutInventoryItem, token: str = Depends(oaut
                 headers={"WWW-Authenticate": "Bearer"},
             )
 
-        # ! critical lvl
-        if new_quantity > 0:
-            new_status = "In Stock"
-        elif new_quantity == 0:
-            new_status = "Out of Stock";  
+        if new_quantity > 0 and new_quantity >= old_item["critical_level"]:
+            new_status = 'In Stock'
+        elif new_quantity > 0 and new_quantity < old_item["critical_level"]:
+            new_status = 'Low Stock'
+        else:
+            new_status = 'Out of Stock'
         
         updated_item = InventoryItem(
             item_id = old_item["item_id"],
