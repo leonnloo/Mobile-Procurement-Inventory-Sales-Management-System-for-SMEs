@@ -193,9 +193,7 @@ class SalesOrderScreen extends StatelessWidget {
         List<dynamic> jsonData = jsonDecode(order.body);
         
         // Map each dynamic object to SalesOrder
-        print('object');
         List<SalesOrder> orderData = jsonData.map((data) => SalesOrder.fromJson(data)).toList();
-        print('objectasdasd');
         return orderData;
       } else {
         throw Exception('Unable to fetch order data.');

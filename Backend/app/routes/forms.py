@@ -103,9 +103,10 @@ def supplier_form(supplier: NewSupplier):
 @form_router.post("/sales_order_form")
 def sales_order_form(order: NewSaleOrder, token: str = Depends(oauth_scheme)):
     product = product_db.find_one({"product_id": order.product_id})
-    if (product["quantity"] > 0):
+    left_product = product["quantity"] - order.quantity
+    if (left_product >= 0):
         latest_id_document = sales_order_db.find_one(sort=[("order_id", -1)])
-
+        
         if latest_id_document:
             query_id = latest_id_document.get("order_id", "-1")
             next_order_id = processNextID(query_id)
@@ -127,6 +128,8 @@ def sales_order_form(order: NewSaleOrder, token: str = Depends(oauth_scheme)):
             employee_id = order.employee_id
         )
         sales_order_db.insert_one(dict(updated_order))
+        product['quantity'] = left_product
+        product_db.update_one({"product_id": order.product_id}, {"$set": product})
         return {"Message": "Sales order successfully registered"}
     else:
         raise HTTPException(
@@ -137,16 +140,18 @@ def sales_order_form(order: NewSaleOrder, token: str = Depends(oauth_scheme)):
 # ----------------------------------------- Procurement Form ----------------------------------------------
 @form_router.post("/procurement_form")
 def procurement_form(procurement: NewProcurement, token: str = Depends(oauth_scheme)):
-    latest_id_document = procurement_db.find_one(sort=[("purchase_no", -1)])
+    latest_id_document = procurement_db.find_one(sort=[("purchase_id", -1)])
 
     if latest_id_document:
-        query_id = latest_id_document.get("purchase_no", "-1")
-        next_purchase_no = processNextID(query_id)
+        query_id = latest_id_document.get("purchase_id", "-1")
+        next_purchase_id = processNextID(query_id)
     else:
-        next_purchase_no = "PR1"
+        next_purchase_id = "PR1"
 
     updated_procurement = Procurement(
-        purchase_no = next_purchase_no,
+        purchase_id = next_purchase_id,
+        item_type = procurement.item_type,
+        item_id = procurement.item_id,
         item_name = procurement.item_name,
         supplier_name = procurement.supplier_name,
         order_date = procurement.order_date,

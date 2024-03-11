@@ -140,7 +140,15 @@ class OrderInformation extends StatelessWidget {
       children: [
         ListTile(
           leading: const Icon(Icons.receipt),
-          title: Text('Order Number: ${order.purchaseNo}'),
+          title: Text('Order ID: ${order.purchaseID}'),
+        ),
+        ListTile(
+          leading: const Icon(Icons.category),
+          title: Text('Type: ${order.itemType}'),
+        ),
+        ListTile(
+          leading: const Icon(Icons.info),
+          title: Text('Item ID: ${order.itemID}'),
         ),
         ListTile(
           leading: const Icon(Icons.shopping_cart),

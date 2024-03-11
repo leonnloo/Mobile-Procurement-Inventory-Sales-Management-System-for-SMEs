@@ -91,7 +91,9 @@ def product_name_serial(products) -> list:
 # ---------------------------------------- Procurement ----------------------------------------
 def procurement_dict_serial(purchase) -> dict:
     return {
-        "purchase_no": purchase["purchase_no"],
+        "purchase_id": purchase["purchase_id"],
+        "item_type": purchase["item_type"],
+        "item_id": purchase["item_id"],
         "item_name": purchase["item_name"],
         "supplier_name": purchase["supplier_name"],
         "order_date": purchase["order_date"],
