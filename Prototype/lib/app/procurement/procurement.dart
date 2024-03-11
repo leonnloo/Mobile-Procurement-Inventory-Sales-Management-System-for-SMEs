@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_navigation/get_navigation.dart';
 import 'package:prototype/app/procurement/add_procurement.dart';
-import 'package:prototype/models/procurementdata.dart';
+import 'package:prototype/app/procurement/monthly_purchases_statistic.dart';
 import 'package:prototype/app/procurement/procurement_info.dart';
+import 'package:prototype/app/procurement/weekly_purchases_statistic.dart';
+import 'package:prototype/models/procurementdata.dart';
+import 'package:prototype/app/procurement/procurement_filter_system.dart';
+import 'package:prototype/widgets/home/home_search.dart';
 
 class ProcurementScreen extends StatefulWidget {
   const ProcurementScreen({super.key});
@@ -13,38 +20,82 @@ class ProcurementScreen extends StatefulWidget {
 class ProcurementScreenState extends State<ProcurementScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: const DefaultTabController(
+    return MaterialApp(
+      home: DefaultTabController(
         length: 2,
-        child: Column(
-          children: [
-            TabBar(
-              tabs: [
-                Tab(text: 'Past'),
-                Tab(text: 'Present'),
-              ],
-            ),
-            Expanded(
-              child: TabBarView(
-                children: [
-                  ProcurementTab(category: 'Past'),
-                  ProcurementTab(category: 'Present'),
+        child: Scaffold(
+          body: ListView(
+            children:  <Widget>[
+              //filter system
+               SizedBox(
+                width: double.infinity,
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Card(
+                    child: GestureDetector(
+                      onTap: () {
+                        Get.to(() => const FilterSystem());
+                      },
+                      child: const TextField(
+                        decoration: InputDecoration(
+                        enabled: false,
+                        prefixIcon: Icon(Icons.search),
+                        labelText: 'Search',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(12.0)),
+                        ),
+                      ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            
+              const Card(
+                elevation: 4.0,
+                margin: EdgeInsets.all(16.0),
+                child: Padding(
+                  padding: EdgeInsets.all(16.0),
+                  child: WeeklyPurchasesBarChart(),
+                ),
+              ),
+              const Card(
+                elevation: 4.0,
+                margin: EdgeInsets.all(16.0),
+                child: Padding(
+                  padding: EdgeInsets.all(16.0),
+                  child: MonthlyPurchaseChart(),
+                ),
+              ),
+              const TabBar(
+                tabs: [
+                  Tab(text: 'Past'),
+                  Tab(text: 'Present'),
                 ],
               ),
-            ),
-          ],
+              const SizedBox(
+                height: 400,
+                child: TabBarView(
+                  children: [
+                    ProcurementTab(category: 'Past'),
+                    ProcurementTab(category: 'Present'),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          floatingActionButton: FloatingActionButton(
+            onPressed: () {
+              // Navigate to a screen for adding new customer info
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => const AddProcurementScreen(),
+                ),
+              );
+            },
+            child: const Icon(Icons.add),
+          ),
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // Navigate to a screen for adding new customer info
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => const AddProcurementScreen(),
-            ),
-          );
-        },
-        child: const Icon(Icons.add),
       ),
     );
   }
@@ -62,9 +113,8 @@ class ProcurementTab extends StatelessWidget {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: SingleChildScrollView(
-      scrollDirection: Axis.vertical,
-      child: 
-        DataTable(
+        scrollDirection: Axis.vertical,
+        child: DataTable(
           columnSpacing: 16.0, // Adjust the spacing between columns
           horizontalMargin: 16.0, // Adjust the horizontal margin
           columns: const [
@@ -153,17 +203,9 @@ class ProcurementTab extends StatelessWidget {
   }
 }
 
-
-
-  
 void navigateToOrderDetail(BuildContext context, PurchasingOrder order) {
   Navigator.push(
     context,
     MaterialPageRoute(builder: (context) => OrderDetailScreen(order: order)),
   );
 }
-
-
-
-
-

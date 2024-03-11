@@ -17,10 +17,12 @@ class OrderDetailScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text('Supplier Information', style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold)),
+            const Text('Supplier Information',
+                style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold)),
             const SupplierInformation(), // Display supplier's information
             const SizedBox(height: 16.0),
-            const Text('Order Information', style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold)),
+            const Text('Order Information',
+                style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold)),
             OrderInformation(order: order), // Display order information
           ],
         ),
@@ -74,19 +76,23 @@ class OrderInformation extends StatelessWidget {
         ),
         ListTile(
           leading: const Icon(Icons.calendar_today),
-          title: Text('Order Date: ${order.orderDate}'), // Corrected to orderDate
+          title:
+              Text('Order Date: ${order.orderDate}'), // Corrected to orderDate
         ),
         ListTile(
           leading: const Icon(Icons.attach_money),
-          title: Text('Total Amount: \$${order.totalPrice.toString()}'), // Corrected to totalPrice
+          title: Text(
+              'Total Amount: \$${order.totalPrice.toString()}'), // Corrected to totalPrice
         ),
         ListTile(
           leading: const Icon(Icons.delivery_dining),
-          title: Text('Delivery Status: ${order.productID}'), // You might want to replace productID with the actual delivery status field
+          title: Text(
+              'Delivery Status: ${order.productID}'), // You might want to replace productID with the actual delivery status field
         ),
         ListTile(
           leading: const Icon(Icons.shopping_bag),
-          title: Text('Supplier Name: ${order.totalPrice}'), // You might want to replace totalPrice with the actual supplier name field
+          title: Text(
+              'Supplier Name: ${order.totalPrice}'), // You might want to replace totalPrice with the actual supplier name field
         ),
       ],
     );
