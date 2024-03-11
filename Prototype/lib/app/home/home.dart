@@ -46,7 +46,7 @@ class HomeScreenState extends State<HomeScreen> {
         container = const HomeWidgets();
         currentTitle = "Dashboard";
       } else if (controller.currentPage.value == DrawerSections.salesOrder) {
-        container = const SalesOrderScreen();
+        container = SalesOrderScreen();
         currentTitle = "Sales Order (Design how you see fit)";
       } else if (controller.currentPage.value == DrawerSections.salesManagement) {
         container = const SalesManagementScreen();

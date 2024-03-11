@@ -67,12 +67,26 @@ def update_supplier(supplier: NewSupplier, supplierID: str, token: str = Depends
 
 
 # ----------------------------------------- Sales Order Update ----------------------------------------------
-@put_router.put("/update_sale_order/{order_no}")
-def update_sale_order(order: SaleOrder, token: str = Depends(oauth_scheme)):
-    old_order = sales_order_db.find_one({"order_no": order.order_no})
+@put_router.put("/update_sale_order/{order_id}")
+def update_sale_order(order: NewSaleOrder, order_id, token: str = Depends(oauth_scheme)):
+    old_order = sales_order_db.find_one({"order_id": order_id})
     if old_order:
-        sales_order_db.update_one({"order_no": order.order_no}, {"$set": dict(order)})
-        return sale_order_dict_serial(sales_order_db.find_one({"order_no": order.order_no}))
+        updated_order = SaleOrder(
+            order_id = order_id,
+            order_date = order.order_date,
+            customer_id = order.customer_id,
+            customer_name = order.customer_name,
+            product_id = order.product_id,
+            product_name = order.product_name,
+            quantity = order.quantity,
+            unit_price = order.unit_price,
+            total_price = order.total_price,
+            status = order.status,
+            employee = order.employee,
+            employee_id = order.employee_id
+        )
+        sales_order_db.update_one({"order_id": order_id}, {"$set": dict(updated_order)})
+        return sale_order_dict_serial(sales_order_db.find_one({"order_id": order_id}))
     else:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,

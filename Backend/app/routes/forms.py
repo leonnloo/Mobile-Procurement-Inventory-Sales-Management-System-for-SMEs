@@ -30,7 +30,7 @@ def processNextID(query: str) -> str:
 
 # ----------------------------------------- Customer Form ----------------------------------------------
 @form_router.post("/customer_form")
-def create_customer(customer: NewCustomer):
+def customer_form(customer: NewCustomer):
     existing_customer = customers_db.find_one({"business_name": customer.business_name})
     if existing_customer:
         raise HTTPException(
@@ -66,7 +66,7 @@ def create_customer(customer: NewCustomer):
 
 # ----------------------------------------- Supplier Form ----------------------------------------------
 @form_router.post("/supplier_form")
-def register(supplier: NewSupplier):
+def supplier_form(supplier: NewSupplier):
     existing_supplier = suppliers_db.find_one({"business_name": supplier.business_name})
     if existing_supplier:
         raise HTTPException(
@@ -101,32 +101,42 @@ def register(supplier: NewSupplier):
 # ! Update monthly sales when inputting a new order
 # ----------------------------------------- Sales Form ----------------------------------------- 
 @form_router.post("/sales_order_form")
-def register(order: SaleOrder):
-    latest_id_document = sales_order_db.find_one(sort=[("order_no", -1)])
+def sales_order_form(order: NewSaleOrder, token: str = Depends(oauth_scheme)):
+    product = product_db.find_one({"product_id": order.product_id})
+    if (product["quantity"] > 0):
+        latest_id_document = sales_order_db.find_one(sort=[("order_id", -1)])
 
-    if latest_id_document:
-        query_id = latest_id_document.get("order_no", "-1")
-        next_order_no = processNextID(query_id)
+        if latest_id_document:
+            query_id = latest_id_document.get("order_id", "-1")
+            next_order_id = processNextID(query_id)
+        else:
+            next_order_id = "SO1"
+
+        updated_order = SaleOrder(
+            order_id = next_order_id,
+            order_date = order.order_date,
+            customer_id = order.customer_id,
+            customer_name = order.customer_name,
+            product_id = order.product_id,
+            product_name = order.product_name,
+            quantity = order.quantity,
+            unit_price = order.unit_price,
+            total_price = order.total_price,
+            status = order.status,
+            employee = order.employee,
+            employee_id = order.employee_id
+        )
+        sales_order_db.insert_one(dict(updated_order))
+        return {"Message": "Sales order successfully registered"}
     else:
-        next_order_no = "SO1"
-
-    updated_order = SaleOrder(
-        order_no = next_order_no,
-        date = order.date,
-        customer_id = order.customer_id,
-        product_id = order.product_id,
-        product_name = order.product_name,
-        quantity = order.quantity,
-        total_price = order.total_price,
-        status = order.status,
-    )
-
-    sales_order_db.insert_one(dict(updated_order))
-    return {"Message": "Sales order successfully registered"}
+        raise HTTPException(
+        status_code = status.HTTP_403_FORBIDDEN,
+        detail = "Product not available",
+        )
 
 # ----------------------------------------- Procurement Form ----------------------------------------------
 @form_router.post("/procurement_form")
-def register(procurement: NewProcurement, token: str = Depends(oauth_scheme)):
+def procurement_form(procurement: NewProcurement, token: str = Depends(oauth_scheme)):
     latest_id_document = procurement_db.find_one(sort=[("purchase_no", -1)])
 
     if latest_id_document:
@@ -152,7 +162,7 @@ def register(procurement: NewProcurement, token: str = Depends(oauth_scheme)):
 
 # ----------------------------------------- Product Form ----------------------------------------------
 @form_router.post("/product_form")
-def register(product: NewProduct, token: str = Depends(oauth_scheme)):
+def product_form(product: NewProduct, token: str = Depends(oauth_scheme)):
     if product_db.find_one({"product_name": product.product_name}):
         raise HTTPException(
             status_code = status.HTTP_403_FORBIDDEN,
@@ -184,7 +194,7 @@ def register(product: NewProduct, token: str = Depends(oauth_scheme)):
 # ! item
 # ----------------------------------------- Inventory Form ----------------------------------------------
 @form_router.post("/inventory_form")
-def register(inventory: NewInventoryItem, token: str = Depends(oauth_scheme)):
+def inventory_form(inventory: NewInventoryItem, token: str = Depends(oauth_scheme)):
     if inventory_db.find_one({"item_name": inventory.item_name}):
         raise HTTPException(
             status_code = status.HTTP_403_FORBIDDEN,

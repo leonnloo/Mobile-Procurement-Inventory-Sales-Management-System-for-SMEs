@@ -1,5 +1,7 @@
 import "package:flutter/material.dart";
+import 'package:prototype/models/edit_type.dart';
 import 'package:prototype/models/order_model.dart';
+import 'package:prototype/widgets/appbar/info_appbar.dart';
 
 void navigateToOrderDetail(BuildContext context, SalesOrder item) {
   Navigator.of(context).push(
@@ -17,21 +19,24 @@ class ItemDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Item Detail'),
-      ),
+      appBar: InfoAppBar(currentTitle: 'Order Details', currentData: item, editType: EditType.salesOrder),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildDetailRow('Item ID', item.orderNo.toString()),
-            _buildDetailRow('Item Name', item.date),
-            _buildDetailRow('Category', item.customerID.toString()),
-            _buildDetailRow('Unit Price', item.productID.toString()),
+            _buildDetailRow('Order ID', item.orderID.toString()),
+            _buildDetailRow('Customer', item.customerName),
+            _buildDetailRow('Customer ID', item.customerID.toString()),
+            _buildDetailRow('Product', item.productName),
+            _buildDetailRow('Product ID', item.productID.toString()),
+            _buildDetailRow('Order Date', item.orderDate),
             _buildDetailRow('Quantity', item.quantity.toString()),
-            _buildDetailRow('Total Price', '\$${item.totalPrice.toString()}'),
+            _buildDetailRow('Unit Price', '\$${item.unitPrice.toStringAsFixed(2)}'),
+            _buildDetailRow('Total Price', '\$${item.totalPrice.toStringAsFixed(2)}'),
             _buildDetailRow('Status', item.status),
+            _buildDetailRow('Employee', item.employee),
+            _buildDetailRow('Employee ID', item.employeeID),
           ],
         ),
       ),

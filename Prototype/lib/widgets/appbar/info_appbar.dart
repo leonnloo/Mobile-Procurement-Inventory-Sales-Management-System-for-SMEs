@@ -4,6 +4,7 @@ import 'package:prototype/app/customer/edit_customer.dart';
 import 'package:prototype/app/inventory/edit_inventory.dart';
 import 'package:prototype/app/procurement/edit_procurement.dart';
 import 'package:prototype/app/product/edit_product.dart';
+import 'package:prototype/app/sale_orders/edit_order.dart';
 import 'package:prototype/app/supplier/edit_supplier.dart';
 import 'package:prototype/models/edit_type.dart';
 
@@ -36,6 +37,8 @@ class InfoAppBar extends StatelessWidget implements PreferredSizeWidget {
                     Get.to(() => EditProduct(productData: currentData));
                   } else if (editType == EditType.inventory) {
                     Get.to(() => EditInventory(inventoryData: currentData));
+                  } else if (editType == EditType.salesOrder) {
+                    Get.to(() => EditOrder(orderData: currentData));
                   }
                 },
                 icon: const Icon(

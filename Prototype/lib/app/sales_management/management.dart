@@ -24,7 +24,7 @@ class SalesManagementScreen extends StatelessWidget {
             ElevatedButton(
               onPressed: () {
                 // Navigate to the first page
-                Navigator.push(context, MaterialPageRoute(builder: (context) => const SalesOrderScreen()));
+                Navigator.push(context, MaterialPageRoute(builder: (context) => SalesOrderScreen()));
               },
               style: ElevatedButton.styleFrom(
                 shape: RoundedRectangleBorder(

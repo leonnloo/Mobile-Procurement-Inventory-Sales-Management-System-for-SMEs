@@ -56,6 +56,14 @@ def customer_dict_serial(customer) -> dict:
 def customer_serial(customers) -> list:
     return [customer_dict_serial(customer) for customer in customers]
 
+def customer_dict_name(customer) -> str:
+    if isinstance(customer, dict):
+        return customer.get("business_name", "")
+    return str(customer)
+
+def customer_name_serial(customers) -> list:
+    return [customer_dict_name(customer) for customer in customers]
+
 # ---------------------------------------- Product ----------------------------------------
 def product_dict_serial(product) -> dict:
     return {
@@ -124,14 +132,18 @@ def inventory_name_serial(items) -> list:
 # ---------------------------------------- Sales Order ----------------------------------------
 def sale_order_dict_serial(sale_order) -> dict:
     return {
-        "order_no": sale_order["order_no"],
-        "date": sale_order["date"],
+        "order_id": sale_order["order_id"],
+        "order_date": sale_order["order_date"],
         "customer_id": sale_order["customer_id"],
+        "customer_name": sale_order["customer_name"],
         "product_id": sale_order["product_id"],
         "product_name": sale_order["product_name"],
         "quantity": sale_order["quantity"],
+        "unit_price": sale_order["unit_price"],
         "total_price": sale_order["total_price"],
-        "status": sale_order["status"]
+        "status": sale_order["status"],
+        "employee": sale_order["employee"],
+        "employee_id": sale_order["employee_id"]
     }
 
 def sale_order_serial(sale_orders) -> list:
