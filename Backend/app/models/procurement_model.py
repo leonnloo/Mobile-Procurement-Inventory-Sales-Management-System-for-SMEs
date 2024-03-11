@@ -1,8 +1,10 @@
 from pydantic import BaseModel
 
 class Procurement(BaseModel):
-    purchase_no: str | None
+    purchase_id: str | None
+    item_type: str
     item_name: str
+    item_id: str
     supplier_name: str
     order_date: str
     delivery_date: str
@@ -12,7 +14,9 @@ class Procurement(BaseModel):
     status: str
 
 class NewProcurement(BaseModel):
+    item_type: str
     item_name: str
+    item_id: str
     supplier_name: str
     order_date: str
     delivery_date: str

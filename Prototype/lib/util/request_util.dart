@@ -50,6 +50,13 @@ class RequestUtil {
       headers: {"Authorization": "Bearer $token"}
     );
   }
+  
+  Future<http.Response> getUsersName() async {
+    return http.get(
+      Uri.parse("${endpoint}get_users_name"),
+      headers: {"Authorization": "Bearer $token"}
+    );
+  }
 
   Future<http.Response> getUserID(String userName) async {
     return http.get(
@@ -238,12 +245,14 @@ class RequestUtil {
   }
 
   // ----------------------------------------- PROCUREMENT ----------------------------------------------
-  Future<http.Response> newProcurement(dynamic itemName, dynamic supplierName, dynamic orderDate, dynamic deliveryDate, dynamic unitPrice, dynamic totalPrice, dynamic quantity, dynamic status) async { return
+  Future<http.Response> newProcurement(dynamic itemName, dynamic itemType, dynamic itemID, dynamic supplierName, dynamic orderDate, dynamic deliveryDate, dynamic unitPrice, dynamic totalPrice, dynamic quantity, dynamic status) async { return
   http.post(
     Uri.parse("${endpoint}procurement_form"),
     headers: {"Authorization": "Bearer $token", 'Content-Type': 'application/json'},
     body: jsonEncode({
         'item_name': itemName,
+        'item_type': itemType,
+        'item_id': itemID,
         'supplier_name': supplierName,
         'order_date': orderDate,
         'delivery_date': deliveryDate,
@@ -254,12 +263,14 @@ class RequestUtil {
       })
   ); }
 
-  Future<http.Response> updateProcurement(String id, dynamic itemName, dynamic supplierName, dynamic orderDate, dynamic deliveryDate, dynamic unitPrice, dynamic totalPrice, dynamic quantity, dynamic status) async {
+  Future<http.Response> updateProcurement(String id, dynamic itemName, dynamic itemType, dynamic itemID, dynamic supplierName, dynamic orderDate, dynamic deliveryDate, dynamic unitPrice, dynamic totalPrice, dynamic quantity, dynamic status) async {
     return http.put(
       Uri.parse("${endpoint}update_procurement/$id"),
       headers: {"Authorization": "Bearer $token", 'Content-Type': 'application/json'},
       body: jsonEncode({
         'item_name': itemName,
+        'item_type': itemType,
+        'item_id': itemID,
         'supplier_name': supplierName,
         'order_date': orderDate,
         'delivery_date': deliveryDate,
@@ -277,15 +288,9 @@ class RequestUtil {
       headers: {"Authorization": "Bearer $token"}
     );
   }
-  Future<http.Response> getCompletedProcurement(String category){
+  Future<http.Response> getProcurementCategory(String category){
     return http.get(
-      Uri.parse("${endpoint}get_past_procurement/$category"),
-      headers: {"Authorization": "Bearer $token"}
-    );
-  }
-  Future<http.Response> getDeliveringProcurement(String category){
-    return http.get(
-      Uri.parse("${endpoint}get_present_procurement/$category"),
+      Uri.parse("${endpoint}get_procurement_category/$category"),
       headers: {"Authorization": "Bearer $token"}
     );
   }
@@ -344,12 +349,13 @@ class RequestUtil {
       })
   ); }
   
-  Future<http.Response> updateProduct(String productID, dynamic productName, dynamic unitPrice, dynamic sellingPrice, dynamic margin, dynamic markup) async { return
+  Future<http.Response> updateProduct(String productID, dynamic productName, dynamic quantity, dynamic unitPrice, dynamic sellingPrice, dynamic margin, dynamic markup) async { return
   http.put(
     Uri.parse("${endpoint}update_product/$productID"),
     headers: {"Authorization": "Bearer $token", 'Content-Type': 'application/json'},
     body: jsonEncode({
         'product_name': productName,
+        'quantity': quantity,
         'unit_price': unitPrice,
         'selling_price':  sellingPrice,
         'markup': markup,
@@ -368,6 +374,13 @@ class RequestUtil {
   Future<http.Response> getInventoryType(String category) async {
     return http.get(
       Uri.parse("${endpoint}get_inventory_category/$category"),
+      headers: {"Authorization": "Bearer $token"}
+    );
+  }
+
+  Future<http.Response> getInventoryID(String itemName) async {
+    return http.get(
+      Uri.parse("${endpoint}get_inventory_item_id/$itemName"),
       headers: {"Authorization": "Bearer $token"}
     );
   }

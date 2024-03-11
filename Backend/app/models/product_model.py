@@ -12,6 +12,7 @@ class ProductItem(BaseModel):
 
 class NewProduct(BaseModel):
     product_name: str
+    quantity: int
     unit_price: float
     selling_price: float
     markup: str

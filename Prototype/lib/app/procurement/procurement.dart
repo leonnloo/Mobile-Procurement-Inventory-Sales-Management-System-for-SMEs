@@ -112,7 +112,7 @@ class ProcurementTab extends StatelessWidget {
                     columnSpacing: 16.0, // Adjust the spacing between columns
                     horizontalMargin: 16.0, // Adjust the horizontal margin
                     columns: const [
-                      DataColumn(label: Text('Order No'),),
+                      DataColumn(label: Text('Order ID'),),
                       DataColumn(label: Text('Item'),),
                       DataColumn(label: Text('Supplier'),),
                       DataColumn(label: Text('Order Date'),),
@@ -126,7 +126,7 @@ class ProcurementTab extends StatelessWidget {
                       return DataRow(
                         cells: [
                           DataCell(
-                            Text(order.purchaseNo!),
+                            Text(order.purchaseID),
                             onTap: () {
                               navigateToOrderDetail(context, order);
                             },
@@ -207,33 +207,22 @@ class ProcurementTab extends StatelessWidget {
   }
   Future<List<PurchasingOrder>> _fetchProcurementData(String category) async {
     try {
-      if (category == 'Past'){
-        final procurement = await requestUtil.getCompletedProcurement('Completed');
-        if (procurement.statusCode == 200) {
-          // Assuming the JSON response is a list of objects
-          List<dynamic> jsonData = jsonDecode(procurement.body);
-          
-          // Map each dynamic object to PurchasingOrder
-          List<PurchasingOrder> procurementData = jsonData.map((data) => PurchasingOrder.fromJson(data)).toList();
-          return procurementData;
-        } else {
-          throw Exception('Unable to fetch procurement data.');
-        }
+      String newCategory;
+      if (category == 'Past') {
+        newCategory = 'Completed';
+      } else {
+        newCategory = 'Delivering';
       }
-      else if (category == 'Present'){
-        final procurement = await requestUtil.getDeliveringProcurement('Delivering');
-        if (procurement.statusCode == 200) {
-          // Assuming the JSON response is a list of objects
-          List<dynamic> jsonData = jsonDecode(procurement.body);
-          
-          // Map each dynamic object to PurchasingOrder
-          List<PurchasingOrder> procurementData = jsonData.map((data) => PurchasingOrder.fromJson(data)).toList();
-          return procurementData;
-        } else {
-          throw Exception('Unable to fetch procurement data.');
-        }
-      }
-      else {
+      
+      final procurement = await requestUtil.getProcurementCategory(newCategory);
+      if (procurement.statusCode == 200) {
+        // Assuming the JSON response is a list of objects
+        List<dynamic> jsonData = jsonDecode(procurement.body);
+        
+        // Map each dynamic object to PurchasingOrder
+        List<PurchasingOrder> procurementData = jsonData.map((data) => PurchasingOrder.fromJson(data)).toList();
+        return procurementData;
+      } else {
         throw Exception('Unable to fetch procurement data.');
       }
     } catch (error) {

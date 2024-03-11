@@ -70,37 +70,47 @@ def update_supplier(supplier: NewSupplier, supplierID: str, token: str = Depends
 @put_router.put("/update_sale_order/{order_id}")
 def update_sale_order(order: NewSaleOrder, order_id, token: str = Depends(oauth_scheme)):
     old_order = sales_order_db.find_one({"order_id": order_id})
-    if old_order:
-        updated_order = SaleOrder(
-            order_id = order_id,
-            order_date = order.order_date,
-            customer_id = order.customer_id,
-            customer_name = order.customer_name,
-            product_id = order.product_id,
-            product_name = order.product_name,
-            quantity = order.quantity,
-            unit_price = order.unit_price,
-            total_price = order.total_price,
-            status = order.status,
-            employee = order.employee,
-            employee_id = order.employee_id
-        )
-        sales_order_db.update_one({"order_id": order_id}, {"$set": dict(updated_order)})
-        return sale_order_dict_serial(sales_order_db.find_one({"order_id": order_id}))
+    product = product_db.find_one({"product_id": order.product_id})
+    left_product = product["quantity"] - (order.quantity - old_order["quantity"])
+    if (left_product >= 0):
+    
+        if old_order:
+            updated_order = SaleOrder(
+                order_id = order_id,
+                order_date = order.order_date,
+                customer_id = order.customer_id,
+                customer_name = order.customer_name,
+                product_id = order.product_id,
+                product_name = order.product_name,
+                quantity = order.quantity,
+                unit_price = order.unit_price,
+                total_price = order.total_price,
+                status = order.status,
+                employee = order.employee,
+                employee_id = order.employee_id
+            )
+            sales_order_db.update_one({"order_id": order_id}, {"$set": dict(updated_order)})
+            product['quantity'] = left_product
+            product_db.update_one({"product_id": order.product_id}, {"$set": product})
+            return sale_order_dict_serial(sales_order_db.find_one({"order_id": order_id}))
+        else:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Sale order not found",
+                headers={"WWW-Authenticate": "Bearer"},
+            )
     else:
         raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Sale order not found",
-            headers={"WWW-Authenticate": "Bearer"},
+        status_code = status.HTTP_403_FORBIDDEN,
+        detail = "Product not available",
         )
-    
 # ----------------------------------------- Procurement Update ----------------------------------------------
-@put_router.put("/update_procurement/{procurement_no}")
-def update_procurement(purchase: NewProcurement, procurement_no: str, token: str = Depends(oauth_scheme)):
-    old_purchase = procurement_db.find_one({"purchase_no": procurement_no})
+@put_router.put("/update_procurement/{procurement_id}")
+def update_procurement(purchase: NewProcurement, procurement_id: str, token: str = Depends(oauth_scheme)):
+    old_purchase = procurement_db.find_one({"purchase_id": procurement_id})
     if old_purchase:
-        procurement_db.update_one({"purchase_no": procurement_no}, {"$set": dict(purchase)})
-        return procurement_dict_serial(procurement_db.find_one({"purchase_no": procurement_no}))
+        procurement_db.update_one({"purchase_id": procurement_id}, {"$set": dict(purchase)})
+        return procurement_dict_serial(procurement_db.find_one({"purchase_id": procurement_id}))
     else:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -120,7 +130,7 @@ def update_product(product: NewProduct, productID: str, token: str = Depends(oau
             selling_price = product.selling_price,
             markup = product.markup,
             margin = product.margin,
-            quantity = old_product["quantity"],
+            quantity = product.quantity,
             status = old_product["status"],
         )
         product_db.update_one({"product_id": productID}, {"$set": dict(updated_product)})

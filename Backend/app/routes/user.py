@@ -34,10 +34,16 @@ def get_users():
     users = user_serial(users_db.find())
     return users
 
+@user_router.get("/get_users_name")
+def get_users_name(token: str = Depends(oauth_scheme)):
+    users = users_db.find()
+    user_names = [user['employee_name'] for user in users]
+    return user_names
+
 @user_router.get("/get_user_id/{userName}")
 def get_user_id(userName: str):
-    users = users_db.find_one({"$or": [{"employee_name": userName}, {"email": userName}]}, {"employee_id": 1})
-    return users['employee_id']
+    user = users_db.find_one({"$or": [{"employee_name": userName}, {"email": userName}]}, {"employee_id": 1})
+    return user['employee_id']
 
 @user_router.post("/create_user")
 def create_user(user: NewUser):

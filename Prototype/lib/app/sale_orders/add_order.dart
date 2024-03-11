@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:prototype/app/procurement/get_procurement.dart';
 import 'package:prototype/app/sale_orders/get_order.dart';
@@ -177,8 +179,8 @@ class AddOrderScreenState extends State<AddOrderScreen> {
                         } else {
                           // Display an error message to the user
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Order added failed'),
+                            SnackBar(
+                              content: Text('Order added failed: ${jsonDecode(response.body)['detail']}'),
                               backgroundColor: Colors.red,
                             ),
                           );

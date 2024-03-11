@@ -17,6 +17,8 @@ class AddProcurementScreen extends StatefulWidget {
 class AddProcurementScreenState extends State<AddProcurementScreen> {
   final _formKey = GlobalKey<FormState>();
   final RequestUtil requestUtil = RequestUtil();
+  late TextEditingController _itemTypeController;
+  late TextEditingController _itemIDController;
   late TextEditingController _itemNameController;
   late TextEditingController _supplierNameController;
   late TextEditingController _orderDateController;
@@ -31,6 +33,8 @@ class AddProcurementScreenState extends State<AddProcurementScreen> {
   void initState() {
     super.initState();
     _itemNameController = TextEditingController();
+    _itemIDController = TextEditingController();
+    _itemTypeController = TextEditingController();
     _supplierNameController = TextEditingController();
     _orderDateController = TextEditingController();
     _deliveryDateController = TextEditingController();
@@ -43,6 +47,8 @@ class AddProcurementScreenState extends State<AddProcurementScreen> {
   @override
   void dispose() {
     _itemNameController.dispose();
+    _itemIDController.dispose();
+    _itemTypeController.dispose();
     _supplierNameController.dispose();
     _orderDateController.dispose();
     _deliveryDateController.dispose();
@@ -69,8 +75,9 @@ class AddProcurementScreenState extends State<AddProcurementScreen> {
                   labelText: 'Type', 
                   options: getProcurementTypeList(), 
                   onChanged: (value){
+                    _itemTypeController.text = value!;
                     setState(() {
-                      type = value!;
+                      type = value;
                   });},
                   defaultSelected: true,
                 ),
@@ -80,6 +87,7 @@ class AddProcurementScreenState extends State<AddProcurementScreen> {
                   options: getItemList(type), 
                   onChanged: (value){
                       _itemNameController.text = value!;
+                      updateItemID(value, type,_itemIDController);
                       changeUnitPrice(type, _itemNameController.text, _unitPriceController, _quantityController, _totalPriceController);
                     },
                   defaultSelected: false,
@@ -140,6 +148,8 @@ class AddProcurementScreenState extends State<AddProcurementScreen> {
                     ),
                     onPressed: () async {
                       String? itemName = validateTextField(_itemNameController.text);
+                      String? itemID = validateTextField(_itemIDController.text);
+                      String? itemType = validateTextField(_itemTypeController.text);
                       String? supplierName = validateTextField(_supplierNameController.text);
                       String? orderDate= validateTextField(_orderDateController.text);
                       String? deliveryDate = validateTextField(_deliveryDateController.text);
@@ -148,6 +158,8 @@ class AddProcurementScreenState extends State<AddProcurementScreen> {
                       String? quantity = validateTextField(_quantityController.text);
                       String? status = validateTextField(_statusController.text);
                       if (itemName == null
+                        || itemID == null
+                        || itemType == null
                         || supplierName == null
                         || orderDate == null
                         || deliveryDate == null
@@ -165,7 +177,7 @@ class AddProcurementScreenState extends State<AddProcurementScreen> {
                         );
                       } else {                
                         final response = await requestUtil.newProcurement(
-                          itemName, supplierName, orderDate, deliveryDate, unitPrice, totalPrice, quantity, status
+                          itemName, itemType, itemID, supplierName, orderDate, deliveryDate, unitPrice, totalPrice, quantity, status
                         );
                         
                         if (response.statusCode == 200) {
