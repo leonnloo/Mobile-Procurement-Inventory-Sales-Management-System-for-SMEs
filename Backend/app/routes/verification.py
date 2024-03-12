@@ -59,7 +59,7 @@ def send_verification_email(background_tasks: BackgroundTasks, email: str):
 
         # Send verification code via email asynchronously
 
-        send_verification_email_background(background_tasks, 'Hello World',   
+        send_verification_email_background(background_tasks, 'Verification Code',   
         email, code)
         return 'Success'
     except Exception as e:
