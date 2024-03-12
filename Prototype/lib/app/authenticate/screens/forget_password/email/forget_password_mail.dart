@@ -1,12 +1,17 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:prototype/app/authenticate/screens/forget_password/email/otp.dart';
+import 'package:prototype/util/request_util.dart';
 import 'package:prototype/util/validate_text.dart';
+import 'package:prototype/widgets/forms/text_field.dart';
 
 class ForgetPasswordMailScreen extends StatelessWidget {
   ForgetPasswordMailScreen({super.key});
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _forgetEmailController = TextEditingController();
+  final RequestUtil requestUtil = RequestUtil();
 
   @override
   Widget build(BuildContext context) {
@@ -33,15 +38,7 @@ class ForgetPasswordMailScreen extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 30.0),
-                TextField(
-                  controller: _forgetEmailController,
-                  decoration: const InputDecoration(
-                    prefixIcon: Icon(Icons.email_outlined),
-                    labelText: 'Email',
-                    hintText: 'Email',
-                    border: OutlineInputBorder(),
-                  ),
-                ),
+                BuildTextField(controller: _forgetEmailController, labelText: 'Email'),
                 const SizedBox(height: 30.0),
                 SizedBox(
                   width: double.infinity,
@@ -53,10 +50,30 @@ class ForgetPasswordMailScreen extends StatelessWidget {
                       shape: const RoundedRectangleBorder(),
                       padding: const EdgeInsets.symmetric(vertical: 15.0)
                     ),
-                    onPressed: () {
+                    onPressed: () async {
                       String? email = validateTextField(_forgetEmailController.text);
                       if (email != null){
-                        Get.to(() => const OTPScreen());
+                        final verifyResponse = await requestUtil.verifyEmail(_forgetEmailController.text);
+                        if (verifyResponse.statusCode == 200) {
+                          final response = await requestUtil.sendVerificationEmail(email);
+                          if (response.statusCode == 200){
+                            Get.to(() => OTPScreen(email: email,));
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('Error sending verification email.'),
+                                backgroundColor: Colors.red,
+                              )
+                            );
+                          }
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Email not registered.'),
+                              backgroundColor: Colors.red,
+                            )
+                          );
+                        }
                       }
                       else {
                         ScaffoldMessenger.of(context).showSnackBar(

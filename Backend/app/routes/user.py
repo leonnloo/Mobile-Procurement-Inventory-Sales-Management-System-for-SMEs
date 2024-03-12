@@ -2,7 +2,6 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from models.users_model import *
 from config.database import users_db
 from schema.schemas import user_dict_serial, user_serial
-from bson import ObjectId
 from fastapi.security import OAuth2PasswordBearer
 
 user_router = APIRouter()
@@ -112,6 +111,22 @@ def update_user(id: str, user: EditUser, token: str = Depends(oauth_scheme)):
             headers={"WWW-Authenticate": "Bearer"},
         )
 
+@user_router.put("/update_user_password/{email}/{password}")
+def update_user_password(email: str, password: str):
+    users_db.find_one_and_update({"email": email}, {"$set": {"password": password}}) 
+
+
 @user_router.delete("/delete_user/{id}")
 def delete_user(id: str, token: str = Depends(oauth_scheme)):
     users_db.find_one_and_delete({"employee_id": id}) 
+
+@user_router.get("/verify_email/{email}")
+def verify_email(email: str):
+    user = users_db.find_one({"email": email}) 
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="User not found",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+
