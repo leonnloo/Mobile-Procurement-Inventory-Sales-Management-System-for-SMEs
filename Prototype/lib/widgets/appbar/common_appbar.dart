@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
-  CommonAppBar({super.key, required this.currentTitle});
+  const CommonAppBar({super.key, required this.currentTitle});
 
   final String currentTitle;
   @override

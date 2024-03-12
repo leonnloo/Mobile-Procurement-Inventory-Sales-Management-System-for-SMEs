@@ -19,3 +19,10 @@ class NewUser(BaseModel):
     email: str
     phone_number: str
     password: str
+
+class EditUser(BaseModel):
+    employee_name: str
+    email: str
+    phone_number: str
+    password: str
+    role: str
