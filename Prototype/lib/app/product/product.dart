@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:prototype/app/product/add_product.dart';
+import 'package:prototype/app/product/speed_dial_product.dart';
 import 'package:prototype/models/product_model.dart';
 import 'package:prototype/app/product/product_info.dart';
 import 'package:prototype/util/request_util.dart';
@@ -134,17 +135,7 @@ class ProductManagementScreen extends StatelessWidget {
           }
         }
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // Navigate to a screen for adding new customer info
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => const AddProductScreen(),
-            ),
-          );
-        },
-        child: const Icon(Icons.add),
-      ),
+      floatingActionButton: productSpeedDial(context)
     );
   }
 

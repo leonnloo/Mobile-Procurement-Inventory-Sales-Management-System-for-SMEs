@@ -7,11 +7,13 @@ import 'package:prototype/app/customer/add_customer.dart';
 import 'package:prototype/app/customer/customer.dart';
 import 'package:prototype/app/inventory/add_inventory.dart';
 import 'package:prototype/app/inventory/inventory.dart';
+import 'package:prototype/app/inventory/stock_inout_inv.dart';
 import 'package:prototype/app/notification_screen.dart';
 import 'package:prototype/app/procurement/add_procurement.dart';
 import 'package:prototype/app/procurement/procurement.dart';
 import 'package:prototype/app/product/add_product.dart';
 import 'package:prototype/app/product/product.dart';
+import 'package:prototype/app/product/stock_inout_prod.dart';
 import 'package:prototype/app/sale_orders/add_order.dart';
 import 'package:prototype/app/sales_management/management.dart';
 import 'package:prototype/app/sale_orders/order.dart';
@@ -201,9 +203,9 @@ class HomeScreenState extends State<HomeScreen> {
             backgroundColor: Colors.black,
             foregroundColor: Colors.white,
             shape: const CircleBorder(),
-            label: 'Add Product',
+            label: 'Stock In/Out Product',
             onTap: () {
-              Get.to(() => const AddProductScreen());
+              Get.to(() => const StockInOutProduct());
             }
           ),
           SpeedDialChild(
@@ -211,9 +213,9 @@ class HomeScreenState extends State<HomeScreen> {
             backgroundColor: Colors.black,
             foregroundColor: Colors.white,
             shape: const CircleBorder(),
-            label: 'Add Inventory',
+            label: 'Stock In/Out Inventory',
             onTap: () {
-              Get.to(() => const AddInventoryScreen());
+              Get.to(() => const StockInOutInventory());
             }
           ),
         ],

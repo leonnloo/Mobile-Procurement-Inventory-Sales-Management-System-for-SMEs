@@ -395,6 +395,28 @@ class RequestUtil {
     );
   }
 
+    Future<http.Response> stockInProduct(String itemName, dynamic quantity) async {
+    return http.put(
+      Uri.parse("${endpoint}stock_in_product"),
+      headers: {"Authorization": "Bearer $token", 'Content-Type': 'application/json'},
+      body: jsonEncode({
+        'product_name': itemName,
+        'quantity': quantity,
+      })
+    );
+  }
+  
+  Future<http.Response> stockOutProduct(String itemName, dynamic quantity) async {
+    return http.put(
+      Uri.parse("${endpoint}stock_out_product"),
+      headers: {"Authorization": "Bearer $token", 'Content-Type': 'application/json'},
+      body: jsonEncode({
+        'product_name': itemName,
+        'quantity': quantity,
+      })
+    );
+  }
+
   // ----------------------------------------- INVENTORY ----------------------------------------------
   Future<http.Response> getInventoryType(String category) async {
     return http.get(

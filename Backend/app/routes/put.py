@@ -205,6 +205,58 @@ def update_product(product: EditProduct, productID: str, token: str = Depends(oa
             headers={"WWW-Authenticate": "Bearer"},
         )
     
+@put_router.put("/stock_in_product")
+def stock_in_product(item: StockInOutProduct, token: str = Depends(oauth_scheme)):
+    old_item = product_db.find_one({"product_name": item.product_name})
+    if old_item:
+        new_quantity = old_item["quantity"] + item.quantity
+        
+        if new_quantity > 0 and new_quantity >= old_item["critical_level"]:
+            old_item['status'] = 'In Stock'
+        elif new_quantity > 0 and new_quantity < old_item["critical_level"]:
+            old_item['status'] = 'Low Stock'
+        else:
+            old_item['status'] = 'Out of Stock'
+        old_item['quantity'] = new_quantity
+
+        product_db.update_one({"product_name": item.product_name}, {"$set": old_item})
+        return product_dict_serial(product_db.find_one({"product_name": item.product_name}))
+    else:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Product not found",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+
+@put_router.put("/stock_out_product")
+def stock_out_product(item: StockInOutProduct, token: str = Depends(oauth_scheme)):
+    old_item = product_db.find_one({"product_name": item.product_name})
+    if old_item:
+        new_quantity = old_item["quantity"] - item.quantity
+        if new_quantity < 0:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Quantity cannot be negative",
+                headers={"WWW-Authenticate": "Bearer"},
+            )
+
+        if new_quantity > 0 and new_quantity >= old_item["critical_level"]:
+            old_item['status'] = 'In Stock'
+        elif new_quantity > 0 and new_quantity < old_item["critical_level"]:
+            old_item['status'] = 'Low Stock'
+        else:
+            old_item['status'] = 'Out of Stock'
+        old_item['quantity'] = new_quantity
+
+        product_db.update_one({"product_name": item.product_name}, {"$set": old_item})
+        return product_dict_serial(product_db.find_one({"product_name": item.product_name}))
+    else:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Product not found",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    
 # ----------------------------------------- Inventory Update ----------------------------------------------
 @put_router.put("/update_inventory/{item_id}")
 def update_inventory(item: EditInventoryItem, item_id: str, token: str = Depends(oauth_scheme)):
@@ -258,7 +310,6 @@ def stock_in_inventory(item: StockInOutInventoryItem, token: str = Depends(oauth
         else:
             new_status = 'Out of Stock'
 
-        new_status = old_item['status']
         updated_item = InventoryItem(
             item_id = old_item["item_id"],
             item_name = item.item_name,

@@ -27,3 +27,7 @@ class EditProduct(BaseModel):
     markup: str
     margin: str
     critical_level: int
+
+class StockInOutProduct(BaseModel):
+    product_name: str
+    quantity: int
