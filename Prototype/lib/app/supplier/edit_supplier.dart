@@ -32,6 +32,15 @@ class EditSupplierState extends State<EditSupplier> {
     _addressController.text = widget.supplierData.address;
   }
 
+  @override
+  void dispose() {
+    _businessNameController.dispose();
+    _contactPersonController.dispose();
+    _emailController.dispose();
+    _phoneNoController.dispose();
+    _addressController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {

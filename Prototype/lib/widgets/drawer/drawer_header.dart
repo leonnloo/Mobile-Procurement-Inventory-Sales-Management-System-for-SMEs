@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:prototype/app/user_profile.dart';
+import 'package:prototype/app/user_profile/user_profile.dart';
 import 'package:prototype/util/user_controller.dart';
 
 class HeaderDrawer extends StatefulWidget {
@@ -132,22 +132,7 @@ class HeaderDrawerState extends State<HeaderDrawer> {
       else {
         throw Exception('Unable to fetch user data.');
       }
-      // final tokenResponse = await requestUtil.getToken(userController.currentUser.value);
-
-      // if (tokenResponse == null || tokenResponse.body == null) {
-      //   throw Exception('Token response is null or missing body.');
-      // }
-
-      // final tokenData = jsonDecode(tokenResponse.body);
-      // if (tokenData == null || tokenData['access_token'] == null) {
-      //   throw Exception('Access token is null or missing.');
-      // }
-
-      // final user = requestUtil.getUser(tokenData['access_token']);
-
-      // return {'token': tokenData['access_token'], 'user': user};
     } catch (error) {
-      // print('Error in _fetchUserData: $error');
       rethrow; // Rethrow the error to be caught by FutureBuilder
     }
   }

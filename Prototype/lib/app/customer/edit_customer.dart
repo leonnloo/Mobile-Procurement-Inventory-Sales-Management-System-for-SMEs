@@ -34,7 +34,17 @@ class EditCustomerState extends State<EditCustomer> {
     _shippingAddressController.text = widget.customerData.shippingAddress;
   }
 
-
+  @override
+  void dispose() {
+    _businessNameController.dispose();
+    _contactPersonController.dispose();
+    _emailController.dispose();
+    _phoneNoController.dispose();
+    _billingAddressController.dispose();
+    _shippingAddressController.dispose();
+    super.dispose();
+  }
+  
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;

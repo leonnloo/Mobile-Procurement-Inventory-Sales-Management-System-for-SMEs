@@ -113,12 +113,12 @@ class LoginContent extends StatelessWidget {
             width: double.infinity,
             child: ElevatedButton(
               style: TextButton.styleFrom(
-                            foregroundColor: Colors.white,
-                            backgroundColor: Colors.black,
-                            side: const BorderSide(color: Colors.black),
-                            shape: const RoundedRectangleBorder(),
-                            padding: const EdgeInsets.symmetric(vertical: 15.0)
-                          ),
+                foregroundColor: Colors.white,
+                backgroundColor: Colors.black,
+                side: const BorderSide(color: Colors.black),
+                shape: const RoundedRectangleBorder(),
+                padding: const EdgeInsets.symmetric(vertical: 15.0)
+              ),
               onPressed: () async {
                 // Add your authentication logic here
                 String? emailError = validateTextField(_emailController.text);
@@ -132,10 +132,6 @@ class LoginContent extends StatelessWidget {
                         backgroundColor: Colors.red,
                       ),
                     );
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(builder: (context) => const HomeScreen()),
-                      );
                   } else {
                     // String email = _emailController.text;
                     // String password = _passwordController.text;

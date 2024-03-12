@@ -83,13 +83,13 @@ class RequestUtil {
     return http.put(
       Uri.parse("${endpoint}update_user/$id"),
       headers: {'Content-Type': 'application/json', "Authorization": "Bearer $token"},
-      body: {
+      body: jsonEncode({
         'employee_name': username,
         'password': password,
         'email': email,
         'phone_number': phoneNumber,
         'role': role,
-      },
+      }),
     );
   }
 

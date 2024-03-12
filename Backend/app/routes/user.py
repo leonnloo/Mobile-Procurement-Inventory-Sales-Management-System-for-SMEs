@@ -82,7 +82,7 @@ def create_user(user: NewUser):
         email = user.email,
         phone_number = user.phone_number,
         password = user.password,
-        role = None,
+        role = 'No Role',
         sales_record = None,
     )
 
@@ -91,10 +91,10 @@ def create_user(user: NewUser):
 
 # ! add logic so that only admin can change employee's role
 @user_router.put("/update_user/{id}")
-def update_user(id: str, user: User):
+def update_user(id: str, user: EditUser, token: str = Depends(oauth_scheme)):
     old_user = users_db.find_one({"employee_id": id})
     if old_user:
-        updated_supplier = User(
+        updated_user = User(
             employee_id = old_user["employee_id"],
             employee_name = user.employee_name,
             email = user.email,
@@ -103,8 +103,8 @@ def update_user(id: str, user: User):
             role = user.role,
             sales_record = old_user["sales_record"],
         )
-        users_db.update_one({"employee_id": user.employee_id}, {"$set": dict(updated_supplier)})
-        return user_dict_serial(users_db.find_one({"employee_id": user.employee_id}))
+        users_db.update_one({"employee_id": id}, {"$set": dict(updated_user)})
+        return user_dict_serial(users_db.find_one({"employee_id": id}))
     else:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -113,5 +113,5 @@ def update_user(id: str, user: User):
         )
 
 @user_router.delete("/delete_user/{id}")
-async def delete_user(id: str):
-    await users_db.find_one_and_delete({"_id": ObjectId(id)}) 
+def delete_user(id: str, token: str = Depends(oauth_scheme)):
+    users_db.find_one_and_delete({"employee_id": id}) 

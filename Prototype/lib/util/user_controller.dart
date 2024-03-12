@@ -5,7 +5,6 @@ class UserLoggedInController extends GetxController {
   
   RxString currentUser = ''.obs;
   RxString currentUserID = ''.obs;
-
   void updateUser(String username) async {
     currentUser.value = username;
   }
