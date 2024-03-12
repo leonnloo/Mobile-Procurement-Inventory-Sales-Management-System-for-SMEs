@@ -8,22 +8,23 @@ import 'package:prototype/util/validate_text.dart';
 import 'package:prototype/widgets/fade_in_animation/animation_design.dart';
 import 'package:prototype/widgets/fade_in_animation/fade_in_animation_model.dart';
 import 'package:prototype/widgets/fade_in_animation/fade_in_controller.dart';
+import 'package:prototype/widgets/forms/password_field.dart';
 
-class RegisterContent extends StatelessWidget {
+class RegisterContent extends StatefulWidget {
+
+  const RegisterContent({super.key});
+
+  @override
+  State<RegisterContent> createState() => _RegisterContentState();
+}
+
+class _RegisterContentState extends State<RegisterContent> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController = TextEditingController();
   final TextEditingController _phoneNumberController = TextEditingController();
-
-  // final String _selectedCountryCode = '+1'; // Default country code
-
-  // // TO DO: add in a table in mongodb for a list of country codes
-  // final List<String> _countryCodes = [
-  //   '+1', '+44', '+91', // Add more country codes as needed
-  // ];
-
-  RegisterContent({super.key});
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -74,14 +75,16 @@ class RegisterContent extends StatelessWidget {
       ),
     );
   }
+
   Form _registerForm(context) {
     final RequestUtil requestUtil = RequestUtil();
     final controller = Get.put(FadeInController());
     return Form(
+      key: _formKey,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          TextField(
+          TextFormField(
             controller: _usernameController,
             decoration: const InputDecoration(
               prefixIcon: Icon(Icons.person_outline_outlined),
@@ -89,9 +92,15 @@ class RegisterContent extends StatelessWidget {
               hintText: 'Full Name',
               border: OutlineInputBorder()
             ),
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Please enter username';
+              }
+              return null;
+            },
           ),
           const SizedBox(height: 16.0),
-          TextField(
+          TextFormField(
             controller: _emailController,
             decoration: const InputDecoration(
               prefixIcon: Icon(Icons.email_outlined),
@@ -99,9 +108,15 @@ class RegisterContent extends StatelessWidget {
               hintText: 'Email',
               border: OutlineInputBorder()
             ),
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Please enter email';
+              }
+              return null;
+            },
           ),
           const SizedBox(height: 16.0),
-          TextField(
+          TextFormField(
             controller: _phoneNumberController,
             keyboardType: TextInputType.phone,
             decoration: const InputDecoration(
@@ -127,45 +142,30 @@ class RegisterContent extends StatelessWidget {
               hintText: 'Phone Number',
               border: OutlineInputBorder(),
             ),
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Please enter phone number';
+              }
+              return null;
+            },
           ),
           const SizedBox(height: 16.0),
-          TextField(
-            controller: _passwordController,
-            obscureText: true,
-            decoration: const InputDecoration(
-              prefixIcon: Icon(Icons.vpn_key_outlined),
-              labelText: 'Password',
-              hintText: 'Password',
-              border: OutlineInputBorder(),
-              suffixIcon: Icon(Icons.remove_red_eye_rounded)
-            ),
-          ),
+          PasswordTextField(controller: _passwordController, labelText: 'Password'),
           const SizedBox(height: 16.0),
-          TextField(
-            controller: _confirmPasswordController,
-            obscureText: true,
-            decoration: const InputDecoration(
-              prefixIcon: Icon(Icons.vpn_key_outlined),
-              labelText: 'Confirm Password',
-              hintText: 'Confirm Password',
-              border: OutlineInputBorder(),
-              suffixIcon: Icon(Icons.remove_red_eye_rounded)
-            ),
-          ),
+          PasswordTextField(controller: _confirmPasswordController, labelText: 'Confirm Password'),
           const SizedBox(height: 16.0),
           /*------ BUTTON ------*/
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
               style: TextButton.styleFrom(
-                            foregroundColor: Colors.white,
-                            backgroundColor: Colors.black,
-                            side: const BorderSide(color: Colors.black),
-                            shape: const RoundedRectangleBorder(),
-                            padding: const EdgeInsets.symmetric(vertical: 15.0)
-                          ),
+                foregroundColor: Colors.white,
+                backgroundColor: Colors.black,
+                side: const BorderSide(color: Colors.black),
+                shape: const RoundedRectangleBorder(),
+                padding: const EdgeInsets.symmetric(vertical: 15.0)
+              ),
               onPressed: () async {
-                // Add your authentication logic here
                 String? usernameError = validateTextField(_usernameController.text);
                 String? emailError = validateTextField(_emailController.text);
                 String? phoneNumberError = validateTextField(_phoneNumberController.text);
@@ -177,7 +177,7 @@ class RegisterContent extends StatelessWidget {
                     phoneNumberError == null ||
                     passwordError == null ||
                     confirmPasswordError == null) {
-                  // Display validation error messages
+                  _formKey.currentState?.validate();
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
                       content: Text('Please fill in all the required fields.'),
@@ -249,6 +249,5 @@ class RegisterContent extends StatelessWidget {
       )
     );
   }
-
 }
 
