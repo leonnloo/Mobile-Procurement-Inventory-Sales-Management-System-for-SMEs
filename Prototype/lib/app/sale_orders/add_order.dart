@@ -61,7 +61,7 @@ class AddOrderScreenState extends State<AddOrderScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CommonAppBar(currentTitle: 'Add Order'),
+      appBar: const CommonAppBar(currentTitle: 'Add Order'),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),

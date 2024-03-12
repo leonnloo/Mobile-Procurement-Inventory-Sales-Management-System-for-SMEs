@@ -11,6 +11,7 @@ import 'package:prototype/util/validate_text.dart';
 import 'package:prototype/widgets/fade_in_animation/animation_design.dart';
 import 'package:prototype/widgets/fade_in_animation/fade_in_animation_model.dart';
 import 'package:prototype/widgets/fade_in_animation/fade_in_controller.dart';
+import 'package:prototype/widgets/forms/password_field.dart';
 
 final RequestUtil requestUtil = RequestUtil();
 class LoginContent extends StatelessWidget {
@@ -87,17 +88,7 @@ class LoginContent extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 16.0),
-          TextField(
-            controller: _passwordController,
-            obscureText: true,
-            decoration: const InputDecoration(
-              prefixIcon: Icon(Icons.vpn_key_outlined),
-              labelText: 'Password',
-              hintText: 'Password',
-              border: OutlineInputBorder(),
-              suffixIcon: Icon(Icons.remove_red_eye_rounded)
-            ),
-          ),
+          PasswordTextField(controller: _passwordController, labelText: 'Password'),
           const SizedBox(height: 6.0),
           Align(
             alignment: Alignment.centerRight,
