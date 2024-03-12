@@ -9,7 +9,6 @@ import 'package:prototype/util/request_util.dart';
 class InventoryScreen extends StatelessWidget {
   InventoryScreen({super.key});
   final RequestUtil requestUtil = RequestUtil();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,42 +38,42 @@ class InventoryScreen extends StatelessWidget {
           future: _fetchInventoryData(sectionTitle),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-            return const SizedBox(
-              width: double.infinity,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  SizedBox(height: 26.0),
-                  CircularProgressIndicator(
-                    backgroundColor: Colors.white,
-                    color: Colors.red,
-                  ),
-                  SizedBox(height: 16.0),
-                  Text(
-                    'Loading...',
-                    style: TextStyle(fontSize: 16.0, color: Colors.white),
-                  ),
-                ],
-              ),
-            );
-          } else if (snapshot.hasError) {
-            return Container(
-              width: double.infinity,
-              padding: const EdgeInsets.only(top: 20.0),
-              child: const Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    "Unable to load item data",
-                    style: TextStyle(color: Colors.white, fontSize: 20),
-                  ),
-                ],
-              ),
-            );
-          } else if (snapshot.hasData) {
-            List<InventoryItem> items = snapshot.data as List<InventoryItem>;
-              if (items.length != 0) {
+              return const SizedBox(
+                width: double.infinity,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    SizedBox(height: 26.0),
+                    CircularProgressIndicator(
+                      backgroundColor: Colors.white,
+                      color: Colors.red,
+                    ),
+                    SizedBox(height: 16.0),
+                    Text(
+                      'Loading...',
+                      style: TextStyle(fontSize: 16.0, color: Colors.white),
+                    ),
+                  ],
+                ),
+              );
+            } else if (snapshot.hasError) {
+              return Container(
+                width: double.infinity,
+                padding: const EdgeInsets.only(top: 20.0),
+                child: const Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Unable to load item data",
+                      style: TextStyle(color: Colors.white, fontSize: 20),
+                    ),
+                  ],
+                ),
+              );
+            } else if (snapshot.hasData) {
+              List<InventoryItem> items = snapshot.data as List<InventoryItem>;
+              if (items.isNotEmpty) {
                 return Column(
                   children: [
                     Padding(
@@ -161,23 +160,23 @@ class InventoryScreen extends StatelessWidget {
               else {
                 return Container();
               }
-          }
-          else {
-            return Container(
-              width: double.infinity,
-              height: double.infinity,
-              padding: const EdgeInsets.only(top: 20.0),
-              child: const Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    "Unable to load inventory data",
-                    style: TextStyle(color: Colors.white, fontSize: 20),
-                  ),
-                ],
-              ),
-            );
-          }
+            }
+            else {
+              return Container(
+                width: double.infinity,
+                height: double.infinity,
+                padding: const EdgeInsets.only(top: 20.0),
+                child: const Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Unable to load inventory data",
+                      style: TextStyle(color: Colors.white, fontSize: 20),
+                    ),
+                  ],
+                ),
+              );
+            }
           }
         ),
       ],
