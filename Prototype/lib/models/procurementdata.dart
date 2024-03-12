@@ -361,3 +361,15 @@ List<PurchasingOrder> presentOrders = [
   ),
 ];
 
+
+double calculateTotalPriceByMonth(List<PurchasingOrder> orders,String month) {
+    double totalByMonth = 0;
+    for (PurchasingOrder order in orders) {
+        DateTime orderDate = DateTime.parse(order.orderDate);
+        String monthKey = '${orderDate.year}-${orderDate.month}';
+        if (month==(monthKey)) {
+            totalByMonth += order.totalPrice;
+        } 
+    }
+    return totalByMonth;
+}

@@ -5,7 +5,7 @@ import 'package:get/get_navigation/get_navigation.dart';
 import 'package:prototype/app/procurement/add_procurement.dart';
 import 'package:prototype/app/procurement/monthly_purchases_statistic.dart';
 import 'package:prototype/app/procurement/procurement_info.dart';
-import 'package:prototype/app/procurement/weekly_purchases_statistic.dart';
+import 'package:prototype/app/procurement/monthly_purchases_statistic.dart';
 import 'package:prototype/models/procurementdata.dart';
 import 'package:prototype/app/procurement/procurement_filter_system.dart';
 import 'package:prototype/widgets/home/home_search.dart';
@@ -56,17 +56,17 @@ class ProcurementScreenState extends State<ProcurementScreen> {
                 margin: EdgeInsets.all(16.0),
                 child: Padding(
                   padding: EdgeInsets.all(16.0),
-                  child: WeeklyPurchasesBarChart(),
+                  child: MonthlyPurchaseStatic(),
                 ),
               ),
-              const Card(
+              /*const Card(
                 elevation: 4.0,
                 margin: EdgeInsets.all(16.0),
                 child: Padding(
                   padding: EdgeInsets.all(16.0),
                   child: MonthlyPurchaseChart(),
                 ),
-              ),
+              ),*/
               const TabBar(
                 tabs: [
                   Tab(text: 'Past'),
