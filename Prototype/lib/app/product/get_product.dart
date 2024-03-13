@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:prototype/models/procurement_model.dart';
 import 'package:prototype/util/request_util.dart';
 final RequestUtil requestUtil = RequestUtil();
 
@@ -30,4 +31,14 @@ void calculateSellingPrice(TextEditingController unitPriceController, TextEditin
   }
 }
 
-
+double calculateTotalPriceByMonth(List<PurchasingOrder> orders,String month) {
+    double totalByMonth = 0;
+    for (PurchasingOrder order in orders) {
+        DateTime orderDate = DateTime.parse(order.orderDate);
+        String monthKey = '${orderDate.year}-${orderDate.month}';
+        if (month==(monthKey)) {
+            totalByMonth += order.totalPrice;
+        } 
+    }
+    return totalByMonth;
+}

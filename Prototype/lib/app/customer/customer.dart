@@ -56,7 +56,7 @@ class CustomerManagementScreen extends StatelessWidget {
             );
           } else if (snapshot.hasData) {
             // Assuming snapshot.data is a List<CustomerData>
-            List<PurchasingOrder> customerData = snapshot.data as List<PurchasingOrder>;
+            List<CustomerData> customerData = snapshot.data as List<CustomerData>;
       
             return SingleChildScrollView(
               scrollDirection: Axis.horizontal,
@@ -74,7 +74,7 @@ class CustomerManagementScreen extends StatelessWidget {
                     DataColumn(label: Text('Billing Address')),
                     DataColumn(label: Text('Shipping Address')),
                   ],
-                  rows: customerData.map((PurchasingOrder customer) {
+                  rows: customerData.map((CustomerData customer) {
                     return DataRow(
                       cells: [
                         DataCell(
@@ -144,7 +144,7 @@ class CustomerManagementScreen extends StatelessWidget {
     );
   }
 
-  Future<List<PurchasingOrder>> _fetchCustomerData() async {
+  Future<List<CustomerData>> _fetchCustomerData() async {
     try {
       final customer = await requestUtil.getCustomers();
       if (customer.statusCode == 200) {
@@ -152,7 +152,7 @@ class CustomerManagementScreen extends StatelessWidget {
         List<dynamic> jsonData = jsonDecode(customer.body);
         
         // Map each dynamic object to CustomerData
-        List<PurchasingOrder> customerData = jsonData.map((data) => PurchasingOrder.fromJson(data)).toList();
+        List<CustomerData> customerData = jsonData.map((data) => CustomerData.fromJson(data)).toList();
         return customerData;
       } else {
         throw Exception('Unable to fetch customer data.');

@@ -1,6 +1,6 @@
 import 'package:prototype/models/order_model.dart';
 
-class PurchasingOrder {
+class CustomerData {
   final String customerID;
   final String businessName;
   final String contactPerson;
@@ -11,7 +11,7 @@ class PurchasingOrder {
   final List<SalesOrder>? pastOrder;
   final String? notes;
 
-  PurchasingOrder({
+  CustomerData({
     required this.customerID,
     required this.businessName,
     required this.contactPerson,
@@ -23,8 +23,8 @@ class PurchasingOrder {
     this.notes
   });
 
-  factory PurchasingOrder.fromJson(Map<String, dynamic> json) {
-    return PurchasingOrder(
+  factory CustomerData.fromJson(Map<String, dynamic> json) {
+    return CustomerData(
       customerID: json['customer_id'],
       businessName: json['business_name'],
       contactPerson: json['contact_person'],
