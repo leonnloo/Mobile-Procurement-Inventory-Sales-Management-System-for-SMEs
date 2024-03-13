@@ -1,24 +1,24 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:prototype/app/authenticate/screens/forget_password/option/forget_password_option.dart';
 import 'package:prototype/app/authenticate/screens/register_content.dart';
 import 'package:prototype/app/home/home.dart';
+import 'package:prototype/util/request_util.dart';
+import 'package:prototype/util/user_controller.dart';
+import 'package:prototype/util/validate_text.dart';
 import 'package:prototype/widgets/fade_in_animation/animation_design.dart';
 import 'package:prototype/widgets/fade_in_animation/fade_in_animation_model.dart';
 import 'package:prototype/widgets/fade_in_animation/fade_in_controller.dart';
+import 'package:prototype/widgets/forms/password_field.dart';
 
+final RequestUtil requestUtil = RequestUtil();
 class LoginContent extends StatelessWidget {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
   LoginContent({super.key});
-
-  String? _validateTextField(String value, String fieldName) {
-    if (value.isEmpty) {
-      return '$fieldName is required';
-    }
-    return null;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -72,7 +72,8 @@ class LoginContent extends StatelessWidget {
   }
 
   Form _loginForm(context) {
-    final controller = Get.put(FadeInController());
+    final fadeInController = Get.put(FadeInController());
+    final userController = Get.put(UserLoggedInController());
     return Form(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -81,23 +82,13 @@ class LoginContent extends StatelessWidget {
             controller: _emailController,
             decoration: const InputDecoration(
               prefixIcon: Icon(Icons.person_outline_outlined),
-              labelText: 'Email',
-              hintText: 'Email',
+              labelText: 'Email / Username',
+              hintText: 'Email / Username',
               border: OutlineInputBorder()
             ),
           ),
           const SizedBox(height: 16.0),
-          TextField(
-            controller: _passwordController,
-            obscureText: true,
-            decoration: const InputDecoration(
-              prefixIcon: Icon(Icons.vpn_key_outlined),
-              labelText: 'Password',
-              hintText: 'Password',
-              border: OutlineInputBorder(),
-              suffixIcon: Icon(Icons.remove_red_eye_rounded)
-            ),
-          ),
+          PasswordTextField(controller: _passwordController, labelText: 'Password'),
           const SizedBox(height: 6.0),
           Align(
             alignment: Alignment.centerRight,
@@ -113,18 +104,18 @@ class LoginContent extends StatelessWidget {
             width: double.infinity,
             child: ElevatedButton(
               style: TextButton.styleFrom(
-                            foregroundColor: Colors.white,
-                            backgroundColor: Colors.black,
-                            side: const BorderSide(color: Colors.black),
-                            shape: const RoundedRectangleBorder(),
-                            padding: const EdgeInsets.symmetric(vertical: 15.0)
-                          ),
-              onPressed: () {
+                foregroundColor: Colors.white,
+                backgroundColor: Colors.black,
+                side: const BorderSide(color: Colors.black),
+                shape: const RoundedRectangleBorder(),
+                padding: const EdgeInsets.symmetric(vertical: 15.0)
+              ),
+              onPressed: () async {
                 // Add your authentication logic here
-                String? emailError = _validateTextField(_emailController.text, 'Email');
-                String? passwordError = _validateTextField(_passwordController.text, 'Password');
+                String? emailError = validateTextField(_emailController.text);
+                String? passwordError = validateTextField(_passwordController.text);
                 // Add logic for logging in
-                if (emailError != null || passwordError != null) {
+                if (emailError == null || passwordError == null) {
                     // Display validation error messages
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
@@ -132,32 +123,37 @@ class LoginContent extends StatelessWidget {
                         backgroundColor: Colors.red,
                       ),
                     );
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(builder: (context) => const HomeScreen()),
-                      );
                   } else {
-                    String email = _emailController.text;
-                    String password = _passwordController.text;
-
-                    // TO DO: compare email and password to the ones in the database
-                    print(email);
-                    print(password);
-                    // if (emailError == null || passwordError == null){
-                    //   ScaffoldMessenger.of(context).showSnackBar(
-                    //     const SnackBar(
-                    //       content: Text('Email or password is incorrect.'),
-                    //       backgroundColor: Colors.red,
-                    //     ),
-                    //   );
-                    // } else {
-                      // Add logic for login
-                      print('Login successful!');
+                    // String email = _emailController.text;
+                    // String password = _passwordController.text;
+                    final response = await requestUtil.login(
+                      _emailController.text,
+                      _passwordController.text,
+                    );
+                    if (response.statusCode == 200) {
+                      // Successful login
+                      // print("Login successful!");
+                      // print("Access Token: ${jsonDecode(response.body)['access_token']}");
+                      userController.updateUser(_emailController.text);
+                      final idresponse = await requestUtil.getUserID(_emailController.text);
+                      if (idresponse.statusCode == 200) {
+                        final dynamic userID = jsonDecode(idresponse.body);
+                        userController.updateUserID(userID);
+                      }
+                      // Navigate to the home screen or perform other actions
                       Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(builder: (context) => const HomeScreen()),
                       );
-                    // }
+                    } else {
+                      // Display an error message to the user
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Email or password is incorrect.'),
+                          backgroundColor: Colors.red,
+                        ),
+                      );
+                    }
                   }
               },
               child: const Text('LOGIN'),
@@ -168,7 +164,7 @@ class LoginContent extends StatelessWidget {
             alignment: Alignment.center,
             child: TextButton(
               onPressed: () {
-                controller.resetAnimation();
+                fadeInController.resetAnimation();
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(builder: (context) => RegisterContent()),
@@ -181,6 +177,4 @@ class LoginContent extends StatelessWidget {
       )
     );
   }
-
-  
 }

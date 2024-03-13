@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import 'package:prototype/widgets/drawer/drawer_sections.dart';
+import 'package:prototype/models/drawer_sections.dart';
 
 class CustomDrawerController extends GetxController {
   static CustomDrawerController get find => Get.find();

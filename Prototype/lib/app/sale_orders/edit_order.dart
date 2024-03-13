@@ -1,0 +1,282 @@
+import 'package:flutter/material.dart';
+import 'package:prototype/app/procurement/get_procurement.dart';
+import 'package:prototype/app/sale_orders/get_order.dart';
+import 'package:prototype/models/order_model.dart';
+import 'package:prototype/util/request_util.dart';
+import 'package:prototype/util/validate_text.dart';
+import 'package:prototype/widgets/forms/date_field.dart';
+import 'package:prototype/widgets/forms/dropdown_field.dart';
+import 'package:prototype/widgets/forms/number_field.dart';
+
+class EditOrder extends StatefulWidget {
+  final SalesOrder orderData;
+
+  const EditOrder({super.key, required this.orderData});
+
+  @override
+  EditOrderState createState() => EditOrderState();
+}
+
+class EditOrderState extends State<EditOrder> {
+  final TextEditingController _customerNameController = TextEditingController();
+  final TextEditingController _customerIDController = TextEditingController();
+  final TextEditingController _productNameController = TextEditingController();
+  final TextEditingController _productIDController = TextEditingController();
+  final TextEditingController _orderDateController = TextEditingController();
+  final TextEditingController _quantityController = TextEditingController();
+  final TextEditingController _totalPriceController = TextEditingController();
+  final TextEditingController _unitPriceController = TextEditingController();
+  final TextEditingController _statusController = TextEditingController();
+  final TextEditingController _employeeNameController = TextEditingController();
+  final TextEditingController _employeeIDController = TextEditingController();
+  final RequestUtil requestUtil = RequestUtil();
+
+  @override
+  void initState() {
+    super.initState();
+    _customerNameController.text = widget.orderData.customerName;
+    _customerIDController.text = widget.orderData.customerID;
+    _productNameController.text = widget.orderData.productName;
+    _productIDController.text = widget.orderData.productID;
+    _orderDateController.text = widget.orderData.orderDate;
+    _unitPriceController.text = widget.orderData.unitPrice.toStringAsFixed(2);
+    _totalPriceController.text = widget.orderData.totalPrice.toStringAsFixed(2);
+    _quantityController.text = widget.orderData.quantity.toString();
+    _statusController.text = widget.orderData.status;
+    _employeeNameController.text = widget.orderData.employee;
+    _employeeIDController.text = widget.orderData.employeeID;
+  }
+
+  @override
+  void dispose() {
+    _customerNameController.dispose();
+    _customerIDController.dispose();
+    _productNameController.dispose();
+    _productIDController.dispose();
+    _orderDateController.dispose();
+    _unitPriceController.dispose();
+    _totalPriceController.dispose();
+    _quantityController.dispose();
+    _statusController.dispose();
+    _employeeNameController.dispose();
+    _employeeIDController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        toolbarHeight: 60.0,
+        backgroundColor: Colors.red[400],
+        title: const Text('Edit Order'),
+        actions: [
+          IconButton(
+            onPressed: () => _showDeleteConfirmationDialog(context),
+            icon: const Icon(
+              Icons.delete,
+              size: 30.0,
+            ),
+          ),
+        ],
+      ),
+      body: SingleChildScrollView(
+        child: Container(
+          padding: const EdgeInsets.all(30.0),
+          child: SizedBox(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const SizedBox(height: 16.0),
+                DropdownTextField(
+                  labelText: 'Customer', 
+                  options: getCustomerList(), 
+                  onChanged: (value){
+                    _customerNameController.text = value!;
+                    updateCustomerID(value, _customerIDController);
+                  },
+                  defaultSelected: true,
+                  data: _customerNameController.text,
+                ),
+                const SizedBox(height: 16.0),
+                DropdownTextField(
+                  labelText: 'Product', 
+                  options: getProductList(), 
+                  onChanged: (value){
+                    _productNameController.text = value!;
+                    updateProductID(value, _productIDController);
+                    updateUnitPrice(value, _unitPriceController, _quantityController, _totalPriceController);
+                  },
+                  defaultSelected: true,
+                  data: _productNameController.text,
+                ),
+                const SizedBox(height: 16.0),
+                BuildDateField(controller: _orderDateController, labelText: 'Order Date'),
+                const SizedBox(height: 16.0),
+                IntegerTextField(
+                  controller: _quantityController, 
+                  labelText: 'Quantity', 
+                  onChanged: (value) {
+                    updateTotalPrice(_unitPriceController, _quantityController, _totalPriceController);
+                  },
+                  floatData: false,
+                ),
+                const SizedBox(height: 16.0),
+                IntegerTextField(
+                  controller: _unitPriceController, 
+                  labelText: 'Unit Price', 
+                  onChanged: (value) {
+                    updateTotalPrice(_unitPriceController, _quantityController, _totalPriceController);
+                  },
+                  floatData: true,
+                ),
+                const SizedBox(height: 16.0),
+                IntegerTextField(
+                  controller: _totalPriceController, 
+                  labelText: 'Total Price', 
+                  onChanged: (value) {},
+                  floatData: true,
+                ),
+                const SizedBox(height: 16.0),
+                DropdownTextField(
+                  labelText: 'Status', 
+                  options: getOrderStatusList(), 
+                  onChanged: (value){_statusController.text = value!;},
+                  defaultSelected: true,
+                  data: _statusController.text,
+                ),
+                const SizedBox(height: 16.0),
+                DropdownTextField(
+                  labelText: 'Employee', 
+                  options: getUsersNameList(), 
+                  onChanged: (value){
+                    _employeeNameController.text = value!;
+                    updateUserID(value, _employeeIDController);
+                  },
+                  defaultSelected: true,
+                  data: _employeeNameController.text,
+                ),
+                const SizedBox(height: 16.0),
+                SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      style: TextButton.styleFrom(
+                        foregroundColor: Colors.white,
+                        backgroundColor: Colors.black,
+                        side: const BorderSide(color: Colors.black),
+                        shape: const RoundedRectangleBorder(),
+                        padding: const EdgeInsets.symmetric(vertical: 15.0)
+                      ),
+                      onPressed: () async {
+                        String? customerName = validateTextField(_customerNameController.text);
+                        String? customerID = validateTextField(_customerIDController.text);
+                        String? productName = validateTextField(_productNameController.text);
+                        String? productID = validateTextField(_productIDController.text);
+                        String? orderDate= validateTextField(_orderDateController.text);
+                        String? quantity = validateTextField(_quantityController.text);
+                        String? unitPrice = validateTextField(_unitPriceController.text);
+                        String? totalPrice = validateTextField(_totalPriceController.text);
+                        String? status = validateTextField(_statusController.text);
+                        if (customerName == null
+                          || customerID == null
+                          || productName == null
+                          || productID == null
+                          || orderDate == null
+                          || quantity == null
+                          || unitPrice == null
+                          || totalPrice == null
+                          || status == null) {
+                          // Display validation error messages
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Please fill in all the required fields.'),
+                              backgroundColor: Colors.red,
+                            ),
+                          );
+                        } else {                
+                          final response = await requestUtil.newOrder(
+                            widget.orderData.orderID, customerID, productName, productID, orderDate, unitPrice, totalPrice, quantity, status
+                          );
+                          
+                          if (response.statusCode == 200) {
+                            Navigator.pop(context);
+                            Navigator.pop(context);
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('Order updated successfully.'),
+                                backgroundColor: Colors.green,
+                              ),
+                            );
+                          } else {
+                            // Display an error message to the user
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('Order could not be updated.'),
+                                backgroundColor: Colors.red,
+                              ),
+                            );
+                          }
+                        }
+                      },
+                      child: const Text('DONE')
+                    ),
+                  ),
+                const SizedBox(height: 30.0),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Future<void> _showDeleteConfirmationDialog(BuildContext context) async {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Confirm Deletion"),
+          content: const Text("Are you sure you want to delete?"),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child: const Text("Cancel"),
+            ),
+            TextButton(
+              onPressed: () async {
+                // Handle the deletion logic here
+                // You can call a function to perform the deletion or any other action
+                // For now, just close the dialog
+                final response = await requestUtil.deleteOrder(widget.orderData.orderID);
+                
+                if (response.statusCode == 200) {
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Order deleted successfully.'),
+                      backgroundColor: Colors.green,
+                    ),
+                  );
+                } else {
+                  // Display an error message to the user
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Delete order failed'),
+                      backgroundColor: Colors.red,
+                    ),
+                  );
+                }
+                Navigator.of(context).pop();
+              },
+              child: const Text("Delete"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+}

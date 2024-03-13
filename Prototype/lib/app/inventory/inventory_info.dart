@@ -1,5 +1,7 @@
 import "package:flutter/material.dart";
-import 'package:prototype/models/inventorydata.dart';
+import 'package:prototype/models/edit_type.dart';
+import 'package:prototype/models/inventory_model.dart';
+import 'package:prototype/widgets/appbar/info_appbar.dart';
 
 void navigateToItemDetail(BuildContext context, InventoryItem item) {
   Navigator.of(context).push(
@@ -17,9 +19,7 @@ class ItemDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Item Detail'),
-      ),
+      appBar: InfoAppBar(currentTitle: 'Item Details', currentData: item, editType: EditType.inventory),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -29,9 +29,10 @@ class ItemDetailScreen extends StatelessWidget {
             _buildDetailRow('Item Name', item.itemName),
             _buildDetailRow('Category', item.category),
             _buildDetailRow('Quantity', item.quantity.toString()),
-            _buildDetailRow('Unit Price', '\$${item.unitPrice.toString()}'),
-            _buildDetailRow('Total Price', '\$${item.totalPrice.toString()}'),
+            _buildDetailRow('Unit Price', '\$${item.unitPrice.toStringAsFixed(2).toString()}'),
+            _buildDetailRow('Total Price', '\$${item.totalPrice.toStringAsFixed(2).toString()}'),
             _buildDetailRow('Status', item.status),
+            _buildDetailRow('Critical Level', item.criticalLvl.toString()),
           ],
         ),
       ),
