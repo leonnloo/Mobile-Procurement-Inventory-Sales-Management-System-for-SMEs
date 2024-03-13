@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:prototype/models/customerdata.dart';
+import 'package:contacts_service/contacts_service.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class AddCustomerScreen extends StatefulWidget {
-  const AddCustomerScreen({super.key});
+  const AddCustomerScreen({Key? key}) : super(key: key);
 
   @override
-  AddCustomerScreenState createState() => AddCustomerScreenState();
+  _AddCustomerScreenState createState() => _AddCustomerScreenState();
 }
 
-class AddCustomerScreenState extends State<AddCustomerScreen> {
+class _AddCustomerScreenState extends State<AddCustomerScreen> {
   final _formKey = GlobalKey<FormState>();
 
   late TextEditingController _customerNameController;
@@ -52,11 +54,66 @@ class AddCustomerScreenState extends State<AddCustomerScreen> {
         shippingAddress: _shippingAddressController.text,
       );
 
-
       print(newCustomer);
 
       // Close the screen
       Navigator.of(context).pop();
+    }
+  }
+
+  void _importCustomerFromContacts() async {
+    var permissionStatus = await Permission.contacts.request();
+
+    if (permissionStatus.isGranted) {
+      Iterable<Contact> contacts = await ContactsService.getContacts();
+
+      Contact? selectedContact = await showModalBottomSheet<Contact>(
+        context: context,
+        builder: (BuildContext context) {
+          return ListView(
+            children: contacts.map((contact) {
+              return ListTile(
+                title: Text(contact.displayName ?? ''),
+                onTap: () {
+                  Navigator.of(context).pop(contact);
+                },
+              );
+            }).toList(),
+          );
+        },
+      );
+
+      if (selectedContact != null) {
+        setState(() {
+          _customerNameController.text = selectedContact.displayName ?? '';
+          _contactPersonController.text = selectedContact.givenName ?? '';
+          _emailController.text =
+              selectedContact.emails?.isNotEmpty ?? false ? selectedContact.emails!.first.value ?? '' : '';
+          _phoneNoController.text =
+              (selectedContact.phones?.isNotEmpty ?? false ? selectedContact.phones!.first.value : '')!;
+          _billingAddressController.text =
+              (selectedContact.postalAddresses?.isNotEmpty ?? false ? selectedContact.postalAddresses!.first.street : '')!;
+          _shippingAddressController.text =
+              (selectedContact.postalAddresses?.isNotEmpty ?? false ? selectedContact.postalAddresses!.first.street : '')!;
+        });
+      }
+    } else {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Permission Required'),
+            content: const Text(
+                'Please grant permission to access contacts in order to import customer information.'),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: const Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
     }
   }
 
@@ -66,8 +123,7 @@ class AddCustomerScreenState extends State<AddCustomerScreen> {
       appBar: AppBar(
         title: const Text('Add Customer'),
       ),
-      body: 
-      SingleChildScrollView(
+      body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Form(
           key: _formKey,
@@ -133,6 +189,11 @@ class AddCustomerScreenState extends State<AddCustomerScreen> {
                   }
                   return null;
                 },
+              ),
+              const SizedBox(height: 16.0),
+              ElevatedButton(
+                onPressed: _importCustomerFromContacts,
+                child: const Text('Import Customer from Contacts'),
               ),
               const SizedBox(height: 16.0),
               ElevatedButton(

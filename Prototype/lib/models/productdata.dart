@@ -7,6 +7,10 @@ class Product {
   final double weight;
   final String status;
 
+  final int safetyQuantity;
+  final double markup;
+  final double margin;
+
   Product({
     required this.productID,
     required this.productName,
@@ -15,6 +19,10 @@ class Product {
     required this.quantity,
     required this.weight,
     required this.status,
+
+    required this.safetyQuantity,
+    required this.markup,
+    required this.margin,
   });
 }
 
@@ -27,6 +35,10 @@ List<Product> products = [
     quantity: 100,
     weight: 1.5,
     status: 'In Stock',
+
+    safetyQuantity: 200, //interim assumption
+    markup: 0.5,
+    margin: 0.3,
   ),
   Product(
     productID: 2,
@@ -36,6 +48,10 @@ List<Product> products = [
     quantity: 50,
     weight: 2.0,
     status: 'Out of Stock',
+
+    safetyQuantity: 10, //interim assumption
+    markup: 0.5,
+    margin: 0.3,
   ),
   Product(
     productID: 3,
@@ -45,6 +61,10 @@ List<Product> products = [
     quantity: 75,
     weight: 1.8,
     status: 'In Stock',
+
+    safetyQuantity: 10, //interim assumption
+    markup: 0.5,
+    margin: 0.3,
   ),
   Product(
     productID: 4,
@@ -54,6 +74,10 @@ List<Product> products = [
     quantity: 120,
     weight: 2.5,
     status: 'In Stock',
+
+    safetyQuantity: 10, //interim assumption
+    markup: 0.5,
+    margin: 0.3,
   ),
   Product(
     productID: 5,
@@ -63,6 +87,10 @@ List<Product> products = [
     quantity: 80,
     weight: 1.2,
     status: 'Out of Stock',
+
+    safetyQuantity: 10, //interim assumption
+    markup: 0.5,
+    margin: 0.3,
   ),
   Product(
     productID: 6,
@@ -72,6 +100,10 @@ List<Product> products = [
     quantity: 60,
     weight: 2.2,
     status: 'In Stock',
+
+    safetyQuantity: 10, //interim assumption
+    markup: 0.5,
+    margin: 0.3,
   ),
   Product(
     productID: 7,
@@ -81,6 +113,10 @@ List<Product> products = [
     quantity: 90,
     weight: 1.7,
     status: 'Out of Stock',
+
+    safetyQuantity: 10, //interim assumption
+    markup: 0.5,
+    margin: 0.3,
   ),
   Product(
     productID: 8,
@@ -90,6 +126,10 @@ List<Product> products = [
     quantity: 110,
     weight: 1.4,
     status: 'In Stock',
+
+    safetyQuantity: 10, //interim assumption
+    markup: 0.5,
+    margin: 0.3,
   ),
   Product(
     productID: 9,
@@ -99,6 +139,10 @@ List<Product> products = [
     quantity: 70,
     weight: 2.8,
     status: 'In Stock',
+
+    safetyQuantity: 10, //interim assumption
+    markup: 0.5,
+    margin: 0.3,
   ),
   Product(
     productID: 10,
@@ -108,6 +152,10 @@ List<Product> products = [
     quantity: 40,
     weight: 2.3,
     status: 'Out of Stock',
+
+    safetyQuantity: 10, //interim assumption
+    markup: 0.5,
+    margin: 0.3,
   ),
   Product(
     productID: 11,
@@ -117,6 +165,10 @@ List<Product> products = [
     quantity: 30,
     weight: 1.8,
     status: 'In Stock',
+
+    safetyQuantity: 10, //interim assumption
+    markup: 0.5,
+    margin: 0.3,
   ),
   Product(
     productID: 12,
@@ -126,6 +178,10 @@ List<Product> products = [
     quantity: 50,
     weight: 1.5,
     status: 'In Stock',
+
+    safetyQuantity: 10, //interim assumption
+    markup: 0.5,
+    margin: 0.3,
   ),
   Product(
     productID: 13,
@@ -135,6 +191,10 @@ List<Product> products = [
     quantity: 20,
     weight: 3.2,
     status: 'Out of Stock',
+
+    safetyQuantity: 10, //interim assumption
+    markup: 0.5,
+    margin: 0.3,
   ),
   Product(
     productID: 14,
@@ -144,6 +204,10 @@ List<Product> products = [
     quantity: 35,
     weight: 2.5,
     status: 'In Stock',
+
+    safetyQuantity: 10, //interim assumption
+    markup: 0.5,
+    margin: 0.3,
   ),
   Product(
     productID: 15,
@@ -153,6 +217,10 @@ List<Product> products = [
     quantity: 25,
     weight: 1.2,
     status: 'In Stock',
+
+    safetyQuantity: 10, //interim assumption
+    markup: 0.5,
+    margin: 0.3,
   ),
   Product(
     productID: 16,
@@ -162,5 +230,9 @@ List<Product> products = [
     quantity: 15,
     weight: 2.0,
     status: 'Out of Stock',
+
+    safetyQuantity: 10, //interim assumption
+    markup: 0.5,
+    margin: 0.3,
   ),
 ];

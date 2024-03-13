@@ -31,8 +31,13 @@ class ProductDetailScreen extends StatelessWidget {
             _buildDetailRow('Selling Price', '\$${product.sellingPrice.toString()}'),
             _buildDetailRow('Quantity', product.quantity.toString()),
             _buildDetailRow('Weight', product.weight.toString()),
+            
+            _buildDetailRow('Safety Quantity', product.safetyQuantity.toString()),
+            _buildDetailRow('Markup', product.markup.toString()),
+            _buildDetailRow('Margin', product.margin.toString()),
+            
             _buildDetailRow('Status', product.status),
-            // Add more details based on your product data model
+
           ],
         ),
       ),

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:prototype/models/supplierdata.dart';
+import 'package:contacts_service/contacts_service.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class AddSupplierScreen extends StatefulWidget {
   const AddSupplierScreen({super.key});
@@ -37,6 +39,62 @@ class AddSupplierScreenState extends State<AddSupplierScreen> {
     super.dispose();
   }
 
+  void _importSupplierFromContacts() async {
+    // 请求访问设备联系人权限
+    var permissionStatus = await Permission.contacts.request();
+
+    // 检查权限状态
+    if (permissionStatus.isGranted) {
+      // 获取联系人列表
+      Iterable<Contact> contacts = await ContactsService.getContacts();
+
+      // 显示联系人选择器
+      Contact? selectedContact = await showModalBottomSheet<Contact>(
+        context: context,
+        builder: (BuildContext context) {
+          return ListView(
+            children: contacts.map((contact) {
+              return ListTile(
+                title: Text(contact.displayName ?? ''),
+                onTap: () {
+                  Navigator.of(context).pop(contact);
+                },
+              );
+            }).toList(),
+          );
+        },
+      );
+
+      // 将选择的联系人信息填充到文本框中
+      if (selectedContact != null) {
+        setState(() {
+          _supplierNameController.text = selectedContact.displayName ?? '';
+          _contactPersonController.text = selectedContact.givenName ?? '';
+          _emailController.text = selectedContact.emails?.isNotEmpty ?? false ? selectedContact.emails!.first.value ?? '' : '';
+          _phoneNoController.text = (selectedContact.phones?.isNotEmpty ?? false ? selectedContact.phones!.first.value : '')!;
+          _addressController.text = (selectedContact.postalAddresses?.isNotEmpty ?? false ? selectedContact.postalAddresses!.first.street : '')!;
+        });
+      }
+    } else {
+      // 如果用户未授予联系人访问权限，则提示用户
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Permission Required'),
+            content: const Text('Please grant permission to access contacts in order to import supplier information.'),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: const Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
+    }
+  }
+
   void _submitForm() {
     if (_formKey.currentState?.validate() ?? false) {
       SupplierData newSupplier = SupplierData(
@@ -47,7 +105,6 @@ class AddSupplierScreenState extends State<AddSupplierScreen> {
         phoneno: _phoneNoController.text,
         address: _addressController.text,
       );
-
 
       print(newSupplier);
 
@@ -62,8 +119,7 @@ class AddSupplierScreenState extends State<AddSupplierScreen> {
       appBar: AppBar(
         title: const Text('Add Supplier'),
       ),
-      body: 
-      SingleChildScrollView(
+      body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Form(
           key: _formKey,
@@ -122,6 +178,10 @@ class AddSupplierScreenState extends State<AddSupplierScreen> {
               ),
               const SizedBox(height: 16.0),
               ElevatedButton(
+                onPressed: _importSupplierFromContacts,
+                child: const Text('Import Supplier from Contacts'),
+              ),
+              ElevatedButton(
                 onPressed: _submitForm,
                 child: const Text('Submit'),
               ),
@@ -132,3 +192,4 @@ class AddSupplierScreenState extends State<AddSupplierScreen> {
     );
   }
 }
+

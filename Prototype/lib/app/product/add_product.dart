@@ -20,6 +20,9 @@ class AddProductScreenState extends State<AddProductScreen> {
   late TextEditingController _totalPriceController;
   late TextEditingController _statusController;
 
+  late TextEditingController _markupController;
+  late TextEditingController _marginController;
+
   @override
   void initState() {
     super.initState();
@@ -31,6 +34,9 @@ class AddProductScreenState extends State<AddProductScreen> {
     _quantityController = TextEditingController();
     _totalPriceController = TextEditingController();
     _statusController = TextEditingController();
+
+    _markupController = TextEditingController();
+    _marginController = TextEditingController();
   }
 
   @override
@@ -43,23 +49,22 @@ class AddProductScreenState extends State<AddProductScreen> {
     _quantityController.dispose();
     _totalPriceController.dispose();
     _statusController.dispose();
+
+    _markupController.dispose();
+    _marginController.dispose();
     super.dispose();
   }
 
   void _submitForm() {
     if (_formKey.currentState?.validate() ?? false) {
-      SalesOrder newOrder = SalesOrder(
-        orderNo: int.tryParse(_orderNoController.text) ?? 0,
-        date: _customerIDController.text,
-        customerID: int.tryParse(_customerIDController.text) ?? 0,
-        productID: int.tryParse(_productID.text) ?? 0,
-        quantity: int.tryParse(_quantityController.text) ?? 0,
-        totalPrice: double.tryParse(_totalPriceController.text) ?? 0,
-        status: _statusController.text,
-      );
+      // Other form submission code
 
+      double costPrice = double.tryParse(_totalPriceController.text) ?? 0;
+      double markup = double.tryParse(_markupController.text) ?? 0;
+      double margin = double.tryParse(_marginController.text) ?? 0;
 
-      print(newOrder);
+      double sellingPrice = costPrice * (1 + markup);
+      double profit = sellingPrice - costPrice - margin;
 
       // Close the screen
       Navigator.of(context).pop();
@@ -143,6 +148,26 @@ class AddProductScreenState extends State<AddProductScreen> {
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter total price';
+                    }
+                    return null;
+                  },
+                ),
+                TextFormField(
+                  controller: _markupController,
+                  decoration: const InputDecoration(labelText: 'Markup'),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter markup';
+                    }
+                    return null;
+                  },
+                ),
+                TextFormField(
+                  controller: _marginController,
+                  decoration: const InputDecoration(labelText: 'Margin'),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter margin';
                     }
                     return null;
                   },
