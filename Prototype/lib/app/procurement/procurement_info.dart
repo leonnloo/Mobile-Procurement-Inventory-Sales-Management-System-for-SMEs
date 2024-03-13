@@ -174,6 +174,7 @@ class OrderInformation extends StatelessWidget {
           leading: const Icon(Icons.attach_money),
           title: Text('Total Amount: \$${order.totalPrice.toStringAsFixed(2).toString()}'), // Corrected to totalPrice
         ),
+
         ListTile(
           leading: const Icon(Icons.shopping_bag),
           title: Text('Status: ${order.status}'), // You might want to replace totalPrice with the actual supplier name field
