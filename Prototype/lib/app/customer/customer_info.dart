@@ -6,7 +6,7 @@ import 'package:prototype/util/request_util.dart';
 import 'dart:math';
 import 'package:prototype/widgets/appbar/info_appbar.dart';
 
-void navigateToCustomerDetail(BuildContext context, PurchasingOrder customer) {
+void navigateToCustomerDetail(BuildContext context, CustomerData customer) {
   Navigator.of(context).push(
     MaterialPageRoute(
       builder: (context) => CustomerDetailScreen(customer: customer),
@@ -15,7 +15,7 @@ void navigateToCustomerDetail(BuildContext context, PurchasingOrder customer) {
 }
 
 class CustomerDetailScreen extends StatelessWidget {
-  final PurchasingOrder customer;
+  final CustomerData customer;
 
   const CustomerDetailScreen({super.key, required this.customer});
 

@@ -7,7 +7,7 @@ import 'package:prototype/util/validate_text.dart';
 import 'package:prototype/widgets/forms/text_field.dart';
 
 class EditCustomer extends StatefulWidget {
-  final PurchasingOrder customerData;
+  final CustomerData customerData;
 
   const EditCustomer({super.key, required this.customerData});
 
