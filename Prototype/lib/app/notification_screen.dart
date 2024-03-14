@@ -12,7 +12,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
             'Notifications',
             style: TextStyle(
               fontSize: 25.0, 
@@ -22,7 +22,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
           ),
           
       ),
-      body: Column(
+      body: const Column(
         children: [
           Divider(),
         ],

@@ -162,7 +162,7 @@ List<PastOrder> generatePastOrders() {
           'Past Orders:',
           style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
-        SizedBox(height: 8.0),
+        const SizedBox(height: 8.0),
         Column(
           children: pastOrders.map((order) {
             return Padding(

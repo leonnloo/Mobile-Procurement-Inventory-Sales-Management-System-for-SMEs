@@ -4,6 +4,10 @@ import 'package:prototype/app/sales_management/individual_sales.dart';
 import 'package:prototype/app/sale_orders/order.dart';
 import 'package:prototype/app/sales_management/product_monthly_sales.dart';
 
+import 'Claims_and_Refunds/CustomerClaimsRefunds.dart';
+import 'Dispatch_and_Delivery/DispatchDelivery.dart';
+import 'Sales_Target/SalesTargetScreen.dart';
+
 class SalesManagementScreen extends StatelessWidget {
   const SalesManagementScreen({super.key});
 
@@ -24,7 +28,7 @@ class SalesManagementScreen extends StatelessWidget {
             ElevatedButton(
               onPressed: () {
                 // Navigate to the first page
-                Navigator.push(context, MaterialPageRoute(builder: (context) => SalesOrderScreen()));
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const SalesOrderScreen()));
               },
               style: ElevatedButton.styleFrom(
                 shape: RoundedRectangleBorder(
@@ -33,12 +37,12 @@ class SalesManagementScreen extends StatelessWidget {
                 padding: const EdgeInsets.all(8), // Adjust the padding as needed
                 minimumSize: const Size(100.0, 40.0),
               ),
-              child: const Text('Sales Order (REMOVE THIS)'),
+              child: const Text('Sales Order'),
             ),
             ElevatedButton(
               onPressed: () {
                 // Navigate to the second page
-                // Navigator.push(context, MaterialPageRoute(builder: (context) => SecondPage()));
+                Navigator.push(context, MaterialPageRoute(builder: (context) => SalesTargetScreen()));
               },
               style: ElevatedButton.styleFrom(
                 shape: RoundedRectangleBorder(
@@ -52,7 +56,7 @@ class SalesManagementScreen extends StatelessWidget {
             ElevatedButton(
               onPressed: () {
                 // Navigate to the third page
-                // Navigator.push(context, MaterialPageRoute(builder: (context) => ThirdPage()));
+                Navigator.push(context, MaterialPageRoute(builder: (context) => DispatchDeliveryScreen()));
               },
               style: ElevatedButton.styleFrom(
                 shape: RoundedRectangleBorder(
@@ -61,12 +65,12 @@ class SalesManagementScreen extends StatelessWidget {
                 padding: const EdgeInsets.all(8),
                 minimumSize: const Size(100.0, 40.0),
               ),
-              child: const Text('Order Dispatch and Delivery (REMOVE THIS)'),
+              child: const Text('Order Dispatch and Delivery'),
             ),
             ElevatedButton(
               onPressed: () {
                 // Navigate to the fourth page
-                // Navigator.push(context, MaterialPageRoute(builder: (context) => FourthPage()));
+                 Navigator.push(context, MaterialPageRoute(builder: (context) => CustomerClaimsRefundsScreen()));
               },
               style: ElevatedButton.styleFrom(
                 shape: RoundedRectangleBorder(
@@ -75,7 +79,7 @@ class SalesManagementScreen extends StatelessWidget {
                 padding: const EdgeInsets.all(8),
                 minimumSize: const Size(100.0, 40.0),
               ),
-              child: const Text('Customer Claims, Refunds (REMOVE THIS)'),
+              child: const Text('Customer Claims, Refunds'),
             ),
           ],
         ),
@@ -102,7 +106,7 @@ class SalesManagementScreen extends StatelessWidget {
                 child: ProductMonthlySalesLine1(),
               ),
             ),
-              
+
             IndividualSales(),
           ],
         ),
