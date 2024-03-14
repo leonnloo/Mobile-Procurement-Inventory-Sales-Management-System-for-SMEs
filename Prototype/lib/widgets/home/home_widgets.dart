@@ -85,7 +85,7 @@ class HomeWidgets extends StatelessWidget {
                   onTap: () {
                     
                   },
-                  child: InventoryOverview(),
+                  child: const InventoryOverview(),
                 ),
               ),
 
