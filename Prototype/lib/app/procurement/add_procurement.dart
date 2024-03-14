@@ -42,6 +42,7 @@ class AddProcurementScreenState extends State<AddProcurementScreen> {
     _totalPriceController = TextEditingController();
     _quantityController = TextEditingController();
     _statusController = TextEditingController();
+    _itemTypeController.text = type;
   }
 
   @override
@@ -61,7 +62,7 @@ class AddProcurementScreenState extends State<AddProcurementScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CommonAppBar(currentTitle: 'Add Purchase'),
+      appBar: const CommonAppBar(currentTitle: 'Add Purchase'),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -80,6 +81,7 @@ class AddProcurementScreenState extends State<AddProcurementScreen> {
                       type = value;
                   });},
                   defaultSelected: true,
+                  data: _itemTypeController.text,
                 ),
                 const SizedBox(height: 16.0),
                 DropdownTextField(

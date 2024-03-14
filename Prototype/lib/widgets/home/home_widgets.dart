@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:prototype/app/home/chatbot_dialogflow/chatbot.dart';
 import 'package:prototype/widgets/drawer/drawer_controller.dart';
 import 'package:prototype/models/drawer_sections.dart';
-import 'package:prototype/widgets/home/home_search.dart';
 import 'package:prototype/widgets/inventory_overview.dart';
 import 'package:prototype/widgets/product_overview.dart';
 import 'package:prototype/widgets/product_sales_pie.dart';
@@ -46,7 +46,7 @@ class HomeWidgets extends StatelessWidget {
                   child: Card(
                     child: GestureDetector(
                       onTap: () {
-                        // Get.to(() => const HomeSearch());
+                        Get.to(() => const ChatBot());
                       },
                       child: const TextField(
                         decoration: InputDecoration(
