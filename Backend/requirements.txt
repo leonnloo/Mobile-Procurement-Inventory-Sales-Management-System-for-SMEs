@@ -1,9 +1,7 @@
 fastapi
 pydantic
-dialogflow
 bson
 fastapi-mail
-google-api-core
 pymongo
 numpy
 torch
@@ -12,3 +10,8 @@ nn
 torchvision 
 torchaudio
 skicit-learn
+spacy
+
+
+# install this seperately
+python -m spacy download en_core_web_sm
