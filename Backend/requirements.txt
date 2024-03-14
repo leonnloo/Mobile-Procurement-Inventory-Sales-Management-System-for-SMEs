@@ -1,0 +1,14 @@
+fastapi
+pydantic
+dialogflow
+bson
+fastapi-mail
+google-api-core
+pymongo
+numpy
+torch
+nltk
+nn
+torchvision 
+torchaudio
+skicit-learn

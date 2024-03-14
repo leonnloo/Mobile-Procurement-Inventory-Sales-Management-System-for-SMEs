@@ -78,7 +78,7 @@ class HeaderDrawerState extends State<HeaderDrawer> {
                       decoration: const BoxDecoration(
                         shape: BoxShape.circle,
                         image: DecorationImage(
-                          image: AssetImage('images/nottingham.jpg'),
+                          image: AssetImage('assets/images/nottingham.jpg'),
                         ),
                       ),
                     ),

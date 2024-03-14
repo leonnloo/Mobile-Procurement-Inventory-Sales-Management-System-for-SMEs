@@ -1,17 +1,14 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:get/get.dart';
 import 'package:prototype/app/customer/add_customer.dart';
 import 'package:prototype/app/customer/customer.dart';
-import 'package:prototype/app/inventory/add_inventory.dart';
 import 'package:prototype/app/inventory/inventory.dart';
 import 'package:prototype/app/inventory/stock_inout_inv.dart';
 import 'package:prototype/app/notification_screen.dart';
 import 'package:prototype/app/procurement/add_procurement.dart';
 import 'package:prototype/app/procurement/procurement.dart';
-import 'package:prototype/app/product/add_product.dart';
 import 'package:prototype/app/product/product.dart';
 import 'package:prototype/app/product/stock_inout_prod.dart';
 import 'package:prototype/app/sale_orders/add_order.dart';

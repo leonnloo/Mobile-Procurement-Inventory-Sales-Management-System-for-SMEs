@@ -1,7 +1,8 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:prototype/app/product/get_product.dart';
 import 'package:prototype/resources/app_colors.dart';
-import 'package:prototype/models/procurementdata.dart';
+import 'package:prototype/models/procurement_model.dart';
 
 class MonthlyPurchaseStatic extends StatefulWidget {
   const MonthlyPurchaseStatic({super.key});
@@ -17,6 +18,9 @@ class _MonthlyPurchaseStaticState extends State<MonthlyPurchaseStatic> {
   ];
 
   bool showPast = false;
+  List<PurchasingOrder> pastOrders = [];
+  List<PurchasingOrder> presentOrders = [];
+
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +46,7 @@ class _MonthlyPurchaseStaticState extends State<MonthlyPurchaseStatic> {
           child: TextButton(
             style: ButtonStyle(
               backgroundColor: MaterialStateProperty.all<Color>(
-                  Color(0xFF64A8E0)), // 设置文本颜色为蓝色
+                  const Color(0xFF64A8E0)), // 设置文本颜色为蓝色
             ),
             onPressed: () {
               setState(() {
@@ -106,7 +110,7 @@ class _MonthlyPurchaseStaticState extends State<MonthlyPurchaseStatic> {
     Widget text;
     switch (value.toInt()) {
       case 5:
-        text = const Text('Monthly purhchases statistic', style: style);
+        text = const Text('Monthly Purchase', style: style);
         break;
 
       default:
