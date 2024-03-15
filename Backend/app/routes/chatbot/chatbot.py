@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException, APIRouter
+from fastapi import APIRouter
 from pydantic import BaseModel
 import random
 import json

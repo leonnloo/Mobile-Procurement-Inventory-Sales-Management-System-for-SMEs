@@ -8,11 +8,15 @@ def construct_query(intent_tag, entities):
         query = {}
         if "customer_id" in entities:
             query["customer_id"] = entities["customer_id"]
+        elif "business_name" in entities:
+            query["business_name"] = entities["business_name"]
         elif "name" in entities:
             query["business_name"] = entities["name"]
             query["contact_person"] = entities["name"]
         elif "email" in entities:
             query["email"] = entities["email"]
+        elif "phone_number" in entities:
+            query["phone_number"] = entities["phone_number"]
         # Add handling for other attributes like phone number, etc.
         return query
     # Handle other intents similarly
