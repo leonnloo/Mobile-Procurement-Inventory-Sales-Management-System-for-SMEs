@@ -63,22 +63,46 @@ def chat(user_input: UserInput):
 
     probs = torch.softmax(output, dim=1)
     prob = probs[0][predicted.item()]
-    print(prob)
+    print(prob.item())
     if prob.item() > 0.75:
         print(tag)
-        if tag == "customer_info":
+        if (tag == "customer_info" or
+            tag == "supplier_info" or
+            tag == "procurement_info"or
+            tag == "inventory_info" or
+            tag == "product_info" or
+            tag == "sale_order_info" or
+            tag == "employee_monthly_sales_info" or
+            tag == "company_monthly_sales_info"):
             mongo_result = query_mongodb(tag, user_input.sentence)
             if mongo_result:
                 response = format_mongo_response(tag, mongo_result)  # Define this function
                 return {"response": response}
             else: 
-                return {"response": "Customer not found"}
+                if tag == "customer_info":
+                    return {"response": "Customer not found"}
+                elif tag == "supplier_info":
+                    return {"response": "Supplier not found"}
+                elif tag == "procurement_info":
+                    return {"response": "Purchase not found"}
+                elif tag == "inventory_info":
+                    return {"response": "Inventory item not found"}
+                elif tag == "product_info":
+                    return {"response": "Product not found"}
+                elif tag == "sale_order_info":
+                    return {"response": "Sale order not found"}
+                elif tag == "employee_monthly_sales_info":
+                    return {"response": "Employee monthly sales not found"}
+                elif tag == "company_monthly_sales_info":
+                    return {"response": "Company monthly sales not found"}
         else:
             for intent in intents['intents']:
                 if tag == intent["tag"]:
                     response = random.choice(intent['responses'])
                     return {"response": response}
-    return {"response": "I do not understand..."}
+    return {"response": 
+            "Sorry, but please try again by specifying what you want to query for (Supplier, Customer, Purchase, Order, Item, etc)"
+            }
 
 
 

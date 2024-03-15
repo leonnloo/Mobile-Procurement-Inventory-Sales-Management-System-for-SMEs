@@ -3,17 +3,143 @@
     {
       "tag": "customer_info",
       "patterns": [
-        "Tell me about customer",
-        "What is the business name for customer?",
-        "Can you give me the contact person for?",
-        "What's the email for customer?",
-        "What phone number do you have on file for?",
-        "What's the billing address for?",
-        "What is the shipping address for?",
-        "Do you have any past orders for?",
+        "Can you provide details for customer?",
+        "I need information about the customer with ID",
+        "What do you know about customer?",
+        "Who is the main contact for customer?",
+        "Do you have the email address for customer?",
+        "How can I reach customer?",
+        "Where can I find the phone number for customer?",
+        "What's the billing information for customer?",
+        "Can you tell me about the shipping address for customer?",
+        "Are there any past orders for customer?",
+        "Do you have any additional notes about customer?",
+        "Can you give me details about the business name for customer?",
+        "Who is the contact person for customer?",
+        "Can you provide the email address for customer?",
+        "What's the phone number for customer?",
+        "Can you tell me the billing address for customer?",
+        "What is the shipping address for customer?",
+        "Do you have any past orders for customer?",
         "Are there any notes for customer?"
       ]
+    },    
+    {
+      "tag": "supplier_info",
+      "patterns": [
+        "Can you provide details for supplier?",
+        "I need information about the supplier with ID",
+        "What do you know about supplier?",
+        "Who is the main contact for supplier?",
+        "Do you have the email address for supplier?",
+        "How can I reach supplier?",
+        "Where can I find the phone number for supplier?",
+        "What's the address for supplier?",
+        "Can you tell me about the business name for supplier?",
+        "Who is the contact person for supplier?",
+        "Can you provide the email address for supplier?",
+        "What's the phone number for supplier?",
+        "Can you give me details about the business name for supplier?",
+        "Who is the contact person for supplier?",
+        "Can you provide the email address for supplier?",
+        "What's the phone number for supplier?",
+        "Can you tell me the address for supplier?",
+        "Do you have any additional notes about supplier?"
+      ]
+    },    
+    {
+      "tag": "procurement_info",
+      "patterns": [
+        "Can you provide details for purchase?",
+        "What do you know about the purchase with ID",
+        "Can you tell me about the item purchased?",
+        "What's the status of the purchase?",
+        "When was the purchase made?",
+        "When is the delivery expected for the purchase?",
+        "What was the unit price of the item?",
+        "What was the total price of the purchase?",
+        "How many items were purchased?",
+        "Can you provide details for the order with ID",
+        "Can you tell me about the item ordered?",
+        "What's the status of the order?",
+        "When was the order placed?",
+        "When is the delivery expected for the order?",
+        "What was the unit price of the ordered item?",
+        "What was the total price of the order?",
+        "How many items were ordered?",
+        "Do you have any additional notes about the purchase?"
+      ]
     },
+    {
+      "tag": "inventory_info",
+      "patterns": [
+        "Can you provide details for item?",
+        "What do you know about the item with ID",
+        "Can you tell me about the item named",
+        "What's the category of the item?",
+        "How many units of the item are in stock?",
+        "What's the unit price of the item?",
+        "What's the total price of the item?",
+        "What's the critical level of the item?",
+        "What's the status of the item?",
+        "Do you have any additional notes about the item?"
+      ]
+    },
+    {
+      "tag": "product_info",
+      "patterns": [
+        "Can you provide details for product?",
+        "What do you know about the product with ID",
+        "Can you tell me about the product named",
+        "What's the unit price of the product?",
+        "What's the selling price of the product?",
+        "How many units of the product are available?",
+        "What's the markup percentage of the product?",
+        "What's the margin percentage of the product?",
+        "What's the critical level of the product?",
+        "What's the status of the product?",
+        "Do you have any additional notes about the product?"
+      ]
+    },    
+    {
+      "tag": "sale_order_info",
+      "patterns": [
+        "Can you provide details for sale order?",
+        "What do you know about the sale order with ID",
+        "Can you tell me about the sale order placed on",
+        "What's the customer ID for the sale order?",
+        "What's the customer name for the sale order?",
+        "What's the product ID for the sale order?",
+        "What's the product name for the sale order?",
+        "How many units were ordered in the sale order?",
+        "What's the unit price for the product in the sale order?",
+        "What's the total price for the product in the sale order?",
+        "What's the status of the sale order?",
+        "Who processed the sale order?",
+        "What's the employee ID who processed the sale order?"
+      ]
+    },
+    {
+      "tag": "employee_monthly_sales_info",
+      "patterns": [
+        "Can you provide details for employee monthly sales?",
+        "What do you know about the sales for employee in the month of",
+        "Can you tell me about the sales for employee in",
+        "What's the total sales for employee in the month of",
+        "What were the sales for employee in the month of",
+        "Can you provide the sales details for employee in the month of"
+      ]
+    },    
+    {
+      "tag": "company_monthly_sales_info",
+      "patterns": [
+        "Can you provide monthly sales for the year and month?",
+        "What are the sales for the month of in the year?",
+        "Can you tell me about the sales for the year and month?",
+        "What are the company's monthly sales for the year and month?",
+        "What are the employee's monthly sales for the year and month?"
+      ]
+    },        
     {
       "tag": "greeting",
       "patterns": [
@@ -44,6 +170,55 @@
       "tag": "thanks",
       "patterns": ["Thanks", "Thank you", "That's helpful", "Thank's a lot!"],
       "responses": ["Happy to help!", "Any time!", "My pleasure"]
+    },
+    {
+      "tag": "compliment",
+      "patterns": [
+        "You're doing a great job!",
+        "I'm impressed with your service",
+        "Your website is very user-friendly",
+        "Your team is very helpful"
+      ],
+      "responses": [
+        "Thank you so much!",
+        "That's very kind of you to say!",
+        "We strive to provide the best service!",
+        "We appreciate your positive feedback!"
+      ]
+    },
+    {
+      "tag": "complaint",
+      "patterns": [
+        "I'm having trouble with your website",
+        "My order hasn't arrived yet",
+        "I received the wrong item",
+        "Your customer service is slow to respond"
+      ],
+      "responses": [
+        "We apologize for the inconvenience. Please let us know how we can assist you.",
+        "We're sorry to hear that. We'll do our best to resolve the issue promptly.",
+        "Thank you for bringing this to our attention. We'll investigate and get back to you.",
+        "We understand your frustration. We'll work to address the issue and improve our service."
+      ]
+    },
+    {
+      "tag": "feedback",
+      "patterns": [
+        "I have a suggestion",
+        "I want to leave feedback",
+        "How can I provide feedback?",
+        "I had a great experience",
+        "I had a problem with my order",
+        "Can I speak to a manager?"
+      ],
+      "responses": [
+        "We appreciate your feedback! Please feel free to share your suggestion with us.",
+        "Thank you for wanting to leave feedback! You can provide your feedback through our website/contact form.",
+        "Providing feedback is easy! You can do it through our website or by contacting our customer support.",
+        "We're glad you had a great experience! We love hearing positive feedback from our customers.",
+        "We're sorry to hear about the problem with your order. Please let us know the details so we can assist you.",
+        "Certainly, you can speak to a manager. Please hold on for a moment while we connect you."
+      ]
     }
   ]
 }

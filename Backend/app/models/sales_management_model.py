@@ -4,14 +4,14 @@ from pydantic import BaseModel
 
 # Used in user data
 class EmployeeMonthlySales(BaseModel):
-    year: int
-    month: int
+    year: str
+    month: str
     sales: float
     
 class CompanyMonthlySales(BaseModel):
-    year: int
-    month: int
-    sales: int
+    year: str
+    month: str
+    sales: float
 
 
 

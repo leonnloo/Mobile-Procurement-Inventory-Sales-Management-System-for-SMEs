@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:prototype/app/home/chatbot_dialogflow/chatbot.dart';
+import 'package:prototype/app/home/chatbot/chatbot.dart';
 import 'package:prototype/widgets/drawer/drawer_controller.dart';
 import 'package:prototype/models/drawer_sections.dart';
 import 'package:prototype/widgets/inventory_overview.dart';

@@ -12,5 +12,15 @@ def extract_entities(text):
             entities["name"] = ent.text
         elif ent.label_ == "EMAIL":  # Extract email addresses
             entities["email"] = ent.text
-        # You can add more conditions to extract other types of entities like dates, phone numbers, etc.
+        elif ent.label_ == "ORG":  # Extract organization or company names
+            entities["organization"] = ent.text
+        elif ent.label_ == "PHONE":  # Extract phone numbers
+            entities["phone"] = ent.text
+        elif ent.label_ == "DATE":  # Extract dates
+            entities["date"] = ent.text
+        elif ent.label_ == "MONEY":  # Extract monetary values
+            entities["money"] = ent.text
+        elif ent.label_ == "PRODUCT":  # Extract product names
+            entities["product"] = ent.text
+            
     return entities
