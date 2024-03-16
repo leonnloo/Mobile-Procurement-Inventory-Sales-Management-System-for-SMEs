@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:prototype/app/procurement/get_procurement.dart';
 import 'package:prototype/util/request_util.dart';
@@ -42,6 +44,7 @@ class AddProcurementScreenState extends State<AddProcurementScreen> {
     _totalPriceController = TextEditingController();
     _quantityController = TextEditingController();
     _statusController = TextEditingController();
+    _itemTypeController.text = type;
   }
 
   @override
@@ -61,7 +64,7 @@ class AddProcurementScreenState extends State<AddProcurementScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CommonAppBar(currentTitle: 'Add Purchase'),
+      appBar: const CommonAppBar(currentTitle: 'Add Purchase'),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -80,6 +83,7 @@ class AddProcurementScreenState extends State<AddProcurementScreen> {
                       type = value;
                   });},
                   defaultSelected: true,
+                  data: _itemTypeController.text,
                 ),
                 const SizedBox(height: 16.0),
                 DropdownTextField(
