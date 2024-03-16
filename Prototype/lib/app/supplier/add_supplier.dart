@@ -1,7 +1,9 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:prototype/models/supplierdata.dart';
-import 'package:contacts_service/contacts_service.dart';
-import 'package:permission_handler/permission_handler.dart';
+import 'package:prototype/util/request_util.dart';
+import 'package:prototype/util/validate_text.dart';
+import 'package:prototype/widgets/appbar/common_appbar.dart';
+import 'package:prototype/widgets/forms/text_field.dart';
 
 class AddSupplierScreen extends StatefulWidget {
   const AddSupplierScreen({super.key});
@@ -12,8 +14,9 @@ class AddSupplierScreen extends StatefulWidget {
 
 class AddSupplierScreenState extends State<AddSupplierScreen> {
   final _formKey = GlobalKey<FormState>();
+  final RequestUtil requestUtil = RequestUtil();
 
-  late TextEditingController _supplierNameController;
+  late TextEditingController _businessNameController;
   late TextEditingController _contactPersonController;
   late TextEditingController _emailController;
   late TextEditingController _phoneNoController;
@@ -22,7 +25,7 @@ class AddSupplierScreenState extends State<AddSupplierScreen> {
   @override
   void initState() {
     super.initState();
-    _supplierNameController = TextEditingController();
+    _businessNameController = TextEditingController();
     _contactPersonController = TextEditingController();
     _emailController = TextEditingController();
     _phoneNoController = TextEditingController();
@@ -31,7 +34,7 @@ class AddSupplierScreenState extends State<AddSupplierScreen> {
 
   @override
   void dispose() {
-    _supplierNameController.dispose();
+    _businessNameController.dispose();
     _contactPersonController.dispose();
     _emailController.dispose();
     _phoneNoController.dispose();
@@ -39,151 +42,83 @@ class AddSupplierScreenState extends State<AddSupplierScreen> {
     super.dispose();
   }
 
-  void _importSupplierFromContacts() async {
-    // 请求访问设备联系人权限
-    var permissionStatus = await Permission.contacts.request();
-
-    // 检查权限状态
-    if (permissionStatus.isGranted) {
-      // 获取联系人列表
-      Iterable<Contact> contacts = await ContactsService.getContacts();
-
-      // 显示联系人选择器
-      Contact? selectedContact = await showModalBottomSheet<Contact>(
-        context: context,
-        builder: (BuildContext context) {
-          return ListView(
-            children: contacts.map((contact) {
-              return ListTile(
-                title: Text(contact.displayName ?? ''),
-                onTap: () {
-                  Navigator.of(context).pop(contact);
-                },
-              );
-            }).toList(),
-          );
-        },
-      );
-
-      // 将选择的联系人信息填充到文本框中
-      if (selectedContact != null) {
-        setState(() {
-          _supplierNameController.text = selectedContact.displayName ?? '';
-          _contactPersonController.text = selectedContact.givenName ?? '';
-          _emailController.text = selectedContact.emails?.isNotEmpty ?? false ? selectedContact.emails!.first.value ?? '' : '';
-          _phoneNoController.text = (selectedContact.phones?.isNotEmpty ?? false ? selectedContact.phones!.first.value : '')!;
-          _addressController.text = (selectedContact.postalAddresses?.isNotEmpty ?? false ? selectedContact.postalAddresses!.first.street : '')!;
-        });
-      }
-    } else {
-      // 如果用户未授予联系人访问权限，则提示用户
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text('Permission Required'),
-            content: const Text('Please grant permission to access contacts in order to import supplier information.'),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.of(context).pop(),
-                child: const Text('OK'),
-              ),
-            ],
-          );
-        },
-      );
-    }
-  }
-
-  void _submitForm() {
-    if (_formKey.currentState?.validate() ?? false) {
-      SupplierData newSupplier = SupplierData(
-        supplierID: 0, // Assign a unique ID (can generate or get from a database)
-        supplierName: _supplierNameController.text,
-        contactPerson: _contactPersonController.text,
-        email: _emailController.text,
-        phoneno: _phoneNoController.text,
-        address: _addressController.text,
-      );
-
-      print(newSupplier);
-
-      // Close the screen
-      Navigator.of(context).pop();
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Add Supplier'),
-      ),
-      body: SingleChildScrollView(
+      appBar: CommonAppBar(currentTitle: 'Add Supplier'),
+      body: 
+      SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Form(
           key: _formKey,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              TextFormField(
-                controller: _supplierNameController,
-                decoration: const InputDecoration(labelText: 'Supplier Name'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter supplier name';
-                  }
-                  return null;
-                },
-              ),
-              TextFormField(
-                controller: _contactPersonController,
-                decoration: const InputDecoration(labelText: 'Contact Person'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter contact person';
-                  }
-                  return null;
-                },
-              ),
-              TextFormField(
-                controller: _emailController,
-                decoration: const InputDecoration(labelText: 'Email'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter email';
-                  }
-                  return null;
-                },
-              ),
-              TextFormField(
-                controller: _phoneNoController,
-                decoration: const InputDecoration(labelText: 'Phone No'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter phone number';
-                  }
-                  return null;
-                },
-              ),
-              TextFormField(
-                controller: _addressController,
-                decoration: const InputDecoration(labelText: 'Shipping Address'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter shipping address';
-                  }
-                  return null;
-                },
-              ),
               const SizedBox(height: 16.0),
-              ElevatedButton(
-                onPressed: _importSupplierFromContacts,
-                child: const Text('Import Supplier from Contacts'),
-              ),
-              ElevatedButton(
-                onPressed: _submitForm,
-                child: const Text('Submit'),
+              BuildTextField(controller: _businessNameController, labelText: 'Business Name'),
+              const SizedBox(height: 16.0),
+              BuildTextField(controller: _contactPersonController, labelText: 'Contact Person'),
+              const SizedBox(height: 16.0),
+              BuildTextField(controller: _emailController, labelText: 'Email'),
+              const SizedBox(height: 16.0),
+              BuildTextField(controller: _phoneNoController, labelText: 'Phone Number'),
+              const SizedBox(height: 16.0),
+              BuildTextField(controller: _addressController, labelText: 'Address'),
+              const SizedBox(height: 40.0),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  style: TextButton.styleFrom(
+                    foregroundColor: Colors.white,
+                    backgroundColor: Colors.black,
+                    side: const BorderSide(color: Colors.black),
+                    shape: const RoundedRectangleBorder(),
+                    padding: const EdgeInsets.symmetric(vertical: 15.0)
+                  ),
+                  onPressed: () async {
+                    String? businessName = validateTextField(_businessNameController.text);
+                    String? contactPerson = validateTextField(_contactPersonController.text);
+                    String? email = validateTextField(_emailController.text);
+                    String? phoneNumber = validateTextField(_phoneNoController.text);
+                    String? address = validateTextField(_addressController.text);
+                    if (businessName == null ||
+                        contactPerson == null ||
+                        email == null ||
+                        phoneNumber == null ||
+                        address == null) {
+                      // Display validation error messages
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Please fill in all the required fields.'),
+                          backgroundColor: Colors.red,
+                        ),
+                      );
+                    } else {                
+                      final response = await requestUtil.newSupplier(
+                        businessName, contactPerson, email, phoneNumber, address
+                      );
+                      
+                      if (response.statusCode == 200) {
+                        Navigator.pop(context);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Supplier added successfully.'),
+                            backgroundColor: Colors.green,
+                          ),
+                        );
+                      } else {
+                        // Display an error message to the user
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(jsonDecode(response.body)['detail']),
+                            backgroundColor: Colors.red,
+                          ),
+                        );
+                      }
+                    }
+                  },
+                  child: const Text('DONE')
+                ),
               ),
             ],
           ),
