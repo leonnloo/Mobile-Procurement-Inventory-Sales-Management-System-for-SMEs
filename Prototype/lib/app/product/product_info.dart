@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:prototype/models/productdata.dart';
+import 'package:prototype/models/edit_type.dart';
+import 'package:prototype/models/product_model.dart';
+import 'package:prototype/widgets/appbar/info_appbar.dart';
 
-void navigateToProductDetail(BuildContext context, Product product) {
+void navigateToProductDetail(BuildContext context, ProductItem product) {
   Navigator.of(context).push(
     MaterialPageRoute(
       builder: (context) => ProductDetailScreen(product: product),
@@ -10,16 +12,14 @@ void navigateToProductDetail(BuildContext context, Product product) {
 }
 
 class ProductDetailScreen extends StatelessWidget {
-  final Product product;
+  final ProductItem product;
 
   const ProductDetailScreen({super.key, required this.product});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Product Detail'),
-      ),
+      appBar: InfoAppBar(currentTitle: 'Product Info', currentData: product, editType: EditType.product),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -27,17 +27,16 @@ class ProductDetailScreen extends StatelessWidget {
           children: [
             _buildDetailRow('Product ID', product.productID.toString()),
             _buildDetailRow('Product Name', product.productName),
-            _buildDetailRow('Unit Price', '\$${product.unitPrice.toString()}'),
-            _buildDetailRow('Selling Price', '\$${product.sellingPrice.toString()}'),
+            _buildDetailRow('Unit Price', '\$${product.unitPrice.toStringAsFixed(2).toString()}'),
+            _buildDetailRow('Selling Price', '\$${product.sellingPrice.toStringAsFixed(2).toString()}'),
             _buildDetailRow('Quantity', product.quantity.toString()),
-            _buildDetailRow('Weight', product.weight.toString()),
             
-            _buildDetailRow('Safety Quantity', product.safetyQuantity.toString()),
+            _buildDetailRow('Safety Quantity', product.criticalLvl.toString()),
             _buildDetailRow('Markup', product.markup.toString()),
             _buildDetailRow('Margin', product.margin.toString()),
             
             _buildDetailRow('Status', product.status),
-
+            // Add more details based on your product data model
           ],
         ),
       ),

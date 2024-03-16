@@ -7,11 +7,13 @@ import 'package:prototype/app/customer/add_customer.dart';
 import 'package:prototype/app/customer/customer.dart';
 import 'package:prototype/app/inventory/add_inventory.dart';
 import 'package:prototype/app/inventory/inventory.dart';
+import 'package:prototype/app/inventory/stock_inout_inv.dart';
 import 'package:prototype/app/notification_screen.dart';
 import 'package:prototype/app/procurement/add_procurement.dart';
 import 'package:prototype/app/procurement/procurement.dart';
 import 'package:prototype/app/product/add_product.dart';
 import 'package:prototype/app/product/product.dart';
+import 'package:prototype/app/product/stock_inout_prod.dart';
 import 'package:prototype/app/sale_orders/add_order.dart';
 import 'package:prototype/app/sales_management/management.dart';
 import 'package:prototype/app/sale_orders/order.dart';
@@ -21,7 +23,7 @@ import 'package:prototype/app/supplier/supplier.dart';
 import 'package:prototype/widgets/drawer/drawer_controller.dart';
 import 'package:prototype/widgets/drawer/drawer_header.dart';
 import 'package:prototype/widgets/drawer/drawer_list.dart';
-import 'package:prototype/widgets/drawer/drawer_sections.dart';
+import 'package:prototype/models/drawer_sections.dart';
 import 'package:prototype/widgets/home/home_widgets.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -37,6 +39,7 @@ class HomeScreenState extends State<HomeScreen> {
   String currentTitle = 'Dashboard';
   final controller = Get.put(CustomDrawerController());
   DateTime? currentBackPressTime;
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
@@ -45,25 +48,25 @@ class HomeScreenState extends State<HomeScreen> {
         container = const HomeWidgets();
         currentTitle = "Dashboard";
       } else if (controller.currentPage.value == DrawerSections.salesOrder) {
-        container = const SalesOrderScreen();
+        container = SalesOrderScreen();
         currentTitle = "Sales Order (Design how you see fit)";
       } else if (controller.currentPage.value == DrawerSections.salesManagement) {
         container = const SalesManagementScreen();
         currentTitle = "Sales Management (Design how you see fit)";
       } else if (controller.currentPage.value == DrawerSections.inventory) {
-        container = const InventoryScreen();
+        container = InventoryScreen();
         currentTitle = "Inventory (Design how you see fit)";
       } else if (controller.currentPage.value == DrawerSections.product) {
-        container = const ProductManagementScreen();
+        container = ProductManagementScreen();
         currentTitle = "Product";
       } else if (controller.currentPage.value == DrawerSections.procurement) {
         container = const ProcurementScreen();
         currentTitle = "Procurement (Design how you see fit)";
       } else if (controller.currentPage.value == DrawerSections.supplier) {
-        container = const SupplierManagementScreen();
+        container = SupplierManagementScreen();
         currentTitle = "Supplier";
       } else if (controller.currentPage.value == DrawerSections.customer) {
-        container = const CustomerManagementScreen();
+        container = CustomerManagementScreen();
         currentTitle = "Customer";
       } else if (controller.currentPage.value == DrawerSections.settings) {
         container = const SettingsScreen();
@@ -72,15 +75,25 @@ class HomeScreenState extends State<HomeScreen> {
       return PopScope(
         canPop: false,
         onPopInvoked: (bool isDialOpen) async {
+          // If the dial is open and the back button is pressed, close the dial.
           if (isDialOpen) {
             isDialOpen = false;
             return;
           }
+
+          // If current page is not dashboard, press back button to go back to dashboard.
           if (controller.currentPage.value != DrawerSections.dashboard){
             controller.changePage(DrawerSections.dashboard);
             isDialOpen = false;
             return;
           } 
+
+          // If the drawer is open, close it
+          if (_scaffoldKey.currentState?.isDrawerOpen ?? false) {
+            _scaffoldKey.currentState?.openEndDrawer();
+            return;
+          }
+
           // Handle double press to exit
           DateTime now = DateTime.now();
           if (currentBackPressTime == null || now.difference(currentBackPressTime!) > const Duration(seconds: 2)) {
@@ -96,17 +109,18 @@ class HomeScreenState extends State<HomeScreen> {
           }
         },
         child: Scaffold(
+          key: _scaffoldKey,
           appBar: AppBar(
             toolbarHeight: 60.0,
             leading: Builder(
-            builder: (context) => IconButton(
-              icon: const Icon(
-                Icons.notes, // Replace with the desired icon
-                size: 30.0,
-              ),
-              onPressed: () {
-                Scaffold.of(context).openDrawer();
-              },
+              builder: (context) => IconButton(
+                icon: const Icon(
+                  Icons.notes, // Replace with the desired icon
+                  size: 30.0,
+                ),
+                onPressed: () {
+                  Scaffold.of(context).openDrawer();
+                },
               ),
             ),
             actions: [
@@ -189,9 +203,9 @@ class HomeScreenState extends State<HomeScreen> {
             backgroundColor: Colors.black,
             foregroundColor: Colors.white,
             shape: const CircleBorder(),
-            label: 'Add Product',
+            label: 'Stock In/Out Product',
             onTap: () {
-              Get.to(() => const AddProductScreen());
+              Get.to(() => const StockInOutProduct());
             }
           ),
           SpeedDialChild(
@@ -199,9 +213,9 @@ class HomeScreenState extends State<HomeScreen> {
             backgroundColor: Colors.black,
             foregroundColor: Colors.white,
             shape: const CircleBorder(),
-            label: 'Add Inventory',
+            label: 'Stock In/Out Inventory',
             onTap: () {
-              Get.to(() => const AddInventoryScreen());
+              Get.to(() => const StockInOutInventory());
             }
           ),
         ],
@@ -210,3 +224,5 @@ class HomeScreenState extends State<HomeScreen> {
     );
   }
 }
+
+
