@@ -1,6 +1,5 @@
 fastapi
 pydantic
-bson
 fastapi-mail
 pymongo
 numpy
@@ -9,9 +8,9 @@ nltk
 nn
 torchvision 
 torchaudio
-skicit-learn
 spacy
+spacy-llm
 
 
 # install this seperately
-python -m spacy download en_core_web_sm
+# python -m spacy download en_core_web_sm
