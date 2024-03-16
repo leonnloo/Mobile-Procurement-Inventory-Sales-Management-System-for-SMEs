@@ -5,13 +5,11 @@ import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:get/get.dart';
 import 'package:prototype/app/customer/add_customer.dart';
 import 'package:prototype/app/customer/customer.dart';
-import 'package:prototype/app/inventory/add_inventory.dart';
 import 'package:prototype/app/inventory/inventory.dart';
 import 'package:prototype/app/inventory/stock_inout_inv.dart';
 import 'package:prototype/app/notification_screen.dart';
 import 'package:prototype/app/procurement/add_procurement.dart';
 import 'package:prototype/app/procurement/procurement.dart';
-import 'package:prototype/app/product/add_product.dart';
 import 'package:prototype/app/product/product.dart';
 import 'package:prototype/app/product/stock_inout_prod.dart';
 import 'package:prototype/app/sale_orders/add_order.dart';
@@ -49,19 +47,19 @@ class HomeScreenState extends State<HomeScreen> {
         currentTitle = "Dashboard";
       } else if (controller.currentPage.value == DrawerSections.salesOrder) {
         container = SalesOrderScreen();
-        currentTitle = "Sales Order (Design how you see fit)";
+        currentTitle = "Sales Order";
       } else if (controller.currentPage.value == DrawerSections.salesManagement) {
         container = const SalesManagementScreen();
-        currentTitle = "Sales Management (Design how you see fit)";
+        currentTitle = "Sales Management";
       } else if (controller.currentPage.value == DrawerSections.inventory) {
         container = InventoryScreen();
-        currentTitle = "Inventory (Design how you see fit)";
+        currentTitle = "Inventory";
       } else if (controller.currentPage.value == DrawerSections.product) {
-        container = ProductManagementScreen();
+        container = const ProductManagementScreen();
         currentTitle = "Product";
       } else if (controller.currentPage.value == DrawerSections.procurement) {
         container = const ProcurementScreen();
-        currentTitle = "Procurement (Design how you see fit)";
+        currentTitle = "Procurement";
       } else if (controller.currentPage.value == DrawerSections.supplier) {
         container = SupplierManagementScreen();
         currentTitle = "Supplier";
@@ -130,16 +128,16 @@ class HomeScreenState extends State<HomeScreen> {
             title: Text(controller.currentPage.value == DrawerSections.dashboard ? '' : currentTitle),
           ),
           body: container,
-        drawer: Drawer(
+          drawer: Drawer(
             child: SingleChildScrollView(
               child: Column(
                   children: [
                     const HeaderDrawer(),
                     drawerList(context),
                   ],
+                ),
               ),
             ),
-          ),
           floatingActionButton: homeSpeedDial(context),
         ),
       );

@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:prototype/app/sales_management/monthly_sales_bar.dart';
 import 'package:prototype/app/sales_management/individual_sales.dart';
-import 'package:prototype/app/sale_orders/order.dart';
 import 'package:prototype/app/sales_management/product_monthly_sales.dart';
-
 import 'Claims_and_Refunds/CustomerClaimsRefunds.dart';
 import 'Dispatch_and_Delivery/DispatchDelivery.dart';
 import 'Sales_Target/SalesTargetScreen.dart';
@@ -13,80 +11,84 @@ class SalesManagementScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            SizedBox(height: size.height * 0.030,),
             SizedBox(
-        child: GridView.count(
-          crossAxisCount: 2,
-          crossAxisSpacing: 10.0,
-          mainAxisSpacing: 16.0,
-          shrinkWrap: true,
-          children: [
-            ElevatedButton(
-              onPressed: () {
-                // Navigate to the first page
-                Navigator.push(context, MaterialPageRoute(builder: (context) => const SalesOrderScreen()));
-              },
-              style: ElevatedButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15.0), // Adjust the border radius as needed
+              width: size.width * 0.8,
+              child: ElevatedButton(
+                onPressed: () {
+                  // Navigate to the second page
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => SalesTargetScreen()));
+                },
+                style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.all(20.0),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  backgroundColor: Colors.white,
                 ),
-                padding: const EdgeInsets.all(8), // Adjust the padding as needed
-                minimumSize: const Size(100.0, 40.0),
+                child: const Text('Sales Target',
+                    style: TextStyle(
+                      fontSize: 20.0,
+                      color: Colors.black,
+                    ),
+                  ),
               ),
-              child: const Text('Sales Order'),
             ),
-            ElevatedButton(
-              onPressed: () {
-                // Navigate to the second page
-                Navigator.push(context, MaterialPageRoute(builder: (context) => SalesTargetScreen()));
-              },
-              style: ElevatedButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15.0),
+            const SizedBox(height: 20.0),
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: SizedBox(
+                width: size.width * 0.8,
+                child: ElevatedButton(
+                  onPressed: () {
+                    // Navigate to the third page
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => const DispatchDeliveryScreen()));
+                  },
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.all(20.0),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    backgroundColor: Colors.white,
+                  ),
+                  child: const Text('Order Dispatch and Delivery',
+                    style: TextStyle(
+                      fontSize: 20.0,
+                      color: Colors.black,
+                    ),
+                  ),
                 ),
-                padding: const EdgeInsets.all(8),
-                minimumSize: const Size(100.0, 40.0),
               ),
-              child: const Text('Sales Target'),
             ),
-            ElevatedButton(
-              onPressed: () {
-                // Navigate to the third page
-                Navigator.push(context, MaterialPageRoute(builder: (context) => DispatchDeliveryScreen()));
-              },
-              style: ElevatedButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15.0),
+            const SizedBox(height: 20.0),
+            SizedBox(
+              width: size.width * 0.8,
+              child: ElevatedButton(
+                onPressed: () {
+                  // Navigate to the fourth page
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => CustomerClaimsRefundsScreen()));
+                },
+                style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.all(20.0),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  backgroundColor: Colors.white,
                 ),
-                padding: const EdgeInsets.all(8),
-                minimumSize: const Size(100.0, 40.0),
-              ),
-              child: const Text('Order Dispatch and Delivery'),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                // Navigate to the fourth page
-                 Navigator.push(context, MaterialPageRoute(builder: (context) => CustomerClaimsRefundsScreen()));
-              },
-              style: ElevatedButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15.0),
+                child: const Text('Customer Claims, Refunds', 
+                  style: TextStyle(
+                    fontSize: 20.0,
+                    color: Colors.black,
+                  ),
                 ),
-                padding: const EdgeInsets.all(8),
-                minimumSize: const Size(100.0, 40.0),
               ),
-              child: const Text('Customer Claims, Refunds'),
             ),
-          ],
-        ),
-            ),
-
-            // Add a GridView for buttons
-            const SizedBox(height: 50.0),
+            SizedBox(height: size.height * 0.045,),
             // Add the charts below the buttons
             const Card(
               elevation: 4.0,
