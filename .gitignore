@@ -1,33 +1,209 @@
-# Gradle files
-.gradle/
+# Flutter specific
+/.dart_tool/
+/.idea/
+/.vscode/
+/build/
+/ios/Pods/
+/ios/.symlinks/
+/android/app/build/
+
+# Python specific
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.pyc
+
+# Compiled Python files
+*.pyc
+*.pyo
+*.pyd
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
 build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
 
-# Local configuration file (sdk path, etc)
-local.properties
+# PyInstaller
+__pycache__/
+dist/
+build/
+*.exe
+*.spec
 
-# Log/OS Files
+# Django
 *.log
+*.pot
+*.pyc
+__pycache__/
+local_settings.py
+db.sqlite3
 
-# Android Studio generated files and folders
-captures/
-.externalNativeBuild/
-.cxx/
-*.apk
-output.json
+# Flask
+instance/
+.webassets-cache
 
-# IntelliJ
-*.iml
+# Scrapy
+.scrapy/
+
+# Sphinx
+docs/_build/
+docs/doctrees/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# IPython
+profile_default/
+ipython_config.py
+
+# pyenv
+.python-version
+
+# pipenv
+#   According to pypa/pipenv#598, it is recommended to include Pipfile.lock in version control.
+#   However, in case of collaboration, if having platform-specific dependencies or dependencies
+#   having no cross-platform support, pipenv may install dependencies that don’t work, or not
+#   install all needed dependencies.
+#Pipfile.lock
+
+# PEP 582; used by e.g. github.com/David-OConnor/pyflow
+__pypackages__/
+
+# Celery stuff
+celerybeat-schedule
+celerybeat.pid
+
+# SageMath parsed files
+.sageMath/
+*.sage.py
+
+# Environments
+.env
+.venv
+venv/
+ENV/
+
+# Spyder project settings
+.spyderproject
+.spyproject
+
+# Rope project settings
+.ropeproject
+
+# mkdocs documentation
+/site
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Pyre type checker
+.pyre/
+
+# pyflow
+.flowconfig
+
+# Standard node_modules folder
+/node_modules/
+
+# Yarn
+/yarn-error.log
+
+# Parcel
+.cache/
+dist/
+
+# AWS S3
+.s3-credentials
+
+# Windows image file caches
+Thumbs.db
+ehthumbs.db
+
+# Folder config file
+Desktop.ini
+
+# Recycle Bin used on file shares
+$RECYCLE.BIN/
+
+# VS Code directories
+.vscode/
 .idea/
-misc.xml
-deploymentTargetDropDown.xml
-render.experimental.xml
 
-# Keystore files
-*.jks
-*.keystore
+# Flutter build directory
+/build/
+/.dart_tool/
 
-# Google Services (e.g. APIs or Firebase)
-google-services.json
+# Android directories
+**/android/app/build/
 
-# Android Profiling
-*.hprof
+# iOS directories
+**/ios/Pods/
+**/ios/Flutter/.symlinks/
+**/ios/Flutter/Generated.xcconfig
+**/ios/Flutter/App.framework
+**/ios/Flutter/Flutter.framework
+**/ios/Flutter/Flutter.podspec
+**/ios/Flutter/FlutterMacOS.framework/
+
+# macOS directories
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Node.js
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Visual Studio Code directories
+.vscode/
+
+# Python files
+*.pyc
+*.pyo
+*.pyd
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+
+# Python environment
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Python distribution / packaging
+.Python
+*.pyc
+*.pyo
+*.pyd
+*.pyc
+__pycache__/
+*.egg-info/
+dist/
+build/

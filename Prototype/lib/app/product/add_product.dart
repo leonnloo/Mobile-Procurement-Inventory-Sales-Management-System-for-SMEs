@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:prototype/models/orderdata.dart';
+import 'package:prototype/app/product/get_product.dart';
+import 'package:prototype/util/request_util.dart';
+import 'package:prototype/util/validate_text.dart';
+import 'package:prototype/widgets/appbar/common_appbar.dart';
+import 'package:prototype/widgets/forms/number_field.dart';
+import 'package:prototype/widgets/forms/text_field.dart';
 
 class AddProductScreen extends StatefulWidget {
   const AddProductScreen({super.key});
@@ -10,82 +15,44 @@ class AddProductScreen extends StatefulWidget {
 
 class AddProductScreenState extends State<AddProductScreen> {
   final _formKey = GlobalKey<FormState>();
+  final RequestUtil requestUtil = RequestUtil();
 
   // late TextEditingController _procurementNameController;
-  late TextEditingController _orderNoController;
-  late TextEditingController _dateController;
-  late TextEditingController _customerIDController;
-  late TextEditingController _productID;
-  late TextEditingController _quantityController;
-  late TextEditingController _totalPriceController;
-  late TextEditingController _statusController;
+  late TextEditingController _productNameController;
+  late TextEditingController _unitPriceController;
+  late TextEditingController _sellingPriceController;
+  late TextEditingController _markupController;
+  late TextEditingController _marginController;
+  late TextEditingController _criticalLevelController;
 
   @override
   void initState() {
     super.initState();
     // _procurementNameController = TextEditingController();
-    _orderNoController = TextEditingController();
-    _dateController = TextEditingController();
-    _customerIDController = TextEditingController();
-    _productID = TextEditingController();
-    _quantityController = TextEditingController();
-    _totalPriceController = TextEditingController();
-    _statusController = TextEditingController();
+    _productNameController = TextEditingController();
+    _unitPriceController = TextEditingController();
+    _sellingPriceController = TextEditingController();
+    _markupController = TextEditingController();
+    _marginController = TextEditingController();
+    _criticalLevelController = TextEditingController();
   }
 
   @override
   void dispose() {
     // _procurementNameController.dispose();
-    _orderNoController.dispose();
-    _dateController.dispose();
-    _customerIDController.dispose();
-    _productID.dispose();
-    _quantityController.dispose();
-    _totalPriceController.dispose();
-    _statusController.dispose();
+    _productNameController.dispose();
+    _unitPriceController.dispose();
+    _sellingPriceController.dispose();
+    _markupController.dispose();
+    _marginController.dispose();
+    _criticalLevelController.dispose();
     super.dispose();
-  }
-
-  void _submitForm() {
-    if (_formKey.currentState?.validate() ?? false) {
-      SalesOrder newOrder = SalesOrder(
-        orderNo: int.tryParse(_orderNoController.text) ?? 0,
-        date: _customerIDController.text,
-        customerID: int.tryParse(_customerIDController.text) ?? 0,
-        productID: int.tryParse(_productID.text) ?? 0,
-        quantity: int.tryParse(_quantityController.text) ?? 0,
-        totalPrice: double.tryParse(_totalPriceController.text) ?? 0,
-        status: _statusController.text,
-      );
-
-
-      print(newOrder);
-
-      // Close the screen
-      Navigator.of(context).pop();
-    }
-  }
-
-  Future<void> _selectOrderDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2101),
-    );
-    if (picked != null && picked != DateTime.now()) {
-      setState(() {
-        _customerIDController.text = picked.toLocal().toString().split(' ')[0];
-      });
-    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Add Product'),
-      ),
+      appBar: CommonAppBar(currentTitle: 'Add Product'),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -94,83 +61,112 @@ class AddProductScreenState extends State<AddProductScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                TextFormField(
-                  // controller: _orderNoController,
-                  decoration: const InputDecoration(labelText: 'Product'),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter product ID';
-                    }
-                    return null;
-                  },
-                ),
-                TextFormField(
-                  controller: _customerIDController,
-                  decoration: const InputDecoration(labelText: 'Unit Price'),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter supplier ID';
-                    }
-                    return null;
-                  },
-                ),
-                TextFormField(
-                  controller: _dateController,
-                  decoration: const InputDecoration(labelText: 'Selling Price'),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter order date';
-                    }
-                    return null;
-                  },
-                  onTap: () async {
-                    await _selectOrderDate(context);
-                  },
-                ),
-                TextFormField(
-                  controller: _productID,
-                  decoration: const InputDecoration(labelText: 'Quantity'),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter delivery date';
-                    }
-                    return null;
-                  },
-                ),
-                TextFormField(
-                  controller: _totalPriceController,
-                  decoration: const InputDecoration(labelText: 'Weight'),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter total price';
-                    }
-                    return null;
-                  },
-                ),
-                // TextFormField(
-                //   controller: _quantityController,
-                //   decoration: InputDecoration(labelText: 'Quantity'),
-                //   validator: (value) {
-                //     if (value == null || value.isEmpty) {
-                //       return 'Please enter quantity';
-                //     }
-                //     return null;
-                //   },
-                // ),
-                // TextFormField(
-                //   controller: _quantityController,
-                //   decoration: InputDecoration(labelText: 'Status'),
-                //   validator: (value) {
-                //     if (value == null || value.isEmpty) {
-                //       return 'Please enter status';
-                //     }
-                //     return null;
-                //   },
-                // ),
+                BuildTextField(controller: _productNameController, labelText: 'Product Name'),
                 const SizedBox(height: 16.0),
-                ElevatedButton(
-                  onPressed: _submitForm,
-                  child: const Text('Submit'),
+                IntegerTextField(
+                  controller: _unitPriceController, 
+                  labelText: 'Unit Price', 
+                  onChanged: (value) {
+                    calculateMarkupAndMargin(_unitPriceController, _sellingPriceController, _marginController, _markupController);
+                    _marginController.text = '${_marginController.text}%';
+                    _markupController.text = '${_markupController.text}%';
+                  },
+                  floatData: true,
+                ),
+                const SizedBox(height: 16.0),
+                IntegerTextField(
+                  controller: _sellingPriceController, 
+                  labelText: 'Selling Price', 
+                  onChanged: (value) {
+                    calculateMarkupAndMargin(_unitPriceController, _sellingPriceController, _marginController, _markupController);
+                    _marginController.text = '${_marginController.text}%';
+                    _markupController.text = '${_markupController.text}%';
+                  },
+                  floatData: true,
+                ),
+                const SizedBox(height: 16.0),
+                IntegerTextField(
+                  controller: _markupController, 
+                  labelText: 'Markup', 
+                  onChanged: (value){
+                    calculateSellingPrice(_unitPriceController, _sellingPriceController, _markupController);
+                  },
+                  floatData: true,
+                ),
+                const SizedBox(height: 16.0),
+                IntegerTextField(
+                  controller: _marginController, 
+                  labelText: 'Margin', 
+                  onChanged: (value){
+                    calculateSellingPrice(_unitPriceController, _sellingPriceController, _markupController);
+                  },
+                  floatData: true,
+                ),
+                const SizedBox(height: 16.0),
+                IntegerTextField(
+                  controller: _criticalLevelController, 
+                  labelText: 'Critical Level',  
+                  onChanged: (value){},
+                  floatData: false,
+                ),
+                const SizedBox(height: 16.0),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    style: TextButton.styleFrom(
+                      foregroundColor: Colors.white,
+                      backgroundColor: Colors.black,
+                      side: const BorderSide(color: Colors.black),
+                      shape: const RoundedRectangleBorder(),
+                      padding: const EdgeInsets.symmetric(vertical: 15.0)
+                    ),
+                    onPressed: () async {
+                      String? productName = validateTextField(_productNameController.text);
+                      String? unitPrice = validateTextField(_unitPriceController.text);
+                      String? sellingPrice= validateTextField(_sellingPriceController.text);
+                      String? margin = validateTextField(_marginController.text);
+                      String? markup = validateTextField(_markupController.text);
+                      String? criticalLevel = validateTextField(_criticalLevelController.text);
+                      if (productName == null
+                        || unitPrice == null
+                        || sellingPrice == null
+                        || margin == null
+                        || markup == null
+                        || criticalLevel == null) {
+                        // Display validation error messages
+                        _formKey.currentState?.validate();
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Please fill in all the required fields.'),
+                            backgroundColor: Colors.red,
+                          ),
+                        );
+                      } else {                
+                        final response = await requestUtil.newProduct(
+                          productName, unitPrice, sellingPrice, margin, markup, criticalLevel
+                        );
+                        
+                        if (response.statusCode == 200) {
+                          Navigator.pop(context);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Product added successfully.'),
+                              backgroundColor: Colors.green,
+                            ),
+                          );
+                        } else {
+                          // Display an error message to the user
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Product added failed'),
+                              backgroundColor: Colors.red,
+                            ),
+                          );
+                        }
+                      }
+                    },
+                    child: const Text('DONE')
+                  ),
                 ),
               ],
             ),
