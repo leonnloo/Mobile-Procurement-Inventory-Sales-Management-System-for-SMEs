@@ -25,9 +25,9 @@ class ProcurementScreenState extends State<ProcurementScreen> {
         length: 2,
         child: Scaffold(
           body: ListView(
-            children:  <Widget>[
+            children: <Widget>[
               //filter system
-               SizedBox(
+              SizedBox(
                 width: double.infinity,
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
@@ -38,19 +38,20 @@ class ProcurementScreenState extends State<ProcurementScreen> {
                       },
                       child: const TextField(
                         decoration: InputDecoration(
-                        enabled: false,
-                        prefixIcon: Icon(Icons.search),
-                        labelText: 'Search',
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(12.0)),
+                          enabled: false,
+                          prefixIcon: Icon(Icons.search),
+                          labelText: 'Search',
+                          border: OutlineInputBorder(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(12.0)),
+                          ),
                         ),
-                      ),
                       ),
                     ),
                   ),
                 ),
               ),
-            
+
               const Card(
                 elevation: 4.0,
                 margin: EdgeInsets.all(16.0),
@@ -59,14 +60,7 @@ class ProcurementScreenState extends State<ProcurementScreen> {
                   child: MonthlyPurchaseStatic(),
                 ),
               ),
-              /*const Card(
-                elevation: 4.0,
-                margin: EdgeInsets.all(16.0),
-                child: Padding(
-                  padding: EdgeInsets.all(16.0),
-                  child: MonthlyPurchaseChart(),
-                ),
-              ),*/
+
               const TabBar(
                 tabs: [
                   Tab(text: 'Past'),
@@ -110,9 +104,9 @@ class ProcurementTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: _fetchProcurementData(category),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
+        future: _fetchProcurementData(category),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
             return const SizedBox(
               height: double.infinity,
               width: double.infinity,
@@ -150,91 +144,108 @@ class ProcurementTab extends StatelessWidget {
               ),
             );
           } else if (snapshot.hasData) {
-            List<PurchasingOrder> orders = snapshot.data as List<PurchasingOrder>;
+            List<PurchasingOrder> orders =
+                snapshot.data as List<PurchasingOrder>;
             return SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: SingleChildScrollView(
                 scrollDirection: Axis.vertical,
-                child: 
-                  DataTable(
-                    columnSpacing: 16.0, // Adjust the spacing between columns
-                    horizontalMargin: 16.0, // Adjust the horizontal margin
-                    columns: const [
-                      DataColumn(label: Text('Order ID'),),
-                      DataColumn(label: Text('Item'),),
-                      DataColumn(label: Text('Supplier'),),
-                      DataColumn(label: Text('Order Date'),),
-                      DataColumn(label: Text('Delivery Date'),),
-                      DataColumn(label: Text('Quantity'),),
-                      DataColumn(label: Text('Unit Price'),),
-                      DataColumn(label: Text('Total Price'),),
-                      DataColumn(label: Text('Status'),),
-                    ],
-                    rows: orders.map((order) {
-                      return DataRow(
-                        cells: [
-                          DataCell(
-                            Text(order.purchaseID),
-                            onTap: () {
-                              navigateToOrderDetail(context, order);
-                            },
-                          ),
-                          DataCell(
-                            Text(order.itemName),
-                            onTap: () {
-                              navigateToOrderDetail(context, order);
-                            },
-                          ),
-                          DataCell(
-                            Text(order.supplierName),
-                            onTap: () {
-                              navigateToOrderDetail(context, order);
-                            },
-                          ),
-                          DataCell(
-                            Text(order.orderDate),
-                            onTap: () {
-                              navigateToOrderDetail(context, order);
-                            },
-                          ),
-                          DataCell(
-                            Text(order.deliveryDate),
-                            onTap: () {
-                              navigateToOrderDetail(context, order);
-                            },
-                          ),
-                          DataCell(
-                            Text(order.quantity.toString()),
-                            onTap: () {
-                              navigateToOrderDetail(context, order);
-                            },
-                          ),
-                          DataCell(
-                            Text(order.unitPrice.toStringAsFixed(2).toString()),
-                            onTap: () {
-                              navigateToOrderDetail(context, order);
-                            },
-                          ),
-                          DataCell(
-                            Text(order.totalPrice.toStringAsFixed(2).toString()),
-                            onTap: () {
-                              navigateToOrderDetail(context, order);
-                            },
-                          ),
-                          DataCell(
-                            Text(order.status),
-                            onTap: () {
-                              navigateToOrderDetail(context, order);
-                            },
-                          ),
-                        ],
-                      );
-                    }).toList(),
-                  ),
+                child: DataTable(
+                  columnSpacing: 16.0, // Adjust the spacing between columns
+                  horizontalMargin: 16.0, // Adjust the horizontal margin
+                  columns: const [
+                    DataColumn(
+                      label: Text('Order ID'),
+                    ),
+                    DataColumn(
+                      label: Text('Item'),
+                    ),
+                    DataColumn(
+                      label: Text('Supplier'),
+                    ),
+                    DataColumn(
+                      label: Text('Order Date'),
+                    ),
+                    DataColumn(
+                      label: Text('Delivery Date'),
+                    ),
+                    DataColumn(
+                      label: Text('Quantity'),
+                    ),
+                    DataColumn(
+                      label: Text('Unit Price'),
+                    ),
+                    DataColumn(
+                      label: Text('Total Price'),
+                    ),
+                    DataColumn(
+                      label: Text('Status'),
+                    ),
+                  ],
+                  rows: orders.map((order) {
+                    return DataRow(
+                      cells: [
+                        DataCell(
+                          Text(order.purchaseID),
+                          onTap: () {
+                            navigateToOrderDetail(context, order);
+                          },
+                        ),
+                        DataCell(
+                          Text(order.itemName),
+                          onTap: () {
+                            navigateToOrderDetail(context, order);
+                          },
+                        ),
+                        DataCell(
+                          Text(order.supplierName),
+                          onTap: () {
+                            navigateToOrderDetail(context, order);
+                          },
+                        ),
+                        DataCell(
+                          Text(order.orderDate),
+                          onTap: () {
+                            navigateToOrderDetail(context, order);
+                          },
+                        ),
+                        DataCell(
+                          Text(order.deliveryDate),
+                          onTap: () {
+                            navigateToOrderDetail(context, order);
+                          },
+                        ),
+                        DataCell(
+                          Text(order.quantity.toString()),
+                          onTap: () {
+                            navigateToOrderDetail(context, order);
+                          },
+                        ),
+                        DataCell(
+                          Text(order.unitPrice.toStringAsFixed(2).toString()),
+                          onTap: () {
+                            navigateToOrderDetail(context, order);
+                          },
+                        ),
+                        DataCell(
+                          Text(order.totalPrice.toStringAsFixed(2).toString()),
+                          onTap: () {
+                            navigateToOrderDetail(context, order);
+                          },
+                        ),
+                        DataCell(
+                          Text(order.status),
+                          onTap: () {
+                            navigateToOrderDetail(context, order);
+                          },
+                        ),
+                      ],
+                    );
+                  }).toList(),
                 ),
+              ),
             );
-          }
-          else {
+          } else {
             return Container(
               width: double.infinity,
               height: double.infinity,
@@ -250,9 +261,9 @@ class ProcurementTab extends StatelessWidget {
               ),
             );
           }
-      }
-    );
+        });
   }
+
   Future<List<PurchasingOrder>> _fetchProcurementData(String category) async {
     try {
       String newCategory;
@@ -261,14 +272,15 @@ class ProcurementTab extends StatelessWidget {
       } else {
         newCategory = 'Delivering';
       }
-      
+
       final procurement = await requestUtil.getProcurementCategory(newCategory);
       if (procurement.statusCode == 200) {
         // Assuming the JSON response is a list of objects
         List<dynamic> jsonData = jsonDecode(procurement.body);
-        
+
         // Map each dynamic object to PurchasingOrder
-        List<PurchasingOrder> procurementData = jsonData.map((data) => PurchasingOrder.fromJson(data)).toList();
+        List<PurchasingOrder> procurementData =
+            jsonData.map((data) => PurchasingOrder.fromJson(data)).toList();
         return procurementData;
       } else {
         throw Exception('Unable to fetch procurement data.');
