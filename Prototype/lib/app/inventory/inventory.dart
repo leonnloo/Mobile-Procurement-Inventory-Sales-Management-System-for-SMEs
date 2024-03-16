@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/get_navigation.dart';
-import 'package:prototype/app/inventory/filter_system';
+import 'package:prototype/app/inventory/inventory_filter_system';
 import 'package:prototype/app/inventory/speed_dial_inventory.dart';
 import 'package:prototype/models/inventory_model.dart';
 import 'package:prototype/app/inventory/inventory_info.dart';
@@ -47,9 +47,9 @@ class InventoryScreen extends StatelessWidget {
 
             Card(
               elevation: 4.0,
-              margin: EdgeInsets.all(16.0),
+              margin: const EdgeInsets.all(16.0),
               child: Padding(
-                padding: EdgeInsets.all(16.0),
+                padding: const EdgeInsets.all(16.0),
                 child: BarChartSample4(),
               ),
             ),
