@@ -241,10 +241,10 @@ class ItemSearch extends SearchDelegate<InventoryItem> {
   }
 
   Widget buildSearchResults(String query) {
-    final List<InventoryItem> searchResults = items
-        .where((item) =>
-            item.itemName.toLowerCase().contains(query.toLowerCase()))
-        .toList();
+    // final List<InventoryItem> searchResults = items
+    //     .where((item) =>
+    //         item.itemName.toLowerCase().contains(query.toLowerCase()))
+    //     .toList();
 
     return const SingleChildScrollView(
       child: Column(
