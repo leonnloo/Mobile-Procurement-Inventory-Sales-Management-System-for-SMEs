@@ -11,9 +11,9 @@ class NotificationScreen extends StatefulWidget {
 class _NotificationScreenState extends State<NotificationScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: CommonAppBar(currentTitle: 'Notifications'),
-      body: const Column(
+    return const Scaffold(
+      appBar: const CommonAppBar(currentTitle: 'Notifications'),
+      body: Column(
         children: [
         ],
       ),

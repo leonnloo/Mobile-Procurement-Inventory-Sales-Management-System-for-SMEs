@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class InventoryOverview extends StatelessWidget {
-  InventoryOverview({
+  const InventoryOverview({
     super.key,
   });
   @override
