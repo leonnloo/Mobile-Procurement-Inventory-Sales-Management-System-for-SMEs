@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import '../../../models/DispatchData.dart';
+import 'package:prototype/models/DispatchData.dart';
 import 'DetailScreen.dart';
 
 class DispatchDeliveryScreen extends StatefulWidget {
-  const DispatchDeliveryScreen({Key? key}) : super(key: key);
+  const DispatchDeliveryScreen({super.key});
 
   @override
-  _DispatchDeliveryScreenState createState() => _DispatchDeliveryScreenState();
+  DispatchDeliveryScreenState createState() => DispatchDeliveryScreenState();
 }
 
-class _DispatchDeliveryScreenState extends State<DispatchDeliveryScreen> {
+class DispatchDeliveryScreenState extends State<DispatchDeliveryScreen> {
   late int packagedCount;
   late int shippedCount;
   late int deliveredCount;
@@ -41,11 +41,11 @@ class _DispatchDeliveryScreenState extends State<DispatchDeliveryScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Dispatch & Delivery'),
+        title: const Text('Dispatch & Delivery'),
         backgroundColor: Colors.red,
         actions: [ // 添加搜索框
           IconButton(
-            icon: Icon(Icons.search),
+            icon: const Icon(Icons.search),
             onPressed: () {
               showSearch(context: context, delegate: _DataSearch());
             },
@@ -53,7 +53,7 @@ class _DispatchDeliveryScreenState extends State<DispatchDeliveryScreen> {
         ],
       ),
       body: Padding(
-        padding: EdgeInsets.all(20.0),
+        padding: const EdgeInsets.all(20.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -64,9 +64,9 @@ class _DispatchDeliveryScreenState extends State<DispatchDeliveryScreen> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   _buildItem(context, '10\nQuantity to be Packaged', Icons.shopping_cart, 'PACKAGED', packagedCount),
-                  SizedBox(height: 20.0),
+                  const SizedBox(height: 20.0),
                   _buildItem(context, '10\nPackages to be Shipped', Icons.local_shipping, 'SHIPPED', shippedCount),
-                  SizedBox(height: 20.0),
+                  const SizedBox(height: 20.0),
                   _buildItem(context, '10\nPackages to be Delivered', Icons.delivery_dining, 'DELIVERED', deliveredCount),
                 ],
               )
@@ -83,11 +83,11 @@ class _DispatchDeliveryScreenState extends State<DispatchDeliveryScreen> {
                 },
               ),
             ),
-            SizedBox(height: 30.0),
+            const SizedBox(height: 30.0),
             Text(
               'In Summary: Total Orders: ${dispatchData.length}',
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
+              style: const TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
             ),
           ],
         ),
@@ -106,17 +106,17 @@ class _DispatchDeliveryScreenState extends State<DispatchDeliveryScreen> {
         size: 30.0,
       ),
       label: Padding(
-        padding: EdgeInsets.only(left: 2.0),
+        padding: const EdgeInsets.only(left: 20.0),
         child: Text(
           title.replaceAll('10', count.toString()), // Replacing '10' with the actual count
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 20.0,
             color: Colors.black,
           ),
         ),
       ),
       style: ElevatedButton.styleFrom(
-        padding: EdgeInsets.all(20.0),
+        padding: const EdgeInsets.all(20.0),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10.0),
         ),
@@ -162,7 +162,7 @@ class _DataSearch extends SearchDelegate<String> {
     final List<DispatchData> searchResults = dispatchData.where((data) => data.orderNo.toString() == query).toList();
 
     if (searchResults.isEmpty) {
-      return Center(
+      return const Center(
         child: Text(
           'No information found.',
           style: TextStyle(fontSize: 16.0),
@@ -176,11 +176,11 @@ class _DataSearch extends SearchDelegate<String> {
         final DispatchData item = searchResults[index];
         return Card(
           elevation: 3,
-          margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+          margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
           child: ListTile(
             title: Text(
               'Order No: ${item.orderNo}',
-              style: TextStyle(
+              style: const TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 18,
               ),
@@ -188,27 +188,27 @@ class _DataSearch extends SearchDelegate<String> {
             subtitle: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
                 Text(
                   'Date: ${item.date}',
-                  style: TextStyle(fontSize: 16),
+                  style: const TextStyle(fontSize: 16),
                 ),
-                SizedBox(height: 4),
+                const SizedBox(height: 4),
                 Text(
                   'Customer ID: ${item.customerID}',
-                  style: TextStyle(fontSize: 16),
+                  style: const TextStyle(fontSize: 16),
                 ),
-                SizedBox(height: 4),
+                const SizedBox(height: 4),
                 Text(
                   'Product ID: ${item.productID}',
-                  style: TextStyle(fontSize: 16),
+                  style: const TextStyle(fontSize: 16),
                 ),
-                SizedBox(height: 4),
+                const SizedBox(height: 4),
                 Text(
                   'Status: ${item.status}',
-                  style: TextStyle(fontSize: 16),
+                  style: const TextStyle(fontSize: 16),
                 ),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
               ],
             ),
           ),
@@ -221,7 +221,7 @@ class _DataSearch extends SearchDelegate<String> {
   List<Widget> buildActions(BuildContext context) {
     return [
       IconButton(
-        icon: Icon(Icons.clear),
+        icon: const Icon(Icons.clear),
         onPressed: () {
           query = '';
         },
@@ -232,7 +232,7 @@ class _DataSearch extends SearchDelegate<String> {
   @override
   Widget buildLeading(BuildContext context) {
     return IconButton(
-      icon: Icon(Icons.arrow_back),
+      icon: const Icon(Icons.arrow_back),
       onPressed: () {
         close(context, '');
       },
