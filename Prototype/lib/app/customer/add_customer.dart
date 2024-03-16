@@ -6,13 +6,13 @@ import 'package:prototype/widgets/appbar/common_appbar.dart';
 import 'package:prototype/widgets/forms/text_field.dart';
 
 class AddCustomerScreen extends StatefulWidget {
-  const AddCustomerScreen({super.key});
+  const AddCustomerScreen({Key? key}) : super(key: key);
 
   @override
-  AddCustomerScreenState createState() => AddCustomerScreenState();
+  _AddCustomerScreenState createState() => _AddCustomerScreenState();
 }
 
-class AddCustomerScreenState extends State<AddCustomerScreen> {
+class _AddCustomerScreenState extends State<AddCustomerScreen> {
   final _formKey = GlobalKey<FormState>();
   final RequestUtil requestUtil = RequestUtil();
 

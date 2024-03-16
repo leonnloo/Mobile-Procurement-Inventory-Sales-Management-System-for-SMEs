@@ -31,6 +31,9 @@ dependencies:
   flutter:
     sdk: flutter
 
+  contacts_service: ^0.6.0
+  permission_handler: ^10.1.2
+
   fl_chart: ^0.66.1
   google_fonts: ^6.1.0
   flutter_native_splash: ^2.3.10

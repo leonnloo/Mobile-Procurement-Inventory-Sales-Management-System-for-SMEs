@@ -1,8 +1,7 @@
 // main.dart
 import 'package:flutter/material.dart';
-import 'package:prototype/app/customer/customer_info.dart';
-import 'package:prototype/models/procurementdata.dart';
 import 'package:get/get.dart';
+import 'package:prototype/models/procurement_model.dart';
 
 class FilterSystem extends StatefulWidget {
   const FilterSystem({super.key});
@@ -11,12 +10,15 @@ class FilterSystem extends StatefulWidget {
 class FilterSystemState extends State<FilterSystem>{
 
   TextEditingController searchController = TextEditingController();
-  static List<PurchasingOrder> searchList = pastOrders + presentOrders;
-  List<PurchasingOrder> displayList = List.from(searchList);
+  // static List<PurchasingOrder> searchList = pastOrders + presentOrders;
+  static List<PurchasingOrder> searchList = [];
+
+  // List<PurchasingOrder> displayList = List.from(searchList);
+  List<PurchasingOrder> displayList = [];
 
   void updateList(String value){
     displayList = searchList
-      .where((element) => element.orderNumber.toString().toLowerCase().contains(value.toLowerCase()))
+      .where((element) => element.purchaseID.toLowerCase().contains(value.toLowerCase()))
       .toList();
   }
 
@@ -57,7 +59,7 @@ class FilterSystemState extends State<FilterSystem>{
                     ),
                     child: ListTile(
                       title: Text(
-                        '${displayList[index].orderNumber} ${displayList[index].status}',
+                        '${displayList[index].purchaseID} ${displayList[index].status}',
                         style: const TextStyle(
                           fontSize: 20.0,
                           fontWeight: FontWeight.bold,
