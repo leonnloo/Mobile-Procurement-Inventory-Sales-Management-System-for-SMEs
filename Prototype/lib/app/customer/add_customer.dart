@@ -1,27 +1,31 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:prototype/models/customerdata.dart';
+import 'package:prototype/util/request_util.dart';
+import 'package:prototype/util/validate_text.dart';
+import 'package:prototype/widgets/appbar/common_appbar.dart';
+import 'package:prototype/widgets/forms/text_field.dart';
 
 class AddCustomerScreen extends StatefulWidget {
-  const AddCustomerScreen({super.key});
+  const AddCustomerScreen({Key? key}) : super(key: key);
 
   @override
-  AddCustomerScreenState createState() => AddCustomerScreenState();
+  _AddCustomerScreenState createState() => _AddCustomerScreenState();
 }
 
-class AddCustomerScreenState extends State<AddCustomerScreen> {
+class _AddCustomerScreenState extends State<AddCustomerScreen> {
   final _formKey = GlobalKey<FormState>();
+  final RequestUtil requestUtil = RequestUtil();
 
-  late TextEditingController _customerNameController;
+  late TextEditingController _businessNameController;
   late TextEditingController _contactPersonController;
   late TextEditingController _emailController;
   late TextEditingController _phoneNoController;
   late TextEditingController _billingAddressController;
   late TextEditingController _shippingAddressController;
-
   @override
   void initState() {
     super.initState();
-    _customerNameController = TextEditingController();
+    _businessNameController = TextEditingController();
     _contactPersonController = TextEditingController();
     _emailController = TextEditingController();
     _phoneNoController = TextEditingController();
@@ -31,7 +35,7 @@ class AddCustomerScreenState extends State<AddCustomerScreen> {
 
   @override
   void dispose() {
-    _customerNameController.dispose();
+    _businessNameController.dispose();
     _contactPersonController.dispose();
     _emailController.dispose();
     _phoneNoController.dispose();
@@ -40,32 +44,10 @@ class AddCustomerScreenState extends State<AddCustomerScreen> {
     super.dispose();
   }
 
-  void _submitForm() {
-    if (_formKey.currentState?.validate() ?? false) {
-      CustomerData newCustomer = CustomerData(
-        customerID: 0, // Assign a unique ID (can generate or get from a database)
-        customerName: _customerNameController.text,
-        contactPerson: _contactPersonController.text,
-        email: _emailController.text,
-        phoneno: _phoneNoController.text,
-        billingAddress: _billingAddressController.text,
-        shippingAddress: _shippingAddressController.text,
-      );
-
-
-      print(newCustomer);
-
-      // Close the screen
-      Navigator.of(context).pop();
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Add Customer'),
-      ),
+      appBar: CommonAppBar(currentTitle: 'Add Customer'),
       body: 
       SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
@@ -74,70 +56,76 @@ class AddCustomerScreenState extends State<AddCustomerScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              TextFormField(
-                controller: _customerNameController,
-                decoration: const InputDecoration(labelText: 'Customer Name'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter customer name';
-                  }
-                  return null;
-                },
-              ),
-              TextFormField(
-                controller: _contactPersonController,
-                decoration: const InputDecoration(labelText: 'Contact Person'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter contact person';
-                  }
-                  return null;
-                },
-              ),
-              TextFormField(
-                controller: _emailController,
-                decoration: const InputDecoration(labelText: 'Email'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter email';
-                  }
-                  return null;
-                },
-              ),
-              TextFormField(
-                controller: _phoneNoController,
-                decoration: const InputDecoration(labelText: 'Phone No'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter phone number';
-                  }
-                  return null;
-                },
-              ),
-              TextFormField(
-                controller: _billingAddressController,
-                decoration: const InputDecoration(labelText: 'Billing Address'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter billing address';
-                  }
-                  return null;
-                },
-              ),
-              TextFormField(
-                controller: _shippingAddressController,
-                decoration: const InputDecoration(labelText: 'Shipping Address'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter shipping address';
-                  }
-                  return null;
-                },
-              ),
               const SizedBox(height: 16.0),
-              ElevatedButton(
-                onPressed: _submitForm,
-                child: const Text('Submit'),
+              BuildTextField(controller: _businessNameController, labelText: 'Business Name'),
+              const SizedBox(height: 16.0),
+              BuildTextField(controller: _contactPersonController, labelText: 'Contact Person'),
+              const SizedBox(height: 16.0),
+              BuildTextField(controller: _emailController, labelText: 'Email'),
+              const SizedBox(height: 16.0),
+              BuildTextField(controller: _phoneNoController, labelText: 'Phone Number'),
+              const SizedBox(height: 16.0),
+              BuildTextField(controller: _billingAddressController, labelText: 'Billing Address'),
+              const SizedBox(height: 16.0),
+              BuildTextField(controller: _shippingAddressController, labelText: 'Shipping Address'),
+              const SizedBox(height: 16.0),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  style: TextButton.styleFrom(
+                    foregroundColor: Colors.white,
+                    backgroundColor: Colors.black,
+                    side: const BorderSide(color: Colors.black),
+                    shape: const RoundedRectangleBorder(),
+                    padding: const EdgeInsets.symmetric(vertical: 15.0)
+                  ),
+                  onPressed: () async {
+                    String? businessName = validateTextField(_businessNameController.text);
+                    String? contactPerson = validateTextField(_contactPersonController.text);
+                    String? email = validateTextField(_emailController.text);
+                    String? phoneNumber = validateTextField(_phoneNoController.text);
+                    String? billingAddress = validateTextField(_billingAddressController.text);
+                    String? shippingAddress = validateTextField(_shippingAddressController.text);
+                    if (businessName == null ||
+                        contactPerson == null ||
+                        email == null ||
+                        phoneNumber == null ||
+                        billingAddress == null ||
+                        shippingAddress == null) {
+                      // Display validation error messages
+                      _formKey.currentState?.validate();
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Please fill in all the required fields.'),
+                          backgroundColor: Colors.red,
+                        ),
+                      );
+                    } else {                
+                      final response = await requestUtil.newCustomer(
+                        businessName, contactPerson, email, phoneNumber, billingAddress, shippingAddress
+                      );
+                      
+                      if (response.statusCode == 200) {
+                        Navigator.pop(context);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Customer added successfully.'),
+                            backgroundColor: Colors.green,
+                          ),
+                        );
+                      } else {
+                        // Display an error message to the user
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(jsonDecode(response.body)['detail']),
+                            backgroundColor: Colors.red,
+                          ),
+                        );
+                      }
+                    }
+                  },
+                  child: const Text('DONE')
+                ),
               ),
             ],
           ),

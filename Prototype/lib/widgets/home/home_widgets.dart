@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:prototype/widgets/drawer/drawer_controller.dart';
-import 'package:prototype/widgets/drawer/drawer_sections.dart';
+import 'package:prototype/models/drawer_sections.dart';
 import 'package:prototype/widgets/home/home_search.dart';
 import 'package:prototype/widgets/inventory_overview.dart';
 import 'package:prototype/widgets/product_overview.dart';
@@ -46,8 +46,7 @@ class HomeWidgets extends StatelessWidget {
                   child: Card(
                     child: GestureDetector(
                       onTap: () {
-                        print('object');
-                        Get.to(() => const HomeSearch());
+                        // Get.to(() => const HomeSearch());
                       },
                       child: const TextField(
                         decoration: InputDecoration(
@@ -73,7 +72,8 @@ class HomeWidgets extends StatelessWidget {
                     controller.changePage(DrawerSections.inventory);
                   },
                   child:
-                    ProductStatusWidget(),
+                    // ProductStatusWidget(),
+                    Container()
                 ),
               ),
 

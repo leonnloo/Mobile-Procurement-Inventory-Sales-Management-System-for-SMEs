@@ -5,7 +5,7 @@ db = client.grp_db
 
 users_db = db["users_db"]
 customers_db = db["customers_db"]
-supplier_db = db["supplier_db"]
+suppliers_db = db["suppliers_db"]
 sales_order_db = db["sales_order_db"]
 sales_management_db = db["sales_management_db"]
 procurement_db = db["procurement_db"]

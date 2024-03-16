@@ -1,6 +1,10 @@
 import "package:flutter/material.dart";
-import 'package:prototype/models/customerdata.dart';
+import 'package:prototype/models/customer_model.dart';
+import 'package:prototype/models/edit_type.dart';
+import 'package:prototype/models/order_model.dart';
+import 'package:prototype/util/request_util.dart';
 import 'dart:math';
+import 'package:prototype/widgets/appbar/info_appbar.dart';
 
 void navigateToCustomerDetail(BuildContext context, CustomerData customer) {
   Navigator.of(context).push(
@@ -18,24 +22,22 @@ class CustomerDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Customer Detail'),
-      ),
+      appBar: InfoAppBar(currentTitle: 'Customer Details', currentData: customer, editType: EditType.customer,),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildDetailRow('Customer ID', customer.customerID.toString()),
-            _buildDetailRow('Customer Name', customer.customerName),
+            _buildDetailRow('Customer ID', customer.customerID),
+            _buildDetailRow('Business Name', customer.businessName),
             _buildDetailRow('Contact Person', customer.contactPerson),
             _buildDetailRow('Email', customer.email),
-            _buildDetailRow('Phone number', customer.phoneno),
-            _buildDetailRow('Billing address', customer.billingAddress),
+            _buildDetailRow('Phone Number', customer.phoneNo),
+            _buildDetailRow('Billing Address', customer.billingAddress),
             _buildDetailRow('Shipping Address', customer.shippingAddress),
 
             const SizedBox(height: 6.0), // Add some spacing
-            _buildNotes(),
+            _buildNotes(context),
             
             const SizedBox(height: 6.0),
             _buildHistory(),
@@ -72,37 +74,78 @@ class CustomerDetailScreen extends StatelessWidget {
   }
 
 
-  Widget _buildNotes(){
+  Widget _buildNotes(BuildContext context){
+    final TextEditingController notesController = TextEditingController();
+    notesController.text = customer.notes!;
+
+    final RequestUtil requestUtil = RequestUtil();
     return Padding(
       padding: const EdgeInsets.all(16.0),
-      child: 
-      // Section for User's Remark
-      Align(
-        child: Container(
-          decoration: BoxDecoration(
-            border: Border.all(
-              color: Colors.grey, // You can set the color of the border
-              width: 1.0,
+      child: Align(
+          child: Container(
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: Colors.grey, // You can set the color of the border
+                width: 1.0,
+              ),
+              borderRadius: const BorderRadius.all(Radius.circular(8.0)),
             ),
-            borderRadius: const BorderRadius.all(Radius.circular(8.0)),
-          ),
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                'Note:                                                           ',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 8.0),
-              Text(
-                customer.remark ?? 'No remark available',
-                style: const TextStyle(fontSize: 16),
-              ),
-            ],
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  width: double.infinity,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const SizedBox(
+                        child: Text(
+                          'Note:',
+                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      SizedBox(
+                        child: TextButton(
+                          onPressed: () async {
+                            final response = await requestUtil.updateNote(customer.customerID, notesController.text);
+                            if (response.statusCode == 200) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text('Note saved!'),
+                                  backgroundColor: Colors.green,
+                                ),
+                              );
+                              return;
+                            }
+                            else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text('Note save failed!'),
+                                  backgroundColor: Colors.red,
+                                ),
+                              );
+                            }
+                          }, 
+                          child: const Text('Save'),
+                        )
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 8.0),
+                TextFormField(
+                  controller: notesController,
+                  maxLines: null, // Allow text to wrap to multiple lines
+                  minLines: 1,    // Set the minimum number of lines to show
+                  decoration: const InputDecoration(
+                    border: InputBorder.none,
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
-      ),
     );
   }
   
@@ -122,26 +165,28 @@ List<String> generateRandomHistory() {
 }
 
 Widget _buildHistory() {
-  List<String> historyEntries = generateRandomHistory();
+  List<SalesOrder>? pastOrders = customer.pastOrder;
 
   return Padding(
     padding: const EdgeInsets.all(16.0),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: historyEntries.map((history) {
+      children: pastOrders?.map((order) {
         return Row(
           children: [
             const Icon(Icons.history, color: Colors.blue),
             const SizedBox(width: 8.0),
-            Text(history),
+            Text('Placed an order on ${order.orderDate} - ${order.status}'),
           ],
         );
-      }).toList(),
+        // ! do empty history after completing adding orders
+      }).toList() ?? [],
     ),
   );
 }
+
+
 List<PastOrder> generatePastOrders() {
-    final Random random = Random();
 
     return List.generate(5, (index) {
       return PastOrder(
