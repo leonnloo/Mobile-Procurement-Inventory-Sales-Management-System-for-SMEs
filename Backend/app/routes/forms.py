@@ -30,7 +30,7 @@ def processNextID(query: str) -> str:
 
 # ----------------------------------------- Customer Form ----------------------------------------------
 @form_router.post("/customer_form")
-def customer_form(customer: NewCustomer):
+def customer_form(customer: NewCustomer, token: str = Depends(oauth_scheme)):
     existing_customer = customers_db.find_one({"business_name": customer.business_name})
     if existing_customer:
         raise HTTPException(
@@ -66,12 +66,12 @@ def customer_form(customer: NewCustomer):
 
 # ----------------------------------------- Supplier Form ----------------------------------------------
 @form_router.post("/supplier_form")
-def supplier_form(supplier: NewSupplier):
+def supplier_form(supplier: NewSupplier, token: str = Depends(oauth_scheme)):
     existing_supplier = suppliers_db.find_one({"business_name": supplier.business_name})
     if existing_supplier:
         raise HTTPException(
         status_code = status.HTTP_403_FORBIDDEN,
-        detail = "Customer business registered",
+        detail = "Supplier business registered",
     )
 
     # Find the document with the largest supplier_id

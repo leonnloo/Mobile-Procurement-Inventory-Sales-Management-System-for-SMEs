@@ -12,7 +12,7 @@ def construct_query(intent_tag, entities):
             query["business_name"] = entities["business_name"]
         elif "name" in entities:
             query["business_name"] = entities["name"]
-            query["contact_person"] = entities["name"]
+            # query["contact_person"] = entities["name"]
         elif "email" in entities:
             query["email"] = entities["email"]
         elif "phone_number" in entities:
@@ -27,16 +27,16 @@ def construct_query(intent_tag, entities):
 def query_mongodb(intent_tag, user_input):
     entities = extract_entities(user_input)
     for entity in entities: 
-        print(entity)
+        print(entity) 
     query = construct_query(intent_tag, entities)
     if query:
         if intent_tag == "customer_info":
-            if query.__len__ > 1:
+            if query.__len__() > 1:
                 result = customers_db.find_one({"$or": [query[0], query[1]]})
             else:
                 result = customers_db.find_one(query)
         elif intent_tag == "supplier_info":
-            if query.__len__ > 1:
+            if query.__len__() > 1:
                 result = suppliers_db.find_one({"$or": [query[0], query[1]]})
             else:
                 result = suppliers_db.find_one(query)
