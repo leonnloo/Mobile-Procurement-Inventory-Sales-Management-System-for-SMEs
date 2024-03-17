@@ -1,7 +1,7 @@
-fastapi
-pydantic
+fastapi[all]
 fastapi-mail
 pymongo
+bson
 numpy
 torch
 nltk
@@ -14,3 +14,6 @@ spacy-llm
 
 # install this seperately
 # python -m spacy download en_core_web_sm
+
+# to install torch
+# New-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\FileSystem" -Name "LongPathsEnabled" -Value 1 -PropertyType DWORD -Force
