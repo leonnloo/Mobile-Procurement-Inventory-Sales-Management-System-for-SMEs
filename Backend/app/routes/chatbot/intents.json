@@ -152,16 +152,21 @@
       ],
       "responses": [
         "Hey :-)",
-        "Hello, thanks for visiting",
         "Hi there, what can I do for you?",
-        "Hi there, how can I help?"
+        "Hi there, how can I help?",
+        "Greetings!",
+        "Nice to see you!",
+        "Hey, what's up?",
+        "Hello! How's your day going?",
+        "Hey, good to have you here!",
+        "Hi! What brings you here today?"
       ]
-    },
+    },    
     {
       "tag": "goodbye",
       "patterns": ["Bye", "See you later", "Goodbye"],
       "responses": [
-        "See you later, thanks for visiting",
+        "See you later",
         "Have a nice day",
         "Bye! Come back again soon."
       ]

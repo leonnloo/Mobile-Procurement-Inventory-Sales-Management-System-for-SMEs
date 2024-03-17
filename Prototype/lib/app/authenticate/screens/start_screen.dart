@@ -73,7 +73,7 @@ class StartScreen extends StatelessWidget {
                                 controller.resetAnimation();
                                 Navigator.pushReplacement(
                                   context,
-                                  MaterialPageRoute(builder: (context) => const RegisterContent()),
+                                  MaterialPageRoute(builder: (context) => RegisterContent()),
                                 );
                               },
                               style: ElevatedButton.styleFrom(

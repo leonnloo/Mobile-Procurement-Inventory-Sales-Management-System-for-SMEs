@@ -46,19 +46,19 @@ class HomeScreenState extends State<HomeScreen> {
         currentTitle = "Dashboard";
       } else if (controller.currentPage.value == DrawerSections.salesOrder) {
         container = SalesOrderScreen();
-        currentTitle = "Sales Order (Design how you see fit)";
+        currentTitle = "Sales Order";
       } else if (controller.currentPage.value == DrawerSections.salesManagement) {
         container = const SalesManagementScreen();
-        currentTitle = "Sales Management (Design how you see fit)";
+        currentTitle = "Sales Management";
       } else if (controller.currentPage.value == DrawerSections.inventory) {
         container = InventoryScreen();
-        currentTitle = "Inventory (Design how you see fit)";
+        currentTitle = "Inventory";
       } else if (controller.currentPage.value == DrawerSections.product) {
-        container = ProductManagementScreen();
+        container = const ProductManagementScreen();
         currentTitle = "Product";
       } else if (controller.currentPage.value == DrawerSections.procurement) {
         container = const ProcurementScreen();
-        currentTitle = "Procurement (Design how you see fit)";
+        currentTitle = "Procurement";
       } else if (controller.currentPage.value == DrawerSections.supplier) {
         container = SupplierManagementScreen();
         currentTitle = "Supplier";

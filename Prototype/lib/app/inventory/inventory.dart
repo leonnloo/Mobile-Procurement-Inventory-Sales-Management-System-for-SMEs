@@ -1,20 +1,58 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_navigation/get_navigation.dart';
+import 'package:prototype/app/inventory/inventory_filter_system';
 import 'package:prototype/app/inventory/speed_dial_inventory.dart';
 import 'package:prototype/models/inventory_model.dart';
 import 'package:prototype/app/inventory/inventory_info.dart';
+import 'package:prototype/app/inventory/inventory_barchart.dart';
 import 'package:prototype/util/request_util.dart';
 
 class InventoryScreen extends StatelessWidget {
   InventoryScreen({super.key});
   final RequestUtil requestUtil = RequestUtil();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
         child: Column(
           children: [
+            SizedBox(
+              width: double.infinity,
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Card(
+                  child: GestureDetector(
+                    onTap: () {
+                      Get.to(() => const FilterSystem());
+                    },
+                    child: const TextField(
+                      decoration: InputDecoration(
+                        enabled: false,
+                        prefixIcon: Icon(Icons.search),
+                        labelText: 'Search',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(12.0)),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+
+            Card(
+              elevation: 4.0,
+              margin: const EdgeInsets.all(16.0),
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: BarChartSample4(),
+              ),
+            ),
             // In Stock Section
             buildInventorySection(context, 'In Stock'),
           
@@ -182,7 +220,6 @@ class InventoryScreen extends StatelessWidget {
       ],
     );
   }
-
   Future<List<InventoryItem>> _fetchInventoryData(String category) async {
     try {
       final item = await requestUtil.getInventoryType(category);
@@ -200,8 +237,9 @@ class InventoryScreen extends StatelessWidget {
       rethrow; // Rethrow the error to be caught by FutureBuilder
     }
   }
-
 }
+
+
 
 class ItemSearch extends SearchDelegate<InventoryItem> {
   final List<InventoryItem> items;
@@ -241,10 +279,10 @@ class ItemSearch extends SearchDelegate<InventoryItem> {
   }
 
   Widget buildSearchResults(String query) {
-    // final List<InventoryItem> searchResults = items
-    //     .where((item) =>
-    //         item.itemName.toLowerCase().contains(query.toLowerCase()))
-    //     .toList();
+    final List<InventoryItem> searchResults = items
+        .where(
+            (item) => item.itemName.toLowerCase().contains(query.toLowerCase()))
+        .toList();
 
     return const SingleChildScrollView(
       child: Column(

@@ -20,79 +20,81 @@ class ProcurementScreen extends StatefulWidget {
 class ProcurementScreenState extends State<ProcurementScreen> {
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 2,
-      child: Scaffold(
-        body: ListView(
-          children:  <Widget>[
-            //filter system
-              SizedBox(
-              width: double.infinity,
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Card(
-                  child: GestureDetector(
-                    onTap: () {
-                      Get.to(() => const FilterSystem());
-                    },
-                    child: const TextField(
-                      decoration: InputDecoration(
-                      enabled: false,
-                      prefixIcon: Icon(Icons.search),
-                      labelText: 'Search',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(12.0)),
+    return MaterialApp(
+      home: DefaultTabController(
+        length: 2,
+        child: Scaffold(
+          body: ListView(
+            children:  <Widget>[
+              //filter system
+               SizedBox(
+                width: double.infinity,
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Card(
+                    child: GestureDetector(
+                      onTap: () {
+                        Get.to(() => const FilterSystem());
+                      },
+                      child: const TextField(
+                        decoration: InputDecoration(
+                        enabled: false,
+                        prefixIcon: Icon(Icons.search),
+                        labelText: 'Search',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(12.0)),
+                        ),
                       ),
-                    ),
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
-          
-            const Card(
-              elevation: 4.0,
-              margin: EdgeInsets.all(16.0),
-              child: Padding(
-                padding: EdgeInsets.all(16.0),
-                child: MonthlyPurchaseStatic(),
+            
+              const Card(
+                elevation: 4.0,
+                margin: EdgeInsets.all(16.0),
+                child: Padding(
+                  padding: EdgeInsets.all(16.0),
+                  child: MonthlyPurchaseStatic(),
+                ),
               ),
-            ),
-            /*const Card(
-              elevation: 4.0,
-              margin: EdgeInsets.all(16.0),
-              child: Padding(
-                padding: EdgeInsets.all(16.0),
-                child: MonthlyPurchaseChart(),
-              ),
-            ),*/
-            const TabBar(
-              tabs: [
-                Tab(text: 'Past'),
-                Tab(text: 'Present'),
-              ],
-            ),
-            SizedBox(
-              height: 400,
-              child: TabBarView(
-                children: [
-                  ProcurementTab(category: 'Past'),
-                  ProcurementTab(category: 'Present'),
+              /*const Card(
+                elevation: 4.0,
+                margin: EdgeInsets.all(16.0),
+                child: Padding(
+                  padding: EdgeInsets.all(16.0),
+                  child: MonthlyPurchaseChart(),
+                ),
+              ),*/
+              const TabBar(
+                tabs: [
+                  Tab(text: 'Past'),
+                  Tab(text: 'Present'),
                 ],
               ),
-            ),
-          ],
-        ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            // Navigate to a screen for adding new customer info
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => const AddProcurementScreen(),
+              SizedBox(
+                height: 400,
+                child: TabBarView(
+                  children: [
+                    ProcurementTab(category: 'Past'),
+                    ProcurementTab(category: 'Present'),
+                  ],
+                ),
               ),
-            );
-          },
-          child: const Icon(Icons.add),
+            ],
+          ),
+          floatingActionButton: FloatingActionButton(
+            onPressed: () {
+              // Navigate to a screen for adding new customer info
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => const AddProcurementScreen(),
+                ),
+              );
+            },
+            child: const Icon(Icons.add),
+          ),
         ),
       ),
     );
