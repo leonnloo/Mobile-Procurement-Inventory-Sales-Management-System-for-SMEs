@@ -35,14 +35,14 @@ class UserInput(BaseModel):
 def format_mongo_response(intent, mongo_result):
     if intent == 'customer_info':
         response = f"Customer ID {mongo_result['customer_id']} is associated with the business named {mongo_result['business_name']}. "
-        response += f"The contact person is {mongo_result['contact_person']}. "
-        response += f"You can reach them via email at {mongo_result['email']} or phone at {mongo_result['phone_number']}. "
-        response += f"The billing and shipping address is {mongo_result['billing_address']}. "
+        response += f"\nThe contact person is {mongo_result['contact_person']}. "
+        response += f"\nYou can reach them via email at {mongo_result['email']} or phone at {mongo_result['phone_number']}. "
+        response += f"\nThe billing and shipping address is {mongo_result['billing_address']}. "
         if mongo_result['past_order'] is None:
-            response += "Currently, there are no past orders listed for this customer. "
+            response += "\nCurrently, there are no past orders listed for this customer. "
         else:
-            response += f"The past order is {mongo_result['past_order']}. "
-        response += f"Notes: {mongo_result['notes']}."
+            response += f"\nThe past order is {mongo_result['past_order']}. "
+        response += f"\nNotes: {mongo_result['notes']}."
         return response
 
         
