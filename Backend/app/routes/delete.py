@@ -3,7 +3,18 @@ from config.database import *
 from models import *
 from schema.schemas import *
 from fastapi.security import OAuth2PasswordBearer
+from datetime import datetime
 
+
+def extract_year_month_day(date_str: str):
+    try:
+        date_obj = datetime.strptime(date_str, "%Y-%m-%d")
+        year = date_obj.year
+        month = date_obj.month
+        day = date_obj.day
+        return year, month, day
+    except ValueError:
+        raise ValueError("Invalid date format. Please provide a date in the format YYYY-MM-DD")
 delete_router = APIRouter()
 oauth_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
@@ -35,8 +46,38 @@ def delete_suppliers(id: str, token: str = Depends(oauth_scheme)):
 # ---------------------------------------- Sales Order ----------------------------------------
 @delete_router.delete("/delete_sale_order/{id}")
 def delete_sale_order(id: str, token: str = Depends(oauth_scheme)):
-    result = sales_order_db.delete_one({'order_id': id})
+    deleted_order = sales_order_db.find_one({'order_id': id})
     
+    # update product
+    product = product_db.find_one({"product_id": deleted_order['product_id']})
+    product['quantity'] += deleted_order['quantity']
+    if product['quantity'] > 0 and product['quantity'] >= product['critical_level']:
+        new_status = 'In Stock'
+    elif product['quantity'] > 0 and product['quantity'] < product['critical_level']:
+        new_status = 'Low Stock'
+    else:
+        new_status = 'Out of Stock'
+    product['status'] = new_status
+    product_db.update_one({'product_id': deleted_order['product_id']}, {'$set': product})
+
+    # Only update monthly and employee sales if order is completed
+    if deleted_order['status'] == 'Completed':
+        year, month, day = extract_year_month_day(deleted_order['order_date'])
+        # update monthly sales
+        monthly_sale = monthly_sales_db.find_one({"year": year, "month": month})
+        if monthly_sale:
+            monthly_sale['actual_sales'] -= deleted_order['total_price']
+            monthly_sales_db.update_one({"year": year, "month": month}, {"$set": monthly_sale})
+
+        # update employee sales
+        employee = users_db.find_one({"employee_id": deleted_order['employee_id']})
+        if employee:
+            for record in employee['sales_record']:
+                if record['year'] == year and record['month'] == month:
+                    record['sales'] -= deleted_order['total_price']
+            users_db.update_one({"employee_id": deleted_order['employee_id']}, {"$set": employee})
+
+    result = sales_order_db.delete_one({'order_id': id})
     if result.deleted_count > 0:
         return {"message": f"Sale order with id {id} deleted successfully"}
     else:
@@ -46,6 +87,7 @@ def delete_sale_order(id: str, token: str = Depends(oauth_scheme)):
         )
 
 # ---------------------------------------- Procurement ----------------------------------------
+# ! UPDATE BOUGHT PURCHASE ITEMS
 @delete_router.delete("/delete_procurement/{id}")
 def delete_procurement(id: str, token: str = Depends(oauth_scheme)):
     result = procurement_db.delete_one({'purchase_no': id})
@@ -83,19 +125,5 @@ def delete_inventory(id: str, token: str = Depends(oauth_scheme)):
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"Inventory item with id {id} not found",
-        )
-
-
-# ---------------------------------------- Sale Management ----------------------------------------
-@delete_router.delete("/delete_company_monthly_sales/{id}")
-def delete_company_monthly_sales(id: str, token: str = Depends(oauth_scheme)):
-    result = sales_management_db.delete_one({'monthly_sales_id': id})
-
-    if result.deleted_count > 0:
-        return {"message": f"Company monthly sales with id {id} deleted successfully"}
-    else:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"Company monthly sales with id {id} not found",
         )
 

@@ -1,3 +1,7 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:prototype/app/procurement/get_procurement.dart';
 import 'package:prototype/app/sale_orders/get_order.dart';
@@ -178,6 +182,8 @@ class EditOrderState extends State<EditOrder> {
                         String? unitPrice = validateTextField(_unitPriceController.text);
                         String? totalPrice = validateTextField(_totalPriceController.text);
                         String? status = validateTextField(_statusController.text);
+                        String? employee = validateTextField(_employeeNameController.text);
+                        String? employeeID = validateTextField(_employeeIDController.text);
                         if (customerName == null
                           || customerID == null
                           || productName == null
@@ -186,7 +192,9 @@ class EditOrderState extends State<EditOrder> {
                           || quantity == null
                           || unitPrice == null
                           || totalPrice == null
-                          || status == null) {
+                          || status == null
+                          || employee == null
+                          || employeeID == null) {
                           // Display validation error messages
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
@@ -195,8 +203,8 @@ class EditOrderState extends State<EditOrder> {
                             ),
                           );
                         } else {                
-                          final response = await requestUtil.newOrder(
-                            widget.orderData.orderID, customerID, productName, productID, orderDate, unitPrice, totalPrice, quantity, status
+                          final response = await requestUtil.updateSaleOrder(
+                            widget.orderData.orderID, customerName, customerID, productName, productID, orderDate, unitPrice, totalPrice, quantity, status, employee, employeeID
                           );
                           
                           if (response.statusCode == 200) {
@@ -211,8 +219,8 @@ class EditOrderState extends State<EditOrder> {
                           } else {
                             // Display an error message to the user
                             ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text('Order could not be updated.'),
+                              SnackBar(
+                                content: Text('Order added failed: ${jsonDecode(response.body)['detail']}'),
                                 backgroundColor: Colors.red,
                               ),
                             );
