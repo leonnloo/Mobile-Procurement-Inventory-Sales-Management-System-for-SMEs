@@ -6,10 +6,28 @@ from models.supplier_model import *
 from models.procurement_model import * 
 from models.product_model import * 
 from models.inventory_model import *  
-from models.sales_management_model import CompanyMonthlySales
-from models import *
+from models.sales_management_model import *
 from schema.schemas import *
 from fastapi.security import OAuth2PasswordBearer
+from datetime import datetime
+
+
+def extract_year_month_day(date_str: str):
+    try:
+        date_obj = datetime.strptime(date_str, "%Y-%m-%d")
+        year = date_obj.year
+        month = date_obj.month
+        day = date_obj.day
+        return year, month, day
+    except ValueError:
+        raise ValueError("Invalid date format. Please provide a date in the format YYYY-MM-DD")
+
+# # Example usage:
+# date_str = "2024-03-19"
+# year, month, day = extract_year_month_day(date_str)
+# print("Year:", year)
+# print("Month:", month)
+# print("Day:", day)
 
 put_router = APIRouter()
 oauth_scheme = OAuth2PasswordBearer(tokenUrl="token")
@@ -88,6 +106,64 @@ def update_sale_order(order: NewSaleOrder, order_id, token: str = Depends(oauth_
                 employee_id = order.employee_id
             )
 
+
+            if updated_order.status == 'Completed':
+                priceDifference = order.total_price - old_order['total_price']
+                year, month, day = extract_year_month_day(order.order_date)
+                monthly_sale = monthly_sales_db.find_one({"year": year, "month": month})
+                # Update monthly sales
+                if monthly_sale:
+                    monthly_sale['actual_sales'] += priceDifference
+                    monthly_sales_db.update_one({"year": year, "month": month}, {"$set": monthly_sale})
+                # if order is placed in a advanced month
+                else:
+                    new_monthly_sales = MonthlySalesTarget(
+                        year = year,
+                        month = month,
+                        actual_sales = order.total_price,
+                        target_sales = 0
+                    )
+                    monthly_sales_db.insert_one(dict(new_monthly_sales))
+
+
+                # Update employee
+                employee = users_db.find_one({"employee_id": order.employee_id})
+                if employee:
+                    if 'sales_record' in employee and isinstance(employee['sales_record'], list):
+                        # Check if there is a sales record for the given year and month
+                        sales_record_found = False
+                        for record in employee['sales_record']:
+                            if record['year'] == year and record['month'] == month:
+                                record['sales'] += priceDifference
+                                sales_record_found = True
+                                break
+
+                        # If no sales record found for the given year and month, create a new one
+                        if not sales_record_found:
+                            new_monthly_sales = {
+                                'year': year,
+                                'month': month,
+                                'sales': order.total_price
+                            }
+                            employee['sales_record'].append(new_monthly_sales)
+                    else:
+                        # If sales_record doesn't exist or is not a list, create a new list with the new sales record
+                        employee['sales_record'] = [{
+                            'year': year,
+                            'month': month,
+                            'sales': order.total_price
+                        }]
+                    
+                    # Update the employee document in the database
+                    users_db.update_one({"employee_id": order.employee_id}, {"$set": employee})
+                if not employee:
+                    raise HTTPException(
+                        status_code = status.HTTP_403_FORBIDDEN,
+                        detail = "Couldn't register employee sale",
+                        headers={"WWW-Authenticate": "Bearer"},
+                    )
+
+            # Update product status
             product['quantity'] = left_product
             if product['quantity'] > 0 and product['quantity'] >= product['critical_level']:
                 new_status = 'In Stock'
@@ -109,7 +185,7 @@ def update_sale_order(order: NewSaleOrder, order_id, token: str = Depends(oauth_
     else:
         raise HTTPException(
         status_code = status.HTTP_403_FORBIDDEN,
-        detail = "Product not available",
+        detail = "Product ran out of stock",
         )
 # ----------------------------------------- Procurement Update ----------------------------------------------
 @put_router.put("/update_procurement/{procurement_id}")
@@ -367,21 +443,3 @@ def stock_out_inventory(item: StockInOutInventoryItem, token: str = Depends(oaut
             detail="Inventory item not found",
             headers={"WWW-Authenticate": "Bearer"},
         )
-    
-
-    
-    
-# ----------------------------------------- Sales Management Update ----------------------------------------------
-@put_router.put("/update_company_monthly_sales/{year}")
-def update_company_monthly_sales(sales_by_month: CompanyMonthlySales, token: str = Depends(oauth_scheme)):
-    old_sales = sales_management_db.find_one({"year": sales_by_month.year})
-    if old_sales:
-        sales_management_db.update_one({"$and": [{"year": sales_by_month.year}, {"month": sales_by_month.sales}]}, {"$set": dict(sales_by_month)})
-        return company_monthly_sales_dict_serial(sales_management_db.find_one({"year": sales_by_month.year}))
-    else:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Company Monthly Sales not found",
-            headers={"WWW-Authenticate": "Bearer"},
-        )
-

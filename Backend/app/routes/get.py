@@ -128,9 +128,4 @@ def get_inventory_unit_price(item: str, token: str = Depends(oauth_scheme)):
     inventory = inventory_db.find_one({'item_name': item}, {'unit_price': 1})
     return inventory['unit_price']
 
-# ---------------------------------------- Sale Management ----------------------------------------
-@get_router.get("/get_company_monthly_sales")
-def get_company_monthly_sales(token: str = Depends(oauth_scheme)):
-    sales = company_monthly_sales_serial(sales_management_db.find())
-    return sales
 
