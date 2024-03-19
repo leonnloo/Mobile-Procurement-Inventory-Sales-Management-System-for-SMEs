@@ -552,6 +552,19 @@ class RequestUtil {
       headers: {"Authorization": "Bearer $token"},
     );
   }
+
+  Future<http.Response> setMonthlyTarget(int selectedYear, int selectedMonth, double monthlyTarget) {
+    return http.post(
+      Uri.parse("${endpoint}sales-management/new_monthly_sales_target"),
+      headers: {"Authorization": "Bearer $token", 'Content-Type': 'application/json'},
+      body: jsonEncode({
+        'year': selectedYear,
+        'month': selectedMonth,
+        'actual_sales': 0,
+        'target_sales': monthlyTarget,
+      })
+    );
+  }
 }
 
 
