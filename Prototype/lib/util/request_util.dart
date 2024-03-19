@@ -189,12 +189,6 @@ class RequestUtil {
     );
   }
   // ----------------------------------------- SUPPLIER ----------------------------------------------
-  Future<http.Response> getSuppliers() async {
-    return http.get(
-      Uri.parse("${endpoint}get_suppliers"),
-      headers: {"Authorization": "Bearer $token"}
-    );
-  }
 
   Future<http.Response> getSupplier(String id) async {
     return http.get(
@@ -210,6 +204,13 @@ class RequestUtil {
     );
   }
 
+  Future<http.Response> getSuppliers() async {
+    return http.get(
+      Uri.parse("${endpoint}get_suppliers"),
+      headers: {"Authorization": "Bearer $token"}
+    );
+  }
+  
   Future<http.Response> newSupplier(String businessName, String contactPerson, String email, String phoneNumber, String address) async {
     return http.post(
       Uri.parse("${endpoint}supplier_form"),
@@ -395,7 +396,7 @@ class RequestUtil {
     );
   }
 
-    Future<http.Response> stockInProduct(String itemName, dynamic quantity) async {
+  Future<http.Response> stockInProduct(String itemName, dynamic quantity) async {
     return http.put(
       Uri.parse("${endpoint}stock_in_product"),
       headers: {"Authorization": "Bearer $token", 'Content-Type': 'application/json'},
@@ -418,13 +419,6 @@ class RequestUtil {
   }
 
   // ----------------------------------------- INVENTORY ----------------------------------------------
-  Future<http.Response> getInventories() async {
-    return http.get(
-      Uri.parse("${endpoint}get_inventories"),
-      headers: {"Authorization": "Bearer $token"}
-    );
-  }
-
   Future<http.Response> getInventoryType(String category) async {
     return http.get(
       Uri.parse("${endpoint}get_inventory_category/$category"),

@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Body, Request
+from fastapi import FastAPI
 from routes.user import user_router
 from routes.auth import auth_router
 from routes.forms import form_router
@@ -7,6 +7,7 @@ from routes.put import put_router
 from routes.notes import note_router
 from routes.delete import delete_router 
 from routes.verification import verify_router 
+from routes.chatbot.chatbot import chatbot_router
 from fastapi.middleware.cors import CORSMiddleware
 app = FastAPI()
 app.add_middleware(
@@ -25,3 +26,4 @@ app.include_router(put_router)
 app.include_router(note_router)
 app.include_router(delete_router)
 app.include_router(verify_router)
+app.include_router(chatbot_router)

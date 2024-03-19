@@ -57,7 +57,7 @@ class _RegisterContentState extends State<RegisterContent> {
                       SizedBox(height: size.height * 0.03,),
                       /*------ LABEL ------*/
                       Image(
-                        image: const AssetImage('images/register.jpg'),
+                        image: const AssetImage('assets/images/register.jpg'),
                         height: size.height * 0.2,
                       ),
                       Text('Your ultimate inventory management solution. ', style: Theme.of(context).textTheme.headlineSmall),

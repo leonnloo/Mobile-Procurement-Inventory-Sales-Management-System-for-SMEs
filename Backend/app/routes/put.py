@@ -317,6 +317,7 @@ def stock_in_inventory(item: StockInOutInventoryItem, token: str = Depends(oauth
             quantity = new_quantity,
             unit_price = old_item["unit_price"],
             total_price = old_item["unit_price"] * new_quantity,
+            critical_level = old_item["critical_level"], 
             status = new_status,
         )
 
