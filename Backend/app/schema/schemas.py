@@ -23,7 +23,6 @@ def supplier_dict_serial(supplier) -> dict:
         "email": supplier["email"],
         "phone_number": supplier["phone_number"],
         "address": supplier["address"],
-        "past_order": supplier["past_order"],
         "notes": supplier["notes"]
     }
 

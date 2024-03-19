@@ -127,4 +127,3 @@ class AddSupplierScreenState extends State<AddSupplierScreen> {
     );
   }
 }
-

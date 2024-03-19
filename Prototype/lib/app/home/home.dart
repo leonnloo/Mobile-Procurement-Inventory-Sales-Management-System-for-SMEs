@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:get/get.dart';
@@ -128,16 +127,16 @@ class HomeScreenState extends State<HomeScreen> {
             title: Text(controller.currentPage.value == DrawerSections.dashboard ? '' : currentTitle),
           ),
           body: container,
-          drawer: Drawer(
+        drawer: Drawer(
             child: SingleChildScrollView(
               child: Column(
                   children: [
                     const HeaderDrawer(),
                     drawerList(context),
                   ],
-                ),
               ),
             ),
+          ),
           floatingActionButton: homeSpeedDial(context),
         ),
       );

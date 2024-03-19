@@ -51,7 +51,7 @@ class LoginContent extends StatelessWidget {
                       SizedBox(height: size.height * 0.04,),
                       /*------ LABEL ------*/
                       Image.asset(
-                        'images/login.jpg',
+                        'assets/images/login.jpg',
                         height: size.height * 0.2,
                       ),
                       const SizedBox(height: 25.0,),
