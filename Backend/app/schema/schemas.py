@@ -153,14 +153,15 @@ def sale_order_serial(sale_orders) -> list:
     return [sale_order_dict_serial(sale_order) for sale_order in sale_orders]
 
 # ---------------------------------------- Sales Management ----------------------------------------
-def company_monthly_sales_dict_serial(sale) -> dict:
+def monthly_sales_target_dict_serial(sale) -> dict:
     return {
         "year": sale["year"],
         "month": sale["month"],
-        "sales": sale["sales"]
+        "actual_sales": sale["actual_sales"],
+        "target_sales": sale["target_sales"]
     }
 
-def company_monthly_sales_serial(sales) -> list:
+def monthly_sales_target_serial(sales) -> list:
     return [company_monthly_sales_dict_serial(sale) for sale in sales]
 
 

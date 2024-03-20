@@ -5,10 +5,31 @@ from models.supplier_model import *
 from models.procurement_model import *
 from models.product_model import *
 from models.inventory_model import *
+from models.sales_management_model import *
 from config.database import *
 from fastapi.security import OAuth2PasswordBearer
+from datetime import datetime
 
-form_router = APIRouter()
+
+def extract_year_month_day(date_str: str):
+    try:
+        date_obj = datetime.strptime(date_str, "%Y-%m-%d")
+        year = date_obj.year
+        month = date_obj.month
+        day = date_obj.day
+        return year, month, day
+    except ValueError:
+        raise ValueError("Invalid date format. Please provide a date in the format YYYY-MM-DD")
+
+# # Example usage:
+# date_str = "2024-03-19"
+# year, month, day = extract_year_month_day(date_str)
+# print("Year:", year)
+# print("Month:", month)
+# print("Day:", day)
+
+
+post_router = APIRouter()
 oauth_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 
@@ -29,7 +50,7 @@ def processNextID(query: str) -> str:
         return None
 
 # ----------------------------------------- Customer Form ----------------------------------------------
-@form_router.post("/customer_form")
+@post_router.post("/customer_form")
 def customer_form(customer: NewCustomer, token: str = Depends(oauth_scheme)):
     existing_customer = customers_db.find_one({"business_name": customer.business_name})
     if existing_customer:
@@ -65,7 +86,7 @@ def customer_form(customer: NewCustomer, token: str = Depends(oauth_scheme)):
     return {"Message": "Customer successfully registered"}
 
 # ----------------------------------------- Supplier Form ----------------------------------------------
-@form_router.post("/supplier_form")
+@post_router.post("/supplier_form")
 def supplier_form(supplier: NewSupplier, token: str = Depends(oauth_scheme)):
     existing_supplier = suppliers_db.find_one({"business_name": supplier.business_name})
     if existing_supplier:
@@ -99,7 +120,7 @@ def supplier_form(supplier: NewSupplier, token: str = Depends(oauth_scheme)):
 
 # ! Update monthly sales when inputting a new order
 # ----------------------------------------- Sales Form ----------------------------------------- 
-@form_router.post("/sales_order_form")
+@post_router.post("/sales_order_form")
 def sales_order_form(order: NewSaleOrder, token: str = Depends(oauth_scheme)):
     product = product_db.find_one({"product_id": order.product_id})
     left_product = product["quantity"] - order.quantity
@@ -126,7 +147,63 @@ def sales_order_form(order: NewSaleOrder, token: str = Depends(oauth_scheme)):
             employee = order.employee,
             employee_id = order.employee_id
         )
-        
+
+        # Doesn't update monthly and employee sales after the order is completed
+        if updated_order.status == 'Completed':
+            year, month, day = extract_year_month_day(order.order_date)
+            monthly_sale = monthly_sales_db.find_one({"year": year, "month": month})
+            # Update monthly sales
+            if monthly_sale:
+                monthly_sale['actual_sales'] += order.total_price
+                monthly_sales_db.update_one({"year": year, "month": month}, {"$set": monthly_sale})
+            # if order is placed in a advanced month
+            else:
+                new_monthly_sales = MonthlySalesTarget(
+                    year = year,
+                    month = month,
+                    actual_sales = order.total_price,
+                    target_sales = 0
+                )
+                monthly_sales_db.insert_one(dict(new_monthly_sales))
+
+            # Update employee
+            employee = users_db.find_one({"employee_id": order.employee_id})
+            if employee:
+                if 'sales_record' in employee and isinstance(employee['sales_record'], list):
+                    # Check if there is a sales record for the given year and month
+                    sales_record_found = False
+                    for record in employee['sales_record']:
+                        if record['year'] == year and record['month'] == month:
+                            record['sales'] += order.total_price
+                            sales_record_found = True
+                            break
+
+                    # If no sales record found for the given year and month, create a new one
+                    if not sales_record_found:
+                        new_monthly_sales = {
+                            'year': year,
+                            'month': month,
+                            'sales': order.total_price
+                        }
+                        employee['sales_record'].append(new_monthly_sales)
+                else:
+                    # If sales_record doesn't exist or is not a list, create a new list with the new sales record
+                    employee['sales_record'] = [{
+                        'year': year,
+                        'month': month,
+                        'sales': order.total_price
+                    }]
+                
+                # Update the employee document in the database
+                users_db.update_one({"employee_id": order.employee_id}, {"$set": employee})
+            if not employee:
+                raise HTTPException(
+                    status_code = status.HTTP_403_FORBIDDEN,
+                    detail = "Couldn't register employee sale",
+                    headers={"WWW-Authenticate": "Bearer"},
+                )
+
+        # Update product status
         product['quantity'] = left_product
         if product['quantity'] > 0 and product['quantity'] >= product['critical_level']:
             new_status = 'In Stock'
@@ -146,7 +223,7 @@ def sales_order_form(order: NewSaleOrder, token: str = Depends(oauth_scheme)):
         )
 
 # ----------------------------------------- Procurement Form ----------------------------------------------
-@form_router.post("/procurement_form")
+@post_router.post("/procurement_form")
 def procurement_form(procurement: NewProcurement, token: str = Depends(oauth_scheme)):
     latest_id_document = procurement_db.find_one(sort=[("purchase_id", -1)])
 
@@ -216,7 +293,7 @@ def procurement_form(procurement: NewProcurement, token: str = Depends(oauth_sch
     return {"Message": "Procurement successfully registered"}
 
 # ----------------------------------------- Product Form ----------------------------------------------
-@form_router.post("/product_form")
+@post_router.post("/product_form")
 def product_form(product: NewProduct, token: str = Depends(oauth_scheme)):
     if product_db.find_one({"product_name": product.product_name}):
         raise HTTPException(
@@ -248,7 +325,7 @@ def product_form(product: NewProduct, token: str = Depends(oauth_scheme)):
     return {"Message": "Product successfully registered"}
 
 # ----------------------------------------- Inventory Form ----------------------------------------------
-@form_router.post("/inventory_form")
+@post_router.post("/inventory_form")
 def inventory_form(inventory: NewInventoryItem, token: str = Depends(oauth_scheme)):
     if inventory_db.find_one({"item_name": inventory.item_name}):
         raise HTTPException(
