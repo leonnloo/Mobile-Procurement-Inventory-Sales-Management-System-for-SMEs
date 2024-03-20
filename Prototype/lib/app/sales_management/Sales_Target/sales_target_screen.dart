@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:prototype/app/sales_management/Sales_Target/IndividualSales.dart';
-import 'package:prototype/app/sales_management/Sales_Target/SalesByDate.dart';
+import 'package:prototype/app/sales_management/Sales_Target/individual_sales.dart';
+import 'package:prototype/app/sales_management/Sales_Target/sales_by_date.dart';
 import 'package:prototype/app/sales_management/Sales_Target/set_targetSales.dart';
 import 'package:prototype/widgets/appbar/common_appbar.dart';
 
-import 'SalesComparisonChart.dart';
+import 'sales_comparison_chart.dart';
 
 
 
@@ -37,7 +37,7 @@ class SalesTargetScreen extends StatelessWidget {
                 // 导航到月度利润和损失页面
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) =>SalesComparisonScreen() ),
+                  MaterialPageRoute(builder: (context) => SalesComparisonScreen() ),
                 );
               },
               icon: Icons.trending_up,

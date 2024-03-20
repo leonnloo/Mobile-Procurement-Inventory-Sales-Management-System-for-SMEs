@@ -1,6 +1,6 @@
 from fastapi.security import OAuth2PasswordBearer
 from fastapi import APIRouter, Depends, HTTPException, status
-from schema import *
+from schema.schemas import *
 from config.database import *
 from models.sales_management_model import *
 
