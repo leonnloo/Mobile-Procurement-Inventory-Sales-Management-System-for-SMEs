@@ -71,7 +71,7 @@ class SalesComparisonScreenState extends State<SalesComparisonScreen> {
                         SizedBox(height: 16.0),
                         Text(
                           'Loading...',
-                          style: TextStyle(fontSize: 16.0, color: Colors.white),
+                          style: TextStyle(fontSize: 16.0, color: Colors.black),
                         ),
                       ],
                     ),
@@ -188,7 +188,7 @@ class SalesComparisonScreenState extends State<SalesComparisonScreen> {
                       children: [
                         Text(
                           "Unable to load sales target",
-                          style: TextStyle(color: Colors.white, fontSize: 20),
+                          style: TextStyle(color: Colors.black, fontSize: 20),
                         ),
                       ],
                     ),

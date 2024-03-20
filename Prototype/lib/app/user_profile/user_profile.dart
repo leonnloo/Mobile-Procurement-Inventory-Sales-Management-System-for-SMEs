@@ -87,7 +87,7 @@ class UserProfileScreen extends StatelessWidget {
                     width: double.infinity,
                     child: ElevatedButton(
                       onPressed: () {
-                        User userEdit = User(employeeName: user['employee_name'], employeeID: user['employee_id'], email: user['email'], password: user['password'], phoneNumber: user['phone_number'], role: user['role'] ?? 'No Role');
+                        User userEdit = User(employeeName: user['employee_name'], employeeID: user['employee_id'], email: user['email'], password: user['password'], phoneNumber: user['phone_number'], role: user['role'] ?? 'No Role', salesRecord: user['sales_record'] ?? []);
                         Get.to(() => EditUser(user: userEdit));
                       },
                       style: TextButton.styleFrom(
