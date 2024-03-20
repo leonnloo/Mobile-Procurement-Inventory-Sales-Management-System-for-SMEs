@@ -1,8 +1,6 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:prototype/app/authenticate/screens/login_content.dart';
-import 'package:prototype/app/sales_management/individual_sales.dart';
 import 'package:prototype/models/user_model.dart';
 import 'package:prototype/util/request_util.dart';
 import 'package:prototype/widgets/appbar/common_appbar.dart';
@@ -56,8 +54,8 @@ class _IndividualSalesScreenState extends State<IndividualSalesScreen> {
                         _selectedYear = newValue!;
                       });
                     },
-                    items: List<DropdownMenuItem<int>>.generate(6, (int index) {
-                      int year = DateTime.now().year + index;
+                    items: List<DropdownMenuItem<int>>.generate(9, (int index) {
+                      int year = DateTime.now().year - 3 + index;
                       return DropdownMenuItem<int>(
                         value: year,
                         child: Text(year.toString()),

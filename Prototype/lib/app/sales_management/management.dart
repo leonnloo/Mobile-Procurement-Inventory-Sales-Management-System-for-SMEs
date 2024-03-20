@@ -22,7 +22,7 @@ class SalesManagementScreen extends StatelessWidget {
               child: ElevatedButton(
                 onPressed: () {
                   // Navigate to the second page
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => SalesTargetScreen()));
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => const SalesTargetScreen()));
                 },
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.all(20.0),
@@ -71,7 +71,7 @@ class SalesManagementScreen extends StatelessWidget {
               child: ElevatedButton(
                 onPressed: () {
                   // Navigate to the fourth page
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => CustomerClaimsRefundsScreen()));
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => const CustomerClaimsRefundsScreen()));
                 },
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.all(20.0),
@@ -90,11 +90,11 @@ class SalesManagementScreen extends StatelessWidget {
             ),
             SizedBox(height: size.height * 0.045,),
             // Add the charts below the buttons
-            const Card(
+            Card(
               elevation: 4.0,
-              margin: EdgeInsets.all(16.0),
+              margin: const EdgeInsets.all(16.0),
               child: Padding(
-                padding: EdgeInsets.all(16.0),
+                padding: const EdgeInsets.all(16.0),
 
                 child: MonthlySalesBarChart(),
               ),

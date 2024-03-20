@@ -33,14 +33,13 @@ class SalesOrderScreen extends StatelessWidget {
                     SizedBox(height: 16.0),
                     Text(
                       'Loading...',
-                      style: TextStyle(fontSize: 16.0, color: Colors.white),
+                      style: TextStyle(fontSize: 16.0, color: Colors.black),
                     ),
                   ],
                 ),
               );
             } else if (snapshot.hasError) {
               return Container(
-                color: Colors.red[400],
                 width: double.infinity,
                 height: double.infinity,
                 padding: const EdgeInsets.only(top: 20.0),
@@ -49,7 +48,7 @@ class SalesOrderScreen extends StatelessWidget {
                   children: [
                     Text(
                       "Unable to load order data",
-                      style: TextStyle(color: Colors.white, fontSize: 20),
+                      style: TextStyle(color: Colors.black, fontSize: 20),
                     ),
                   ],
                 ),
@@ -163,7 +162,7 @@ class SalesOrderScreen extends StatelessWidget {
                   children: [
                     Text(
                       "Unable to load order data",
-                      style: TextStyle(color: Colors.white, fontSize: 20),
+                      style: TextStyle(color: Colors.black, fontSize: 20),
                     ),
                   ],
                 ),
