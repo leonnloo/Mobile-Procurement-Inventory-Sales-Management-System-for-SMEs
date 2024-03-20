@@ -162,7 +162,7 @@ def monthly_sales_target_dict_serial(sale) -> dict:
     }
 
 def monthly_sales_target_serial(sales) -> list:
-    return [company_monthly_sales_dict_serial(sale) for sale in sales]
+    return [monthly_sales_target_dict_serial(sale) for sale in sales]
 
 
 # ---------------------------------------- Notes ----------------------------------------
