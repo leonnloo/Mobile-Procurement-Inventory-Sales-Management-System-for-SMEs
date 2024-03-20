@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:prototype/util/management_util.dart';
 import 'package:prototype/widgets/appbar/common_appbar.dart';
 import 'package:prototype/models/sales_target_data.dart';
-import 'package:intl/intl.dart';
 class SalesComparisonScreen extends StatefulWidget {
   const SalesComparisonScreen({super.key});
 
@@ -96,7 +95,7 @@ class SalesComparisonScreenState extends State<SalesComparisonScreen> {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       const Text(
-                        'Sales Comparison Table',
+                        'Monthly Sales',
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,

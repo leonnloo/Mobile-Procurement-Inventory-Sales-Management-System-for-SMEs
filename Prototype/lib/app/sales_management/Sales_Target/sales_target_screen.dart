@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:prototype/app/sales_management/Sales_Target/individual_sales.dart';
-import 'package:prototype/app/sales_management/Sales_Target/sales_by_date.dart';
-import 'package:prototype/app/sales_management/Sales_Target/set_targetSales.dart';
+import 'package:prototype/app/sales_management/Sales_Target/product_sales.dart';
+import 'package:prototype/app/sales_management/Sales_Target/set_target_sales.dart';
 import 'package:prototype/app/sales_management/Sales_Target/sales_comparison_chart.dart';
 import 'package:prototype/widgets/appbar/common_appbar.dart';
 
@@ -40,19 +40,19 @@ class SalesTargetScreen extends StatelessWidget {
                 );
               },
               icon: Icons.trending_up,
-              label: 'Actual vs Target - Month',
+              label: 'Sales by Month',
             ),
             const SizedBox(height: 20.0),
             _buildButtonWithIcon(
               onPressed: () {
                 // 导航到按日期销售页面
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const SalesByDate() ),
-                );
+                // Navigator.push(
+                //   context,
+                //   MaterialPageRoute(builder: (context) => const ProductSalesByMonth() ),
+                // );
               },
-              icon: Icons.calendar_today,
-              label: 'Sales by Date',
+              icon: Icons.sell_outlined,
+              label: 'Product Sales by Month',
             ),
             const SizedBox(height: 20.0),
             _buildButtonWithIcon(

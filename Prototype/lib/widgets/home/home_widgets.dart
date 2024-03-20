@@ -122,12 +122,12 @@ class HomeWidgets extends StatelessWidget {
               GestureDetector(
                 onTap: () {
                 },
-                child: const Card(
+                child: Card(
                   
                   elevation: 4.0,
-                  margin: EdgeInsets.all(16.0),
+                  margin: const EdgeInsets.all(16.0),
                   child: Padding(
-                    padding: EdgeInsets.all(16.0),
+                    padding: const EdgeInsets.all(16.0),
                     child: MonthlySalesBarChart(),
                   ),
                 ),
