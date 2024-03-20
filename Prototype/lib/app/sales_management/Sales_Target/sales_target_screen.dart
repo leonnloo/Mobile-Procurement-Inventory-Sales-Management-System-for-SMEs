@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:prototype/app/sales_management/Sales_Target/IndividualSales.dart';
 import 'package:prototype/app/sales_management/Sales_Target/SalesByDate.dart';
-import 'package:prototype/app/sales_management/Sales_Target/setTargetSales.dart';
+import 'package:prototype/app/sales_management/Sales_Target/set_targetSales.dart';
 import 'package:prototype/widgets/appbar/common_appbar.dart';
 
 import 'SalesComparisonChart.dart';

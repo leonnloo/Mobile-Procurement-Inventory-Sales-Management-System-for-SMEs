@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:prototype/models/DispatchData.dart'; // 导入订单数据模型
+import 'package:prototype/models/dispatch_data.dart'; // 导入订单数据模型
 
 class DetailScreen extends StatelessWidget {
   final List<DispatchData> dispatchData;

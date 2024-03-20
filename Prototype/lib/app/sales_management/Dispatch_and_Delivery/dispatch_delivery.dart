@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:prototype/models/DispatchData.dart';
-import 'detailScreen.dart';
+import 'package:prototype/models/dispatch_data.dart';
+import 'detail_screen.dart';
 
 class DispatchDeliveryScreen extends StatefulWidget {
   const DispatchDeliveryScreen({super.key});

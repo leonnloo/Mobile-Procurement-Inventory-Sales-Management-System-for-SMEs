@@ -3,8 +3,8 @@ import 'package:prototype/app/sales_management/monthly_sales_bar.dart';
 import 'package:prototype/app/sales_management/individual_sales.dart';
 import 'package:prototype/app/sales_management/product_monthly_sales.dart';
 import 'Claims_and_Refunds/customerClaimsRefunds.dart';
-import 'Dispatch_and_Delivery/dispatchDelivery.dart';
-import 'Sales_Target/salesTargetScreen.dart';
+import 'Dispatch_and_Delivery/dispatch_delivery.dart';
+import 'Sales_Target/sales_target_screen.dart';
 
 class SalesManagementScreen extends StatelessWidget {
   const SalesManagementScreen({super.key});

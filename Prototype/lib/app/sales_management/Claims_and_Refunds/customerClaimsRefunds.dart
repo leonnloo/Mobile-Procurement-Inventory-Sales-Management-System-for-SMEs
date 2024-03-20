@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:prototype/app/sales_management/Claims_and_Refunds/claimRefundHistory.dart';
 import 'package:prototype/models/refundData.dart';
-import 'addClaimRefundForm.dart'; // 导入添加 Claim 或 Refund 表单的页面
+import 'add_claim_refund_form.dart'; // 导入添加 Claim 或 Refund 表单的页面
 
 class CustomerClaimsRefundsScreen extends StatelessWidget {
   const CustomerClaimsRefundsScreen({super.key});
