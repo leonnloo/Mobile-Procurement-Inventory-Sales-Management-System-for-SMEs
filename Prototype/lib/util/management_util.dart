@@ -29,4 +29,13 @@ class ManagementUtil {
     );
     return response;
   }
+
+  Future<http.Response> getMonthlySales() async {
+    final response = await http.get(
+      Uri.parse('${endpoint}sales-management/get_monthly_sales'),
+      headers: {
+        'Content-Type': 'application/json', 'Authorization': 'Bearer $token'},
+    );
+    return response;
+  }
 }
