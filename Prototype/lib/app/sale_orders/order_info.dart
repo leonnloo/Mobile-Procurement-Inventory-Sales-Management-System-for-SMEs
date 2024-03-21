@@ -22,22 +22,24 @@ class ItemDetailScreen extends StatelessWidget {
       appBar: InfoAppBar(currentTitle: 'Order Details', currentData: item, editType: EditType.salesOrder),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildDetailRow('Order ID', item.orderID.toString()),
-            _buildDetailRow('Customer', item.customerName),
-            _buildDetailRow('Customer ID', item.customerID.toString()),
-            _buildDetailRow('Product', item.productName),
-            _buildDetailRow('Product ID', item.productID.toString()),
-            _buildDetailRow('Order Date', item.orderDate),
-            _buildDetailRow('Quantity', item.quantity.toString()),
-            _buildDetailRow('Unit Price', '\$${item.unitPrice.toStringAsFixed(2)}'),
-            _buildDetailRow('Total Price', '\$${item.totalPrice.toStringAsFixed(2)}'),
-            _buildDetailRow('Status', item.status),
-            _buildDetailRow('Employee', item.employee),
-            _buildDetailRow('Employee ID', item.employeeID),
-          ],
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildDetailRow('Order ID', item.orderID.toString()),
+              _buildDetailRow('Customer', item.customerName),
+              _buildDetailRow('Customer ID', item.customerID.toString()),
+              _buildDetailRow('Product', item.productName),
+              _buildDetailRow('Product ID', item.productID.toString()),
+              _buildDetailRow('Order Date', item.orderDate),
+              _buildDetailRow('Quantity', item.quantity.toString()),
+              _buildDetailRow('Unit Price', '\$${item.unitPrice.toStringAsFixed(2)}'),
+              _buildDetailRow('Total Price', '\$${item.totalPrice.toStringAsFixed(2)}'),
+              _buildDetailRow('Status', item.orderStatus),
+              _buildDetailRow('Employee', item.employee),
+              _buildDetailRow('Employee ID', item.employeeID),
+            ],
+          ),
         ),
       ),
     );

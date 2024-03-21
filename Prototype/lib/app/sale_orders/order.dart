@@ -134,7 +134,7 @@ class SalesOrderScreen extends StatelessWidget {
                               },
                             ),
                             DataCell(
-                              Text(order.status),
+                              Text(order.orderStatus),
                               onTap: () {
                                 navigateToOrderDetail(context, order);
                               },

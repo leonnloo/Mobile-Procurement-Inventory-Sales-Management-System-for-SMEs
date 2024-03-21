@@ -30,7 +30,8 @@ class EditOrderState extends State<EditOrder> {
   final TextEditingController _quantityController = TextEditingController();
   final TextEditingController _totalPriceController = TextEditingController();
   final TextEditingController _unitPriceController = TextEditingController();
-  final TextEditingController _statusController = TextEditingController();
+  final TextEditingController _completionStatusController = TextEditingController();
+  final TextEditingController _orderStatusController = TextEditingController();
   final TextEditingController _employeeNameController = TextEditingController();
   final TextEditingController _employeeIDController = TextEditingController();
   final RequestUtil requestUtil = RequestUtil();
@@ -46,7 +47,8 @@ class EditOrderState extends State<EditOrder> {
     _unitPriceController.text = widget.orderData.unitPrice.toStringAsFixed(2);
     _totalPriceController.text = widget.orderData.totalPrice.toStringAsFixed(2);
     _quantityController.text = widget.orderData.quantity.toString();
-    _statusController.text = widget.orderData.status;
+    _completionStatusController.text = widget.orderData.completionStatus;
+    _orderStatusController.text = widget.orderData.orderStatus;
     _employeeNameController.text = widget.orderData.employee;
     _employeeIDController.text = widget.orderData.employeeID;
   }
@@ -61,7 +63,7 @@ class EditOrderState extends State<EditOrder> {
     _unitPriceController.dispose();
     _totalPriceController.dispose();
     _quantityController.dispose();
-    _statusController.dispose();
+    _orderStatusController.dispose();
     _employeeNameController.dispose();
     _employeeIDController.dispose();
     super.dispose();
@@ -144,11 +146,19 @@ class EditOrderState extends State<EditOrder> {
                 ),
                 const SizedBox(height: 16.0),
                 DropdownTextField(
-                  labelText: 'Status', 
+                  labelText: 'Order Status', 
                   options: getOrderStatusList(), 
-                  onChanged: (value){_statusController.text = value!;},
+                  onChanged: (value){_orderStatusController.text = value!;},
                   defaultSelected: true,
-                  data: _statusController.text,
+                  data: _orderStatusController.text,
+                ),
+                const SizedBox(height: 16.0),
+                DropdownTextField(
+                  labelText: 'Completion Status', 
+                  options: getCompletionStatusList(), 
+                  onChanged: (value){_completionStatusController.text = value!;},
+                  defaultSelected: true,
+                  data: _completionStatusController.text,
                 ),
                 const SizedBox(height: 16.0),
                 DropdownTextField(
@@ -181,7 +191,8 @@ class EditOrderState extends State<EditOrder> {
                         String? quantity = validateTextField(_quantityController.text);
                         String? unitPrice = validateTextField(_unitPriceController.text);
                         String? totalPrice = validateTextField(_totalPriceController.text);
-                        String? status = validateTextField(_statusController.text);
+                        String? completionStatus = validateTextField(_completionStatusController.text);
+                        String? orderStatus = validateTextField(_orderStatusController.text);
                         String? employee = validateTextField(_employeeNameController.text);
                         String? employeeID = validateTextField(_employeeIDController.text);
                         if (customerName == null
@@ -192,7 +203,8 @@ class EditOrderState extends State<EditOrder> {
                           || quantity == null
                           || unitPrice == null
                           || totalPrice == null
-                          || status == null
+                          || completionStatus == null
+                          || orderStatus == null
                           || employee == null
                           || employeeID == null) {
                           // Display validation error messages
@@ -204,7 +216,7 @@ class EditOrderState extends State<EditOrder> {
                           );
                         } else {                
                           final response = await requestUtil.updateSaleOrder(
-                            widget.orderData.orderID, customerName, customerID, productName, productID, orderDate, unitPrice, totalPrice, quantity, status, employee, employeeID
+                            widget.orderData.orderID, customerName, customerID, productName, productID, orderDate, unitPrice, totalPrice, quantity, orderStatus, completionStatus, employee, employeeID
                           );
                           
                           if (response.statusCode == 200) {

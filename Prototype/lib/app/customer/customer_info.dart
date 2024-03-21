@@ -176,7 +176,7 @@ Widget _buildHistory() {
           children: [
             const Icon(Icons.history, color: Colors.blue),
             const SizedBox(width: 8.0),
-            Text('Placed an order on ${order.orderDate} - ${order.status}'),
+            Text('Placed an order on ${order.orderDate} - ${order.orderStatus}'),
           ],
         );
         // ! do empty history after completing adding orders

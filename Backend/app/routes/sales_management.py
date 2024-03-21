@@ -70,3 +70,26 @@ def update_company_monthly_sales(sales_by_month: MonthlySalesTarget, token: str 
             detail="Previous monthly sales not found",
             headers={"WWW-Authenticate": "Bearer"},
         )
+
+
+# Updating dispatch information
+@sales_management_router.put("/sales-management/update_dispatch/{orderID}/{completionStatus}")
+def update_dispatch(orderID: str, completionStatus: str, token: str = Depends(oauth_scheme)):
+    order = sales_order_db.find_one({"order_id": orderID})
+    if not order:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Order not found",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    if order['order_status'] == "Completed":
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Order already completed",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    order['completion_status'] = completionStatus
+    if completionStatus == 'Delivered':
+        order['order_status'] = 'Completed'
+    sales_order_db.update_one({"order_id": orderID}, {"$set": order})
+    return {"message": "Dispatch updated successfully",}

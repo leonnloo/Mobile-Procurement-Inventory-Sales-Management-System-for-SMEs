@@ -85,29 +85,13 @@ def update_supplier(supplier: NewSupplier, supplierID: str, token: str = Depends
 
 # ----------------------------------------- Sales Order Update ----------------------------------------------
 @put_router.put("/update_sale_order/{order_id}")
-def update_sale_order(order: NewSaleOrder, order_id, token: str = Depends(oauth_scheme)):
+def update_sale_order(order: SaleOrder, order_id, token: str = Depends(oauth_scheme)):
     old_order = sales_order_db.find_one({"order_id": order_id})
     product = product_db.find_one({"product_id": order.product_id})
     left_product = product["quantity"] - (order.quantity - old_order["quantity"])
     if (left_product >= 0):
         if old_order:
-            updated_order = SaleOrder(
-                order_id = order_id,
-                order_date = order.order_date,
-                customer_id = order.customer_id,
-                customer_name = order.customer_name,
-                product_id = order.product_id,
-                product_name = order.product_name,
-                quantity = order.quantity,
-                unit_price = order.unit_price,
-                total_price = order.total_price,
-                status = order.status,
-                employee = order.employee,
-                employee_id = order.employee_id
-            )
-
-
-            if updated_order.status == 'Completed':
+            if order.order_status == 'Completed':
                 priceDifference = order.total_price - old_order['total_price']
                 product_difference = order.quantity - old_order["quantity"]
                 year, month, day = extract_year_month_day(order.order_date)
@@ -192,6 +176,9 @@ def update_sale_order(order: NewSaleOrder, order_id, token: str = Depends(oauth_
                         'total_price': order.total_price
                     }]
 
+                # Update completion status of order
+                order.completion_status = 'Delivered'
+
             # Update product status
             product['quantity'] = left_product
             if product['quantity'] > 0 and product['quantity'] >= product['critical_level']:
@@ -202,6 +189,23 @@ def update_sale_order(order: NewSaleOrder, order_id, token: str = Depends(oauth_
                 new_status = 'Out of Stock'
             product['status'] = new_status
             product_db.update_one({"product_id": order.product_id}, {"$set": product})
+
+
+            updated_order = SaleOrder(
+                order_id = order_id,
+                order_date = order.order_date,
+                customer_id = order.customer_id,
+                customer_name = order.customer_name,
+                product_id = order.product_id,
+                product_name = order.product_name,
+                quantity = order.quantity,
+                unit_price = order.unit_price,
+                total_price = order.total_price,
+                completion_status = order.completion_status,
+                order_status = order.order_status,
+                employee = order.employee,
+                employee_id = order.employee_id
+            )
 
             sales_order_db.update_one({"order_id": order_id}, {"$set": dict(updated_order)})
             return sale_order_dict_serial(sales_order_db.find_one({"order_id": order_id}))
