@@ -46,10 +46,10 @@ class SalesTargetScreen extends StatelessWidget {
             _buildButtonWithIcon(
               onPressed: () {
                 // 导航到按日期销售页面
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(builder: (context) => const ProductSalesByMonth() ),
-                // );
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const ProductSalesByMonth() ),
+                );
               },
               icon: Icons.sell_outlined,
               label: 'Product Sales by Month',

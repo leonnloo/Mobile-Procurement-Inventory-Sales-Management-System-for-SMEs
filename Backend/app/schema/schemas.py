@@ -74,7 +74,8 @@ def product_dict_serial(product) -> dict:
         "markup": product["markup"],
         "margin": product["margin"],
         "critical_level": product["critical_level"],
-        "status": product["status"]
+        "status": product["status"],
+        "monthly_sales": product["monthly_sales"],
     } 
 
 def product_serial(products) -> list:

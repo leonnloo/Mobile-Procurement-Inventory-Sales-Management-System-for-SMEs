@@ -203,6 +203,34 @@ def sales_order_form(order: NewSaleOrder, token: str = Depends(oauth_scheme)):
                     headers={"WWW-Authenticate": "Bearer"},
                 )
 
+            # Add product monthly sales
+            if 'monthly_sales' in product and isinstance(product['monthly_sales'], list):
+                monthlyProduct = False
+                for record in product['monthly_sales']:
+                    if record['year'] == year and record['month'] == month:
+                        record['total_price'] += order.total_price
+                        record['quantity_sold'] += order.quantity
+                        monthlyProduct = True
+                        break
+
+                # If no sales record found for the given year and month, create a new one
+                if not monthlyProduct:
+                    new_monthly_sales = {
+                        'year': year,
+                        'month': month,
+                        'quantity_sold': order.quantity,
+                        'total_price': order.total_price
+                    }
+                    product['monthly_sales'].append(new_monthly_sales)
+            else:
+                # If monthly_sales doesn't exist or is not a list, create a new list with the new sales record
+                product['monthly_sales'] = [{
+                    'year': year,
+                    'month': month,
+                    'quantity_sold': order.quantity,
+                    'total_price': order.total_price
+                }]
+
         # Update product status
         product['quantity'] = left_product
         if product['quantity'] > 0 and product['quantity'] >= product['critical_level']:
