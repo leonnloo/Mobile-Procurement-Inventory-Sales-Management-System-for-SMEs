@@ -50,7 +50,7 @@ def delete_sale_order(id: str, token: str = Depends(oauth_scheme)):
     product = product_db.find_one({"product_id": deleted_order['product_id']})
     
     # Only update monthly and employee sales if order is completed
-    if deleted_order['status'] == 'Completed':
+    if deleted_order['order_status'] == 'Completed':
         year, month, day = extract_year_month_day(deleted_order['order_date'])
         # update monthly sales
         monthly_sale = monthly_sales_db.find_one({"year": year, "month": month})

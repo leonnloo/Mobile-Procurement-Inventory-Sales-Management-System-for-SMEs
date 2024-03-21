@@ -1,5 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
-import 'package:prototype/models/dispatch_data.dart';
+import 'package:prototype/models/order_model.dart';
+import 'package:prototype/util/request_util.dart';
+import 'package:prototype/widgets/appbar/common_appbar.dart';
 import 'detail_screen.dart';
 
 class DispatchDeliveryScreen extends StatefulWidget {
@@ -13,25 +17,28 @@ class DispatchDeliveryScreenState extends State<DispatchDeliveryScreen> {
   late int packagedCount;
   late int shippedCount;
   late int deliveredCount;
-  late List<DispatchData> searchResults;
+  late List<SalesOrder> orderData;
+  final RequestUtil requestUtil = RequestUtil();
+  Key futureBuilderKey = UniqueKey();
 
   @override
   void initState() {
-    super.initState();
     packagedCount = 0;
     shippedCount = 0;
     deliveredCount = 0;
-    searchResults = [];
-    countOrders();
+    super.initState();
   }
 
-  void countOrders() {
-    for (var data in dispatchData) {
-      if (data.status == 'Packaged') {
+  void countOrders(List<SalesOrder> saleOrders) {
+    packagedCount = 0;
+    shippedCount = 0;
+    deliveredCount = 0;
+    for (var data in saleOrders) {
+      if (data.completionStatus == 'To be Packaged') {
         packagedCount++;
-      } else if (data.status == 'Shipped') {
+      } else if (data.completionStatus == 'To be Shipped') {
         shippedCount++;
-      } else if (data.status == 'Delivered') {
+      } else if (data.completionStatus == 'To be Delivered') {
         deliveredCount++;
       }
     }
@@ -40,54 +47,102 @@ class DispatchDeliveryScreenState extends State<DispatchDeliveryScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Dispatch & Delivery'),
-        backgroundColor: Colors.red,
-        actions: [ // 添加搜索框
-          IconButton(
-            icon: const Icon(Icons.search),
-            onPressed: () {
-              showSearch(context: context, delegate: _DataSearch());
-            },
-          ),
-        ],
-      ),
+      appBar: const CommonAppBar(currentTitle: 'Dispatch and Delivery'),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Expanded(
-              child: searchResults.isEmpty
-                  ? Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  _buildItem(context, '10\nQuantity to be Packaged', Icons.shopping_cart, 'PACKAGED', packagedCount),
-                  const SizedBox(height: 20.0),
-                  _buildItem(context, '10\nPackages to be Shipped', Icons.local_shipping, 'SHIPPED', shippedCount),
-                  const SizedBox(height: 20.0),
-                  _buildItem(context, '10\nPackages to be Delivered', Icons.delivery_dining, 'DELIVERED', deliveredCount),
-                ],
-              )
-                  : ListView.builder(
-                itemCount: searchResults.length,
-                itemBuilder: (context, index) {
-                  return _buildItem(
-                    context,
-                    'Order No: ${searchResults[index].orderNo}',
-                    Icons.shopping_cart, // or use appropriate icon based on status
-                    searchResults[index].status, // Use searchResults[index] to access status
-                    1, // Assuming you want to show only 1 item for each search result
+            FutureBuilder(
+              key: futureBuilderKey,
+              future: _fetchSalesOrderData(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const SizedBox(
+                    width: double.infinity,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        SizedBox(height: 26.0),
+                        CircularProgressIndicator(
+                          backgroundColor: Colors.white,
+                          color: Colors.red,
+                        ),
+                        SizedBox(height: 16.0),
+                        Text(
+                          'Loading...',
+                          style: TextStyle(fontSize: 16.0, color: Colors.black),
+                        ),
+                      ],
+                    ),
                   );
-                },
-              ),
-            ),
-            const SizedBox(height: 30.0),
-            Text(
-              'In Summary: Total Orders: ${dispatchData.length}',
-              textAlign: TextAlign.center,
-              style: const TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
+                } else if (snapshot.hasError) {
+                  return Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      _buildItem(context, [], '10\nQuantasdity to be Packaged', Icons.shopping_cart, 'To be Packaged', packagedCount),
+                      const SizedBox(height: 20.0),
+                      _buildItem(context, [], '10\nPackages to be Shipped', Icons.local_shipping, 'To be Shipped', shippedCount),
+                      const SizedBox(height: 20.0),
+                      _buildItem(context, [], '10\nPackages to be Delivered', Icons.delivery_dining, 'To be Delivered', deliveredCount),
+                    ],
+                  );
+                } else if (!snapshot.hasData) {
+                  return Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      _buildItem(context, [], '10\nQuantasdity to be Packaged', Icons.shopping_cart, 'To be Packaged', packagedCount),
+                      const SizedBox(height: 20.0),
+                      _buildItem(context, [], '10\nPackages to be Shipped', Icons.local_shipping, 'To be Shipped', shippedCount),
+                      const SizedBox(height: 20.0),
+                      _buildItem(context, [], '10\nPackages to be Delivered', Icons.delivery_dining, 'To be Delivered', deliveredCount),
+                    ],
+                  );
+                } else if (snapshot.hasData) {
+                  List<SalesOrder> salesData = snapshot.data as List<SalesOrder>;
+                      orderData = salesData;
+                      countOrders(salesData);
+                  return SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.75,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        const Spacer(),
+                        _buildItem(context, salesData, '10\nQuantity to be Packaged', Icons.shopping_cart, 'To be Packaged', packagedCount),
+                        const SizedBox(height: 20.0),
+                        _buildItem(context, salesData, '10\nPackages to be Shipped', Icons.local_shipping, 'To be Shipped', shippedCount),
+                        const SizedBox(height: 20.0),
+                        _buildItem(context, salesData, '10\nPackages to be Delivered', Icons.delivery_dining, 'To be Delivered', deliveredCount),
+                        const Spacer(),
+                        Text(
+                          'Total Orders Ongoing: ${packagedCount+shippedCount+deliveredCount}',
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                  );
+                }
+                else{
+                  return Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.only(top: 20.0),
+                    child: const Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Unable to load dispatch data",
+                          style: TextStyle(color: Colors.black, fontSize: 20),
+                        ),
+                      ],
+                    ),
+                  );
+                }
+              },
             ),
           ],
         ),
@@ -95,10 +150,16 @@ class DispatchDeliveryScreenState extends State<DispatchDeliveryScreen> {
     );
   }
 
-  Widget _buildItem(BuildContext context, String title, IconData iconData, String status, int count) {
+  void updateData() async {
+    setState(() {
+      futureBuilderKey = UniqueKey();
+    });
+  }
+
+  Widget _buildItem(BuildContext context, List<SalesOrder> orderList, String title, IconData iconData, String status, int count) {
     return ElevatedButton.icon(
       onPressed: () {
-        _navigateToDetail(context, title, status);
+        _navigateToDetail(context, orderList, title, status);
       },
       icon: Icon(
         iconData,
@@ -125,122 +186,25 @@ class DispatchDeliveryScreenState extends State<DispatchDeliveryScreen> {
     );
   }
 
-  void _navigateToDetail(BuildContext context, String itemName, String initialStatus) {
+  void _navigateToDetail(BuildContext context, List<SalesOrder> orderList, String itemName, String initialStatus) {
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) => DetailScreen( dispatchData: dispatchData, initialStatus: initialStatus,), // 传递 searchResults
+        builder: (context) => DetailScreen(dispatchData: orderList, selectedStatus: initialStatus, updateData: updateData,), // 传递 searchResults
       ),
     );
   }
 
-  void searchOrders(String query) {
-    setState(() {
-      searchResults.clear();
-      if (dispatchData != null) { // Checking if dispatchData is not null
-        for (var data in dispatchData) {
-          if (data.orderNo.toString().contains(query)) {
-            searchResults.add(data);
-          }
-        }
-      }
-    });
-  }
-}
-
-
-//Filter system
-class _DataSearch extends SearchDelegate<String> {
-  @override
-  Widget buildSuggestions(BuildContext context) {
-    // Placeholder implementation
-    return Container();
-  }
-
-  @override
-  Widget buildResults(BuildContext context) {
-    // Search logic implementation
-    final List<DispatchData> searchResults = dispatchData.where((data) => data.orderNo.toString() == query).toList();
-
-    if (searchResults.isEmpty) {
-      return const Center(
-        child: Text(
-          'No information found.',
-          style: TextStyle(fontSize: 16.0),
-        ),
-      );
+  Future<List<SalesOrder>> _fetchSalesOrderData() async {
+    final response = await requestUtil.getSaleOrders();
+    if (response.statusCode == 200) {
+      List<dynamic> orders = jsonDecode(response.body);
+      List<SalesOrder> salesOrders = orders.map((e) => SalesOrder.fromJson(e)).toList();
+      return salesOrders;
+    } else {
+      throw Exception('Error while fetching code');
     }
-
-    return ListView.builder(
-      itemCount: searchResults.length,
-      itemBuilder: (context, index) {
-        final DispatchData item = searchResults[index];
-        return Card(
-          elevation: 3,
-          margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-          child: ListTile(
-            title: Text(
-              'Order No: ${item.orderNo}',
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 18,
-              ),
-            ),
-            subtitle: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(height: 8),
-                Text(
-                  'Date: ${item.date}',
-                  style: const TextStyle(fontSize: 16),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  'Customer ID: ${item.customerID}',
-                  style: const TextStyle(fontSize: 16),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  'Product ID: ${item.productID}',
-                  style: const TextStyle(fontSize: 16),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  'Status: ${item.status}',
-                  style: const TextStyle(fontSize: 16),
-                ),
-                const SizedBox(height: 8),
-              ],
-            ),
-          ),
-        );
-      },
-    );
   }
 
-  @override
-  List<Widget> buildActions(BuildContext context) {
-    return [
-      IconButton(
-        icon: const Icon(Icons.clear),
-        onPressed: () {
-          query = '';
-        },
-      )
-    ];
-  }
-
-  @override
-  Widget buildLeading(BuildContext context) {
-    return IconButton(
-      icon: const Icon(Icons.arrow_back),
-      onPressed: () {
-        close(context, '');
-      },
-    );
-  }
-
-  @override
-  String get searchFieldLabel => 'Enter Order No'; // 提示用户输入订单号
 }
 
 

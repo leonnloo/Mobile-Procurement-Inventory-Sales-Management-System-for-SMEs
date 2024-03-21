@@ -133,23 +133,42 @@ def sales_order_form(order: NewSaleOrder, token: str = Depends(oauth_scheme)):
         else:
             next_order_id = "SO1"
 
-        updated_order = SaleOrder(
-            order_id = next_order_id,
-            order_date = order.order_date,
-            customer_id = order.customer_id,
-            customer_name = order.customer_name,
-            product_id = order.product_id,
-            product_name = order.product_name,
-            quantity = order.quantity,
-            unit_price = order.unit_price,
-            total_price = order.total_price,
-            status = order.status,
-            employee = order.employee,
-            employee_id = order.employee_id
-        )
+        if order.order_status == "Completed":
+            updated_order = SaleOrder(
+                order_id = next_order_id,
+                order_date = order.order_date,
+                customer_id = order.customer_id,
+                customer_name = order.customer_name,
+                product_id = order.product_id,
+                product_name = order.product_name,
+                quantity = order.quantity,
+                unit_price = order.unit_price,
+                total_price = order.total_price,
+                completion_status = 'Delivered',
+                order_status = order.order_status,
+                employee = order.employee,
+                employee_id = order.employee_id
+            )
+        else:
+            updated_order = SaleOrder(
+                order_id = next_order_id,
+                order_date = order.order_date,
+                customer_id = order.customer_id,
+                customer_name = order.customer_name,
+                product_id = order.product_id,
+                product_name = order.product_name,
+                quantity = order.quantity,
+                unit_price = order.unit_price,
+                total_price = order.total_price,
+                completion_status = 'To be Packaged',
+                order_status = order.order_status,
+                employee = order.employee,
+                employee_id = order.employee_id
+            )
+
 
         # Doesn't update monthly and employee sales after the order is completed
-        if updated_order.status == 'Completed':
+        if order.order_status == 'Completed':
             year, month, day = extract_year_month_day(order.order_date)
             monthly_sale = monthly_sales_db.find_one({"year": year, "month": month})
             # Update monthly sales

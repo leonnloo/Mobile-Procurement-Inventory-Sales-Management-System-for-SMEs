@@ -47,4 +47,13 @@ class ManagementUtil {
     );
     return response;
   }
+
+  Future<http.Response> updateDispatch(String orderID, String completionStatus) async {
+    final response = await http.put(
+      Uri.parse('${endpoint}sales-management/update_dispatch/$orderID/$completionStatus'),
+      headers: {
+        'Content-Type': 'application/json', 'Authorization': 'Bearer $token'},
+    );
+    return response;
+  }
 }
