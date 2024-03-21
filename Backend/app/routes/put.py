@@ -109,6 +109,7 @@ def update_sale_order(order: NewSaleOrder, order_id, token: str = Depends(oauth_
 
             if updated_order.status == 'Completed':
                 priceDifference = order.total_price - old_order['total_price']
+                product_difference = order.quantity - old_order["quantity"]
                 year, month, day = extract_year_month_day(order.order_date)
                 monthly_sale = monthly_sales_db.find_one({"year": year, "month": month})
                 # Update monthly sales
@@ -162,6 +163,34 @@ def update_sale_order(order: NewSaleOrder, order_id, token: str = Depends(oauth_
                         detail = "Couldn't register employee sale",
                         headers={"WWW-Authenticate": "Bearer"},
                     )
+                
+                # Update product monthly sales
+                if 'monthly_sales' in product and isinstance(product['monthly_sales'], list):
+                    monthlyProduct = False
+                    for record in product['monthly_sales']:
+                        if record['year'] == year and record['month'] == month:
+                            record['total_price'] += priceDifference
+                            record['quantity_sold'] += product_difference
+                            monthlyProduct = True
+                            break
+
+                    # If no sales record found for the given year and month, create a new one
+                    if not monthlyProduct:
+                        new_monthly_sales = {
+                            'year': year,
+                            'month': month,
+                            'quantity_sold': order.quantity,
+                            'total_price': order.total_price
+                        }
+                        product['monthly_sales'].append(new_monthly_sales)
+                else:
+                    # If monthly_sales doesn't exist or is not a list, create a new list with the new sales record
+                    product['monthly_sales'] = [{
+                        'year': year,
+                        'month': month,
+                        'quantity_sold': order.quantity,
+                        'total_price': order.total_price
+                    }]
 
             # Update product status
             product['quantity'] = left_product

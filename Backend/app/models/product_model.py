@@ -1,4 +1,6 @@
 from pydantic import BaseModel
+from models.sales_management_model import ProductMonthlySales
+from typing import List
 
 class ProductItem(BaseModel):
     product_id: str
@@ -10,6 +12,7 @@ class ProductItem(BaseModel):
     margin: str
     critical_level: int
     status: str
+    monthly_sales: List[ProductMonthlySales] | None
 
 class NewProduct(BaseModel):
     product_name: str

@@ -47,19 +47,8 @@ def delete_suppliers(id: str, token: str = Depends(oauth_scheme)):
 @delete_router.delete("/delete_sale_order/{id}")
 def delete_sale_order(id: str, token: str = Depends(oauth_scheme)):
     deleted_order = sales_order_db.find_one({'order_id': id})
-    
-    # update product
     product = product_db.find_one({"product_id": deleted_order['product_id']})
-    product['quantity'] += deleted_order['quantity']
-    if product['quantity'] > 0 and product['quantity'] >= product['critical_level']:
-        new_status = 'In Stock'
-    elif product['quantity'] > 0 and product['quantity'] < product['critical_level']:
-        new_status = 'Low Stock'
-    else:
-        new_status = 'Out of Stock'
-    product['status'] = new_status
-    product_db.update_one({'product_id': deleted_order['product_id']}, {'$set': product})
-
+    
     # Only update monthly and employee sales if order is completed
     if deleted_order['status'] == 'Completed':
         year, month, day = extract_year_month_day(deleted_order['order_date'])
@@ -76,6 +65,26 @@ def delete_sale_order(id: str, token: str = Depends(oauth_scheme)):
                 if record['year'] == year and record['month'] == month:
                     record['sales'] -= deleted_order['total_price']
             users_db.update_one({"employee_id": deleted_order['employee_id']}, {"$set": employee})
+
+        # update product monthly sales
+        if product:
+            for record in product['monthly_sales']:
+                if record['year'] == year and record['month'] == month:
+                    record['total_price'] -= deleted_order['total_price']
+                    record['quantity_sold'] -= deleted_order['quantity']
+                    break
+
+    # update product
+    if product:
+        product['quantity'] += deleted_order['quantity']
+        if product['quantity'] > 0 and product['quantity'] >= product['critical_level']:
+            new_status = 'In Stock'
+        elif product['quantity'] > 0 and product['quantity'] < product['critical_level']:
+            new_status = 'Low Stock'
+        else:
+            new_status = 'Out of Stock'
+        product['status'] = new_status
+        product_db.update_one({'product_id': deleted_order['product_id']}, {'$set': product})
 
     result = sales_order_db.delete_one({'order_id': id})
     if result.deleted_count > 0:

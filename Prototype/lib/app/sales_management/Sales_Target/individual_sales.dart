@@ -169,7 +169,6 @@ class _IndividualSalesScreenState extends State<IndividualSalesScreen> {
                       ), // 添加差值列
                     ],
                     rows: data.map((user) {
-                      print(_selectedMonth);
                       if (_selectedMonth == 0){
                         if (user.salesRecord.isNotEmpty){
                           dynamic total = 0;
