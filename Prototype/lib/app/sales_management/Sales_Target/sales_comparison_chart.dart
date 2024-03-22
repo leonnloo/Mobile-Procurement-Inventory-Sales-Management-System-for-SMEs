@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:prototype/util/management_util.dart';
 import 'package:prototype/widgets/appbar/common_appbar.dart';
-import 'package:prototype/models/sales_target_data.dart';
+import 'package:prototype/models/sales_target_model.dart';
 class SalesComparisonScreen extends StatefulWidget {
   const SalesComparisonScreen({super.key});
 

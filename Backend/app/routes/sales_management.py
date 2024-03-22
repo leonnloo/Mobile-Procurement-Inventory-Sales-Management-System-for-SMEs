@@ -93,6 +93,97 @@ def update_dispatch(orderID: str, completionStatus: str, token: str = Depends(oa
     order['completion_status'] = completionStatus
     if completionStatus == 'Delivered':
         order['order_status'] = 'Completed'
+        year, month, day = extract_year_month_day(order['order_date'])
+        monthly_sale = monthly_sales_db.find_one({"year": year, "month": month})
+
+        # Update monthly sales
+        if monthly_sale:
+            monthly_sale['actual_sales'] += order['total_price']
+            monthly_sales_db.update_one({"year": year, "month": month}, {"$set": monthly_sale})
+        # if order is placed in a advanced month
+        else:
+            new_monthly_sales = MonthlySalesTarget(
+                year = year,
+                month = month,
+                actual_sales = order['total_price'],
+                target_sales = 0
+            )
+            monthly_sales_db.insert_one(dict(new_monthly_sales))
+
+        # Update employee
+        employee = users_db.find_one({"employee_id": order['employee_id']})
+        if employee:
+            if 'sales_record' in employee and isinstance(employee['sales_record'], list):
+                # Check if there is a sales record for the given year and month
+                sales_record_found = False
+                for record in employee['sales_record']:
+                    if record['year'] == year and record['month'] == month:
+                        record['sales'] += order['total_price']
+                        sales_record_found = True
+                        break
+
+                # If no sales record found for the given year and month, create a new one
+                if not sales_record_found:
+                    new_monthly_sales = {
+                        'year': year,
+                        'month': month,
+                        'sales': order['total_price']
+                    }
+                    employee['sales_record'].append(new_monthly_sales)
+            else:
+                # If sales_record doesn't exist or is not a list, create a new list with the new sales record
+                employee['sales_record'] = [{
+                    'year': year,
+                    'month': month,
+                    'sales': order['total_price']
+                }]
+            
+            # Update the employee document in the database
+            users_db.update_one({"employee_id": order['employee_id']}, {"$set": employee})
+        if not employee:
+            raise HTTPException(
+                status_code = status.HTTP_403_FORBIDDEN,
+                detail = "Couldn't register employee sale",
+                headers={"WWW-Authenticate": "Bearer"},
+            )
+
+        # Add product monthly sales
+        product = product_db.find_one({"product_id": order['product_id']})
+        if 'monthly_sales' in product and isinstance(product['monthly_sales'], list):
+            monthlyProduct = False
+            for record in product['monthly_sales']:
+                if record['year'] == year and record['month'] == month:
+                    record['total_price'] += order['total_price']
+                    record['quantity_sold'] += order['quantity']
+                    monthlyProduct = True
+                    break
+
+            # If no sales record found for the given year and month, create a new one
+            if not monthlyProduct:
+                new_monthly_sales = {
+                    'year': year,
+                    'month': month,
+                    'quantity_sold': order['quantity'],
+                    'total_price': order['total_price']
+                }
+                product['monthly_sales'].append(new_monthly_sales)
+        else:
+            # If monthly_sales doesn't exist or is not a list, create a new list with the new sales record
+            product['monthly_sales'] = [{
+                'year': year,
+                'month': month,
+                'quantity_sold': order['quantity'],
+                'total_price': order['total_price']
+            }]
+        if not product:
+            raise HTTPException(
+                status_code = status.HTTP_403_FORBIDDEN,
+                detail = "Couldn't register product sale",
+                headers={"WWW-Authenticate": "Bearer"},
+            )
+        product_db.update_one({"product_id": order['product_id']}, {"$set": product})
+
+
     sales_order_db.update_one({"order_id": orderID}, {"$set": order})
     return {"message": "Dispatch updated successfully",}
 

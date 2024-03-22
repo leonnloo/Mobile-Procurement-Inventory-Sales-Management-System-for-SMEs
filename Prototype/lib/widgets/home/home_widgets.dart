@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:prototype/app/home/chatbot/chatbot.dart';
 import 'package:prototype/widgets/drawer/drawer_controller.dart';
 import 'package:prototype/models/drawer_sections.dart';
-import 'package:prototype/widgets/product_sales_pie.dart';
+import 'package:prototype/widgets/statistics/product_sales_pie.dart';
 import 'package:prototype/widgets/statistics/delivery_overview.dart';
 import 'package:prototype/widgets/statistics/product_overview.dart';
 import 'package:prototype/app/sales_management/monthly_sales_bar.dart';
@@ -11,13 +11,9 @@ import 'package:prototype/app/sales_management/monthly_sales_bar.dart';
 
 class HomeWidgets extends StatelessWidget {
   const HomeWidgets({super.key});
-
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(CustomDrawerController());
-    // Add logic to calculate total profits
-    double totalProfits = 50000.00; // Replace your actual calculation
-
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.all(12.0),
@@ -95,27 +91,7 @@ class HomeWidgets extends StatelessWidget {
                 onTap: () {
                   controller.changePage(DrawerSections.salesManagement);
                 },
-                child: Card(
-                  elevation: 4.0,
-                  margin: const EdgeInsets.all(16.0),
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Column( // Wrap the Text widgets in a Column
-                      children: [
-                        const Text(
-                          'Total Sales',
-                          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                        ),
-                        Text(
-                          '\$$totalProfits',
-                          style: const TextStyle(fontSize: 32, color: Colors.green),
-                        ),
-                        const SizedBox(height: 25),
-                        const ProductSalesPieChart(),
-                      ],
-                    ),
-                  ),
-                ),
+                child: const ProductSalesPieChart(),
               ),
 
               /* ---------------FIFTH WIDGET------------------*/

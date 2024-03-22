@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:prototype/app/sales_management/monthly_sales_bar.dart';
-import 'package:prototype/app/sales_management/individual_sales.dart';
-import 'package:prototype/widgets/statistics/product_monthly_sales.dart';
+import 'package:prototype/widgets/statistics/product_sales_pie.dart';
+import 'package:prototype/widgets/statistics/individual_sales_chart.dart';
 import 'package:prototype/widgets/icon_button.dart';
 import 'Claims_and_Refunds/customer_claims_refunds.dart';
 import 'Dispatch_and_Delivery/dispatch_delivery.dart';
@@ -67,15 +67,7 @@ class SalesManagementScreen extends StatelessWidget {
                   child: MonthlySalesBarChart(),
                 ),
               ),
-              const Card(
-                elevation: 4.0,
-                margin: EdgeInsets.all(16.0),
-                child: Padding(
-                  padding: EdgeInsets.all(16.0),
-          
-                  child: ProductMonthlySalesLine1(),
-                ),
-              ),
+              const ProductSalesPieChart(),
           
               IndividualSales(),
             ],
