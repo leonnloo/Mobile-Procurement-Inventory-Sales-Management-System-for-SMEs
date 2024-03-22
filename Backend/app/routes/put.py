@@ -9,29 +9,10 @@ from models.inventory_model import *
 from models.sales_management_model import *
 from schema.schemas import *
 from fastapi.security import OAuth2PasswordBearer
-from datetime import datetime
-
-
-def extract_year_month_day(date_str: str):
-    try:
-        date_obj = datetime.strptime(date_str, "%Y-%m-%d")
-        year = date_obj.year
-        month = date_obj.month
-        day = date_obj.day
-        return year, month, day
-    except ValueError:
-        raise ValueError("Invalid date format. Please provide a date in the format YYYY-MM-DD")
-
-# # Example usage:
-# date_str = "2024-03-19"
-# year, month, day = extract_year_month_day(date_str)
-# print("Year:", year)
-# print("Month:", month)
-# print("Day:", day)
+from routes.func import *
 
 put_router = APIRouter()
 oauth_scheme = OAuth2PasswordBearer(tokenUrl="token")
-
 
 # ----------------------------------------- Customer Update ----------------------------------------------
 @put_router.put("/update_customer/{customerID}")

@@ -8,16 +8,12 @@ class ManagementUtil {
   final int port = 8000;
   late final String endpoint;
   var token = '';
-  var currentUser = '';
-  var currentUserID = '';
   final userLoggedInController = Get.put(UserLoggedInController());
   ManagementUtil() {
     // ipAddress = InternetAddress.loopbackIPv4.address;
     ipAddress = "10.0.2.2";
     endpoint = "http://$ipAddress:$port/";
     token = userLoggedInController.currentUser.value;
-    currentUser = userLoggedInController.currentUser.value;
-    currentUserID = userLoggedInController.currentUserID.value;
   }
 
 
@@ -56,4 +52,46 @@ class ManagementUtil {
     );
     return response;
   }
+
+  Future<http.Response> getRefunds() async {
+    final response = await http.get(
+      Uri.parse('${endpoint}sales-management/get_refunds'),
+      headers: {
+        'Authorization': 'Bearer $token'},
+    );
+    return response;
+  }
+
+  Future<http.Response> newRefund(dynamic orderID, dynamic orderStatus, dynamic refundDate, dynamic customerID, dynamic customerName, dynamic productID, dynamic productName, dynamic refundQuantity, dynamic orderPrice, dynamic refundAmount, dynamic reason) async {
+    final response = await http.post(
+      Uri.parse('${endpoint}sales-management/new_refund'),
+      headers: {
+        'Content-Type': 'application/json', 'Authorization': 'Bearer $token'},
+      body: jsonEncode({
+        'refund_id': '',
+        'order_id': orderID,
+        'order_status': orderStatus,
+        'refund_date': refundDate,
+        'customer_id': customerID,
+        'customer_name': customerName,
+        'product_id': productID,
+        'product_name': productName,
+        'refund_quantity': refundQuantity,
+        'order_price': orderPrice,
+        'refund_amount': refundAmount,
+        'reason': reason
+      })
+    );
+    return response;
+  }
+
+  Future<http.Response> deleteRefund(String refundID) async {
+    final response = await http.delete(
+      Uri.parse('${endpoint}sales-management/delete_refund/$refundID'),
+      headers: {
+        'Content-Type': 'application/json', 'Authorization': 'Bearer $token'},
+    );
+    return response;
+  }
+
 }

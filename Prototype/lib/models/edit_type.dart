@@ -6,4 +6,5 @@ enum EditType {
   procurement,
   supplier,
   customer,
+  refunds
 }
