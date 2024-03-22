@@ -306,9 +306,9 @@ class RequestUtil {
     );
   }
 
-  Future<http.Response> getProcurement(String category){
+  Future<http.Response> getProcurement(){
     return http.get(
-      Uri.parse("${endpoint}get_procurement/$category"),
+      Uri.parse("${endpoint}get_procurement"),
       headers: {"Authorization": "Bearer $token"}
     );
   }
