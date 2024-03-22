@@ -25,7 +25,7 @@ class ProductItem {
 
   factory ProductItem.fromJson(Map<String, dynamic> json) {
     dynamic monthlyList;
-    if (json[''] != null){
+    if (json['monthly_sales'] != null){
       monthlyList = json["monthly_sales"].map((x) => ProductMonthlySales.fromJson(x)).toList();
     }
     else {

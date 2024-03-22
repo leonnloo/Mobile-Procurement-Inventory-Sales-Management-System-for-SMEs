@@ -66,7 +66,7 @@ class InventoryCount extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: _fetchProducts(),
+      future: fetchProducts(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return SizedBox(
@@ -124,7 +124,7 @@ class InventoryCount extends StatelessWidget {
     );
   }
   
-  Future<List<ProductItem>> _fetchProducts() async {
+  Future<List<ProductItem>> fetchProducts() async {
     final response = await requestUtil.getProducts();
     if (response.statusCode == 200){
       List<dynamic> data = jsonDecode(response.body);

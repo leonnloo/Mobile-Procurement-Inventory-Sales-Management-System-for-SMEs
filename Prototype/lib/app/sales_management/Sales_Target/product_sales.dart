@@ -1,8 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:prototype/widgets/statistics/product_monthly_sales.dart';
+import 'package:prototype/widgets/statistics/product_sales_pie.dart';
 import 'package:prototype/models/product_model.dart';
 import 'package:prototype/util/request_util.dart';
 import 'package:prototype/widgets/appbar/common_appbar.dart';
@@ -35,16 +34,9 @@ class _ProductSalesByMonthState extends State<ProductSalesByMonth> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               // Add a GridView for buttons
-              const SizedBox(height: 20.0),
-              const Card(
-                elevation: 4.0,
-                margin: EdgeInsets.all(16.0),
-                child: Padding(
-                  padding: EdgeInsets.all(16.0),
-                  child: ProductMonthlySalesLine1(),
-                ),
-              ),
-              const SizedBox(height: 10,),
+              // const SizedBox(height: 16),
+              // const ProductSalesPieChart(),
+              // const SizedBox(height: 10,),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
