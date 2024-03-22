@@ -47,7 +47,7 @@ class AddCustomerScreenState extends State<AddCustomerScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CommonAppBar(currentTitle: 'Add Customer'),
+      appBar: const CommonAppBar(currentTitle: 'Add Customer'),
       body: 
       SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),

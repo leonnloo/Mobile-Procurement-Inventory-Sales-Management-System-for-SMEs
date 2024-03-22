@@ -181,6 +181,7 @@ def refund_serial_dict(refund) -> dict:
     return {
         "refund_id": refund["refund_id"],
         "order_id": refund["order_id"],
+        "order_status": refund["order_status"],
         "refund_date": refund["refund_date"],
         "customer_id": refund["customer_id"],
         "customer_name": refund["customer_name"],
