@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:prototype/app/sales_management/product_monthly_sales.dart';
+import 'package:prototype/widgets/statistics/product_monthly_sales.dart';
 import 'package:prototype/models/product_model.dart';
 import 'package:prototype/util/request_util.dart';
 import 'package:prototype/widgets/appbar/common_appbar.dart';

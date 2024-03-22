@@ -3,9 +3,9 @@ import 'package:get/get.dart';
 import 'package:prototype/app/home/chatbot/chatbot.dart';
 import 'package:prototype/widgets/drawer/drawer_controller.dart';
 import 'package:prototype/models/drawer_sections.dart';
-import 'package:prototype/widgets/inventory_overview.dart';
-import 'package:prototype/widgets/product_overview.dart';
 import 'package:prototype/widgets/product_sales_pie.dart';
+import 'package:prototype/widgets/statistics/inventory_overview.dart';
+import 'package:prototype/widgets/statistics/product_overview.dart';
 import 'package:prototype/app/sales_management/monthly_sales_bar.dart';
 
 

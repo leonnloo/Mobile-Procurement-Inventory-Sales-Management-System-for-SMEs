@@ -1,7 +1,7 @@
 import 'package:prototype/resources/app_resources.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:prototype/widgets/indicator.dart';
+import 'package:prototype/widgets/statistics/indicator.dart';
 
 class ProductSalesPieChart extends StatefulWidget {
   const ProductSalesPieChart({super.key});

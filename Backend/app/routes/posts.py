@@ -332,6 +332,7 @@ def product_form(product: NewProduct, token: str = Depends(oauth_scheme)):
         quantity = 0,
         critical_level = product.critical_level,
         status = "Out of Stock",
+        monthly_sales = [],
     )
 
     product_db.insert_one(dict(updated_product))
