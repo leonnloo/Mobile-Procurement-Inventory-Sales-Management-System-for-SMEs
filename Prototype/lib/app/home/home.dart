@@ -107,7 +107,7 @@ class HomeScreenState extends State<HomeScreen> {
         },
         child: Scaffold(
           key: _scaffoldKey,
-          appBar: AppBar(
+          appBar: controller.currentPage.value == DrawerSections.dashboard ? null : AppBar(
             toolbarHeight: 60.0,
             leading: Builder(
               builder: (context) => IconButton(
@@ -127,7 +127,7 @@ class HomeScreenState extends State<HomeScreen> {
             title: Text(controller.currentPage.value == DrawerSections.dashboard ? '' : currentTitle),
           ),
           body: container,
-        drawer: Drawer(
+          drawer: Drawer(
             child: SingleChildScrollView(
               child: Column(
                   children: [
