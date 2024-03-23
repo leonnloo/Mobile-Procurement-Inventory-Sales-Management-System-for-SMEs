@@ -32,7 +32,7 @@ class HomeScreen extends StatefulWidget {
 
 class HomeScreenState extends State<HomeScreen> {
   final isDialOpen = ValueNotifier(false);
-  Widget container = const HomeWidgets();
+  Widget container = HomeWidgets();
   String currentTitle = 'Dashboard';
   final controller = Get.put(CustomDrawerController());
   DateTime? currentBackPressTime;
@@ -42,7 +42,7 @@ class HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Obx(() {
       if (controller.currentPage.value == DrawerSections.dashboard) {
-        container = const HomeWidgets();
+        container = HomeWidgets();
         currentTitle = "Dashboard";
       } else if (controller.currentPage.value == DrawerSections.salesOrder) {
         container = const SalesOrderScreen();
