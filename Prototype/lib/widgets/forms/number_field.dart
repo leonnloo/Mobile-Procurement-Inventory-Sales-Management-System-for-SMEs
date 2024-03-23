@@ -34,8 +34,9 @@ class IntegerTextField extends StatelessWidget {
       ),
       onChanged: (String? newValue) {
         if (newValue != null) {
-          String formattedValue = double.parse(newValue).toStringAsFixed(2);
-          onChanged(formattedValue);
+          // String formattedValue = double.parse(newValue).toStringAsFixed(2);
+          // onChanged(formattedValue);
+          onChanged(newValue);
         }
       },
     );

@@ -1,8 +1,10 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:prototype/app/sales_management/Sales_Target/edit_sales_target.dart';
+import 'package:prototype/models/monthly_sales_model.dart';
 import 'package:prototype/util/management_util.dart';
 import 'package:prototype/widgets/appbar/common_appbar.dart';
-import 'package:prototype/models/sales_target_model.dart';
 class SalesComparisonScreen extends StatefulWidget {
   const SalesComparisonScreen({super.key});
 
@@ -53,6 +55,7 @@ class SalesComparisonScreenState extends State<SalesComparisonScreen> {
             ),
             const SizedBox(height: 30,),
             FutureBuilder(
+              key: futureBuilderKey,
               future: _fetchSalesTargetData(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
@@ -90,7 +93,7 @@ class SalesComparisonScreenState extends State<SalesComparisonScreen> {
                     ),
                   );
                 } else if (snapshot.hasData) {
-                  List<SalesTargetData> data = snapshot.data as List<SalesTargetData>;
+                  List<MonthlySales> data = snapshot.data as List<MonthlySales>;
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
@@ -131,8 +134,8 @@ class SalesComparisonScreenState extends State<SalesComparisonScreen> {
                           ), // 添加差值列
                         ],
                         rows: data.map((data) {
-                          final difference = data.actualSalesVolume - data.targetSalesVolume;
-                          final differenceText = difference.toString();
+                          final difference = data.actualSales - data.targetSales;
+                          final differenceText = difference.toStringAsFixed(2);
                           final differenceColor = difference < 0 ? Colors.red : null; // 若差值为负数则设置颜色为红色
                           if (data.year == _selectedYear){
                             return DataRow(cells: [
@@ -145,13 +148,14 @@ class SalesComparisonScreenState extends State<SalesComparisonScreen> {
                                   ),
                                 ),
                               ),
-                              DataCell(Text(data.actualSalesVolume.toString())),
-                              DataCell(Text(data.targetSalesVolume.toString())),
+                              DataCell(Text(data.actualSales.toStringAsFixed(2)), onTap: () => Get.to(() => EditSalesTarget(targetMonth: data, updateData: updateData,)),),
+                              DataCell(Text(data.targetSales.toStringAsFixed(2)), onTap: () => Get.to(() => EditSalesTarget(targetMonth: data, updateData: updateData,)),),
                               DataCell(
                                 Text(
                                   differenceText,
                                   style: TextStyle(fontSize: 14, color: differenceColor), // Adjust font size and color
                                 ),
+                                onTap: () => Get.to(() => EditSalesTarget(targetMonth: data, updateData: updateData,)),
                               ), // Display difference
                             ]);
                           }
@@ -201,11 +205,11 @@ class SalesComparisonScreenState extends State<SalesComparisonScreen> {
     );
   }
   
-  Future<List<SalesTargetData>> _fetchSalesTargetData() async {
+  Future<List<MonthlySales>> _fetchSalesTargetData() async {
     final response = await managementUtil.getSalesTarget();
     if (response.statusCode == 200) {
       List<dynamic> data = jsonDecode(response.body);
-      List<SalesTargetData> result = data.map((data) => SalesTargetData.fromJson(data)).toList();
+      List<MonthlySales> result = data.map((data) => MonthlySales.fromJson(data)).toList();
       return result;
     }
     else {
@@ -228,5 +232,12 @@ class SalesComparisonScreenState extends State<SalesComparisonScreen> {
       // Return a placeholder string if monthNumber is out of range
       return 'Unknown';
     }
+  }
+
+  Key futureBuilderKey = UniqueKey();
+  void updateData() async {
+    setState(() {
+      futureBuilderKey = UniqueKey();
+    });
   }
 }

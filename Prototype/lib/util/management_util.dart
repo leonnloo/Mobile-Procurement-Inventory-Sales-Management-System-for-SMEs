@@ -25,6 +25,20 @@ class ManagementUtil {
     );
     return response;
   }
+  Future<http.Response> updateMonthlyTargetSales(dynamic year, dynamic month, dynamic actualSales, dynamic targetSales) async {
+    final response = await http.put(
+      Uri.parse('${endpoint}sales-management/update_monthly_target_sales'),
+      headers: {
+        'Content-Type': 'application/json', 'Authorization': 'Bearer $token'},
+      body: jsonEncode({
+        'year': year,
+        'month': month,
+        'actual_sales': actualSales,
+        'target_sales': targetSales,
+      })
+    );
+    return response;
+  }
 
   Future<http.Response> getMonthlySales() async {
     final response = await http.get(
@@ -34,6 +48,7 @@ class ManagementUtil {
     );
     return response;
   }
+  
 
   Future<http.Response> getProductMonthlySales() async {
     final response = await http.get(

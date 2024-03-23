@@ -17,7 +17,7 @@ def get_sales_by_month(token: str = Depends(oauth_scheme)):
     return sales
 
 @sales_management_router.get("/sales-management/get_monthly_sales_by_year/{year}")
-def get_sales_by_month(year: int, token: str = Depends(oauth_scheme)):
+def get_sales_by_month_by_year(year: int, token: str = Depends(oauth_scheme)):
     sales = monthly_sales_target_serial(monthly_sales_db.find())
     return sales
 
@@ -60,7 +60,7 @@ def update_company_monthly_sales(sales_by_month: MonthlySalesTarget, token: str 
         
 
 # Updating existing sales target
-@sales_management_router.put("/sales-management/update_monthly_sales_target")
+@sales_management_router.put("/sales-management/update_monthly_target_sales")
 def update_company_monthly_sales(sales_by_month: MonthlySalesTarget, token: str = Depends(oauth_scheme)):
     old_sales = monthly_sales_db.find_one({"year": sales_by_month.year, "month": sales_by_month.month})
     if old_sales:
