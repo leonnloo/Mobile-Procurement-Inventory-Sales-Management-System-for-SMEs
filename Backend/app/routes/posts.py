@@ -6,48 +6,14 @@ from models.procurement_model import *
 from models.product_model import *
 from models.inventory_model import *
 from models.sales_management_model import *
+from routes.func import *
 from config.database import *
 from fastapi.security import OAuth2PasswordBearer
-from datetime import datetime
-
-
-def extract_year_month_day(date_str: str):
-    try:
-        date_obj = datetime.strptime(date_str, "%Y-%m-%d")
-        year = date_obj.year
-        month = date_obj.month
-        day = date_obj.day
-        return year, month, day
-    except ValueError:
-        raise ValueError("Invalid date format. Please provide a date in the format YYYY-MM-DD")
-
-# # Example usage:
-# date_str = "2024-03-19"
-# year, month, day = extract_year_month_day(date_str)
-# print("Year:", year)
-# print("Month:", month)
-# print("Day:", day)
 
 
 post_router = APIRouter()
 oauth_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
-
-def processNextID(query: str) -> str:
-    # Extract integers from the string
-    extracted_numbers = ''.join(char for char in query if char.isdigit())
-
-    # Convert the extracted numbers to an integer
-    result = int(extracted_numbers) if extracted_numbers else None
-    if result:
-        result += 1
-        # Extract the first two characters from the original query
-        first_two_characters = query[:2]
-        # Append them to the result
-        result_with_prefix = f"{first_two_characters}{result}"
-        return result_with_prefix
-    else:
-        return None
 
 # ----------------------------------------- Customer Form ----------------------------------------------
 @post_router.post("/customer_form")
@@ -133,23 +99,42 @@ def sales_order_form(order: NewSaleOrder, token: str = Depends(oauth_scheme)):
         else:
             next_order_id = "SO1"
 
-        updated_order = SaleOrder(
-            order_id = next_order_id,
-            order_date = order.order_date,
-            customer_id = order.customer_id,
-            customer_name = order.customer_name,
-            product_id = order.product_id,
-            product_name = order.product_name,
-            quantity = order.quantity,
-            unit_price = order.unit_price,
-            total_price = order.total_price,
-            status = order.status,
-            employee = order.employee,
-            employee_id = order.employee_id
-        )
+        if order.order_status == "Completed":
+            updated_order = SaleOrder(
+                order_id = next_order_id,
+                order_date = order.order_date,
+                customer_id = order.customer_id,
+                customer_name = order.customer_name,
+                product_id = order.product_id,
+                product_name = order.product_name,
+                quantity = order.quantity,
+                unit_price = order.unit_price,
+                total_price = order.total_price,
+                completion_status = 'Delivered',
+                order_status = order.order_status,
+                employee = order.employee,
+                employee_id = order.employee_id
+            )
+        else:
+            updated_order = SaleOrder(
+                order_id = next_order_id,
+                order_date = order.order_date,
+                customer_id = order.customer_id,
+                customer_name = order.customer_name,
+                product_id = order.product_id,
+                product_name = order.product_name,
+                quantity = order.quantity,
+                unit_price = order.unit_price,
+                total_price = order.total_price,
+                completion_status = 'To be Packaged',
+                order_status = order.order_status,
+                employee = order.employee,
+                employee_id = order.employee_id
+            )
+
 
         # Doesn't update monthly and employee sales after the order is completed
-        if updated_order.status == 'Completed':
+        if order.order_status == 'Completed':
             year, month, day = extract_year_month_day(order.order_date)
             monthly_sale = monthly_sales_db.find_one({"year": year, "month": month})
             # Update monthly sales
@@ -202,6 +187,34 @@ def sales_order_form(order: NewSaleOrder, token: str = Depends(oauth_scheme)):
                     detail = "Couldn't register employee sale",
                     headers={"WWW-Authenticate": "Bearer"},
                 )
+
+            # Add product monthly sales
+            if 'monthly_sales' in product and isinstance(product['monthly_sales'], list):
+                monthlyProduct = False
+                for record in product['monthly_sales']:
+                    if record['year'] == year and record['month'] == month:
+                        record['total_price'] += order.total_price
+                        record['quantity_sold'] += order.quantity
+                        monthlyProduct = True
+                        break
+
+                # If no sales record found for the given year and month, create a new one
+                if not monthlyProduct:
+                    new_monthly_sales = {
+                        'year': year,
+                        'month': month,
+                        'quantity_sold': order.quantity,
+                        'total_price': order.total_price
+                    }
+                    product['monthly_sales'].append(new_monthly_sales)
+            else:
+                # If monthly_sales doesn't exist or is not a list, create a new list with the new sales record
+                product['monthly_sales'] = [{
+                    'year': year,
+                    'month': month,
+                    'quantity_sold': order.quantity,
+                    'total_price': order.total_price
+                }]
 
         # Update product status
         product['quantity'] = left_product
@@ -319,6 +332,7 @@ def product_form(product: NewProduct, token: str = Depends(oauth_scheme)):
         quantity = 0,
         critical_level = product.critical_level,
         status = "Out of Stock",
+        monthly_sales = [],
     )
 
     product_db.insert_one(dict(updated_product))

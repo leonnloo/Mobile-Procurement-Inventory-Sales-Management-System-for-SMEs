@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:prototype/app/inventory/get_inventory.dart';
 import 'package:prototype/models/inventory_model.dart';
@@ -9,8 +11,8 @@ import 'package:prototype/widgets/forms/text_field.dart';
 
 class EditInventory extends StatefulWidget {
   final InventoryItem inventoryData;
-
-  const EditInventory({super.key, required this.inventoryData});
+  final Function updateData;
+  const EditInventory({super.key, required this.inventoryData, required this.updateData});
 
   @override
   EditInventoryState createState() => EditInventoryState();
@@ -135,6 +137,7 @@ class EditInventoryState extends State<EditInventory> {
                           );
                           
                           if (response.statusCode == 200) {
+                            widget.updateData();
                             Navigator.pop(context);
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
@@ -187,6 +190,7 @@ class EditInventoryState extends State<EditInventory> {
                 final response = await requestUtil.deleteInventory(widget.inventoryData.itemID);
                 
                 if (response.statusCode == 200) {
+                  widget.updateData();
                   Navigator.pop(context);
                   Navigator.pop(context);
                   ScaffoldMessenger.of(context).showSnackBar(

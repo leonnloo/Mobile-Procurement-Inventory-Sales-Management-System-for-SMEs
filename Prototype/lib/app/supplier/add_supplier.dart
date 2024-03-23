@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:prototype/util/request_util.dart';
@@ -6,8 +8,8 @@ import 'package:prototype/widgets/appbar/common_appbar.dart';
 import 'package:prototype/widgets/forms/text_field.dart';
 
 class AddSupplierScreen extends StatefulWidget {
-  const AddSupplierScreen({super.key});
-
+  const AddSupplierScreen({super.key, this.updateData});
+  final Function? updateData;
   @override
   AddSupplierScreenState createState() => AddSupplierScreenState();
 }
@@ -45,7 +47,7 @@ class AddSupplierScreenState extends State<AddSupplierScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CommonAppBar(currentTitle: 'Add Supplier'),
+      appBar: const CommonAppBar(currentTitle: 'Add Supplier'),
       body: 
       SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
@@ -99,6 +101,9 @@ class AddSupplierScreenState extends State<AddSupplierScreen> {
                       );
                       
                       if (response.statusCode == 200) {
+                        if (widget.updateData != null) {
+                          widget.updateData!();
+                        }
                         Navigator.pop(context);
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(

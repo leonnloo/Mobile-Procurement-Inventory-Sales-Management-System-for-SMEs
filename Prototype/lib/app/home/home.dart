@@ -32,7 +32,7 @@ class HomeScreen extends StatefulWidget {
 
 class HomeScreenState extends State<HomeScreen> {
   final isDialOpen = ValueNotifier(false);
-  Widget container = const HomeWidgets();
+  Widget container = HomeWidgets();
   String currentTitle = 'Dashboard';
   final controller = Get.put(CustomDrawerController());
   DateTime? currentBackPressTime;
@@ -42,16 +42,16 @@ class HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Obx(() {
       if (controller.currentPage.value == DrawerSections.dashboard) {
-        container = const HomeWidgets();
+        container = HomeWidgets();
         currentTitle = "Dashboard";
       } else if (controller.currentPage.value == DrawerSections.salesOrder) {
-        container = SalesOrderScreen();
+        container = const SalesOrderScreen();
         currentTitle = "Sales Order";
       } else if (controller.currentPage.value == DrawerSections.salesManagement) {
         container = const SalesManagementScreen();
         currentTitle = "Sales Management";
       } else if (controller.currentPage.value == DrawerSections.inventory) {
-        container = InventoryScreen();
+        container = const InventoryScreen();
         currentTitle = "Inventory";
       } else if (controller.currentPage.value == DrawerSections.product) {
         container = const ProductManagementScreen();
@@ -60,10 +60,10 @@ class HomeScreenState extends State<HomeScreen> {
         container = const ProcurementScreen();
         currentTitle = "Procurement";
       } else if (controller.currentPage.value == DrawerSections.supplier) {
-        container = SupplierManagementScreen();
+        container = const SupplierManagementScreen();
         currentTitle = "Supplier";
       } else if (controller.currentPage.value == DrawerSections.customer) {
-        container = CustomerManagementScreen();
+        container = const CustomerManagementScreen();
         currentTitle = "Customer";
       } else if (controller.currentPage.value == DrawerSections.settings) {
         container = const SettingsScreen();
@@ -107,7 +107,7 @@ class HomeScreenState extends State<HomeScreen> {
         },
         child: Scaffold(
           key: _scaffoldKey,
-          appBar: AppBar(
+          appBar: controller.currentPage.value == DrawerSections.dashboard ? null : AppBar(
             toolbarHeight: 60.0,
             leading: Builder(
               builder: (context) => IconButton(
@@ -127,7 +127,7 @@ class HomeScreenState extends State<HomeScreen> {
             title: Text(controller.currentPage.value == DrawerSections.dashboard ? '' : currentTitle),
           ),
           body: container,
-        drawer: Drawer(
+          drawer: Drawer(
             child: SingleChildScrollView(
               child: Column(
                   children: [

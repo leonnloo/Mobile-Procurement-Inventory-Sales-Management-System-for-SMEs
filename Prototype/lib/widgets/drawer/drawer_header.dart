@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:prototype/app/user_profile/user_profile.dart';
@@ -13,127 +11,52 @@ class HeaderDrawer extends StatefulWidget {
 }
 
 class HeaderDrawerState extends State<HeaderDrawer> {
+  final userController = Get.put(UserLoggedInController());
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: _fetchUserData(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return Container(
-            height: 240,
-            width: double.infinity,
-            color: Colors.red[400],
-            child: const Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                SizedBox(height: 26.0),
-                CircularProgressIndicator(
-                  backgroundColor: Colors.white,
-                  color: Colors.red,
-                ),
-                SizedBox(height: 16.0),
-                Text(
-                  'Loading...',
-                  style: TextStyle(fontSize: 16.0, color: Colors.white),
-                ),
-              ],
-            ),
-          );
-        } else if (snapshot.hasError) {
-          return Container(
-                color: Colors.red[400],
-                width: double.infinity,
-                height: 220,
-                padding: const EdgeInsets.only(top: 20.0),
-                child: const Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    // TO DO: user information
-                    Text(           
-                      "Unable to load user data",
-                      style: TextStyle(color: Colors.white, fontSize: 20),
-                    ),
-                  ],
-                ),
-              );
-        } else {
-          final user = snapshot.data;
-          if (user != null) {
-            return GestureDetector(
-              onTap: () {
-                Get.to(() => const UserProfileScreen());
-              },
-              child: Container(
-                color: Colors.red[400],
-                width: double.infinity,
-                height: 220,
-                padding: const EdgeInsets.only(top: 20.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      margin: const EdgeInsets.only(bottom: 10),
-                      height: 70,
-                      decoration: const BoxDecoration(
-                        shape: BoxShape.circle,
-                        image: DecorationImage(
-                          image: AssetImage('assets/images/nottingham.jpg'),
-                        ),
-                      ),
-                    ),
-                    // TO DO: user information
-                    Text(           
-                      user['employee_name'],
-                      style: const TextStyle(color: Colors.white, fontSize: 20),
-                    ),
-                    Text(
-                      user["email"],
-                      style: TextStyle(
-                        color: Colors.grey[200],
-                        fontSize: 14,
-                      ),
-                    ),
-                  ],
+    userController.updateDrawerFunction(updateData);
+    return GestureDetector(
+      onTap: () {
+        Get.to(() => const UserProfileScreen());
+      },
+      child: Container(
+        color: Colors.red[400],
+        width: double.infinity,
+        height: 220,
+        padding: const EdgeInsets.only(top: 20.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              margin: const EdgeInsets.only(bottom: 10),
+              height: 70,
+              decoration: const BoxDecoration(
+                shape: BoxShape.circle,
+                image: DecorationImage(
+                  image: AssetImage('assets/images/nottingham.jpg'),
                 ),
               ),
-            );
-          }
-          else {
-            return Container(
-                color: Colors.red[400],
-                width: double.infinity,
-                height: 220,
-                padding: const EdgeInsets.only(top: 20.0),
-                child: const Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    // TO DO: user information
-                    Text(           
-                      "Unable to load user data",
-                      style: TextStyle(color: Colors.white, fontSize: 20),
-                    ),
-                  ],
-                ),
-              );
-            }
-        }
-      }
+            ),
+            // TO DO: user information
+            Text(           
+              userController.currentUserInfo.value!.employeeName,
+              style: const TextStyle(color: Colors.white, fontSize: 20),
+            ),
+            Text(
+              userController.currentUserInfo.value!.email,
+              style: TextStyle(
+                color: Colors.grey[200],
+                fontSize: 14,
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
-
-  Future<Map<String, dynamic>> _fetchUserData() async {
-    final userController = Get.put(UserLoggedInController());
-    try {
-      final user = await requestUtil.getUser(userController.currentUser.value);
-      if (user.statusCode == 200){
-        return jsonDecode(user.body);
-      }
-      else {
-        throw Exception('Unable to fetch user data.');
-      }
-    } catch (error) {
-      rethrow; // Rethrow the error to be caught by FutureBuilder
-    }
+  void updateData(){
+    setState(() {
+    });
   }
+
 }

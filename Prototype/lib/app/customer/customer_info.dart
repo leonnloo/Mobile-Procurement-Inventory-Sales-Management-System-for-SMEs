@@ -6,23 +6,23 @@ import 'package:prototype/util/request_util.dart';
 import 'dart:math';
 import 'package:prototype/widgets/appbar/info_appbar.dart';
 
-void navigateToCustomerDetail(BuildContext context, CustomerData customer) {
+void navigateToCustomerDetail(BuildContext context, CustomerData customer, Function updateData) {
   Navigator.of(context).push(
     MaterialPageRoute(
-      builder: (context) => CustomerDetailScreen(customer: customer),
+      builder: (context) => CustomerDetailScreen(customer: customer, updateData: updateData),
     ),
   );
 }
 
 class CustomerDetailScreen extends StatelessWidget {
   final CustomerData customer;
-
-  const CustomerDetailScreen({super.key, required this.customer});
+  final Function updateData;
+  const CustomerDetailScreen({super.key, required this.customer, required this.updateData});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: InfoAppBar(currentTitle: 'Customer Details', currentData: customer, editType: EditType.customer,),
+      appBar: InfoAppBar(currentTitle: 'Customer Details', currentData: customer, editType: EditType.customer, updateData: updateData,),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -176,7 +176,7 @@ Widget _buildHistory() {
           children: [
             const Icon(Icons.history, color: Colors.blue),
             const SizedBox(width: 8.0),
-            Text('Placed an order on ${order.orderDate} - ${order.status}'),
+            Text('Placed an order on ${order.orderDate} - ${order.orderStatus}'),
           ],
         );
         // ! do empty history after completing adding orders

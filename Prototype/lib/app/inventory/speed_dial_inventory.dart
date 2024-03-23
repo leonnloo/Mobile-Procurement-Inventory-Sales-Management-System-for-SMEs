@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:prototype/app/inventory/add_inventory.dart';
 import 'package:prototype/app/inventory/stock_inout_inv.dart';
 
-Widget inventorySpeedDial(BuildContext context) {
+Widget inventorySpeedDial(BuildContext context, Function updateData) {
     return SpeedDial(
       icon: Icons.add_outlined,
       activeIcon: Icons.close_outlined,
@@ -20,7 +20,7 @@ Widget inventorySpeedDial(BuildContext context) {
           shape: const CircleBorder(),
           label: 'Add New Item',
           onTap: () {
-            Get.to(() => const AddInventoryScreen());
+            Get.to(() => AddInventoryScreen(updateData: updateData));
           }
         ),
         SpeedDialChild(
@@ -30,7 +30,7 @@ Widget inventorySpeedDial(BuildContext context) {
           shape: const CircleBorder(),
           label: 'Stock In/Out',
           onTap: () {
-            Get.to(() => const StockInOutInventory());
+            Get.to(() => StockInOutInventory(updateData: updateData));;
           }
         ),
       ],

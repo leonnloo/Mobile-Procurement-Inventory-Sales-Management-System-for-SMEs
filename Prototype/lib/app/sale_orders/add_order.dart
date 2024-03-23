@@ -13,8 +13,8 @@ import 'package:prototype/widgets/forms/dropdown_field.dart';
 import 'package:prototype/widgets/forms/number_field.dart';
 
 class AddOrderScreen extends StatefulWidget {
-  const AddOrderScreen({super.key});
-
+  final Function? updateData;
+  const AddOrderScreen({super.key, this.updateData});
   @override
   AddOrderScreenState createState() => AddOrderScreenState();
 }
@@ -171,6 +171,9 @@ class AddOrderScreenState extends State<AddOrderScreen> {
                         );
                         
                         if (response.statusCode == 200) {
+                          if (widget.updateData != null) {
+                            widget.updateData!();
+                          }
                           Navigator.pop(context);
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(

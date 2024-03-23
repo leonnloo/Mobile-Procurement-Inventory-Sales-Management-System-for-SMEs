@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:prototype/app/product/get_product.dart';
 import 'package:prototype/util/request_util.dart';
@@ -7,8 +9,8 @@ import 'package:prototype/widgets/forms/number_field.dart';
 import 'package:prototype/widgets/forms/text_field.dart';
 
 class AddProductScreen extends StatefulWidget {
-  const AddProductScreen({super.key});
-
+  const AddProductScreen({super.key, this.updateData});
+  final Function? updateData;
   @override
   AddProductScreenState createState() => AddProductScreenState();
 }
@@ -52,7 +54,7 @@ class AddProductScreenState extends State<AddProductScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CommonAppBar(currentTitle: 'Add Product'),
+      appBar: const CommonAppBar(currentTitle: 'Add Product'),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -147,6 +149,9 @@ class AddProductScreenState extends State<AddProductScreen> {
                         );
                         
                         if (response.statusCode == 200) {
+                          if (widget.updateData != null) {
+                            widget.updateData!();
+                          }
                           Navigator.pop(context);
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(

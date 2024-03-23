@@ -9,29 +9,10 @@ from models.inventory_model import *
 from models.sales_management_model import *
 from schema.schemas import *
 from fastapi.security import OAuth2PasswordBearer
-from datetime import datetime
-
-
-def extract_year_month_day(date_str: str):
-    try:
-        date_obj = datetime.strptime(date_str, "%Y-%m-%d")
-        year = date_obj.year
-        month = date_obj.month
-        day = date_obj.day
-        return year, month, day
-    except ValueError:
-        raise ValueError("Invalid date format. Please provide a date in the format YYYY-MM-DD")
-
-# # Example usage:
-# date_str = "2024-03-19"
-# year, month, day = extract_year_month_day(date_str)
-# print("Year:", year)
-# print("Month:", month)
-# print("Day:", day)
+from routes.func import *
 
 put_router = APIRouter()
 oauth_scheme = OAuth2PasswordBearer(tokenUrl="token")
-
 
 # ----------------------------------------- Customer Update ----------------------------------------------
 @put_router.put("/update_customer/{customerID}")
@@ -85,30 +66,15 @@ def update_supplier(supplier: NewSupplier, supplierID: str, token: str = Depends
 
 # ----------------------------------------- Sales Order Update ----------------------------------------------
 @put_router.put("/update_sale_order/{order_id}")
-def update_sale_order(order: NewSaleOrder, order_id, token: str = Depends(oauth_scheme)):
+def update_sale_order(order: SaleOrder, order_id, token: str = Depends(oauth_scheme)):
     old_order = sales_order_db.find_one({"order_id": order_id})
     product = product_db.find_one({"product_id": order.product_id})
     left_product = product["quantity"] - (order.quantity - old_order["quantity"])
     if (left_product >= 0):
         if old_order:
-            updated_order = SaleOrder(
-                order_id = order_id,
-                order_date = order.order_date,
-                customer_id = order.customer_id,
-                customer_name = order.customer_name,
-                product_id = order.product_id,
-                product_name = order.product_name,
-                quantity = order.quantity,
-                unit_price = order.unit_price,
-                total_price = order.total_price,
-                status = order.status,
-                employee = order.employee,
-                employee_id = order.employee_id
-            )
-
-
-            if updated_order.status == 'Completed':
+            if order.order_status == 'Completed':
                 priceDifference = order.total_price - old_order['total_price']
+                product_difference = order.quantity - old_order["quantity"]
                 year, month, day = extract_year_month_day(order.order_date)
                 monthly_sale = monthly_sales_db.find_one({"year": year, "month": month})
                 # Update monthly sales
@@ -162,6 +128,37 @@ def update_sale_order(order: NewSaleOrder, order_id, token: str = Depends(oauth_
                         detail = "Couldn't register employee sale",
                         headers={"WWW-Authenticate": "Bearer"},
                     )
+                
+                # Update product monthly sales
+                if 'monthly_sales' in product and isinstance(product['monthly_sales'], list):
+                    monthlyProduct = False
+                    for record in product['monthly_sales']:
+                        if record['year'] == year and record['month'] == month:
+                            record['total_price'] += priceDifference
+                            record['quantity_sold'] += product_difference
+                            monthlyProduct = True
+                            break
+
+                    # If no sales record found for the given year and month, create a new one
+                    if not monthlyProduct:
+                        new_monthly_sales = {
+                            'year': year,
+                            'month': month,
+                            'quantity_sold': order.quantity,
+                            'total_price': order.total_price
+                        }
+                        product['monthly_sales'].append(new_monthly_sales)
+                else:
+                    # If monthly_sales doesn't exist or is not a list, create a new list with the new sales record
+                    product['monthly_sales'] = [{
+                        'year': year,
+                        'month': month,
+                        'quantity_sold': order.quantity,
+                        'total_price': order.total_price
+                    }]
+
+                # Update completion status of order
+                order.completion_status = 'Delivered'
 
             # Update product status
             product['quantity'] = left_product
@@ -173,6 +170,23 @@ def update_sale_order(order: NewSaleOrder, order_id, token: str = Depends(oauth_
                 new_status = 'Out of Stock'
             product['status'] = new_status
             product_db.update_one({"product_id": order.product_id}, {"$set": product})
+
+
+            updated_order = SaleOrder(
+                order_id = order_id,
+                order_date = order.order_date,
+                customer_id = order.customer_id,
+                customer_name = order.customer_name,
+                product_id = order.product_id,
+                product_name = order.product_name,
+                quantity = order.quantity,
+                unit_price = order.unit_price,
+                total_price = order.total_price,
+                completion_status = order.completion_status,
+                order_status = order.order_status,
+                employee = order.employee,
+                employee_id = order.employee_id
+            )
 
             sales_order_db.update_one({"order_id": order_id}, {"$set": dict(updated_order)})
             return sale_order_dict_serial(sales_order_db.find_one({"order_id": order_id}))
