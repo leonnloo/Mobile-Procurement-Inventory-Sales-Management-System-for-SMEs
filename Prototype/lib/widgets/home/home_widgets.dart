@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:prototype/app/home/chatbot/chatbot.dart';
 import 'package:prototype/app/notification_screen.dart';
+import 'package:prototype/util/user_controller.dart';
 import 'package:prototype/widgets/drawer/drawer_controller.dart';
 import 'package:prototype/models/drawer_sections.dart';
 import 'package:prototype/widgets/statistics/product_sales_pie.dart';
@@ -11,7 +12,8 @@ import 'package:prototype/widgets/statistics/monthly_sales_bar.dart';
 
 
 class HomeWidgets extends StatelessWidget {
-  const HomeWidgets({super.key});
+  HomeWidgets({super.key});
+  final userController = Get.put(UserLoggedInController());
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(CustomDrawerController());
@@ -72,11 +74,11 @@ class HomeWidgets extends StatelessWidget {
                           ),
                         ),
                       ),
-                      const Padding(
-                        padding: EdgeInsets.only(left: 15, right: 15, top: 5),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 15, right: 15, top: 5),
                         child: Text(
-                          'Welcome back',
-                          style: TextStyle(
+                          'Welcome back ${userController.currentUser.value}',
+                          style: const TextStyle(
                             color: Colors.white54,
                             fontSize: 16.0, 
                             fontWeight: FontWeight.bold, 
