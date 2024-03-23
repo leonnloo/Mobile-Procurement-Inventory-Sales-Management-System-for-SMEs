@@ -104,8 +104,8 @@ def get_product_selling_price(item: str, token: str = Depends(oauth_scheme)):
 # ---------------------------------------- Inventory ----------------------------------------
 @get_router.get("/get_inventories")
 def get_inventory(token: str = Depends(oauth_scheme)):
-    inventory = inventory_serial(inventory_db.find())
-    return inventory
+    inventories = inventory_serial(inventory_db.find())
+    return inventories
 
 @get_router.get("/get_inventory_item_id/{itemName}")
 def get_inventory_item_id(itemName: str, token: str = Depends(oauth_scheme)):
