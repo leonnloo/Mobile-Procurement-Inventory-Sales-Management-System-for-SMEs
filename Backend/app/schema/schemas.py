@@ -1,7 +1,6 @@
 # ---------------------------------------- User ----------------------------------------
 def user_dict_serial(user) -> dict:
     return {
-        # "Object id": str(user["_id"]),
         "employee_name": user["employee_name"],
         "employee_id": user["employee_id"],
         "email": user["email"],
