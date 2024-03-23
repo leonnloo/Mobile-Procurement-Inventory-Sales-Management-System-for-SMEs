@@ -419,6 +419,12 @@ class RequestUtil {
   }
 
   // ----------------------------------------- INVENTORY ----------------------------------------------
+  Future<http.Response> getInventories() async {
+    return http.get(
+      Uri.parse("${endpoint}get_inventories"),
+      headers: {"Authorization": "Bearer $token"}
+    );
+  }
   Future<http.Response> getInventoryType(String category) async {
     return http.get(
       Uri.parse("${endpoint}get_inventory_category/$category"),

@@ -7,7 +7,7 @@ import 'package:prototype/models/drawer_sections.dart';
 import 'package:prototype/widgets/statistics/product_sales_pie.dart';
 import 'package:prototype/widgets/statistics/delivery_overview.dart';
 import 'package:prototype/widgets/statistics/product_overview.dart';
-import 'package:prototype/app/sales_management/monthly_sales_bar.dart';
+import 'package:prototype/widgets/statistics/monthly_sales_bar.dart';
 
 
 class HomeWidgets extends StatelessWidget {
@@ -66,7 +66,7 @@ class HomeWidgets extends StatelessWidget {
                           'Dashboard',
                           style: TextStyle(
                             color: Colors.white,
-                            fontSize: 34.0, 
+                            fontSize: 38.0, 
                             fontWeight: FontWeight.bold, 
                             letterSpacing: 2.0
                           ),
@@ -78,7 +78,7 @@ class HomeWidgets extends StatelessWidget {
                           'Welcome back',
                           style: TextStyle(
                             color: Colors.white54,
-                            fontSize: 14.0, 
+                            fontSize: 16.0, 
                             fontWeight: FontWeight.bold, 
                             letterSpacing: 2.0
                           ),

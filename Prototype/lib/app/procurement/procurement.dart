@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 import 'package:prototype/app/procurement/add_procurement.dart';
-import 'package:prototype/app/procurement/monthly_purchases_statistic.dart';
 import 'package:prototype/models/procurement_model.dart';
 import 'package:prototype/app/procurement/procurement_info.dart';
 import 'package:prototype/app/procurement/procurement_filter_system.dart';
@@ -50,14 +49,14 @@ class ProcurementScreenState extends State<ProcurementScreen> {
               ),
             ),
           
-            const Card(
-              elevation: 4.0,
-              margin: EdgeInsets.all(16.0),
-              child: Padding(
-                padding: EdgeInsets.all(16.0),
-                child: MonthlyPurchaseStatic(),
-              ),
-            ),
+            // const Card(
+            //   elevation: 4.0,
+            //   margin: EdgeInsets.all(16.0),
+            //   child: Padding(
+            //     padding: EdgeInsets.all(16.0),
+            //     child: MonthlyPurchaseStatic(),
+            //   ),
+            // ),
             /*const Card(
               elevation: 4.0,
               margin: EdgeInsets.all(16.0),
@@ -66,10 +65,16 @@ class ProcurementScreenState extends State<ProcurementScreen> {
                 child: MonthlyPurchaseChart(),
               ),
             ),*/
-            const TabBar(
-              tabs: [
-                Tab(text: 'Past'),
-                Tab(text: 'Present'),
+            TabBar(
+              labelColor: Colors.black,
+              unselectedLabelColor: Colors.black,
+              indicatorColor: Colors.red[400],
+              indicatorSize: TabBarIndicatorSize.label,
+              indicatorWeight: 2.0,
+              labelPadding: const EdgeInsets.all(10),
+              tabs: const [
+                Tab(text: 'Delivered'),
+                Tab(text: 'Ongoing'),
               ],
             ),
             SizedBox(

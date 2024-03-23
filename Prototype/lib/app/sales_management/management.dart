@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:prototype/app/sales_management/monthly_sales_bar.dart';
+import 'package:prototype/widgets/statistics/monthly_sales_bar.dart';
 import 'package:prototype/widgets/statistics/product_sales_pie.dart';
 import 'package:prototype/widgets/statistics/individual_sales_chart.dart';
 import 'package:prototype/widgets/icon_button.dart';
@@ -69,7 +69,7 @@ class SalesManagementScreen extends StatelessWidget {
               ),
               const ProductSalesPieChart(),
           
-              IndividualSales(),
+              // IndividualSales(),
             ],
           ),
         ),
