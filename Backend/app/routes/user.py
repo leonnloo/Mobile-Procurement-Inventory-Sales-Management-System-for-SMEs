@@ -23,9 +23,10 @@ def processNextID(query: str) -> str:
     else:
         return None
 
+
 @user_router.get("/get_user/{id}")
 def get_user(id: str):
-    user = user_dict_serial(users_db.find_one({"$or": [{"employee_name": id}, {"email": id}]}))
+    user = user_dict_serial(users_db.find_one({'employee_id': id}))
     return user
 
 @user_router.get("/get_users")
@@ -93,16 +94,12 @@ def create_user(user: NewUser):
 def update_user(id: str, user: EditUser, token: str = Depends(oauth_scheme)):
     old_user = users_db.find_one({"employee_id": id})
     if old_user:
-        updated_user = User(
-            employee_id = old_user["employee_id"],
-            employee_name = user.employee_name,
-            email = user.email,
-            password = user.password,
-            phone_number = user.phone_number,
-            role = user.role,
-            sales_record = old_user["sales_record"],
-        )
-        users_db.update_one({"employee_id": id}, {"$set": dict(updated_user)})
+        old_user['employee_name'] = user.employee_name
+        old_user['email'] = user.email
+        old_user['phone_number'] = user.phone_number
+        old_user['role'] = user.role
+        old_user['password'] = user.password
+        users_db.update_one({"employee_id": id}, {"$set": old_user})
         return user_dict_serial(users_db.find_one({"employee_id": id}))
     else:
         raise HTTPException(
