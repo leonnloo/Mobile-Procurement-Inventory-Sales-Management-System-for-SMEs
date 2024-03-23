@@ -13,12 +13,13 @@ class ProcurementScreen extends StatefulWidget {
   const ProcurementScreen({super.key});
 
   @override
-  ProcurementScreenState createState() => ProcurementScreenState();
+  State<ProcurementScreen> createState() => _ProcurementScreenState();
 }
 
-class ProcurementScreenState extends State<ProcurementScreen> {
+class _ProcurementScreenState extends State<ProcurementScreen> {
   @override
   Widget build(BuildContext context) {
+    String dummy = '';
     return DefaultTabController(
       length: 2,
       child: Scaffold(
@@ -81,8 +82,8 @@ class ProcurementScreenState extends State<ProcurementScreen> {
               height: 400,
               child: TabBarView(
                 children: [
-                  ProcurementTab(category: 'Past'),
-                  ProcurementTab(category: 'Present'),
+                  ProcurementTab(category: 'Past', dummy: dummy,),
+                  ProcurementTab(category: 'Present', dummy: dummy,),
                 ],
               ),
             ),
@@ -93,7 +94,7 @@ class ProcurementScreenState extends State<ProcurementScreen> {
             // Navigate to a screen for adding new customer info
             Navigator.of(context).push(
               MaterialPageRoute(
-                builder: (context) => const AddProcurementScreen(),
+                builder: (context) => AddProcurementScreen(updateData: updateData,),
               ),
             );
           },
@@ -102,18 +103,30 @@ class ProcurementScreenState extends State<ProcurementScreen> {
       ),
     );
   }
+  void updateData(){
+    setState(() {
+      
+    });
+  }
 }
 
-class ProcurementTab extends StatelessWidget {
+class ProcurementTab extends StatefulWidget {
   final String category;
+  final String dummy;
+  const ProcurementTab({super.key, required this.category, required this.dummy});
 
-  ProcurementTab({super.key, required this.category});
+  @override
+  State<ProcurementTab> createState() => _ProcurementTabState();
+}
+
+class _ProcurementTabState extends State<ProcurementTab> {
   final RequestUtil requestUtil = RequestUtil();
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: _fetchProcurementData(category),
+      key: futureBuilderKey,
+      future: _fetchProcurementData(widget.category, widget.dummy),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
             return const SizedBox(
@@ -179,55 +192,55 @@ class ProcurementTab extends StatelessWidget {
                           DataCell(
                             Text(order.purchaseID),
                             onTap: () {
-                              navigateToOrderDetail(context, order);
+                              navigateToOrderDetail(context, order, updateData);
                             },
                           ),
                           DataCell(
                             Text(order.itemName),
                             onTap: () {
-                              navigateToOrderDetail(context, order);
+                              navigateToOrderDetail(context, order, updateData);
                             },
                           ),
                           DataCell(
                             Text(order.supplierName),
                             onTap: () {
-                              navigateToOrderDetail(context, order);
+                              navigateToOrderDetail(context, order, updateData);
                             },
                           ),
                           DataCell(
                             Text(order.orderDate),
                             onTap: () {
-                              navigateToOrderDetail(context, order);
+                              navigateToOrderDetail(context, order, updateData);
                             },
                           ),
                           DataCell(
                             Text(order.deliveryDate),
                             onTap: () {
-                              navigateToOrderDetail(context, order);
+                              navigateToOrderDetail(context, order, updateData);
                             },
                           ),
                           DataCell(
                             Text(order.quantity.toString()),
                             onTap: () {
-                              navigateToOrderDetail(context, order);
+                              navigateToOrderDetail(context, order, updateData);
                             },
                           ),
                           DataCell(
                             Text(order.unitPrice.toStringAsFixed(2).toString()),
                             onTap: () {
-                              navigateToOrderDetail(context, order);
+                              navigateToOrderDetail(context, order, updateData);
                             },
                           ),
                           DataCell(
                             Text(order.totalPrice.toStringAsFixed(2).toString()),
                             onTap: () {
-                              navigateToOrderDetail(context, order);
+                              navigateToOrderDetail(context, order, updateData);
                             },
                           ),
                           DataCell(
                             Text(order.status),
                             onTap: () {
-                              navigateToOrderDetail(context, order);
+                              navigateToOrderDetail(context, order, updateData);
                             },
                           ),
                         ],
@@ -256,7 +269,8 @@ class ProcurementTab extends StatelessWidget {
       }
     );
   }
-  Future<List<PurchasingOrder>> _fetchProcurementData(String category) async {
+
+  Future<List<PurchasingOrder>> _fetchProcurementData(String category, String dummy) async {
     try {
       String newCategory;
       if (category == 'Past') {
@@ -281,11 +295,19 @@ class ProcurementTab extends StatelessWidget {
       rethrow; // Rethrow the error to be caught by FutureBuilder
     }
   }
+
+  Key futureBuilderKey = UniqueKey();
+
+  void updateData() async {
+    setState(() {
+      futureBuilderKey = UniqueKey();
+    });
+  }
 }
 
-void navigateToOrderDetail(BuildContext context, PurchasingOrder order) {
+void navigateToOrderDetail(BuildContext context, PurchasingOrder order, Function updateData) {
   Navigator.push(
     context,
-    MaterialPageRoute(builder: (context) => OrderDetailScreen(order: order)),
+    MaterialPageRoute(builder: (context) => OrderDetailScreen(order: order, updateData: updateData)),
   );
 }

@@ -7,14 +7,21 @@ import 'package:prototype/app/sale_orders/order_info.dart';
 import 'package:prototype/util/request_util.dart';
 
 
-class SalesOrderScreen extends StatelessWidget {
-  SalesOrderScreen({super.key});
+class SalesOrderScreen extends StatefulWidget {
+  const SalesOrderScreen({super.key});
+
+  @override
+  State<SalesOrderScreen> createState() => _SalesOrderScreenState();
+}
+
+class _SalesOrderScreenState extends State<SalesOrderScreen> {
   final RequestUtil requestUtil = RequestUtil();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: FutureBuilder(
+        key: futureBuilderKey,
         future: _fetchSalesOrderData(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -82,67 +89,67 @@ class SalesOrderScreen extends StatelessWidget {
                             DataCell(
                               Text(order.orderID),
                               onTap: () {
-                                navigateToOrderDetail(context, order);
+                                navigateToOrderDetail(context, order, updateData);
                               },
                             ),
                             DataCell(
                               Text(order.customerName),
                               onTap: () {
-                                navigateToOrderDetail(context, order);
+                                navigateToOrderDetail(context, order, updateData);
                               },
                             ),
                             DataCell(
                               Text(order.customerID),
                               onTap: () {
-                                navigateToOrderDetail(context, order);
+                                navigateToOrderDetail(context, order, updateData);
                               },
                             ),
                             DataCell(
                               Text(order.productName),
                               onTap: () {
-                                navigateToOrderDetail(context, order);
+                                navigateToOrderDetail(context, order, updateData);
                               },
                             ),
                             DataCell(
                               Text(order.productID),
                               onTap: () {
-                                navigateToOrderDetail(context, order);
+                                navigateToOrderDetail(context, order, updateData);
                               },
                             ),
                             DataCell(
                               Text(order.orderDate),
                               onTap: () {
-                                navigateToOrderDetail(context, order);
+                                navigateToOrderDetail(context, order, updateData);
                               },
                             ),
                             DataCell(
                               Text(order.quantity.toString()),
                               onTap: () {
-                                navigateToOrderDetail(context, order);
+                                navigateToOrderDetail(context, order, updateData);
                               },
                             ),
                             DataCell(
                               Text(order.unitPrice.toStringAsFixed(2).toString()),
                               onTap: () {
-                                navigateToOrderDetail(context, order);
+                                navigateToOrderDetail(context, order, updateData);
                               },
                             ),
                             DataCell(
                               Text(order.totalPrice.toStringAsFixed(2).toString()),
                               onTap: () {
-                                navigateToOrderDetail(context, order);
+                                navigateToOrderDetail(context, order, updateData);
                               },
                             ),
                             DataCell(
                               Text(order.orderStatus),
                               onTap: () {
-                                navigateToOrderDetail(context, order);
+                                navigateToOrderDetail(context, order, updateData);
                               },
                             ),
                             DataCell(
                               Text(order.employee),
                               onTap: () {
-                                navigateToOrderDetail(context, order);
+                                navigateToOrderDetail(context, order, updateData);
                               },
                             ),
                           ],
@@ -175,7 +182,7 @@ class SalesOrderScreen extends StatelessWidget {
           // Navigate to a screen for adding new customer info
           Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (context) => const AddOrderScreen(),
+              builder: (context) => AddOrderScreen(updateData: updateData,),
             ),
           );
         },
@@ -201,5 +208,13 @@ class SalesOrderScreen extends StatelessWidget {
       // print('Error in _fetchCustomerData: $error');
       rethrow; // Rethrow the error to be caught by FutureBuilder
     }
+  }
+
+  Key futureBuilderKey = UniqueKey();
+
+  void updateData() async {
+    setState(() {
+      futureBuilderKey = UniqueKey();
+    });
   }
 }

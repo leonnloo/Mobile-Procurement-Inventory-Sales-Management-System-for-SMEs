@@ -10,8 +10,14 @@ import 'package:prototype/util/user_controller.dart';
 import 'package:prototype/widgets/fade_in_animation/fade_in_controller.dart';
 
 final RequestUtil requestUtil = RequestUtil();
-class UserProfileScreen extends StatelessWidget {
+class UserProfileScreen extends StatefulWidget {
   const UserProfileScreen({super.key});
+
+  @override
+  State<UserProfileScreen> createState() => _UserProfileScreenState();
+}
+
+class _UserProfileScreenState extends State<UserProfileScreen> {
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(FadeInController());
@@ -88,7 +94,7 @@ class UserProfileScreen extends StatelessWidget {
                     child: ElevatedButton(
                       onPressed: () {
                         User userEdit = User(employeeName: user['employee_name'], employeeID: user['employee_id'], email: user['email'], password: user['password'], phoneNumber: user['phone_number'], role: user['role'] ?? 'No Role', salesRecord: user['sales_record'] ?? []);
-                        Get.to(() => EditUser(user: userEdit));
+                        Get.to(() => EditUser(user: userEdit, updateData: updateData));
                       },
                       style: TextButton.styleFrom(
                         foregroundColor: Colors.white,
@@ -130,7 +136,6 @@ class UserProfileScreen extends StatelessWidget {
     );
   }
 
-
   Future<Map<String, dynamic>> _fetchUserData() async {
     final userController = Get.put(UserLoggedInController());
     try {
@@ -147,24 +152,30 @@ class UserProfileScreen extends StatelessWidget {
   }
 
   Widget _buildLoadingScreen() {
-  return const Scaffold(
-    body: Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          CircularProgressIndicator(
-            valueColor: AlwaysStoppedAnimation<Color>(Colors.black), // Set the color of the loading indicator
-          ),
-          SizedBox(height: 16.0),
-          Text(
-            'Loading...',
-            style: TextStyle(fontSize: 18.0, color: Colors.black),
-          ),
-        ],
+    return const Scaffold(
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            CircularProgressIndicator(
+              valueColor: AlwaysStoppedAnimation<Color>(Colors.black), // Set the color of the loading indicator
+            ),
+            SizedBox(height: 16.0),
+            Text(
+              'Loading...',
+              style: TextStyle(fontSize: 18.0, color: Colors.black),
+            ),
+          ],
+        ),
       ),
-    ),
-  );
-}
+    );
+  }
 
+  Key futureBuilderKey = UniqueKey();
 
+  void updateData() async {
+    setState(() {
+      futureBuilderKey = UniqueKey();
+    });
+  }
 }

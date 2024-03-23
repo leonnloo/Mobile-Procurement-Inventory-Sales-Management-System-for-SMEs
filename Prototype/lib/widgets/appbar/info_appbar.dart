@@ -15,8 +15,9 @@ class InfoAppBar extends StatelessWidget implements PreferredSizeWidget {
   final dynamic currentData;
   final bool isNoti;
   final EditType editType;
+  final Function? updateData;
 
-  const InfoAppBar({super.key, required this.currentTitle, required this.currentData, required this.editType})
+  const InfoAppBar({super.key, required this.currentTitle, required this.currentData, required this.editType, this.updateData})
       : isNoti = currentTitle == 'Notifications';
   @override
   Widget build(BuildContext context) {
@@ -28,17 +29,17 @@ class InfoAppBar extends StatelessWidget implements PreferredSizeWidget {
               IconButton(
                 onPressed: () {
                   if (editType == EditType.customer) {
-                    Get.to(() => EditCustomer(customerData: currentData));
+                    Get.to(() => EditCustomer(customerData: currentData, updateData: updateData));
                   } else if (editType == EditType.supplier) {
-                    Get.to(() => EditSupplier(supplierData: currentData));
+                    Get.to(() => EditSupplier(supplierData: currentData, updateData: updateData!));
                   } else if (editType == EditType.procurement) {
-                    Get.to(() => EditProcurement(procurementData: currentData));
+                    Get.to(() => EditProcurement(procurementData: currentData, updateData: updateData!));
                   } else if (editType == EditType.product) {
-                    Get.to(() => EditProduct(productData: currentData));
+                    Get.to(() => EditProduct(productData: currentData, updateData: updateData!));
                   } else if (editType == EditType.inventory) {
-                    Get.to(() => EditInventory(inventoryData: currentData));
+                    Get.to(() => EditInventory(inventoryData: currentData, updateData: updateData!));
                   } else if (editType == EditType.salesOrder) {
-                    Get.to(() => EditOrder(orderData: currentData));
+                    Get.to(() => EditOrder(orderData: currentData, updateData: updateData));
                   }
                 },
                 icon: const Icon(

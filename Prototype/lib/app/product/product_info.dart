@@ -3,23 +3,23 @@ import 'package:prototype/models/edit_type.dart';
 import 'package:prototype/models/product_model.dart';
 import 'package:prototype/widgets/appbar/info_appbar.dart';
 
-void navigateToProductDetail(BuildContext context, ProductItem product) {
+void navigateToProductDetail(BuildContext context, ProductItem product, Function updateData) {
   Navigator.of(context).push(
     MaterialPageRoute(
-      builder: (context) => ProductDetailScreen(product: product),
+      builder: (context) => ProductDetailScreen(product: product, updateData: updateData),
     ),
   );
 }
 
 class ProductDetailScreen extends StatelessWidget {
   final ProductItem product;
-
-  const ProductDetailScreen({super.key, required this.product});
+  final Function updateData;
+  const ProductDetailScreen({super.key, required this.product, required this.updateData});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: InfoAppBar(currentTitle: 'Product Info', currentData: product, editType: EditType.product),
+      appBar: InfoAppBar(currentTitle: 'Product Info', currentData: product, editType: EditType.product, updateData: updateData,),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(

@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:prototype/app/inventory/get_inventory.dart';
 import 'package:prototype/util/request_util.dart';
@@ -8,8 +10,8 @@ import 'package:prototype/widgets/forms/number_field.dart';
 import 'package:prototype/widgets/forms/text_field.dart';
 
 class AddInventoryScreen extends StatefulWidget {
-  const AddInventoryScreen({super.key});
-
+  const AddInventoryScreen({super.key, this.updateData});
+  final Function? updateData;
   @override
   AddInventoryScreenState createState() => AddInventoryScreenState();
 }
@@ -45,7 +47,7 @@ class AddInventoryScreenState extends State<AddInventoryScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CommonAppBar(currentTitle: 'Add New Inventory'),
+      appBar: const CommonAppBar(currentTitle: 'Add New Inventory'),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -110,6 +112,9 @@ class AddInventoryScreenState extends State<AddInventoryScreen> {
                         );
                         
                         if (response.statusCode == 200) {
+                          if (widget.updateData != null) {
+                            widget.updateData!();
+                          }
                           Navigator.pop(context);
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(

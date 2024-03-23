@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -11,8 +13,9 @@ import 'package:prototype/widgets/forms/text_field.dart';
 
 class EditUser extends StatefulWidget {
   final User user;
+  final Function updateData;
 
-  const EditUser({super.key, required this.user});
+  const EditUser({super.key, required this.user, required this.updateData});
 
   @override
   EditUserState createState() => EditUserState();
@@ -128,6 +131,7 @@ class EditUserState extends State<EditUser> {
                             );
                             
                             if (response.statusCode == 200) {
+                              widget.updateData();
                               Navigator.pop(context);
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(

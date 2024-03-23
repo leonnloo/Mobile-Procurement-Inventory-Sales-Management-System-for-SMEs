@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:prototype/util/request_util.dart';
@@ -6,8 +8,8 @@ import 'package:prototype/widgets/appbar/common_appbar.dart';
 import 'package:prototype/widgets/forms/text_field.dart';
 
 class AddCustomerScreen extends StatefulWidget {
-  const AddCustomerScreen({super.key});
-
+  const AddCustomerScreen({super.key, this.updateData});
+  final Function? updateData;
   @override
   AddCustomerScreenState createState() => AddCustomerScreenState();
 }
@@ -106,6 +108,9 @@ class AddCustomerScreenState extends State<AddCustomerScreen> {
                       );
                       
                       if (response.statusCode == 200) {
+                        if (widget.updateData != null) {
+                          widget.updateData!();
+                        }
                         Navigator.pop(context);
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(

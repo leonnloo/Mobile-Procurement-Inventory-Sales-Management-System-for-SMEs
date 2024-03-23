@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import "dart:math";
 
 import "package:flutter/material.dart";
@@ -6,23 +8,23 @@ import 'package:prototype/models/supplier_model.dart';
 import 'package:prototype/util/request_util.dart';
 import 'package:prototype/widgets/appbar/info_appbar.dart';
 
-void navigateToSupplierDetail(BuildContext context, SupplierData supplier) {
+void navigateToSupplierDetail(BuildContext context, SupplierData supplier, Function updateData) {
   Navigator.of(context).push(
     MaterialPageRoute(
-      builder: (context) => SupplierDetailScreen(supplierData: supplier),
+      builder: (context) => SupplierDetailScreen(supplierData: supplier, updateData: updateData,),
     ),
   );
 }
 
 class SupplierDetailScreen extends StatelessWidget {
   final SupplierData supplierData;
-
-  const SupplierDetailScreen({super.key, required this.supplierData});
+  final Function updateData;
+  const SupplierDetailScreen({super.key, required this.supplierData, required this.updateData});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: InfoAppBar(currentTitle: 'Supplier Details', currentData: supplierData, editType: EditType.supplier,),
+      appBar: InfoAppBar(currentTitle: 'Supplier Details', currentData: supplierData, editType: EditType.supplier, updateData: updateData),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
