@@ -45,13 +45,13 @@ class HomeScreenState extends State<HomeScreen> {
         container = const HomeWidgets();
         currentTitle = "Dashboard";
       } else if (controller.currentPage.value == DrawerSections.salesOrder) {
-        container = SalesOrderScreen();
+        container = const SalesOrderScreen();
         currentTitle = "Sales Order";
       } else if (controller.currentPage.value == DrawerSections.salesManagement) {
         container = const SalesManagementScreen();
         currentTitle = "Sales Management";
       } else if (controller.currentPage.value == DrawerSections.inventory) {
-        container = InventoryScreen();
+        container = const InventoryScreen();
         currentTitle = "Inventory";
       } else if (controller.currentPage.value == DrawerSections.product) {
         container = const ProductManagementScreen();
@@ -60,10 +60,10 @@ class HomeScreenState extends State<HomeScreen> {
         container = const ProcurementScreen();
         currentTitle = "Procurement";
       } else if (controller.currentPage.value == DrawerSections.supplier) {
-        container = SupplierManagementScreen();
+        container = const SupplierManagementScreen();
         currentTitle = "Supplier";
       } else if (controller.currentPage.value == DrawerSections.customer) {
-        container = CustomerManagementScreen();
+        container = const CustomerManagementScreen();
         currentTitle = "Customer";
       } else if (controller.currentPage.value == DrawerSections.settings) {
         container = const SettingsScreen();

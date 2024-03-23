@@ -14,8 +14,8 @@ import 'package:prototype/widgets/forms/number_field.dart';
 
 class EditOrder extends StatefulWidget {
   final SalesOrder orderData;
-
-  const EditOrder({super.key, required this.orderData});
+  final Function? updateData;
+  const EditOrder({super.key, required this.orderData, this.updateData});
 
   @override
   EditOrderState createState() => EditOrderState();
@@ -220,6 +220,10 @@ class EditOrderState extends State<EditOrder> {
                           );
                           
                           if (response.statusCode == 200) {
+                            if (widget.updateData!= null){
+                              widget.updateData!();
+  
+                            }
                             Navigator.pop(context);
                             Navigator.pop(context);
                             ScaffoldMessenger.of(context).showSnackBar(
@@ -273,6 +277,9 @@ class EditOrderState extends State<EditOrder> {
                 final response = await requestUtil.deleteOrder(widget.orderData.orderID);
                 
                 if (response.statusCode == 200) {
+                  if (widget.updateData!= null){
+                    widget.updateData!();
+                  }
                   Navigator.pop(context);
                   Navigator.pop(context);
                   ScaffoldMessenger.of(context).showSnackBar(

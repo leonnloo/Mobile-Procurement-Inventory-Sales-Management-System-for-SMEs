@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:prototype/app/sales_management/Sales_Target/individual_sales.dart';
-import 'package:prototype/app/sales_management/Sales_Target/product_sales.dart';
 import 'package:prototype/app/sales_management/Sales_Target/set_target_sales.dart';
 import 'package:prototype/app/sales_management/Sales_Target/sales_comparison_chart.dart';
 import 'package:prototype/widgets/appbar/common_appbar.dart';
@@ -19,6 +18,7 @@ class SalesTargetScreen extends StatelessWidget {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             buildButtonWithIcon(
               onPressed: () {
@@ -44,17 +44,7 @@ class SalesTargetScreen extends StatelessWidget {
               label: 'Sales by Month',
             ),
             const SizedBox(height: 20.0),
-            buildButtonWithIcon(
-              onPressed: () {
-                // 导航到按日期销售页面
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const ProductSalesByMonth() ),
-                );
-              },
-              icon: Icons.sell_outlined,
-              label: 'Product Sales by Month',
-            ),
+            
             const SizedBox(height: 20.0),
             buildButtonWithIcon(
               onPressed: () {

@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -8,8 +10,8 @@ import 'package:prototype/widgets/forms/text_field.dart';
 
 class EditSupplier extends StatefulWidget {
   final SupplierData supplierData;
-
-  const EditSupplier({super.key, required this.supplierData});
+  final Function updateData;
+  const EditSupplier({super.key, required this.supplierData, required this.updateData});
 
   @override
   EditSupplierState createState() => EditSupplierState();
@@ -113,6 +115,7 @@ class EditSupplierState extends State<EditSupplier> {
                           );
                           
                           if (response.statusCode == 200) {
+                            widget.updateData();
                             Navigator.pop(context);
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
@@ -165,6 +168,7 @@ class EditSupplierState extends State<EditSupplier> {
                 final response = await requestUtil.deleteSupplier(widget.supplierData.supplierID);
                 
                 if (response.statusCode == 200) {
+                  widget.updateData();
                   Navigator.of(context).pop();
                   Navigator.pop(context);
                   ScaffoldMessenger.of(context).showSnackBar(

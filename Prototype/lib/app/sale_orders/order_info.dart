@@ -3,23 +3,23 @@ import 'package:prototype/models/edit_type.dart';
 import 'package:prototype/models/order_model.dart';
 import 'package:prototype/widgets/appbar/info_appbar.dart';
 
-void navigateToOrderDetail(BuildContext context, SalesOrder item) {
+void navigateToOrderDetail(BuildContext context, SalesOrder item, Function updateData) {
   Navigator.of(context).push(
     MaterialPageRoute(
-      builder: (context) => ItemDetailScreen(item: item),
+      builder: (context) => ItemDetailScreen(item: item, updateData: updateData),
     ),
   );
 }
 
 class ItemDetailScreen extends StatelessWidget {
   final SalesOrder item;
-
-  const ItemDetailScreen({super.key, required this.item});
+  final Function? updateData;
+  const ItemDetailScreen({super.key, required this.item, this.updateData});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: InfoAppBar(currentTitle: 'Order Details', currentData: item, editType: EditType.salesOrder),
+      appBar: InfoAppBar(currentTitle: 'Order Details', currentData: item, editType: EditType.salesOrder, updateData: updateData,),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: SingleChildScrollView(

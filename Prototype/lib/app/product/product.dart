@@ -97,6 +97,7 @@ class ProductManagementScreenState extends State<ProductManagementScreen> {
           ),
           
           FutureBuilder(
+            key: futureBuilderKey,
             future: _fetchAndFilterProducts(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
@@ -173,25 +174,25 @@ class ProductManagementScreenState extends State<ProductManagementScreen> {
                             DataCell(
                               Text(product.productID.toString()),
                               onTap: () {
-                                navigateToProductDetail(context, product);
+                                navigateToProductDetail(context, product, updateData);
                               }
                             ),
                             DataCell(
                               Text(product.productName),
                               onTap: () {
-                                navigateToProductDetail(context, product);
+                                navigateToProductDetail(context, product, updateData);
                               }
                             ),
                             DataCell(
                               Text('\$${product.unitPrice.toStringAsFixed(2).toString()}'),
                               onTap: () {
-                                navigateToProductDetail(context, product);
+                                navigateToProductDetail(context, product, updateData);
                               }              
                             ),
                             DataCell(
                               Text('\$${product.sellingPrice.toStringAsFixed(2).toString()}'),
                               onTap: () {
-                                navigateToProductDetail(context, product);
+                                navigateToProductDetail(context, product, updateData);
                               }              
                             ),
                             DataCell(
@@ -205,25 +206,25 @@ class ProductManagementScreenState extends State<ProductManagementScreen> {
                                 ),
                               ),
                               onTap: () {
-                                navigateToProductDetail(context, product);
+                                navigateToProductDetail(context, product, updateData);
                               }              
                             ),
                             DataCell(
                               Text(product.margin),
                               onTap: () {
-                                navigateToProductDetail(context, product);
+                                navigateToProductDetail(context, product, updateData);
                               }              
                             ),
                             DataCell(
                               Text(product.markup),
                               onTap: () {
-                                navigateToProductDetail(context, product);
+                                navigateToProductDetail(context, product, updateData);
                               }              
                             ),
                             DataCell(
                               Text(product.status),
                               onTap: () {
-                                navigateToProductDetail(context, product);
+                                navigateToProductDetail(context, product, updateData);
                               }              
                             ),
                           ]);
@@ -239,7 +240,7 @@ class ProductManagementScreenState extends State<ProductManagementScreen> {
           ),
         ],
       ),
-      floatingActionButton: productSpeedDial(context)
+      floatingActionButton: productSpeedDial(context, updateData)
     );
   }
 
@@ -280,5 +281,12 @@ class ProductManagementScreenState extends State<ProductManagementScreen> {
         return [];
       }
     }
+  }
+
+  Key futureBuilderKey = UniqueKey();
+  void updateData() async {
+    setState(() {
+      futureBuilderKey = UniqueKey();
+    });
   }
 }

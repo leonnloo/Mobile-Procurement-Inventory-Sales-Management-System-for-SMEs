@@ -6,6 +6,7 @@ import 'package:prototype/models/order_model.dart';
 import 'package:prototype/util/management_util.dart';
 import 'package:prototype/util/request_util.dart';
 
+// ignore: must_be_immutable
 class DetailScreen extends StatefulWidget {
   List<SalesOrder> dispatchData;
   final String selectedStatus;
@@ -188,6 +189,12 @@ class _DetailScreenState extends State<DetailScreen> {
       throw Exception('Error while fetching code');
     }
   }
+
+  void updateData(){
+    setState(() {
+      
+    });
+  }
 }
 // Filter system
 class _DataSearch extends SearchDelegate<String> {
@@ -262,3 +269,10 @@ class _DataSearch extends SearchDelegate<String> {
 
 
 
+void navigateToOrderDetail(BuildContext context, SalesOrder item) {
+  Navigator.of(context).push(
+    MaterialPageRoute(
+      builder: (context) => ItemDetailScreen(item: item),
+    ),
+  );
+}

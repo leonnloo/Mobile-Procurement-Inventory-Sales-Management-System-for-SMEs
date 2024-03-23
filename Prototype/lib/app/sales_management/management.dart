@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:prototype/app/sales_management/product_sales.dart';
 import 'package:prototype/widgets/statistics/monthly_sales_bar.dart';
 import 'package:prototype/widgets/statistics/product_sales_pie.dart';
-import 'package:prototype/widgets/statistics/individual_sales_chart.dart';
 import 'package:prototype/widgets/icon_button.dart';
 import 'Claims_and_Refunds/customer_claims_refunds.dart';
 import 'Dispatch_and_Delivery/dispatch_delivery.dart';
@@ -43,6 +43,18 @@ class SalesManagementScreen extends StatelessWidget {
                 },
                 icon: Icons.local_shipping,
                 label: 'Order Dispatch and Delivery',
+              ),
+              const SizedBox(height: 20.0),
+              buildButtonWithIcon(
+                onPressed: () {
+                  // 导航到按日期销售页面
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const ProductSalesByMonth() ),
+                  );
+                },
+                icon: Icons.sell_outlined,
+                label: 'Product Sales by Month',
               ),
               const SizedBox(height: 20.0),
               buildButtonWithIcon(

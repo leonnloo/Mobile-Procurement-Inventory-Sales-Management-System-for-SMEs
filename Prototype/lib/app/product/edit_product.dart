@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -10,8 +12,8 @@ import 'package:prototype/widgets/forms/text_field.dart';
 
 class EditProduct extends StatefulWidget {
   final ProductItem productData;
-
-  const EditProduct({super.key, required this.productData});
+  final Function updateData;
+  const EditProduct({super.key, required this.productData, required this.updateData});
 
   @override
   EditProductState createState() => EditProductState();
@@ -171,6 +173,7 @@ class EditProductState extends State<EditProduct> {
                           );
                           
                           if (response.statusCode == 200) {
+                            widget.updateData();
                             Navigator.pop(context);
                             Navigator.pop(context);
                             ScaffoldMessenger.of(context).showSnackBar(
@@ -224,6 +227,7 @@ class EditProductState extends State<EditProduct> {
                 final response = await requestUtil.deleteProduct(widget.productData.productID);
                 
                 if (response.statusCode == 200) {
+                  widget.updateData();
                   Navigator.pop(context);
                   Navigator.pop(context);
                   ScaffoldMessenger.of(context).showSnackBar(

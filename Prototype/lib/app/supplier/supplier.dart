@@ -7,14 +7,21 @@ import 'package:prototype/app/supplier/supplier_info.dart';
 import 'package:prototype/util/request_util.dart';
 
 
-class SupplierManagementScreen extends StatelessWidget {
-  SupplierManagementScreen({super.key});
+class SupplierManagementScreen extends StatefulWidget {
+  const SupplierManagementScreen({super.key});
+
+  @override
+  State<SupplierManagementScreen> createState() => _SupplierManagementScreenState();
+}
+
+class _SupplierManagementScreenState extends State<SupplierManagementScreen> {
   final RequestUtil requestUtil = RequestUtil();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: FutureBuilder(
+        key: futureBuilderKey,
         future: _fetchSupplierData(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -79,37 +86,37 @@ class SupplierManagementScreen extends StatelessWidget {
                         DataCell(
                           Text(supplier.supplierID),
                           onTap: () {
-                            navigateToSupplierDetail(context, supplier);
+                            navigateToSupplierDetail(context, supplier, updateData);
                           },
                         ),
                         DataCell(
                           Text(supplier.businessName),
                           onTap: () {
-                            navigateToSupplierDetail(context, supplier);
+                            navigateToSupplierDetail(context, supplier, updateData);
                           },
                         ),
                         DataCell(
                           Text(supplier.contactPerson),
                           onTap: () {
-                            navigateToSupplierDetail(context, supplier);
+                            navigateToSupplierDetail(context, supplier, updateData);
                           },
                         ),
                         DataCell(
                           Text(supplier.email),
                           onTap: () {
-                            navigateToSupplierDetail(context, supplier);
+                            navigateToSupplierDetail(context, supplier, updateData);
                           },
                         ),
                         DataCell(
                           Text(supplier.phoneNo),
                           onTap: () {
-                            navigateToSupplierDetail(context, supplier);
+                            navigateToSupplierDetail(context, supplier, updateData);
                           },
                         ),
                         DataCell(
                           Text(supplier.address),
                           onTap: () {
-                            navigateToSupplierDetail(context, supplier);
+                            navigateToSupplierDetail(context, supplier, updateData);
                           },
                         ),
                       ],
@@ -129,7 +136,7 @@ class SupplierManagementScreen extends StatelessWidget {
           // Navigate to a screen for adding new supplier info
           Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (context) => const AddSupplierScreen(),
+              builder: (context) => AddSupplierScreen(updateData: updateData,),
             ),
           );
         },
@@ -155,6 +162,14 @@ class SupplierManagementScreen extends StatelessWidget {
       // print('Error in _fetchSupplierData: $error');
       rethrow; // Rethrow the error to be caught by FutureBuilder
     }
+  }
+
+  Key futureBuilderKey = UniqueKey();
+
+  void updateData() async {
+    setState(() {
+      futureBuilderKey = UniqueKey();
+    });
   }
 }
 

@@ -73,6 +73,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
               tabs: groupedData.keys.map((status) => Tab(text: status)).toList(),
             ),
             FutureBuilder(
+              key: futureBuilderKey,
               future: _fetchInventoryData(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
@@ -105,7 +106,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
             ),
           ],
         ),
-        floatingActionButton: inventorySpeedDial(context),
+        floatingActionButton: inventorySpeedDial(context, updateData),
       ),
     );
   }
@@ -132,43 +133,51 @@ class _InventoryScreenState extends State<InventoryScreen> {
                 DataCell(
                   Text(item.itemID),
                   onTap: () {
-                    navigateToItemDetail(context, item);
+                    navigateToItemDetail(context, item, updateData);
                   },
                 ),
                 DataCell(
                   Text(item.itemName),
                   onTap: () {
-                    navigateToItemDetail(context, item);
+                    navigateToItemDetail(context, item, updateData);
                   },
                 ),
                 DataCell(
                   Text(item.category),
                   onTap: () {
-                    navigateToItemDetail(context, item);
+                    navigateToItemDetail(context, item, updateData);
                   },
                 ),
                 DataCell(
-                  Text(item.quantity.toString()),
+                  Text(
+                    item.quantity.toString(),
+                    style: TextStyle(
+                    color: _getQuantityColor(
+                      item.quantity,
+                      item.criticalLvl,
+                      ),
+                    ),
+                  ),
                   onTap: () {
-                    navigateToItemDetail(context, item);
+                    navigateToItemDetail(context, item, updateData);
                   },
                 ),
                 DataCell(
                   Text('\$${item.unitPrice.toStringAsFixed(2)}'),
                   onTap: () {
-                    navigateToItemDetail(context, item);
+                    navigateToItemDetail(context, item, updateData);
                   },
                 ),
                 DataCell(
                   Text('\$${item.totalPrice.toStringAsFixed(2)}'),
                   onTap: () {
-                    navigateToItemDetail(context, item);
+                    navigateToItemDetail(context, item, updateData);
                   },
                 ),
                 DataCell(
                   Text(item.status),
                   onTap: () {
-                    navigateToItemDetail(context, item);
+                    navigateToItemDetail(context, item, updateData);
                   },
                 ),
               ],
@@ -192,6 +201,16 @@ class _InventoryScreenState extends State<InventoryScreen> {
     } catch (error) {
       rethrow; // Rethrow the error to be caught by FutureBuilder
     }
+  }
+
+  Key futureBuilderKey = UniqueKey();
+  void updateData() async {
+    setState(() {
+      futureBuilderKey = UniqueKey();
+    });
+  }
+  Color _getQuantityColor(int quantity, int safetyQuantity) {
+    return quantity < safetyQuantity ? Colors.red : Colors.black;
   }
 }
 
