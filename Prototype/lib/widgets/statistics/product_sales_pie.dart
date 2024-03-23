@@ -1,0 +1,357 @@
+import 'dart:async';
+import 'dart:convert';
+
+import 'package:prototype/models/product_model.dart';
+import 'package:prototype/resources/app_resources.dart';
+import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter/material.dart';
+import 'package:prototype/util/request_util.dart';
+import 'package:prototype/widgets/statistics/indicator.dart';
+
+class ProductSalesPieChart extends StatefulWidget {
+  const ProductSalesPieChart({super.key});
+
+  @override
+  State<StatefulWidget> createState() => PieChart2State();
+}
+
+class PieChart2State extends State {
+  final RequestUtil requestUtil = RequestUtil();
+  int touchedIndex = -1;
+  int _selectedMonth = 0;
+  String _selectedYear = '';
+  List<String> years = ['YTD'];
+  List<String> monthNames = [
+    'Total', // Add "Total" as the first option
+    'January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December'
+  ];
+  double totalProfits = 0.0;
+  late Map<String, double> percentages;
+  double allSales = 0.0;
+  final StreamController<String> _totalProfitsController = StreamController<String>.broadcast();
+  final StreamController<Map<String, double>> _percentagesController = StreamController<Map<String, double>>.broadcast();
+
+
+  @override
+  void initState() {
+    int intYear = DateTime.now().year;
+    _selectedYear = years[0];
+    for (int i = intYear; i >= intYear - 3; i--) {
+      years.add(i.toString());
+    }
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _totalProfitsController.close();
+    super.dispose();
+  }
+
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      elevation: 4.0,
+      margin: const EdgeInsets.all(16.0),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  'Product Sales',
+                  style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+                ),
+                DropdownButton<String>(
+                  value: _selectedYear,
+                  elevation: 16,
+                  underline: Container(
+                    height: 1,
+                    color: Colors.black,
+                  ),
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      _selectedYear = newValue!;
+                      if (_selectedYear == 'YTD') {
+                        _selectedMonth = 0;
+                      }
+                      fetchProducts().then((_) {
+                        _totalProfitsController.add(totalProfits.toString()); // Push the new totalProfits to the stream
+                      });
+                    });
+                  },
+                  items: years.map<DropdownMenuItem<String>>((String year) {
+                    return DropdownMenuItem<String>(
+                      value: year,
+                      child: Text(year),
+                    );
+                  }).toList(),
+                ),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                StreamBuilder<String>(
+                  stream: calTotal,
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Container();
+                    }
+                    else if (snapshot.hasData) {
+                      return Text(
+                        '\$${snapshot.data}',
+                        style: const TextStyle(fontSize: 32, color: Colors.green),
+                      );
+                    } else {
+                      return const SizedBox(); // or any placeholder widget
+                    }
+                  }
+                ),
+                DropdownButton<int>(
+                  value: _selectedMonth,
+                  elevation: 16,
+                  underline: Container(
+                    height: 1,
+                    color: Colors.black,
+                  ),
+                  onChanged: (int? newValue) {
+                    setState(() {
+                      if (_selectedYear == 'YTD'){
+                        _selectedMonth = 0;
+                      } else {
+                        _selectedMonth = newValue!;
+                      }
+                    });
+                  },
+                  items: List.generate(monthNames.length, (index) {
+                    return DropdownMenuItem<int>(
+                      value: index,
+                      child: Text(monthNames[index]),
+                    );
+                  }),
+                ),
+              ],
+            ),
+            const SizedBox(height: 25),
+            AspectRatio(
+              aspectRatio: 1.9,
+              child: Row(
+                children: <Widget>[
+                  const SizedBox(height: 18,),
+                  _buildPieChart(),
+                  _buildIndicators(),
+                  const SizedBox(width: 28,),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildPieChart() {
+    return Expanded(
+      child: AspectRatio(
+        aspectRatio: 1,
+        child: FutureBuilder(
+          future: fetchProducts(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const SizedBox();
+            } else if (snapshot.hasError) {
+              return Text('Error: ${snapshot.error}');
+            } else if (!snapshot.hasData) {
+              return const SizedBox(
+                height: 150.0,
+                child: Center(
+                  child: Text('Unable to load', style: TextStyle(fontSize: 14.0),),
+                ),
+              );
+            } else {
+              List<ProductItem> productItems = snapshot.data!;
+              return PieChart(
+                PieChartData(
+                  // pieTouchData: PieTouchData(
+                  //   touchCallback: (FlTouchEvent event, pieTouchResponse) {
+                  //     setState(() {
+                  //       if (!event.isInterestedForInteractions ||
+                  //           pieTouchResponse == null ||
+                  //           pieTouchResponse.touchedSection == null) {
+                  //         touchedIndex = -1;
+                  //         return;
+                  //       }
+                  //       touchedIndex = pieTouchResponse
+                  //           .touchedSection!.touchedSectionIndex;
+                  //     });
+                  //   },
+                  // ),
+                  borderData: FlBorderData(
+                    show: false,
+                  ),
+                  sectionsSpace: 0,
+                  centerSpaceRadius: 40,
+                  sections: showingSections(productItems),
+                ),
+              );
+            }
+          }
+        ),
+      ),
+    );
+  }
+
+  List<PieChartSectionData> showingSections(List<ProductItem> productItems) {
+    percentages = calculatePercentage(productItems);
+    // Create a list to hold the PieChartSectionData
+    List<PieChartSectionData> sections = [];
+
+    // Variable to keep track of the index for color selection
+    int index = 0;
+
+    percentages.forEach((productName, percentage) {
+      final isTouched = index == touchedIndex;
+      final fontSize = isTouched ? 25.0 : 16.0;
+      final radius = isTouched ? 60.0 : 50.0;
+      const shadows = [Shadow(color: Colors.black, blurRadius: 2)];
+
+      sections.add(PieChartSectionData(
+        color: getColorForIndex(index),
+        value: percentage,
+        title: '${percentage.toStringAsFixed(1)}%', // Show percentage with 1 decimal
+        radius: radius,
+        titleStyle: TextStyle(
+          fontSize: fontSize,
+          fontWeight: FontWeight.bold,
+          color: const Color(0xffffffff),
+          shadows: shadows,
+        ),
+      ));
+
+      index++; // Increment index for the next iteration
+    });
+
+    return sections;
+  }
+
+
+  Color getColorForIndex(int index) {
+    List<Color> colors = [AppColors.contentColorBlue, AppColors.contentColorYellow, AppColors.contentColorPurple, AppColors.contentColorGreen];
+    return colors[index % colors.length];
+  }
+  
+  Map<String, double> calculatePercentage(List<ProductItem> products) {
+    allSales = 0.0;
+    Map<String, double> productSales = {};
+
+    for (ProductItem product in products) {
+      double productTotalSales = 0.0;
+      for (int i = 0; i < product.monthlySales.length; i++) {
+        // Assuming sale is a map with `year` and `totalPrice`
+        int saleYear = product.monthlySales[i].year;
+        int saleMonth = product.monthlySales[i].month;
+        double salePrice = product.monthlySales[i].totalPrice;
+        if (_selectedYear == 'YTD' && saleYear == DateTime.now().year){
+          productTotalSales += salePrice;
+          allSales += salePrice;
+        }
+        else if (saleYear == int.parse(_selectedYear) && saleMonth == _selectedMonth) {
+          productTotalSales += salePrice;
+          allSales += salePrice;
+        }
+        else if (saleYear == int.parse(_selectedYear) && 0 == _selectedMonth) {
+          productTotalSales += salePrice;
+          allSales += salePrice;
+        }
+      }
+      if (productTotalSales > 0) {
+        productSales[product.productName] = productTotalSales;
+      }
+    }
+
+    // Sort products by sales in descending order and keep top 3
+    var sortedKeys = productSales.keys.toList(growable: false)
+      ..sort((k1, k2) => productSales[k2]!.compareTo(productSales[k1]!));
+
+    Map<String, double> sortedProductSales = {
+      for (var key in sortedKeys) key: productSales[key]!,
+    };
+
+    // Create a new map with top 3 products and others
+    Map<String, double> finalProductSales = {};
+    double otherSales = 0.0;
+    int count = 0;
+    sortedProductSales.forEach((key, value) {
+      if (count < 3) {
+        finalProductSales[key] = value;
+      } else {
+        otherSales += value;
+      }
+      count++;
+    });
+    if (otherSales > 0) finalProductSales['Others'] = otherSales;
+
+    // Convert sales to percentage of total
+    finalProductSales.updateAll((key, value) => (value / allSales) * 100);
+    _totalProfitsController.sink.add(allSales.toStringAsFixed(2));
+    _percentagesController.sink.add(finalProductSales);
+    return finalProductSales;
+  }
+
+  Future<List<ProductItem>> fetchProducts() async {
+    final response = await requestUtil.getProducts();
+    if (response.statusCode == 200){
+      List<dynamic> data = jsonDecode(response.body);
+      List<ProductItem> productItems = data.map((e) => ProductItem.fromJson(e)).toList();
+      return productItems;
+    }
+    else {
+      throw Exception('Failed to load products');
+    }
+
+  }
+  
+  Widget _buildIndicators() {
+  return StreamBuilder<Map<String, double>>(
+      stream: percentagesStream,
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return Container(); // Or a placeholder/loading indicator
+        }
+        
+        final percentages = snapshot.data!;
+        List<Widget> indicators = [];
+        int index = 0;
+        
+        percentages.forEach((productName, percentage) {
+          final color = getColorForIndex(index);
+          indicators.add(Indicator(
+            color: color,
+            text: productName,
+            isSquare: true,
+          ));
+          indicators.add(const SizedBox(height: 4,));
+          index++;
+        });
+
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: indicators,
+        );
+      },
+    );
+  }
+
+
+
+  Stream<String> get calTotal => _totalProfitsController.stream;
+  Stream<Map<String, double>> get percentagesStream => _percentagesController.stream;
+  
+}

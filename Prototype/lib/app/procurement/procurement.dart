@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 import 'package:prototype/app/procurement/add_procurement.dart';
-import 'package:prototype/app/procurement/monthly_purchases_statistic.dart';
 import 'package:prototype/models/procurement_model.dart';
 import 'package:prototype/app/procurement/procurement_info.dart';
 import 'package:prototype/app/procurement/procurement_filter_system.dart';
@@ -14,103 +13,120 @@ class ProcurementScreen extends StatefulWidget {
   const ProcurementScreen({super.key});
 
   @override
-  ProcurementScreenState createState() => ProcurementScreenState();
+  State<ProcurementScreen> createState() => _ProcurementScreenState();
 }
 
-class ProcurementScreenState extends State<ProcurementScreen> {
+class _ProcurementScreenState extends State<ProcurementScreen> {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: DefaultTabController(
-        length: 2,
-        child: Scaffold(
-          body: ListView(
-            children:  <Widget>[
-              //filter system
-               SizedBox(
-                width: double.infinity,
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Card(
-                    child: GestureDetector(
-                      onTap: () {
-                        Get.to(() => const FilterSystem());
-                      },
-                      child: const TextField(
-                        decoration: InputDecoration(
-                        enabled: false,
-                        prefixIcon: Icon(Icons.search),
-                        labelText: 'Search',
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(12.0)),
-                        ),
+    String dummy = '';
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
+        body: ListView(
+          children:  <Widget>[
+            //filter system
+              SizedBox(
+              width: double.infinity,
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Card(
+                  child: GestureDetector(
+                    onTap: () {
+                      Get.to(() => const FilterSystem());
+                    },
+                    child: const TextField(
+                      decoration: InputDecoration(
+                      enabled: false,
+                      prefixIcon: Icon(Icons.search),
+                      labelText: 'Search',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(12.0)),
                       ),
-                      ),
+                    ),
                     ),
                   ),
                 ),
               ),
-            
-              const Card(
-                elevation: 4.0,
-                margin: EdgeInsets.all(16.0),
-                child: Padding(
-                  padding: EdgeInsets.all(16.0),
-                  child: MonthlyPurchaseStatic(),
-                ),
+            ),
+          
+            // const Card(
+            //   elevation: 4.0,
+            //   margin: EdgeInsets.all(16.0),
+            //   child: Padding(
+            //     padding: EdgeInsets.all(16.0),
+            //     child: MonthlyPurchaseStatic(),
+            //   ),
+            // ),
+            /*const Card(
+              elevation: 4.0,
+              margin: EdgeInsets.all(16.0),
+              child: Padding(
+                padding: EdgeInsets.all(16.0),
+                child: MonthlyPurchaseChart(),
               ),
-              /*const Card(
-                elevation: 4.0,
-                margin: EdgeInsets.all(16.0),
-                child: Padding(
-                  padding: EdgeInsets.all(16.0),
-                  child: MonthlyPurchaseChart(),
-                ),
-              ),*/
-              const TabBar(
-                tabs: [
-                  Tab(text: 'Past'),
-                  Tab(text: 'Present'),
+            ),*/
+            TabBar(
+              labelColor: Colors.black,
+              unselectedLabelColor: Colors.black,
+              indicatorColor: Colors.red[400],
+              indicatorSize: TabBarIndicatorSize.label,
+              indicatorWeight: 2.0,
+              labelPadding: const EdgeInsets.all(10),
+              tabs: const [
+                Tab(text: 'Delivered'),
+                Tab(text: 'Ongoing'),
+              ],
+            ),
+            SizedBox(
+              height: 400,
+              child: TabBarView(
+                children: [
+                  ProcurementTab(category: 'Past', dummy: dummy,),
+                  ProcurementTab(category: 'Present', dummy: dummy,),
                 ],
               ),
-              SizedBox(
-                height: 400,
-                child: TabBarView(
-                  children: [
-                    ProcurementTab(category: 'Past'),
-                    ProcurementTab(category: 'Present'),
-                  ],
-                ),
+            ),
+          ],
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            // Navigate to a screen for adding new customer info
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => AddProcurementScreen(updateData: updateData,),
               ),
-            ],
-          ),
-          floatingActionButton: FloatingActionButton(
-            onPressed: () {
-              // Navigate to a screen for adding new customer info
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => const AddProcurementScreen(),
-                ),
-              );
-            },
-            child: const Icon(Icons.add),
-          ),
+            );
+          },
+          child: const Icon(Icons.add),
         ),
       ),
     );
   }
+  void updateData(){
+    setState(() {
+      
+    });
+  }
 }
 
-class ProcurementTab extends StatelessWidget {
+class ProcurementTab extends StatefulWidget {
   final String category;
+  final String dummy;
+  const ProcurementTab({super.key, required this.category, required this.dummy});
 
-  ProcurementTab({super.key, required this.category});
+  @override
+  State<ProcurementTab> createState() => _ProcurementTabState();
+}
+
+class _ProcurementTabState extends State<ProcurementTab> {
   final RequestUtil requestUtil = RequestUtil();
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: _fetchProcurementData(category),
+      key: futureBuilderKey,
+      future: _fetchProcurementData(widget.category, widget.dummy),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
             return const SizedBox(
@@ -176,55 +192,55 @@ class ProcurementTab extends StatelessWidget {
                           DataCell(
                             Text(order.purchaseID),
                             onTap: () {
-                              navigateToOrderDetail(context, order);
+                              navigateToOrderDetail(context, order, updateData);
                             },
                           ),
                           DataCell(
                             Text(order.itemName),
                             onTap: () {
-                              navigateToOrderDetail(context, order);
+                              navigateToOrderDetail(context, order, updateData);
                             },
                           ),
                           DataCell(
                             Text(order.supplierName),
                             onTap: () {
-                              navigateToOrderDetail(context, order);
+                              navigateToOrderDetail(context, order, updateData);
                             },
                           ),
                           DataCell(
                             Text(order.orderDate),
                             onTap: () {
-                              navigateToOrderDetail(context, order);
+                              navigateToOrderDetail(context, order, updateData);
                             },
                           ),
                           DataCell(
                             Text(order.deliveryDate),
                             onTap: () {
-                              navigateToOrderDetail(context, order);
+                              navigateToOrderDetail(context, order, updateData);
                             },
                           ),
                           DataCell(
                             Text(order.quantity.toString()),
                             onTap: () {
-                              navigateToOrderDetail(context, order);
+                              navigateToOrderDetail(context, order, updateData);
                             },
                           ),
                           DataCell(
                             Text(order.unitPrice.toStringAsFixed(2).toString()),
                             onTap: () {
-                              navigateToOrderDetail(context, order);
+                              navigateToOrderDetail(context, order, updateData);
                             },
                           ),
                           DataCell(
                             Text(order.totalPrice.toStringAsFixed(2).toString()),
                             onTap: () {
-                              navigateToOrderDetail(context, order);
+                              navigateToOrderDetail(context, order, updateData);
                             },
                           ),
                           DataCell(
                             Text(order.status),
                             onTap: () {
-                              navigateToOrderDetail(context, order);
+                              navigateToOrderDetail(context, order, updateData);
                             },
                           ),
                         ],
@@ -253,7 +269,8 @@ class ProcurementTab extends StatelessWidget {
       }
     );
   }
-  Future<List<PurchasingOrder>> _fetchProcurementData(String category) async {
+
+  Future<List<PurchasingOrder>> _fetchProcurementData(String category, String dummy) async {
     try {
       String newCategory;
       if (category == 'Past') {
@@ -278,11 +295,19 @@ class ProcurementTab extends StatelessWidget {
       rethrow; // Rethrow the error to be caught by FutureBuilder
     }
   }
+
+  Key futureBuilderKey = UniqueKey();
+
+  void updateData() async {
+    setState(() {
+      futureBuilderKey = UniqueKey();
+    });
+  }
 }
 
-void navigateToOrderDetail(BuildContext context, PurchasingOrder order) {
+void navigateToOrderDetail(BuildContext context, PurchasingOrder order, Function updateData) {
   Navigator.push(
     context,
-    MaterialPageRoute(builder: (context) => OrderDetailScreen(order: order)),
+    MaterialPageRoute(builder: (context) => OrderDetailScreen(order: order, updateData: updateData)),
   );
 }

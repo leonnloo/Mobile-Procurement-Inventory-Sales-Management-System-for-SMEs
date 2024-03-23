@@ -16,7 +16,11 @@ class MonthlySalesTarget(BaseModel):
     target_sales: float
 
 
-
+class ProductMonthlySales(BaseModel):
+    year: int
+    month: int
+    quantity_sold: int
+    total_price: float
 
 
 

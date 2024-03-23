@@ -1,18 +1,23 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:prototype/app/authenticate/screens/start_screen.dart';
 import 'package:prototype/app/user_profile/get_user.dart';
 import 'package:prototype/models/user_model.dart';
 import 'package:prototype/util/request_util.dart';
+import 'package:prototype/util/user_controller.dart';
 import 'package:prototype/util/validate_text.dart';
 import 'package:prototype/widgets/forms/dropdown_field.dart';
 import 'package:prototype/widgets/forms/password_field.dart';
 import 'package:prototype/widgets/forms/text_field.dart';
 
 class EditUser extends StatefulWidget {
-  final User user;
+  final Function updateData;
 
-  const EditUser({super.key, required this.user});
+  const EditUser({super.key, required this.updateData});
 
   @override
   EditUserState createState() => EditUserState();
@@ -26,15 +31,16 @@ class EditUserState extends State<EditUser> {
   final TextEditingController _roleController = TextEditingController();
   final RequestUtil requestUtil = RequestUtil();
   final _formKey = GlobalKey<FormState>();
+  final userController = Get.put(UserLoggedInController());
 
   @override
   void initState() {
     super.initState();
-    _employeeNameController.text = widget.user.employeeName;
-    _emailController.text = widget.user.email;
-    _phoneNoController.text = widget.user.phoneNumber;
-    _passwordController.text = widget.user.password;
-    _roleController.text = widget.user.role;
+    _employeeNameController.text = userController.currentUserInfo.value!.employeeName;
+    _emailController.text = userController.currentUserInfo.value!.email;
+    _phoneNoController.text = userController.currentUserInfo.value!.phoneNumber;
+    _passwordController.text = userController.currentUserInfo.value!.password;
+    _roleController.text = userController.currentUserInfo.value!.role;
   }
 
   @override
@@ -76,11 +82,11 @@ class EditUserState extends State<EditUser> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  BuildTextField(controller: _employeeNameController, labelText: 'Business Name', data: widget.user.employeeName),
+                  BuildTextField(controller: _employeeNameController, labelText: 'Business Name', data: userController.currentUserInfo.value!.employeeName),
                   const SizedBox(height: 16.0),
-                  BuildTextField(controller: _emailController, labelText: 'Email', data: widget.user.email),
+                  BuildTextField(controller: _emailController, labelText: 'Email', data: userController.currentUserInfo.value!.email),
                   const SizedBox(height: 16.0),
-                  BuildTextField(controller: _phoneNoController, labelText: 'Phone Number', data: widget.user.phoneNumber),
+                  BuildTextField(controller: _phoneNoController, labelText: 'Phone Number', data: userController.currentUserInfo.value!.phoneNumber),
                   const SizedBox(height: 16.0),
                   PasswordTextField(controller: _passwordController, labelText: 'Password'),
                   const SizedBox(height: 16.0),
@@ -124,14 +130,19 @@ class EditUserState extends State<EditUser> {
                             );
                           } else {                
                             final response = await requestUtil.updateUser(
-                              widget.user.employeeID, employeeName, email, password, phoneNumber, role
+                              userController.currentUserInfo.value!.employeeID, employeeName, email, password, phoneNumber, role
                             );
                             
                             if (response.statusCode == 200) {
+                              final editUser = User(employeeName: employeeName, employeeID: userController.currentUserInfo.value!.employeeID, email: email, password: password, phoneNumber: phoneNumber, role: role, salesRecord: userController.currentUserInfo.value!.salesRecord);
+                              userController.updateUserInfo(editUser);
+                              Function? update = userController.updateDrawer.value;
+                              update!();
+                              widget.updateData();
                               Navigator.pop(context);
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
-                                  content: Text('Customer added successfully.'),
+                                  content: Text('Customer edited successfully.'),
                                   backgroundColor: Colors.green,
                                 ),
                               );
@@ -178,14 +189,16 @@ class EditUserState extends State<EditUser> {
                 // Handle the deletion logic here
                 // You can call a function to perform the deletion or any other action
                 // For now, just close the dialog
-                final response = await requestUtil.deleteUser(widget.user.employeeID);
+                final response = await requestUtil.deleteUser(userController.currentUserInfo.value!.employeeID);
                 
                 if (response.statusCode == 200) {
                   Navigator.of(context).pop();
                   Navigator.pop(context);
+                  userController.clearUserInfo();
+                  Get.to(() => const StartScreen());
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
-                      content: Text('Supplier deleted successfully.'),
+                      content: Text('User deleted successfully.'),
                       backgroundColor: Colors.green,
                     ),
                   );
@@ -193,7 +206,7 @@ class EditUserState extends State<EditUser> {
                   // Display an error message to the user
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
-                      content: Text('Supplier delete failed'),
+                      content: Text('User delete failed'),
                       backgroundColor: Colors.red,
                     ),
                   );

@@ -1,9 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
-
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:prototype/util/request_util.dart';
 import 'package:prototype/widgets/appbar/common_appbar.dart';
 

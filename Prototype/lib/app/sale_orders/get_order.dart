@@ -19,6 +19,10 @@ Future<List<String>> getOrderStatusList() async {
   return ['Pending', 'Completed'];
 }
 
+Future<List<String>> getCompletionStatusList() async {
+  return ['To be Packaged', 'To be Shipped', 'To be Delivered', 'Delivered'];
+}
+
 Future<List<String>> getProductList() async {
   final response = await requestUtil.getProductsName();
   if (response.statusCode == 200){

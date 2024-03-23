@@ -309,7 +309,7 @@ class ProductMonthlySalesLine1State extends State<ProductMonthlySalesLine1> {
   @override
   Widget build(BuildContext context) {
     return AspectRatio(
-      aspectRatio: 1.23,
+      aspectRatio: 1,
       child: Stack(
         children: <Widget>[
           Column(
@@ -345,7 +345,7 @@ class ProductMonthlySalesLine1State extends State<ProductMonthlySalesLine1> {
           IconButton(
             icon: Icon(
               Icons.refresh,
-              color: Colors.white.withOpacity(isShowingMainData ? 1.0 : 0.5),
+              color: Colors.black.withOpacity(isShowingMainData ? 1.0 : 0.5),
             ),
             onPressed: () {
               setState(() {

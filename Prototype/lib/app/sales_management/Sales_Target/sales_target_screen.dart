@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:prototype/app/sales_management/Sales_Target/IndividualSales.dart';
-import 'package:prototype/app/sales_management/Sales_Target/SalesByDate.dart';
-import 'package:prototype/app/sales_management/Sales_Target/setTargetSales.dart';
+import 'package:prototype/app/sales_management/Sales_Target/individual_sales.dart';
+import 'package:prototype/app/sales_management/Sales_Target/set_target_sales.dart';
+import 'package:prototype/app/sales_management/Sales_Target/sales_comparison_chart.dart';
 import 'package:prototype/widgets/appbar/common_appbar.dart';
-
-import 'SalesComparisonChart.dart';
+import 'package:prototype/widgets/icon_button.dart';
 
 
 
@@ -19,44 +18,35 @@ class SalesTargetScreen extends StatelessWidget {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            _buildButtonWithIcon(
+            buildButtonWithIcon(
               onPressed: () {
                 // 导航到目标销售页面
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => SetSalesTargetScreen() ),
+                  MaterialPageRoute(builder: (context) => const SetSalesTargetScreen() ),
                 );
               },
               icon: Icons.bar_chart_outlined,
               label: 'Set Target Sales',
             ),
             const SizedBox(height: 20.0),
-            _buildButtonWithIcon(
+            buildButtonWithIcon(
               onPressed: () {
                 // 导航到月度利润和损失页面
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) =>SalesComparisonScreen() ),
+                  MaterialPageRoute(builder: (context) => const SalesComparisonScreen() ),
                 );
               },
               icon: Icons.trending_up,
-              label: 'Actual vs Target - Month',
+              label: 'Sales by Month',
             ),
             const SizedBox(height: 20.0),
-            _buildButtonWithIcon(
-              onPressed: () {
-                // 导航到按日期销售页面
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const SalesByDate() ),
-                );
-              },
-              icon: Icons.calendar_today,
-              label: 'Sales by Date',
-            ),
+            
             const SizedBox(height: 20.0),
-            _buildButtonWithIcon(
+            buildButtonWithIcon(
               onPressed: () {
                 // 导航到个人员工销售页面
                 Navigator.push(
@@ -68,7 +58,7 @@ class SalesTargetScreen extends StatelessWidget {
               label: 'Individual Employee Sales',
             ),
             const SizedBox(height: 20.0),
-            _buildButtonWithIcon(
+            buildButtonWithIcon(
               onPressed: () {
                 // 显示帮助信息
                 showDialog(
@@ -93,27 +83,6 @@ class SalesTargetScreen extends StatelessWidget {
               label: 'Get Help',
             ),
           ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildButtonWithIcon({required VoidCallback onPressed, required IconData icon, required String label}) {
-    return ElevatedButton.icon(
-      onPressed: onPressed,
-      icon: Icon(icon, size: 30.0),
-      label: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 16.0),
-        child: Text(
-          label,
-          style: const TextStyle(fontSize: 18.0),
-        ),
-      ),
-      style: ElevatedButton.styleFrom(
-        foregroundColor: Colors.black, backgroundColor: Colors.white,
-        padding: const EdgeInsets.all(16.0),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10.0),
         ),
       ),
     );

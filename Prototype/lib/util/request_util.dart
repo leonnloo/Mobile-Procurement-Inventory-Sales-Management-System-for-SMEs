@@ -306,9 +306,9 @@ class RequestUtil {
     );
   }
 
-  Future<http.Response> getProcurement(String category){
+  Future<http.Response> getProcurement(){
     return http.get(
-      Uri.parse("${endpoint}get_procurement/$category"),
+      Uri.parse("${endpoint}get_procurement"),
       headers: {"Authorization": "Bearer $token"}
     );
   }
@@ -419,6 +419,12 @@ class RequestUtil {
   }
 
   // ----------------------------------------- INVENTORY ----------------------------------------------
+  Future<http.Response> getInventories() async {
+    return http.get(
+      Uri.parse("${endpoint}get_inventories"),
+      headers: {"Authorization": "Bearer $token"}
+    );
+  }
   Future<http.Response> getInventoryType(String category) async {
     return http.get(
       Uri.parse("${endpoint}get_inventory_category/$category"),
@@ -522,16 +528,18 @@ class RequestUtil {
         'unit_price': unitPrice,
         'total_price':  totalPrice,
         'quantity': quantity,
-        'status': status,
+        'completion_status': '',
+        'order_status': status,
         'employee': currentUser,
         'employee_id': currentUserID,
       })
   ); }
-  Future<http.Response> updateSaleOrder(String orderID, dynamic customerName, dynamic customerID, dynamic productName, dynamic productID, dynamic orderDate, dynamic unitPrice, dynamic totalPrice, dynamic quantity, dynamic status, dynamic employee, dynamic employeeID) async { return
+  Future<http.Response> updateSaleOrder(String orderID, dynamic customerName, dynamic customerID, dynamic productName, dynamic productID, dynamic orderDate, dynamic unitPrice, dynamic totalPrice, dynamic quantity, dynamic orderStatus, dynamic completionStatus, dynamic employee, dynamic employeeID) async { return
   http.put(
     Uri.parse("${endpoint}update_sale_order/$orderID"),
     headers: {"Authorization": "Bearer $token", 'Content-Type': 'application/json'},
     body: jsonEncode({
+        'order_id': orderID,
         'customer_name': customerName,
         'customer_id': customerID,
         'product_name': productName,
@@ -540,7 +548,8 @@ class RequestUtil {
         'unit_price': unitPrice,
         'total_price':  totalPrice,
         'quantity': quantity,
-        'status': status,
+        'completion_status': completionStatus,
+        'order_status': orderStatus,
         'employee': employee,
         'employee_id': employeeID,
       })
