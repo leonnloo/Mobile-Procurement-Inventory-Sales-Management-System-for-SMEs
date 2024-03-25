@@ -10,7 +10,6 @@ class CustomerInfo(BaseModel):
     phone_number: str
     billing_address: str
     shipping_address: str 
-    past_order: List[SaleOrder] | None
     notes: str | None
 
 class NewCustomer(BaseModel):

@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:prototype/app/procurement/get_procurement.dart';
 import 'package:prototype/util/request_util.dart';
@@ -8,8 +10,8 @@ import 'package:prototype/widgets/forms/dropdown_field.dart';
 import 'package:prototype/widgets/forms/number_field.dart';
 
 class AddProcurementScreen extends StatefulWidget {
-  const AddProcurementScreen({super.key});
-
+  const AddProcurementScreen({super.key, this.updateData});
+  final Function? updateData;
   @override
   AddProcurementScreenState createState() => AddProcurementScreenState();
 }
@@ -183,6 +185,9 @@ class AddProcurementScreenState extends State<AddProcurementScreen> {
                         );
                         
                         if (response.statusCode == 200) {
+                          if (widget.updateData != null) {
+                            widget.updateData!();
+                          }
                           Navigator.pop(context);
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(

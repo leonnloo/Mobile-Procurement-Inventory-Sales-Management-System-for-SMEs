@@ -40,7 +40,7 @@ class StartScreen extends StatelessWidget {
                 children: [
                   // Add your company's logo here
                   Image.asset(
-                    'images/nottingham.jpg', // Replace with the path to your logo asset
+                    'assets/images/nottingham.jpg', // Replace with the path to your logo asset
                     height: size.height * 0.15, // Adjust the height as needed
                   ),
                   const SizedBox(height: 76.0),

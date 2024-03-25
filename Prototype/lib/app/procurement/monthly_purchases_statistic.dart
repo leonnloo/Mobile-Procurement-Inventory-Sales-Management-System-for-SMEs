@@ -21,6 +21,9 @@ class _MonthlyPurchaseStaticState extends State<MonthlyPurchaseStatic> {
   ];
 
   bool showPast = false;
+  List<PurchasingOrder> pastOrders = [];
+  List<PurchasingOrder> presentOrders = [];
+
 
   List<PurchasingOrder> pastOrders = [];
   List<PurchasingOrder> presentOrders = [];

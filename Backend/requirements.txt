@@ -1,0 +1,20 @@
+fastapi[all]
+fastapi-mail
+pymongo
+numpy
+nltk
+word2number
+nn
+spacy
+spacy-llm
+transformers
+# torch
+# torchvision 
+# torchaudio
+# pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
+
+# install this seperately
+python -m spacy download en_core_web_bg
+
+# to install torch
+# New-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\FileSystem" -Name "LongPathsEnabled" -Value 1 -PropertyType DWORD -Force

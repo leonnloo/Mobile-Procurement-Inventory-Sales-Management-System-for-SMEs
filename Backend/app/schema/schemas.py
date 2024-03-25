@@ -1,7 +1,6 @@
 # ---------------------------------------- User ----------------------------------------
 def user_dict_serial(user) -> dict:
     return {
-        # "Object id": str(user["_id"]),
         "employee_name": user["employee_name"],
         "employee_id": user["employee_id"],
         "email": user["email"],
@@ -23,7 +22,6 @@ def supplier_dict_serial(supplier) -> dict:
         "email": supplier["email"],
         "phone_number": supplier["phone_number"],
         "address": supplier["address"],
-        "past_order": supplier["past_order"],
         "notes": supplier["notes"]
     }
 
@@ -75,7 +73,8 @@ def product_dict_serial(product) -> dict:
         "markup": product["markup"],
         "margin": product["margin"],
         "critical_level": product["critical_level"],
-        "status": product["status"]
+        "status": product["status"],
+        "monthly_sales": product["monthly_sales"],
     } 
 
 def product_serial(products) -> list:
@@ -145,7 +144,8 @@ def sale_order_dict_serial(sale_order) -> dict:
         "quantity": sale_order["quantity"],
         "unit_price": sale_order["unit_price"],
         "total_price": sale_order["total_price"],
-        "status": sale_order["status"],
+        "completion_status": sale_order["completion_status"],
+        "order_status": sale_order["order_status"],
         "employee": sale_order["employee"],
         "employee_id": sale_order["employee_id"]
     }
@@ -154,15 +154,16 @@ def sale_order_serial(sale_orders) -> list:
     return [sale_order_dict_serial(sale_order) for sale_order in sale_orders]
 
 # ---------------------------------------- Sales Management ----------------------------------------
-def company_monthly_sales_dict_serial(sale) -> dict:
+def monthly_sales_target_dict_serial(sale) -> dict:
     return {
         "year": sale["year"],
         "month": sale["month"],
-        "sales": sale["sales"]
+        "actual_sales": sale["actual_sales"],
+        "target_sales": sale["target_sales"]
     }
 
-def company_monthly_sales_serial(sales) -> list:
-    return [company_monthly_sales_dict_serial(sale) for sale in sales]
+def monthly_sales_target_serial(sales) -> list:
+    return [monthly_sales_target_dict_serial(sale) for sale in sales]
 
 
 # ---------------------------------------- Notes ----------------------------------------
@@ -172,3 +173,24 @@ def note_dict_serial(note) -> dict:
         "date": note["date"],
         "memo": note["memo"]
     }
+
+
+# ---------------------------------------- Refunds ----------------------------------------
+def refund_serial_dict(refund) -> dict:
+    return {
+        "refund_id": refund["refund_id"],
+        "order_id": refund["order_id"],
+        "order_status": refund["order_status"],
+        "refund_date": refund["refund_date"],
+        "customer_id": refund["customer_id"],
+        "customer_name": refund["customer_name"],
+        "product_id": refund["product_id"],
+        "product_name": refund["product_name"],
+        "refund_quantity": refund["refund_quantity"],
+        "order_price": refund["order_price"],
+        "refund_amount": refund["refund_amount"],
+        "reason": refund["reason"],
+    }
+
+def refunds_serial(refunds) -> list:
+    return [refund_serial_dict(refund) for refund in refunds]

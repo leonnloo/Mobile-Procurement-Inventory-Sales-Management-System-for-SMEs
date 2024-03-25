@@ -1,17 +1,14 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:get/get.dart';
 import 'package:prototype/app/customer/add_customer.dart';
 import 'package:prototype/app/customer/customer.dart';
-import 'package:prototype/app/inventory/add_inventory.dart';
 import 'package:prototype/app/inventory/inventory.dart';
 import 'package:prototype/app/inventory/stock_inout_inv.dart';
 import 'package:prototype/app/notification_screen.dart';
 import 'package:prototype/app/procurement/add_procurement.dart';
 import 'package:prototype/app/procurement/procurement.dart';
-import 'package:prototype/app/product/add_product.dart';
 import 'package:prototype/app/product/product.dart';
 import 'package:prototype/app/product/stock_inout_prod.dart';
 import 'package:prototype/app/sale_orders/add_order.dart';
@@ -35,7 +32,7 @@ class HomeScreen extends StatefulWidget {
 
 class HomeScreenState extends State<HomeScreen> {
   final isDialOpen = ValueNotifier(false);
-  Widget container = const HomeWidgets();
+  Widget container = HomeWidgets();
   String currentTitle = 'Dashboard';
   final controller = Get.put(CustomDrawerController());
   DateTime? currentBackPressTime;
@@ -45,28 +42,28 @@ class HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Obx(() {
       if (controller.currentPage.value == DrawerSections.dashboard) {
-        container = const HomeWidgets();
+        container = HomeWidgets();
         currentTitle = "Dashboard";
       } else if (controller.currentPage.value == DrawerSections.salesOrder) {
-        container = SalesOrderScreen();
-        currentTitle = "Sales Order (Design how you see fit)";
+        container = const SalesOrderScreen();
+        currentTitle = "Sales Order";
       } else if (controller.currentPage.value == DrawerSections.salesManagement) {
         container = const SalesManagementScreen();
-        currentTitle = "Sales Management (Design how you see fit)";
+        currentTitle = "Sales Management";
       } else if (controller.currentPage.value == DrawerSections.inventory) {
-        container = InventoryScreen();
-        currentTitle = "Inventory (Design how you see fit)";
+        container = const InventoryScreen();
+        currentTitle = "Inventory";
       } else if (controller.currentPage.value == DrawerSections.product) {
-        container = ProductManagementScreen();
+        container = const ProductManagementScreen();
         currentTitle = "Product";
       } else if (controller.currentPage.value == DrawerSections.procurement) {
         container = const ProcurementScreen();
-        currentTitle = "Procurement (Design how you see fit)";
+        currentTitle = "Procurement";
       } else if (controller.currentPage.value == DrawerSections.supplier) {
-        container = SupplierManagementScreen();
+        container = const SupplierManagementScreen();
         currentTitle = "Supplier";
       } else if (controller.currentPage.value == DrawerSections.customer) {
-        container = CustomerManagementScreen();
+        container = const CustomerManagementScreen();
         currentTitle = "Customer";
       } else if (controller.currentPage.value == DrawerSections.settings) {
         container = const SettingsScreen();
@@ -110,7 +107,7 @@ class HomeScreenState extends State<HomeScreen> {
         },
         child: Scaffold(
           key: _scaffoldKey,
-          appBar: AppBar(
+          appBar: controller.currentPage.value == DrawerSections.dashboard ? null : AppBar(
             toolbarHeight: 60.0,
             leading: Builder(
               builder: (context) => IconButton(
@@ -130,7 +127,7 @@ class HomeScreenState extends State<HomeScreen> {
             title: Text(controller.currentPage.value == DrawerSections.dashboard ? '' : currentTitle),
           ),
           body: container,
-        drawer: Drawer(
+          drawer: Drawer(
             child: SingleChildScrollView(
               child: Column(
                   children: [

@@ -6,14 +6,13 @@ from models.supplier_model import *
 from models.procurement_model import * 
 from models.product_model import * 
 from models.inventory_model import *  
-from models.sales_management_model import CompanyMonthlySales
-from models import *
+from models.sales_management_model import *
 from schema.schemas import *
 from fastapi.security import OAuth2PasswordBearer
+from routes.func import *
 
 put_router = APIRouter()
 oauth_scheme = OAuth2PasswordBearer(tokenUrl="token")
-
 
 # ----------------------------------------- Customer Update ----------------------------------------------
 @put_router.put("/update_customer/{customerID}")
@@ -28,7 +27,6 @@ def update_customer(customer: NewCustomer, customerID: str, token: str = Depends
             phone_number = customer.phone_number,
             billing_address = customer.billing_address,
             shipping_address = customer.shipping_address,
-            past_order = old_customer["past_order"],
             notes = old_customer["notes"],
         )
         customers_db.update_one({"customer_id": customerID}, {"$set": dict(updated_customer)})
@@ -67,12 +65,112 @@ def update_supplier(supplier: NewSupplier, supplierID: str, token: str = Depends
 
 # ----------------------------------------- Sales Order Update ----------------------------------------------
 @put_router.put("/update_sale_order/{order_id}")
-def update_sale_order(order: NewSaleOrder, order_id, token: str = Depends(oauth_scheme)):
+def update_sale_order(order: SaleOrder, order_id, token: str = Depends(oauth_scheme)):
     old_order = sales_order_db.find_one({"order_id": order_id})
     product = product_db.find_one({"product_id": order.product_id})
     left_product = product["quantity"] - (order.quantity - old_order["quantity"])
     if (left_product >= 0):
         if old_order:
+            if order.order_status == 'Completed':
+                priceDifference = order.total_price - old_order['total_price']
+                product_difference = order.quantity - old_order["quantity"]
+                year, month, day = extract_year_month_day(order.order_date)
+                monthly_sale = monthly_sales_db.find_one({"year": year, "month": month})
+                # Update monthly sales
+                if monthly_sale:
+                    monthly_sale['actual_sales'] += priceDifference
+                    monthly_sales_db.update_one({"year": year, "month": month}, {"$set": monthly_sale})
+                # if order is placed in a advanced month
+                else:
+                    new_monthly_sales = MonthlySalesTarget(
+                        year = year,
+                        month = month,
+                        actual_sales = order.total_price,
+                        target_sales = 0
+                    )
+                    monthly_sales_db.insert_one(dict(new_monthly_sales))
+
+
+                # Update employee
+                employee = users_db.find_one({"employee_id": order.employee_id})
+                if employee:
+                    if 'sales_record' in employee and isinstance(employee['sales_record'], list):
+                        # Check if there is a sales record for the given year and month
+                        sales_record_found = False
+                        for record in employee['sales_record']:
+                            if record['year'] == year and record['month'] == month:
+                                record['sales'] += priceDifference
+                                sales_record_found = True
+                                break
+
+                        # If no sales record found for the given year and month, create a new one
+                        if not sales_record_found:
+                            new_monthly_sales = {
+                                'year': year,
+                                'month': month,
+                                'sales': order.total_price
+                            }
+                            employee['sales_record'].append(new_monthly_sales)
+                    else:
+                        # If sales_record doesn't exist or is not a list, create a new list with the new sales record
+                        employee['sales_record'] = [{
+                            'year': year,
+                            'month': month,
+                            'sales': order.total_price
+                        }]
+                    
+                    # Update the employee document in the database
+                    users_db.update_one({"employee_id": order.employee_id}, {"$set": employee})
+                if not employee:
+                    raise HTTPException(
+                        status_code = status.HTTP_403_FORBIDDEN,
+                        detail = "Couldn't register employee sale",
+                        headers={"WWW-Authenticate": "Bearer"},
+                    )
+                
+                # Update product monthly sales
+                if 'monthly_sales' in product and isinstance(product['monthly_sales'], list):
+                    monthlyProduct = False
+                    for record in product['monthly_sales']:
+                        if record['year'] == year and record['month'] == month:
+                            record['total_price'] += priceDifference
+                            record['quantity_sold'] += product_difference
+                            monthlyProduct = True
+                            break
+
+                    # If no sales record found for the given year and month, create a new one
+                    if not monthlyProduct:
+                        new_monthly_sales = {
+                            'year': year,
+                            'month': month,
+                            'quantity_sold': order.quantity,
+                            'total_price': order.total_price
+                        }
+                        product['monthly_sales'].append(new_monthly_sales)
+                else:
+                    # If monthly_sales doesn't exist or is not a list, create a new list with the new sales record
+                    product['monthly_sales'] = [{
+                        'year': year,
+                        'month': month,
+                        'quantity_sold': order.quantity,
+                        'total_price': order.total_price
+                    }]
+
+                # Update completion status of order
+                order.completion_status = 'Delivered'
+
+            # Update product status
+            product['quantity'] = left_product
+            if product['quantity'] > 0 and product['quantity'] >= product['critical_level']:
+                new_status = 'In Stock'
+            elif product['quantity'] > 0 and product['quantity'] < product['critical_level']:
+                new_status = 'Low Stock'
+            else:
+                new_status = 'Out of Stock'
+            product['status'] = new_status
+            product_db.update_one({"product_id": order.product_id}, {"$set": product})
+
+
             updated_order = SaleOrder(
                 order_id = order_id,
                 order_date = order.order_date,
@@ -83,20 +181,11 @@ def update_sale_order(order: NewSaleOrder, order_id, token: str = Depends(oauth_
                 quantity = order.quantity,
                 unit_price = order.unit_price,
                 total_price = order.total_price,
-                status = order.status,
+                completion_status = order.completion_status,
+                order_status = order.order_status,
                 employee = order.employee,
                 employee_id = order.employee_id
             )
-
-            product['quantity'] = left_product
-            if product['quantity'] > 0 and product['quantity'] >= product['critical_level']:
-                new_status = 'In Stock'
-            elif product['quantity'] > 0 and product['quantity'] < product['critical_level']:
-                new_status = 'Low Stock'
-            else:
-                new_status = 'Out of Stock'
-            product['status'] = new_status
-            product_db.update_one({"product_id": order.product_id}, {"$set": product})
 
             sales_order_db.update_one({"order_id": order_id}, {"$set": dict(updated_order)})
             return sale_order_dict_serial(sales_order_db.find_one({"order_id": order_id}))
@@ -109,7 +198,7 @@ def update_sale_order(order: NewSaleOrder, order_id, token: str = Depends(oauth_
     else:
         raise HTTPException(
         status_code = status.HTTP_403_FORBIDDEN,
-        detail = "Product not available",
+        detail = "Product ran out of stock",
         )
 # ----------------------------------------- Procurement Update ----------------------------------------------
 @put_router.put("/update_procurement/{procurement_id}")
@@ -195,8 +284,18 @@ def update_product(product: EditProduct, productID: str, token: str = Depends(oa
             quantity = product.quantity,
             critical_level = product.critical_level,
             status = new_status,
+            monthly_sales = old_product['monthly_sales']
         )
-        product_db.update_one({"product_id": productID}, {"$set": dict(updated_product)})
+
+        old_product['product_name'] = product.product_name
+        old_product['unit_price'] = product.unit_price
+        old_product['selling_price'] = product.selling_price
+        old_product['markup'] = product.markup
+        old_product['margin'] = product.margin
+        old_product['quantity'] = product.quantity
+        old_product['critical_level'] = product.critical_level
+        old_product['status'] = new_status
+        product_db.update_one({"product_id": productID}, {"$set": old_product})
         return product_dict_serial(product_db.find_one({"product_id": productID}))
     else:
         raise HTTPException(
@@ -317,6 +416,7 @@ def stock_in_inventory(item: StockInOutInventoryItem, token: str = Depends(oauth
             quantity = new_quantity,
             unit_price = old_item["unit_price"],
             total_price = old_item["unit_price"] * new_quantity,
+            critical_level = old_item["critical_level"], 
             status = new_status,
         )
 
@@ -366,21 +466,3 @@ def stock_out_inventory(item: StockInOutInventoryItem, token: str = Depends(oaut
             detail="Inventory item not found",
             headers={"WWW-Authenticate": "Bearer"},
         )
-    
-
-    
-    
-# ----------------------------------------- Sales Management Update ----------------------------------------------
-@put_router.put("/update_company_monthly_sales/{year}")
-def update_company_monthly_sales(sales_by_month: CompanyMonthlySales, token: str = Depends(oauth_scheme)):
-    old_sales = sales_management_db.find_one({"year": sales_by_month.year})
-    if old_sales:
-        sales_management_db.update_one({"$and": [{"year": sales_by_month.year}, {"month": sales_by_month.sales}]}, {"$set": dict(sales_by_month)})
-        return company_monthly_sales_dict_serial(sales_management_db.find_one({"year": sales_by_month.year}))
-    else:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Company Monthly Sales not found",
-            headers={"WWW-Authenticate": "Bearer"},
-        )
-

@@ -3,23 +3,23 @@ import 'package:prototype/models/edit_type.dart';
 import 'package:prototype/models/product_model.dart';
 import 'package:prototype/widgets/appbar/info_appbar.dart';
 
-void navigateToProductDetail(BuildContext context, ProductItem product) {
+void navigateToProductDetail(BuildContext context, ProductItem product, Function updateData) {
   Navigator.of(context).push(
     MaterialPageRoute(
-      builder: (context) => ProductDetailScreen(product: product),
+      builder: (context) => ProductDetailScreen(product: product, updateData: updateData),
     ),
   );
 }
 
 class ProductDetailScreen extends StatelessWidget {
   final ProductItem product;
-
-  const ProductDetailScreen({super.key, required this.product});
+  final Function updateData;
+  const ProductDetailScreen({super.key, required this.product, required this.updateData});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: InfoAppBar(currentTitle: 'Product Info', currentData: product, editType: EditType.product),
+      appBar: InfoAppBar(currentTitle: 'Product Info', currentData: product, editType: EditType.product, updateData: updateData,),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -30,10 +30,12 @@ class ProductDetailScreen extends StatelessWidget {
             _buildDetailRow('Unit Price', '\$${product.unitPrice.toStringAsFixed(2).toString()}'),
             _buildDetailRow('Selling Price', '\$${product.sellingPrice.toStringAsFixed(2).toString()}'),
             _buildDetailRow('Quantity', product.quantity.toString()),
-            _buildDetailRow('Margin', product.margin),
-            _buildDetailRow('Markup', product.markup),
+            
+            _buildDetailRow('Safety Quantity', product.criticalLvl.toString()),
+            _buildDetailRow('Markup', product.markup.toString()),
+            _buildDetailRow('Margin', product.margin.toString()),
+            
             _buildDetailRow('Status', product.status),
-            _buildDetailRow('Critical Level', product.criticalLvl.toString()),
             // Add more details based on your product data model
           ],
         ),

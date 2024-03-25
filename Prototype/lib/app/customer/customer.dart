@@ -6,14 +6,21 @@ import 'package:prototype/models/customer_model.dart';
 import 'package:prototype/app/customer/customer_info.dart';
 import 'package:prototype/util/request_util.dart';
 
-class CustomerManagementScreen extends StatelessWidget {
-  CustomerManagementScreen({super.key});
+class CustomerManagementScreen extends StatefulWidget {
+  const CustomerManagementScreen({super.key});
+
+  @override
+  State<CustomerManagementScreen> createState() => _CustomerManagementScreenState();
+}
+
+class _CustomerManagementScreenState extends State<CustomerManagementScreen> {
   final RequestUtil requestUtil = RequestUtil();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: FutureBuilder(
+        key: futureBuilderKey,
         future: _fetchCustomerData(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -80,43 +87,43 @@ class CustomerManagementScreen extends StatelessWidget {
                         DataCell(
                           Text(customer.customerID),
                           onTap: () {
-                            navigateToCustomerDetail(context, customer);
+                            navigateToCustomerDetail(context, customer, updateData);
                           },
                         ),
                         DataCell(
                           Text(customer.businessName),
                           onTap: () {
-                            navigateToCustomerDetail(context, customer);
+                            navigateToCustomerDetail(context, customer, updateData);
                           },
                         ),
                         DataCell(
                           Text(customer.contactPerson),
                           onTap: () {
-                            navigateToCustomerDetail(context, customer);
+                            navigateToCustomerDetail(context, customer, updateData);
                           },
                         ),
                         DataCell(
                           Text(customer.email),
                           onTap: () {
-                            navigateToCustomerDetail(context, customer);
+                            navigateToCustomerDetail(context, customer, updateData);
                           },
                         ),
                         DataCell(
                           Text(customer.phoneNo),
                           onTap: () {
-                            navigateToCustomerDetail(context, customer);
+                            navigateToCustomerDetail(context, customer, updateData);
                           },
                         ),
                         DataCell(
                           Text(customer.billingAddress),
                           onTap: () {
-                            navigateToCustomerDetail(context, customer);
+                            navigateToCustomerDetail(context, customer, updateData);
                           },
                         ),
                         DataCell(
                           Text(customer.shippingAddress),
                           onTap: () {
-                            navigateToCustomerDetail(context, customer);
+                            navigateToCustomerDetail(context, customer, updateData);
                           },
                         ),
                       ],
@@ -161,5 +168,13 @@ class CustomerManagementScreen extends StatelessWidget {
       // print('Error in _fetchCustomerData: $error');
       rethrow; // Rethrow the error to be caught by FutureBuilder
     }
+  }
+
+  Key futureBuilderKey = UniqueKey();
+
+  void updateData() async {
+    setState(() {
+      futureBuilderKey = UniqueKey();
+    });
   }
 }
