@@ -1,3 +1,6 @@
+import 'dart:async';
+import 'dart:convert';
+
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:prototype/app/product/get_product.dart';
@@ -20,6 +23,11 @@ class _MonthlyPurchaseStaticState extends State<MonthlyPurchaseStatic> {
   bool showPast = false;
   List<PurchasingOrder> pastOrders = [];
   List<PurchasingOrder> presentOrders = [];
+
+
+  List<PurchasingOrder> pastOrders = [];
+  List<PurchasingOrder> presentOrders = [];
+  
 
 
   @override
@@ -211,29 +219,29 @@ class _MonthlyPurchaseStaticState extends State<MonthlyPurchaseStatic> {
         LineChartBarData(
           spots: [
             FlSpot(0,
-                (calculateTotalPriceByMonth(presentOrders, '2023-1') / 1000)),
+                (calculateTotalPriceByMonth(presentOrders, '2024-01') / 1000)),
             FlSpot(1,
-                (calculateTotalPriceByMonth(presentOrders, '2023-2') / 1000)),
+                (calculateTotalPriceByMonth(presentOrders, '2024-02') / 1000)),
             FlSpot(2,
-                (calculateTotalPriceByMonth(presentOrders, '2023-03') / 1000)),
+                (calculateTotalPriceByMonth(presentOrders, '2024-03') / 1000)),
             FlSpot(3,
-                (calculateTotalPriceByMonth(presentOrders, '2023-04') / 1000)),
+                (calculateTotalPriceByMonth(presentOrders, '2024-04') / 1000)),
             FlSpot(4,
-                (calculateTotalPriceByMonth(presentOrders, '2023-05') / 1000)),
+                (calculateTotalPriceByMonth(presentOrders, '2024-05') / 1000)),
             FlSpot(5,
-                (calculateTotalPriceByMonth(presentOrders, '2023-06') / 1000)),
+                (calculateTotalPriceByMonth(presentOrders, '2024-06') / 1000)),
             FlSpot(6,
-                (calculateTotalPriceByMonth(presentOrders, '2023-07') / 1000)),
+                (calculateTotalPriceByMonth(presentOrders, '2024-07') / 1000)),
             FlSpot(7,
-                (calculateTotalPriceByMonth(presentOrders, '2023-08') / 1000)),
+                (calculateTotalPriceByMonth(presentOrders, '2024-08') / 1000)),
             FlSpot(8,
-                (calculateTotalPriceByMonth(presentOrders, '2023-09') / 1000)),
+                (calculateTotalPriceByMonth(presentOrders, '2024-09') / 1000)),
             FlSpot(9,
-                (calculateTotalPriceByMonth(presentOrders, '2023-10') / 1000)),
+                (calculateTotalPriceByMonth(presentOrders, '2024-10') / 1000)),
             FlSpot(10,
-                (calculateTotalPriceByMonth(presentOrders, '2023-11') / 1000)),
+                (calculateTotalPriceByMonth(presentOrders, '2024-11') / 1000)),
             FlSpot(11,
-                (calculateTotalPriceByMonth(presentOrders, '2023-12') / 1000)),
+                (calculateTotalPriceByMonth(presentOrders, '2024-12') / 1000)),
           ],
           isCurved: true,
           gradient: LinearGradient(
@@ -319,29 +327,29 @@ class _MonthlyPurchaseStaticState extends State<MonthlyPurchaseStatic> {
         LineChartBarData(
           spots: [
             FlSpot(
-                0, (calculateTotalPriceByMonth(pastOrders, '2023-1') / 1000)),
+                0, (calculateTotalPriceByMonth(pastOrders, '2024-01') / 1000)),
             FlSpot(
-                1, (calculateTotalPriceByMonth(pastOrders, '2023-02') / 1000)),
+                1, (calculateTotalPriceByMonth(pastOrders, '2024-02') / 1000)),
             FlSpot(
-                2, (calculateTotalPriceByMonth(pastOrders, '2023-03') / 1000)),
+                2, (calculateTotalPriceByMonth(pastOrders, '2024-03') / 1000)),
             FlSpot(
-                3, (calculateTotalPriceByMonth(pastOrders, '2023-04') / 1000)),
+                3, (calculateTotalPriceByMonth(pastOrders, '2024-04') / 1000)),
             FlSpot(
-                4, (calculateTotalPriceByMonth(pastOrders, '2023-05') / 1000)),
+                4, (calculateTotalPriceByMonth(pastOrders, '2024-05') / 1000)),
             FlSpot(
-                5, (calculateTotalPriceByMonth(pastOrders, '2023-06') / 1000)),
+                5, (calculateTotalPriceByMonth(pastOrders, '2024-06') / 1000)),
             FlSpot(
-                6, (calculateTotalPriceByMonth(pastOrders, '2023-07') / 1000)),
+                6, (calculateTotalPriceByMonth(pastOrders, '2024-07') / 1000)),
             FlSpot(
-                7, (calculateTotalPriceByMonth(pastOrders, '2023-08') / 1000)),
+                7, (calculateTotalPriceByMonth(pastOrders, '2024-08') / 1000)),
             FlSpot(
-                8, (calculateTotalPriceByMonth(pastOrders, '2023-09') / 1000)),
+                8, (calculateTotalPriceByMonth(pastOrders, '2024-09') / 1000)),
             FlSpot(
-                9, (calculateTotalPriceByMonth(pastOrders, '2023-10') / 1000)),
+                9, (calculateTotalPriceByMonth(pastOrders, '2024-10') / 1000)),
             FlSpot(
-                10, (calculateTotalPriceByMonth(pastOrders, '2023-11') / 1000)),
+                10, (calculateTotalPriceByMonth(pastOrders, '2024-11') / 1000)),
             FlSpot(
-                11, (calculateTotalPriceByMonth(pastOrders, '2023-12') / 1000)),
+                11, (calculateTotalPriceByMonth(pastOrders, '2024-12') / 1000)),
           ],
           isCurved: true,
           gradient: LinearGradient(
