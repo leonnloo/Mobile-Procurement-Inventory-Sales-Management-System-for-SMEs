@@ -165,7 +165,7 @@ class AddClaimRefundFormState extends State<AddClaimRefundForm> {
                 controller: _refundQuantityController, 
                 labelText: 'Refund Quantity', 
                 onChanged: (value) {
-                  double totalP = unitPrice! * int.parse(value);
+                  double totalP = unitPrice! * double.parse(value);
                   _refundAmountController.text = totalP.toStringAsFixed(2);
                   _refundQuantityController.text = value;
                 }, 

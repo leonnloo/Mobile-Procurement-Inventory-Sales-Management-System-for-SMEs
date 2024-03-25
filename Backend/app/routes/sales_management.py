@@ -230,7 +230,7 @@ def new_refund(refund: Refund, token: str = Depends(oauth_scheme)):
         monthly_sales_db.update_one({"year": year, "month": month}, {"$set": monthly_sale})
 
         # Update employee sales
-        employee = employee_db.find_one({"employee_id": order.employee_id})
+        employee = users_db.find_one({"employee_id": order["employee_id"]})
         if not employee:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
@@ -241,10 +241,10 @@ def new_refund(refund: Refund, token: str = Depends(oauth_scheme)):
             if record['year'] == year and record['month'] == month:
                 record['sales'] -= refund.refund_amount
                 break
-        employee_db.update_one({"employee_id": order.employee_id}, {"$set": employee})
+        users_db.update_one({"employee_id": order["employee_id"]}, {"$set": employee})
             
         # Update product sales
-        product = product_db.find_one({"product_id": order.product_id})
+        product = product_db.find_one({"product_id": order["product_id"]})
         if not product:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
@@ -253,9 +253,9 @@ def new_refund(refund: Refund, token: str = Depends(oauth_scheme)):
             )
         for record in product['monthly_sales']:
                 if record['year'] == year and record['month'] == month:
-                    product['total_price'] -= refund.refund_amount
+                    record['total_price'] -= refund.refund_amount
                     break
-        product_db.update_one({"product_id": order.product_id}, {"$set": product})
+        product_db.update_one({"product_id": order["product_id"]}, {"$set": product})
 
     new_refund = Refund(
         refund_id = next_refund_id,
