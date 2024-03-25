@@ -8,13 +8,17 @@ nn
 spacy
 spacy-llm
 transformers
-# torch
-# torchvision 
-# torchaudio
+torch
+torchvision 
+torchaudio
 # pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
 
 # install this seperately
-python -m spacy download en_core_web_bg
+# python -m spacy download en_core_web_lg
+# after downloading you may need to train the updated_ner_model once again due to the size of the file
+# run python routes/chatbot/spacy_train.py
+# may take some time (30 secs) depending on the cpu or gpu
+
 
 # to install torch
 # New-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\FileSystem" -Name "LongPathsEnabled" -Value 1 -PropertyType DWORD -Force
