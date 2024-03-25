@@ -1,196 +1,198 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_navigation/get_navigation.dart';
+import 'package:prototype/app/inventory/inventory_filter_system.dart';
 import 'package:prototype/app/inventory/speed_dial_inventory.dart';
 import 'package:prototype/models/inventory_model.dart';
 import 'package:prototype/app/inventory/inventory_info.dart';
 import 'package:prototype/util/request_util.dart';
 
-class InventoryScreen extends StatelessWidget {
-  InventoryScreen({super.key});
+class InventoryScreen extends StatefulWidget {
+  const InventoryScreen({super.key});
+
+  @override
+  State<InventoryScreen> createState() => _InventoryScreenState();
+}
+
+class _InventoryScreenState extends State<InventoryScreen> {
   final RequestUtil requestUtil = RequestUtil();
+
+  Map<String, List<InventoryItem>> groupedData = {};
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SingleChildScrollView(
-        child: Column(
+  groupedData['In Stock'] = [];
+  groupedData['Low Stock'] = [];
+  groupedData['Out of Stock'] = [];
+    return DefaultTabController(
+      length: groupedData.keys.length,
+      initialIndex: 0,
+      child: Scaffold(
+        body: Column(
           children: [
-            // In Stock Section
-            buildInventorySection(context, 'In Stock'),
-          
-            // Low Stock Section
-            buildInventorySection(context, 'Low Stock'),
+            SizedBox(
+              width: double.infinity,
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Card(
+                  child: GestureDetector(
+                    onTap: () {
+                      Get.to(() => const FilterSystem());
+                    },
+                    child: const TextField(
+                      decoration: InputDecoration(
+                        enabled: false,
+                        prefixIcon: Icon(Icons.search),
+                        labelText: 'Search',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(12.0)),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
         
-            // Out of Stock Section
-            buildInventorySection(context, 'Out of Stock'),
+            // Card(
+            //   elevation: 4.0,
+            //   margin: const EdgeInsets.all(16.0),
+            //   child: Padding(
+            //     padding: const EdgeInsets.all(16.0),
+            //     child: BarChartSample4(),
+            //   ),
+            // ),
+            TabBar(
+              labelColor: Colors.black,
+              unselectedLabelColor: Colors.black,
+              indicatorColor: Colors.red[400],
+              indicatorSize: TabBarIndicatorSize.label,
+              indicatorWeight: 2.0,
+              labelPadding: const EdgeInsets.all(10),
+              tabs: groupedData.keys.map((status) => Tab(text: status)).toList(),
+            ),
+            FutureBuilder(
+              key: futureBuilderKey,
+              future: _fetchInventoryData(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const SizedBox();
+                } else if (snapshot.hasError) {
+                  return Text('Error: ${snapshot.error}');
+                } else if (!snapshot.hasData) {
+                  return const SizedBox(
+                    height: 150.0,
+                    child: Center(
+                      child: Text('Unable to load', style: TextStyle(fontSize: 14.0),),
+                    ),
+                  );
+                } else {
+                  List<InventoryItem> inventoryItems = snapshot.data!;
+                  for (var data in inventoryItems) {
+                    groupedData[data.status]?.add(data);
+                  }
+                  return Expanded(
+                    child: TabBarView(
+                      children: [
+                        buildInventorySection(context, groupedData['In Stock']!),
+                        buildInventorySection(context, groupedData['Low Stock']!),
+                        buildInventorySection(context, groupedData['Out of Stock']!),
+                      ]
+                    ),
+                  );
+                }
+              }
+            ),
           ],
         ),
+        floatingActionButton: inventorySpeedDial(context, updateData),
       ),
-      floatingActionButton: inventorySpeedDial(context),
     );
   }
 
-  Widget buildInventorySection(BuildContext context, String sectionTitle) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        FutureBuilder(
-          future: _fetchInventoryData(sectionTitle),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const SizedBox(
-                width: double.infinity,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    SizedBox(height: 26.0),
-                    CircularProgressIndicator(
-                      backgroundColor: Colors.white,
-                      color: Colors.red,
-                    ),
-                    SizedBox(height: 16.0),
-                    Text(
-                      'Loading...',
-                      style: TextStyle(fontSize: 16.0, color: Colors.white),
-                    ),
-                  ],
+  Widget buildInventorySection(BuildContext context, List<InventoryItem> inventoryItems) {
+    return SingleChildScrollView(
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: DataTable(
+          columnSpacing: 16.0,
+          horizontalMargin: 16.0,
+          columns: const [
+            DataColumn(label: Text('Item ID')),
+            DataColumn(label: Text('Item')),
+            DataColumn(label: Text('Category')),
+            DataColumn(label: Text('Quantity')),
+            DataColumn(label: Text('Unit Price')),
+            DataColumn(label: Text('Total Price')),
+            DataColumn(label: Text('Status')),
+          ],
+          rows: inventoryItems.map((InventoryItem item) {
+            return DataRow(
+              cells: [
+                DataCell(
+                  Text(item.itemID),
+                  onTap: () {
+                    navigateToItemDetail(context, item, updateData);
+                  },
                 ),
-              );
-            } else if (snapshot.hasError) {
-              return Container(
-                width: double.infinity,
-                padding: const EdgeInsets.only(top: 20.0),
-                child: const Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      "Unable to load item data",
-                      style: TextStyle(color: Colors.white, fontSize: 20),
-                    ),
-                  ],
+                DataCell(
+                  Text(item.itemName),
+                  onTap: () {
+                    navigateToItemDetail(context, item, updateData);
+                  },
                 ),
-              );
-            } else if (snapshot.hasData) {
-              List<InventoryItem> items = snapshot.data as List<InventoryItem>;
-              if (items.isNotEmpty) {
-                return Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            sectionTitle,
-                            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                          ),
-                        ],
+                DataCell(
+                  Text(item.category),
+                  onTap: () {
+                    navigateToItemDetail(context, item, updateData);
+                  },
+                ),
+                DataCell(
+                  Text(
+                    item.quantity.toString(),
+                    style: TextStyle(
+                    color: _getQuantityColor(
+                      item.quantity,
+                      item.criticalLvl,
                       ),
                     ),
-                    const Divider(),
-                    SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: DataTable(
-                        columnSpacing: 16.0,
-                        horizontalMargin: 16.0,
-                        columns: const [
-                          DataColumn(label: Text('Item ID')),
-                          DataColumn(label: Text('Item')),
-                          DataColumn(label: Text('Category')),
-                          DataColumn(label: Text('Quantity')),
-                          DataColumn(label: Text('Unit Price')),
-                          DataColumn(label: Text('Total Price')),
-                          DataColumn(label: Text('Status')),
-                        ],
-                        rows: items.map((InventoryItem item) {
-                          return DataRow(
-                            cells: [
-                              DataCell(
-                                Text(item.itemID.toString()),
-                                onTap: () {
-                                  navigateToItemDetail(context, item);
-                                },
-                              ),
-                              DataCell(
-                                Text(item.itemName),
-                                onTap: () {
-                                  navigateToItemDetail(context, item);
-                                },
-                              ),
-                              DataCell(
-                                Text(item.category),
-                                onTap: () {
-                                  navigateToItemDetail(context, item);
-                                },
-                              ),
-                              DataCell(
-                                Text(item.quantity.toString()),
-                                onTap: () {
-                                  navigateToItemDetail(context, item);
-                                },
-                              ),
-                              DataCell(
-                                Text('\$${item.unitPrice.toStringAsFixed(2)}'),
-                                onTap: () {
-                                  navigateToItemDetail(context, item);
-                                },
-                              ),
-                              DataCell(
-                                Text('\$${item.totalPrice.toStringAsFixed(2)}'),
-                                onTap: () {
-                                  navigateToItemDetail(context, item);
-                                },
-                              ),
-                              DataCell(
-                                Text(item.status),
-                                onTap: () {
-                                  navigateToItemDetail(context, item);
-                                },
-                              ),
-                            ],
-                          );
-                        }).toList(),
-                      ),
-                    ),
-                    const Divider(),
-                  ],
-                );
-              }
-              else {
-                return Container();
-              }
-            }
-            else {
-              return Container(
-                width: double.infinity,
-                height: double.infinity,
-                padding: const EdgeInsets.only(top: 20.0),
-                child: const Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      "Unable to load inventory data",
-                      style: TextStyle(color: Colors.white, fontSize: 20),
-                    ),
-                  ],
+                  ),
+                  onTap: () {
+                    navigateToItemDetail(context, item, updateData);
+                  },
                 ),
-              );
-            }
-          }
-        ),
-      ],
+                DataCell(
+                  Text('\$${item.unitPrice.toStringAsFixed(2)}'),
+                  onTap: () {
+                    navigateToItemDetail(context, item, updateData);
+                  },
+                ),
+                DataCell(
+                  Text('\$${item.totalPrice.toStringAsFixed(2)}'),
+                  onTap: () {
+                    navigateToItemDetail(context, item, updateData);
+                  },
+                ),
+                DataCell(
+                  Text(item.status),
+                  onTap: () {
+                    navigateToItemDetail(context, item, updateData);
+                  },
+                ),
+              ],
+            );
+          }).toList(),
+        )
+      ),
     );
   }
 
-  Future<List<InventoryItem>> _fetchInventoryData(String category) async {
+  Future<List<InventoryItem>> _fetchInventoryData() async {
     try {
-      final item = await requestUtil.getInventoryType(category);
+      final item = await requestUtil.getInventories();
       if (item.statusCode == 200) {
-        // Assuming the JSON response is a list of objects
         List<dynamic> jsonData = jsonDecode(item.body);
-        
-        // Map each dynamic object to InventoryItem
         List<InventoryItem> itemData = jsonData.map((data) => InventoryItem.fromJson(data)).toList();
         return itemData;
       } else {
@@ -201,7 +203,18 @@ class InventoryScreen extends StatelessWidget {
     }
   }
 
+  Key futureBuilderKey = UniqueKey();
+  void updateData() async {
+    setState(() {
+      futureBuilderKey = UniqueKey();
+    });
+  }
+  Color _getQuantityColor(int quantity, int safetyQuantity) {
+    return quantity < safetyQuantity ? Colors.red : Colors.black;
+  }
 }
+
+
 
 class ItemSearch extends SearchDelegate<InventoryItem> {
   final List<InventoryItem> items;
@@ -242,8 +255,8 @@ class ItemSearch extends SearchDelegate<InventoryItem> {
 
   Widget buildSearchResults(String query) {
     final List<InventoryItem> searchResults = items
-        .where((item) =>
-            item.itemName.toLowerCase().contains(query.toLowerCase()))
+        .where(
+            (item) => item.itemName.toLowerCase().contains(query.toLowerCase()))
         .toList();
 
     return const SingleChildScrollView(

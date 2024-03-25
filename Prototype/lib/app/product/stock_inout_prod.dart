@@ -9,8 +9,8 @@ import 'package:prototype/widgets/forms/dropdown_field.dart';
 import 'package:prototype/widgets/forms/number_field.dart';
 
 class StockInOutProduct extends StatefulWidget {
-  const StockInOutProduct({super.key});
-
+  const StockInOutProduct({super.key, this.updateData});
+  final Function? updateData;
   @override
   StockInOutProductState createState() => StockInOutProductState();
 }
@@ -98,6 +98,9 @@ class StockInOutProductState extends State<StockInOutProduct> {
                         );
                         
                         if (response.statusCode == 200) {
+                          if (widget.updateData != null) {
+                            widget.updateData!();
+                          }
                           Navigator.pop(context);
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
@@ -169,6 +172,9 @@ class StockInOutProductState extends State<StockInOutProduct> {
                         );
                         
                         if (response.statusCode == 200) {
+                          if (widget.updateData != null) {
+                            widget.updateData!();
+                          }
                           Navigator.pop(context);
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(

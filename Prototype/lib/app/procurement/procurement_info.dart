@@ -10,13 +10,13 @@ import 'package:prototype/widgets/appbar/info_appbar.dart';
 final RequestUtil requestUtil = RequestUtil();
 class OrderDetailScreen extends StatelessWidget {
   final PurchasingOrder order;
-
-  const OrderDetailScreen({super.key, required this.order});
+  final Function updateData;
+  const OrderDetailScreen({super.key, required this.order, required this.updateData});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: InfoAppBar(currentTitle: 'Purchase Details', currentData: order, editType: EditType.procurement),
+      appBar: InfoAppBar(currentTitle: 'Purchase Details', currentData: order, editType: EditType.procurement, updateData: updateData,),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: SingleChildScrollView(

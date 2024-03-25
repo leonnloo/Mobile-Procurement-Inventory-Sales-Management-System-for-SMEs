@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:prototype/app/product/add_product.dart';
 import 'package:prototype/app/product/stock_inout_prod.dart';
 
-Widget productSpeedDial(BuildContext context) {
+Widget productSpeedDial(BuildContext context, Function updateData) {
     return SpeedDial(
       icon: Icons.add_outlined,
       activeIcon: Icons.close_outlined,
@@ -20,7 +20,7 @@ Widget productSpeedDial(BuildContext context) {
           shape: const CircleBorder(),
           label: 'Add New Product',
           onTap: () {
-            Get.to(() => const AddProductScreen());
+            Get.to(() => AddProductScreen(updateData: updateData));
           }
         ),
         SpeedDialChild(
@@ -30,7 +30,7 @@ Widget productSpeedDial(BuildContext context) {
           shape: const CircleBorder(),
           label: 'Stock In/Out',
           onTap: () {
-            Get.to(() => const StockInOutProduct());
+            Get.to(() => StockInOutProduct(updateData: updateData,));
           }
         ),
       ],

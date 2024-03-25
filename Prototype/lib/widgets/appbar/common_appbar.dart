@@ -9,6 +9,7 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       toolbarHeight: 60.0,
       backgroundColor: Colors.red[400],
+      centerTitle: true,
       title: Text(currentTitle),
     );
   }

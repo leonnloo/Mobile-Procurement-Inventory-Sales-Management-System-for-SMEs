@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:prototype/app/authenticate/screens/forget_password/option/forget_password_option.dart';
 import 'package:prototype/app/authenticate/screens/register_content.dart';
 import 'package:prototype/app/home/home.dart';
+import 'package:prototype/models/user_model.dart';
 import 'package:prototype/util/request_util.dart';
 import 'package:prototype/util/user_controller.dart';
 import 'package:prototype/util/validate_text.dart';
@@ -51,7 +52,7 @@ class LoginContent extends StatelessWidget {
                       SizedBox(height: size.height * 0.04,),
                       /*------ LABEL ------*/
                       Image.asset(
-                        'images/login.jpg',
+                        'assets/images/login.jpg',
                         height: size.height * 0.2,
                       ),
                       const SizedBox(height: 25.0,),
@@ -124,21 +125,22 @@ class LoginContent extends StatelessWidget {
                       ),
                     );
                   } else {
-                    // String email = _emailController.text;
-                    // String password = _passwordController.text;
                     final response = await requestUtil.login(
                       _emailController.text,
                       _passwordController.text,
                     );
                     if (response.statusCode == 200) {
-                      // Successful login
-                      // print("Login successful!");
-                      // print("Access Token: ${jsonDecode(response.body)['access_token']}");
                       userController.updateUser(_emailController.text);
-                      final idresponse = await requestUtil.getUserID(_emailController.text);
-                      if (idresponse.statusCode == 200) {
-                        final dynamic userID = jsonDecode(idresponse.body);
+                      final idResponse = await requestUtil.getUserID(_emailController.text);
+                      if (idResponse.statusCode == 200) {
+                        final dynamic userID = jsonDecode(idResponse.body);
                         userController.updateUserID(userID);
+
+                        
+                        final userResponse = await requestUtil.getUser(userID);
+                        final dynamic user = jsonDecode(userResponse.body);
+                        final User userModel = User.fromJson(user);
+                        userController.updateUserInfo(userModel);
                       }
                       // Navigate to the home screen or perform other actions
                       Navigator.pushReplacement(

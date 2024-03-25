@@ -31,8 +31,6 @@ conf = ConnectionConfig(
     TEMPLATE_FOLDER=os.path.abspath('routes/templates')
 ) 
 
-
-
 def send_verification_email_background(background_tasks: BackgroundTasks, subject: str, email_to: str, body: str):
     body_str = f'Your verification code is: {body}'
 
@@ -46,31 +44,21 @@ def send_verification_email_background(background_tasks: BackgroundTasks, subjec
     background_tasks.add_task(
        fm.send_message, message, template_name='email.html')
     
-
-
 @verify_router.get('/send_verification_email/{email}')
 def send_verification_email(background_tasks: BackgroundTasks, email: str):
     try:
         # Generate a random 6-digit code
         code = ''.join(random.choices(string.digits, k=6))
-
-        # Store the code in the database (replace with database logic)
         verification_codes[email] = code
-
-        # Send verification code via email asynchronously
-
         send_verification_email_background(background_tasks, 'Verification Code',   
         email, code)
         return 'Success'
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to send verification code: {str(e)}")
 
-
-
 @verify_router.post("/verify_user/{email}/{code}")
 async def verify_user(email: str, code: str):
     stored_code = verification_codes.get(email)
-
     if not stored_code:
         raise HTTPException(status_code=400, detail="Invalid verification code")
 

@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -11,8 +13,8 @@ import 'package:prototype/widgets/forms/text_field.dart';
 
 class EditProcurement extends StatefulWidget {
   final PurchasingOrder procurementData;
-
-  const EditProcurement({super.key, required this.procurementData});
+  final Function updateData;
+  const EditProcurement({super.key, required this.procurementData, required this.updateData});
 
   @override
   EditProcurementState createState() => EditProcurementState();
@@ -196,6 +198,8 @@ class EditProcurementState extends State<EditProcurement> {
                           );
                           
                           if (response.statusCode == 200) {
+                            widget.updateData();
+                            Navigator.pop(context);
                             Navigator.pop(context);
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
@@ -242,12 +246,9 @@ class EditProcurementState extends State<EditProcurement> {
             ),
             TextButton(
               onPressed: () async {
-                // Handle the deletion logic here
-                // You can call a function to perform the deletion or any other action
-                // For now, just close the dialog
                 final response = await requestUtil.deleteProcurement(widget.procurementData.purchaseID);
-                
                 if (response.statusCode == 200) {
+                  widget.updateData();
                   Navigator.pop(context);
                   Navigator.pop(context);
                   ScaffoldMessenger.of(context).showSnackBar(

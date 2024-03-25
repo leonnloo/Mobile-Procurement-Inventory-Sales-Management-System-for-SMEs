@@ -3,23 +3,23 @@ import 'package:prototype/models/edit_type.dart';
 import 'package:prototype/models/inventory_model.dart';
 import 'package:prototype/widgets/appbar/info_appbar.dart';
 
-void navigateToItemDetail(BuildContext context, InventoryItem item) {
+void navigateToItemDetail(BuildContext context, InventoryItem item, Function updateData) {
   Navigator.of(context).push(
     MaterialPageRoute(
-      builder: (context) => ItemDetailScreen(item: item),
+      builder: (context) => ItemDetailScreen(item: item, updateData: updateData),
     ),
   );
 }
 
 class ItemDetailScreen extends StatelessWidget {
   final InventoryItem item;
-
-  const ItemDetailScreen({super.key, required this.item});
+  final Function updateData;
+  const ItemDetailScreen({super.key, required this.item, required this.updateData});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: InfoAppBar(currentTitle: 'Item Details', currentData: item, editType: EditType.inventory),
+      appBar: InfoAppBar(currentTitle: 'Item Details', currentData: item, editType: EditType.inventory, updateData: updateData,),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(

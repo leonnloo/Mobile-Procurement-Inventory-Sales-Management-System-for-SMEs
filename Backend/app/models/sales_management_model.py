@@ -7,14 +7,20 @@ class EmployeeMonthlySales(BaseModel):
     year: int
     month: int
     sales: float
-    
-class CompanyMonthlySales(BaseModel):
+
+
+class MonthlySalesTarget(BaseModel):
     year: int
     month: int
-    sales: int
+    actual_sales: float
+    target_sales: float
 
 
-
+class ProductMonthlySales(BaseModel):
+    year: int
+    month: int
+    quantity_sold: int
+    total_price: float
 
 
 

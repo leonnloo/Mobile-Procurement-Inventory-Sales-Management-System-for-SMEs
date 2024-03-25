@@ -17,7 +17,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.white, // 设置Appbar背景颜色为白色
-          title: Text(
+          title: const Text(
             'Notifications',
             style: TextStyle(
               color: Colors.black, // 设置标题文字颜色为黑色
@@ -43,7 +43,7 @@ class Notifications extends StatelessWidget {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Container(
               color: Colors.white, 
-              child: Center(
+              child: const Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -63,7 +63,7 @@ class Notifications extends StatelessWidget {
           } else if (snapshot.hasError) {
             return Container(
               color: Colors.red, 
-              child: Center(
+              child: const Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -102,7 +102,7 @@ class Notifications extends StatelessWidget {
                     child: ListTile(
                       title: Text(
                         notifications[index],
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: Colors.black, 
                           fontSize: 16.0,
                         ),
