@@ -166,7 +166,8 @@ class _ProcurementTabState extends State<ProcurementTab> {
               ),
             );
           } else if (snapshot.hasData) {
-            List<PurchasingOrder> orders = snapshot.data as List<PurchasingOrder>;
+            List<PurchasingOrder> orders =
+                snapshot.data as List<PurchasingOrder>;
             return SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: SingleChildScrollView(
@@ -249,8 +250,7 @@ class _ProcurementTabState extends State<ProcurementTab> {
                   ),
                 ),
             );
-          }
-          else {
+          } else {
             return Container(
               width: double.infinity,
               height: double.infinity,
@@ -266,8 +266,7 @@ class _ProcurementTabState extends State<ProcurementTab> {
               ),
             );
           }
-      }
-    );
+        });
   }
 
   Future<List<PurchasingOrder>> _fetchProcurementData(String category, String dummy) async {
@@ -278,14 +277,15 @@ class _ProcurementTabState extends State<ProcurementTab> {
       } else {
         newCategory = 'Delivering';
       }
-      
+
       final procurement = await requestUtil.getProcurementCategory(newCategory);
       if (procurement.statusCode == 200) {
         // Assuming the JSON response is a list of objects
         List<dynamic> jsonData = jsonDecode(procurement.body);
-        
+
         // Map each dynamic object to PurchasingOrder
-        List<PurchasingOrder> procurementData = jsonData.map((data) => PurchasingOrder.fromJson(data)).toList();
+        List<PurchasingOrder> procurementData =
+            jsonData.map((data) => PurchasingOrder.fromJson(data)).toList();
         return procurementData;
       } else {
         throw Exception('Unable to fetch procurement data.');
