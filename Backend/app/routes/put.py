@@ -27,7 +27,6 @@ def update_customer(customer: NewCustomer, customerID: str, token: str = Depends
             phone_number = customer.phone_number,
             billing_address = customer.billing_address,
             shipping_address = customer.shipping_address,
-            past_order = old_customer["past_order"],
             notes = old_customer["notes"],
         )
         customers_db.update_one({"customer_id": customerID}, {"$set": dict(updated_customer)})
@@ -285,8 +284,18 @@ def update_product(product: EditProduct, productID: str, token: str = Depends(oa
             quantity = product.quantity,
             critical_level = product.critical_level,
             status = new_status,
+            monthly_sales = old_product['monthly_sales']
         )
-        product_db.update_one({"product_id": productID}, {"$set": dict(updated_product)})
+
+        old_product['product_name'] = product.product_name
+        old_product['unit_price'] = product.unit_price
+        old_product['selling_price'] = product.selling_price
+        old_product['markup'] = product.markup
+        old_product['margin'] = product.margin
+        old_product['quantity'] = product.quantity
+        old_product['critical_level'] = product.critical_level
+        old_product['status'] = new_status
+        product_db.update_one({"product_id": productID}, {"$set": old_product})
         return product_dict_serial(product_db.find_one({"product_id": productID}))
     else:
         raise HTTPException(

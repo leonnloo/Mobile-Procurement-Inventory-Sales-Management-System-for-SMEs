@@ -44,8 +44,6 @@ class SalesTargetScreen extends StatelessWidget {
               label: 'Sales by Month',
             ),
             const SizedBox(height: 20.0),
-            
-            const SizedBox(height: 20.0),
             buildButtonWithIcon(
               onPressed: () {
                 // 导航到个人员工销售页面
