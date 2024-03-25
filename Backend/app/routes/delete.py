@@ -4,17 +4,8 @@ from models import *
 from schema.schemas import *
 from fastapi.security import OAuth2PasswordBearer
 from datetime import datetime
+from routes.func import *
 
-
-def extract_year_month_day(date_str: str):
-    try:
-        date_obj = datetime.strptime(date_str, "%Y-%m-%d")
-        year = date_obj.year
-        month = date_obj.month
-        day = date_obj.day
-        return year, month, day
-    except ValueError:
-        raise ValueError("Invalid date format. Please provide a date in the format YYYY-MM-DD")
 delete_router = APIRouter()
 oauth_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
