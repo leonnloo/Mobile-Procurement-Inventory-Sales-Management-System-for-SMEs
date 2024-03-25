@@ -21,7 +21,7 @@ class DeliveryOverview extends StatelessWidget {
             padding: EdgeInsets.only(left: 8.0),
             child: Text(
               'Delivery',
-              style: TextStyle(fontSize: 30.0, fontWeight: FontWeight.bold, decoration: TextDecoration.underline),
+              style: TextStyle(fontSize: 30.0, fontWeight: FontWeight.bold),
             ),
           ),
           Row(

@@ -44,7 +44,6 @@ def customer_form(customer: NewCustomer, token: str = Depends(oauth_scheme)):
         phone_number = customer.phone_number,
         billing_address = customer.billing_address,
         shipping_address = customer.shipping_address,
-        past_order = None,
         notes = None,
     )
 
