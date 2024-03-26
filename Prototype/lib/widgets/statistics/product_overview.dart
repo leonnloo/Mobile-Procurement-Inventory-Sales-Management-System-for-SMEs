@@ -76,7 +76,7 @@ class InventoryCount extends StatelessWidget {
                 value: null, // null indicates an indeterminate progress which spins
                 strokeWidth: 4.0, // Thickness of the circle line
                 backgroundColor: Colors.grey[200], // Color of the background circle
-                color: Colors.red[400], // Color of the progress indicator
+                color: Theme.of(context).colorScheme.onSurface, // Color of the progress indicator
               ),
             ),
           );
@@ -94,9 +94,9 @@ class InventoryCount extends StatelessWidget {
           calculateStock(products);
           return Row(
             children: [
-              _buildCol('$inStockCount', 'In Stock'),
-              _buildCol('$lowStockCount', 'Low Stock'),
-              _buildCol('$outOfStockCount', 'Out of Stock'),
+              _buildCol('$inStockCount', 'In Stock', context),
+              _buildCol('$lowStockCount', 'Low Stock', context),
+              _buildCol('$outOfStockCount', 'Out of Stock', context),
             ],
           );
         }
@@ -104,20 +104,20 @@ class InventoryCount extends StatelessWidget {
     );
   }
 
-  Widget _buildCol(String count, String label){
+  Widget _buildCol(String count, String label, BuildContext context) {
     return Expanded(
       child: Column(
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(count, style: const TextStyle(fontSize: 15.0,),),
+              Text(count, style: TextStyle(fontSize: 15.0, color: Theme.of(context).colorScheme.onSurface),),
             ],
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(label, style: const TextStyle(fontSize: 15.0,),),
+              Text(label, style: TextStyle(fontSize: 15.0, color: Theme.of(context).colorScheme.onSurface),),
             ],
           )
         ],
