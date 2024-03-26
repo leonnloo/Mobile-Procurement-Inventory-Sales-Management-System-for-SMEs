@@ -178,6 +178,9 @@ class _SalesOrderScreenState extends State<SalesOrderScreen> {
         }
       ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        foregroundColor: Theme.of(context).colorScheme.onSecondary,
+        shape: const CircleBorder(),
         onPressed: () {
           // Navigate to a screen for adding new customer info
           Navigator.of(context).push(

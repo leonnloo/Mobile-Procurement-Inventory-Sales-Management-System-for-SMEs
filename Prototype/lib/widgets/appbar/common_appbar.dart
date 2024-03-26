@@ -10,7 +10,10 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
       toolbarHeight: 60.0,
       backgroundColor: Theme.of(context).colorScheme.onPrimaryContainer,
       centerTitle: true,
-      title: Text(currentTitle, style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
+      title: Text(currentTitle, style: TextStyle(color: Theme.of(context).colorScheme.surface),),
+      iconTheme: IconThemeData(
+        color: Theme.of(context).colorScheme.surface,
+      )
     );
   }
 
