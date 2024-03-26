@@ -26,34 +26,32 @@ class _SupplierManagementScreenState extends State<SupplierManagementScreen> {
         future: _fetchSupplierData(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Column(
+            return Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                SizedBox(height: 26.0),
+                const SizedBox(height: 26.0),
                 CircularProgressIndicator(
-                  backgroundColor: Colors.white,
-                  color: Colors.red,
+                  color: Theme.of(context).colorScheme.error,
                 ),
-                SizedBox(height: 16.0),
+                const SizedBox(height: 16.0),
                 Text(
                   'Loading...',
-                  style: TextStyle(fontSize: 16.0, color: Colors.black),
+                  style: TextStyle(fontSize: 16.0, color: Theme.of(context).colorScheme.onSurface),
                 ),
               ],
             );
           } else if (snapshot.hasError) {
             return Container(
-              color: Colors.red[400],
               width: double.infinity,
               height: size.height * 0.9,
               padding: const EdgeInsets.only(top: 20.0),
-              child: const Column(
+              child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
                     "Unable to load supplier data",
-                    style: TextStyle(color: Colors.white, fontSize: 20),
+                    style: TextStyle(color: Theme.of(context).colorScheme.onSurface, fontSize: 20),
                   ),
                 ],
               ),
@@ -68,49 +66,49 @@ class _SupplierManagementScreenState extends State<SupplierManagementScreen> {
                 child: DataTable(
                   columnSpacing: 16.0,
                   horizontalMargin: 16.0,
-                  columns: const [
-                    DataColumn(label: Text('ID')),
-                    DataColumn(label: Text('Name')),
-                    DataColumn(label: Text('Contact Person')),
-                    DataColumn(label: Text('Email')),
-                    DataColumn(label: Text('Phone No')),
-                    DataColumn(label: Text('Address')),
+                  columns: [
+                    DataColumn(label: Text('ID', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),)),
+                    DataColumn(label: Text('Name', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),)),
+                    DataColumn(label: Text('Contact Person', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),)),
+                    DataColumn(label: Text('Email', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),)),
+                    DataColumn(label: Text('Phone No', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),)),
+                    DataColumn(label: Text('Address', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),)),
                   ],
                   rows: supplierData.map((SupplierData supplier) {
                     return DataRow(
                       cells: [
                         DataCell(
-                          Text(supplier.supplierID),
+                          Text(supplier.supplierID, style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
                           onTap: () {
                             navigateToSupplierDetail(context, supplier, updateData);
                           },
                         ),
                         DataCell(
-                          Text(supplier.businessName),
+                          Text(supplier.businessName, style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
                           onTap: () {
                             navigateToSupplierDetail(context, supplier, updateData);
                           },
                         ),
                         DataCell(
-                          Text(supplier.contactPerson),
+                          Text(supplier.contactPerson, style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
                           onTap: () {
                             navigateToSupplierDetail(context, supplier, updateData);
                           },
                         ),
                         DataCell(
-                          Text(supplier.email),
+                          Text(supplier.email, style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
                           onTap: () {
                             navigateToSupplierDetail(context, supplier, updateData);
                           },
                         ),
                         DataCell(
-                          Text(supplier.phoneNo),
+                          Text(supplier.phoneNo, style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
                           onTap: () {
                             navigateToSupplierDetail(context, supplier, updateData);
                           },
                         ),
                         DataCell(
-                          Text(supplier.address),
+                          Text(supplier.address, style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
                           onTap: () {
                             navigateToSupplierDetail(context, supplier, updateData);
                           },
