@@ -42,14 +42,18 @@ class InfoAppBar extends StatelessWidget implements PreferredSizeWidget {
                     Get.to(() => EditOrder(orderData: currentData, updateData: updateData));
                   }
                 },
-                icon: const Icon(
+                icon: Icon(
+                  color: Theme.of(context).colorScheme.surface,
                   Icons.edit_rounded,
                   size: 30.0,
                 ),
               ),
             ],
-      backgroundColor: Colors.red[400],
-      title: Text(currentTitle),
+      backgroundColor: Theme.of(context).colorScheme.onPrimaryContainer,
+      title: Text(currentTitle, style: TextStyle(color: Theme.of(context).colorScheme.surface),),
+      iconTheme: IconThemeData(
+        color: Theme.of(context).colorScheme.surface, // Set the color of the back button
+      ),
     );
   }
 

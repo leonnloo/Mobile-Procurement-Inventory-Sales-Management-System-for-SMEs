@@ -8,15 +8,15 @@ Widget inventorySpeedDial(BuildContext context, Function updateData) {
     return SpeedDial(
       icon: Icons.add_outlined,
       activeIcon: Icons.close_outlined,
-      backgroundColor: Colors.black,
-      foregroundColor: Colors.white,
+      backgroundColor: Theme.of(context).colorScheme.primary,
+      foregroundColor: Theme.of(context).colorScheme.onSecondary,
       spaceBetweenChildren: 10,
       overlayOpacity: 0.5,
       children: [
         SpeedDialChild(
           child: const Icon(Icons.new_label),
-          backgroundColor: Colors.black,
-          foregroundColor: Colors.white,
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        foregroundColor: Theme.of(context).colorScheme.onSecondary,
           shape: const CircleBorder(),
           label: 'Add New Item',
           onTap: () {
@@ -25,8 +25,8 @@ Widget inventorySpeedDial(BuildContext context, Function updateData) {
         ),
         SpeedDialChild(
           child: const Icon(Icons.inventory),
-          backgroundColor: Colors.black,
-          foregroundColor: Colors.white,
+          backgroundColor: Theme.of(context).colorScheme.primary,
+          foregroundColor: Theme.of(context).colorScheme.onSecondary,
           shape: const CircleBorder(),
           label: 'Stock In/Out',
           onTap: () {

@@ -53,6 +53,7 @@ class PieChart2State extends State {
   @override
   Widget build(BuildContext context) {
     return Card(
+      color: Theme.of(context).colorScheme.onSecondary,
       elevation: 4.0,
       margin: const EdgeInsets.all(16.0),
       child: Padding(
@@ -63,9 +64,9 @@ class PieChart2State extends State {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text(
+                Text(
                   'Product Sales',
-                  style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.onSurface),
                 ),
                 DropdownButton<String>(
                   value: _selectedYear,
@@ -88,7 +89,7 @@ class PieChart2State extends State {
                   items: years.map<DropdownMenuItem<String>>((String year) {
                     return DropdownMenuItem<String>(
                       value: year,
-                      child: Text(year),
+                      child: Text(year, style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
                     );
                   }).toList(),
                 ),
@@ -118,7 +119,7 @@ class PieChart2State extends State {
                   elevation: 16,
                   underline: Container(
                     height: 1,
-                    color: Colors.black,
+                    color: Theme.of(context).colorScheme.onSurface,
                   ),
                   onChanged: (int? newValue) {
                     setState(() {
@@ -132,7 +133,7 @@ class PieChart2State extends State {
                   items: List.generate(monthNames.length, (index) {
                     return DropdownMenuItem<int>(
                       value: index,
-                      child: Text(monthNames[index]),
+                      child: Text(monthNames[index], style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
                     );
                   }),
                 ),
@@ -168,10 +169,10 @@ class PieChart2State extends State {
             } else if (snapshot.hasError) {
               return Text('Error: ${snapshot.error}');
             } else if (!snapshot.hasData) {
-              return const SizedBox(
+              return SizedBox(
                 height: 150.0,
                 child: Center(
-                  child: Text('Unable to load', style: TextStyle(fontSize: 14.0),),
+                  child: Text('Unable to load', style: TextStyle(fontSize: 14.0, color: Theme.of(context).colorScheme.onSurface),),
                 ),
               );
             } else {

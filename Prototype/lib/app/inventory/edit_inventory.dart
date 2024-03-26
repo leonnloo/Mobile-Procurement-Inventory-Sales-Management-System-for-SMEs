@@ -52,8 +52,8 @@ class EditInventoryState extends State<EditInventory> {
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 60.0,
-        backgroundColor: Colors.red[400],
-        title: const Text('Edit Purchase'),
+        backgroundColor: Theme.of(context).colorScheme.onPrimaryContainer,
+        title: Text('Edit Purchase', style: TextStyle(color: Theme.of(context).colorScheme.surface),),
         actions: [
           IconButton(
             onPressed: () => _showDeleteConfirmationDialog(context),
@@ -63,6 +63,9 @@ class EditInventoryState extends State<EditInventory> {
             ),
           ),
         ],
+        iconTheme: IconThemeData(
+          color: Theme.of(context).colorScheme.surface,
+        ),
       ),
       body: SingleChildScrollView(
         child: Container(
@@ -107,8 +110,8 @@ class EditInventoryState extends State<EditInventory> {
                     width: double.infinity,
                     child: ElevatedButton(
                       style: TextButton.styleFrom(
-                        foregroundColor: Colors.white,
-                        backgroundColor: Colors.black,
+                        foregroundColor: Theme.of(context).colorScheme.onPrimary,
+                        backgroundColor: Theme.of(context).colorScheme.onSecondaryContainer,
                         side: const BorderSide(color: Colors.black),
                         shape: const RoundedRectangleBorder(),
                         padding: const EdgeInsets.symmetric(vertical: 15.0)
@@ -126,9 +129,9 @@ class EditInventoryState extends State<EditInventory> {
                         || criticalLevel == null) {
                           // Display validation error messages
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Please fill in all the required fields.'),
-                              backgroundColor: Colors.red,
+                            SnackBar(
+                              content: const Text('Please fill in all the required fields.'),
+                              backgroundColor: Theme.of(context).colorScheme.error,
                             ),
                           );
                         } else {                
@@ -148,9 +151,9 @@ class EditInventoryState extends State<EditInventory> {
                           } else {
                             // Display an error message to the user
                             ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text('Inventory item edit failed'),
-                                backgroundColor: Colors.red,
+                              SnackBar(
+                                content: const Text('Inventory item edit failed'),
+                                backgroundColor: Theme.of(context).colorScheme.error,
                               ),
                             );
                           }

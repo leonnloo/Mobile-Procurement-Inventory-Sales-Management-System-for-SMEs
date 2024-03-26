@@ -83,8 +83,8 @@ class AddInventoryScreenState extends State<AddInventoryScreen> {
                   width: double.infinity,
                   child: ElevatedButton(
                     style: TextButton.styleFrom(
-                      foregroundColor: Colors.white,
-                      backgroundColor: Colors.black,
+                      foregroundColor: Theme.of(context).colorScheme.onPrimary,
+                      backgroundColor: Theme.of(context).colorScheme.onSecondaryContainer,
                       side: const BorderSide(color: Colors.black),
                       shape: const RoundedRectangleBorder(),
                       padding: const EdgeInsets.symmetric(vertical: 15.0)
@@ -101,9 +101,9 @@ class AddInventoryScreenState extends State<AddInventoryScreen> {
                         // Display validation error messages
                         _formKey.currentState?.validate();
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Please fill in all the required fields.'),
-                            backgroundColor: Colors.red,
+                          SnackBar(
+                            content: const Text('Please fill in all the required fields.'),
+                            backgroundColor: Theme.of(context).colorScheme.error,
                           ),
                         );
                       } else {                
@@ -125,9 +125,9 @@ class AddInventoryScreenState extends State<AddInventoryScreen> {
                         } else {
                           // Display an error message to the user
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Inventory added failed'),
-                              backgroundColor: Colors.red,
+                            SnackBar(
+                              content: const Text('Inventory added failed'),
+                              backgroundColor: Theme.of(context).colorScheme.error,
                             ),
                           );
                         }

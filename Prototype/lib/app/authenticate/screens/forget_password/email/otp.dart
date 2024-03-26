@@ -43,7 +43,6 @@ class OTPScreen extends StatelessWidget {
                 onPressed: () async {
                   final response = await requestUtil.verifyUser(email, globalCode);
                   if (response.statusCode == 200){
-                    print('object');
                     Get.to(() => ResetPassword(email: email,));
                   } else {
                     // ignore: use_build_context_synchronously

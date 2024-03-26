@@ -88,11 +88,11 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                 Get.to(() => EditUser(updateData: updateData));
               },
               style: TextButton.styleFrom(
-                foregroundColor: Colors.white,
-                backgroundColor: Colors.black,
+                foregroundColor: Theme.of(context).colorScheme.onPrimary,
+                backgroundColor: Theme.of(context).colorScheme.onSecondaryContainer,
                 side: const BorderSide(color: Colors.black),
                 shape: const RoundedRectangleBorder(),
-                padding: const EdgeInsets.symmetric(vertical: 10.0)
+                padding: const EdgeInsets.symmetric(vertical: 15.0)
               ),
               child: const Text('Edit', style: TextStyle(fontSize: 16.0),),
             ),

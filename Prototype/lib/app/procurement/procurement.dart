@@ -67,9 +67,9 @@ class _ProcurementScreenState extends State<ProcurementScreen> {
               ),
             ),*/
             TabBar(
-              labelColor: Colors.black,
-              unselectedLabelColor: Colors.black,
-              indicatorColor: Colors.red[400],
+              labelColor: Theme.of(context).colorScheme.onPrimaryContainer,
+              unselectedLabelColor: Theme.of(context).colorScheme.onPrimaryContainer,
+              indicatorColor: Theme.of(context).colorScheme.primary,
               indicatorSize: TabBarIndicatorSize.label,
               indicatorWeight: 2.0,
               labelPadding: const EdgeInsets.all(10),

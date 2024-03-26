@@ -46,7 +46,7 @@ class DropdownTextFieldState extends State<DropdownTextField> {
             items: snapshot.data!.map((String value) {
               return DropdownMenuItem<String>(
                 value: value,
-                child: Text(value),
+                child: Text(value, style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
               );
             }).toList(),
             onChanged: (String? newValue) {
@@ -65,7 +65,7 @@ class DropdownTextFieldState extends State<DropdownTextField> {
             items: snapshot.data!.map((String value) {
               return DropdownMenuItem<String>(
                 value: value,
-                child: Text(value),
+                child: Text(value, style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
               );
             }).toList(),
             onChanged: (String? newValue) {
@@ -98,7 +98,7 @@ class DropdownTextFieldState extends State<DropdownTextField> {
             items: snapshot.data!.map((String value) {
               return DropdownMenuItem<String>(
                 value: value,
-                child: Text(value),
+                child: Text(value, style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
               );
             }).toList(),
             onChanged: (String? newValue) {
@@ -129,7 +129,7 @@ class DropdownTextFieldState extends State<DropdownTextField> {
             items: snapshot.data!.map((String value) {
               return DropdownMenuItem<String>(
                 value: value,
-                child: Text(value),
+                child: Text(value, style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
               );
             }).toList(),
             onChanged: (String? newValue) {
@@ -139,6 +139,7 @@ class DropdownTextFieldState extends State<DropdownTextField> {
               }
             },
             decoration: InputDecoration(
+              fillColor: Theme.of(context).colorScheme.onPrimaryContainer,
               labelText: widget.labelText,
               border: const OutlineInputBorder(),
             ),

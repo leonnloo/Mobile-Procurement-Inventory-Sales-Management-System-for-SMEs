@@ -18,7 +18,7 @@ class ProductStatusWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     String currentDate = DateFormat('MMMM d').format(DateTime.now());
     return Card(
-      color: Theme.of(context).colorScheme.onPrimary,
+      color: Theme.of(context).colorScheme.secondaryContainer,
       elevation: 4.0,
       // color: const Color.fromARGB(255, 11, 238, 181),
       margin: const EdgeInsets.all(16.0),
@@ -83,10 +83,10 @@ class InventoryCount extends StatelessWidget {
         } else if (snapshot.hasError) {
           return Text('Error: ${snapshot.error}');
         } else if (!snapshot.hasData) {
-          return const SizedBox(
+          return SizedBox(
             height: 150.0,
             child: Center(
-              child: Text('Unable to load', style: TextStyle(fontSize: 14.0),),
+              child: Text('Unable to load', style: TextStyle(fontSize: 14.0, color: Theme.of(context).colorScheme.onSurface),),
             ),
           );
         } else {

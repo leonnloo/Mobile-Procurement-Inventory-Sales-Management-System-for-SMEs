@@ -75,8 +75,8 @@ class AddCustomerScreenState extends State<AddCustomerScreen> {
                 width: double.infinity,
                 child: ElevatedButton(
                   style: TextButton.styleFrom(
-                    foregroundColor: Colors.white,
-                    backgroundColor: Colors.black,
+                    foregroundColor: Theme.of(context).colorScheme.onPrimary,
+                    backgroundColor: Theme.of(context).colorScheme.onSecondaryContainer,
                     side: const BorderSide(color: Colors.black),
                     shape: const RoundedRectangleBorder(),
                     padding: const EdgeInsets.symmetric(vertical: 15.0)

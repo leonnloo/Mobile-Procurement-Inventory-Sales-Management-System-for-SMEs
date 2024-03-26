@@ -34,6 +34,9 @@ class RefundDetailScreen extends StatelessWidget {
             ),
           ),
         ],
+        iconTheme: IconThemeData(
+          color: Theme.of(context).colorScheme.surface,
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),

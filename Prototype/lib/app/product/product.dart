@@ -18,7 +18,7 @@ class ProductManagementScreenState extends State<ProductManagementScreen> {
   String? _selectedFilter = 'ID';
   final RequestUtil requestUtil = RequestUtil();
   Color _getQuantityColor(int quantity, int safetyQuantity) {
-    return quantity < safetyQuantity ? Colors.red : Colors.black;
+    return quantity < safetyQuantity ? Theme.of(context).colorScheme.error : Theme.of(context).colorScheme.onSurface;
   }
 
   double calculateMarkup(double costPrice, double sellingPrice) {
