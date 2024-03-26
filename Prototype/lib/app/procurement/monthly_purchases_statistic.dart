@@ -1,5 +1,3 @@
-import 'dart:async';
-import 'dart:convert';
 
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
@@ -23,13 +21,7 @@ class _MonthlyPurchaseStaticState extends State<MonthlyPurchaseStatic> {
   bool showPast = false;
   List<PurchasingOrder> pastOrders = [];
   List<PurchasingOrder> presentOrders = [];
-
-
-  List<PurchasingOrder> pastOrders = [];
-  List<PurchasingOrder> presentOrders = [];
   
-
-
   @override
   Widget build(BuildContext context) {
     return Stack(

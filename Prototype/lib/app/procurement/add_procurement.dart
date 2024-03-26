@@ -174,9 +174,9 @@ class AddProcurementScreenState extends State<AddProcurementScreen> {
                         // Display validation error messages
                         _formKey.currentState?.validate();
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Please fill in all the required fields.'),
-                            backgroundColor: Colors.red,
+                          SnackBar(
+                            content: const Text('Please fill in all the required fields.'),
+                            backgroundColor: Theme.of(context).colorScheme.error,
                           ),
                         );
                       } else {                
@@ -198,9 +198,9 @@ class AddProcurementScreenState extends State<AddProcurementScreen> {
                         } else {
                           // Display an error message to the user
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Procurement added failed'),
-                              backgroundColor: Colors.red,
+                            SnackBar(
+                              content: const Text('Procurement added failed'),
+                              backgroundColor: Theme.of(context).colorScheme.error,
                             ),
                           );
                         }
