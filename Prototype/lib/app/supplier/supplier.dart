@@ -19,6 +19,7 @@ class _SupplierManagementScreenState extends State<SupplierManagementScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     return Scaffold(
       body: FutureBuilder(
         key: futureBuilderKey,
@@ -28,7 +29,6 @@ class _SupplierManagementScreenState extends State<SupplierManagementScreen> {
             return Container(
               height: double.infinity,
               width: double.infinity,
-              color: Colors.red[400],
               child: const Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -41,7 +41,7 @@ class _SupplierManagementScreenState extends State<SupplierManagementScreen> {
                   SizedBox(height: 16.0),
                   Text(
                     'Loading...',
-                    style: TextStyle(fontSize: 16.0, color: Colors.white),
+                    style: TextStyle(fontSize: 16.0, color: Colors.black),
                   ),
                 ],
               ),
@@ -50,7 +50,7 @@ class _SupplierManagementScreenState extends State<SupplierManagementScreen> {
             return Container(
               color: Colors.red[400],
               width: double.infinity,
-              height: double.infinity,
+              height: size.height * 0.9,
               padding: const EdgeInsets.only(top: 20.0),
               child: const Column(
                 mainAxisAlignment: MainAxisAlignment.center,

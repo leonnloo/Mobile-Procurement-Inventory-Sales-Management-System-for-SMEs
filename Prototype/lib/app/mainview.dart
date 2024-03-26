@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:prototype/resources/color_schemes.g.dart';
 import 'authenticate/screens/start_screen.dart';
 
 class MainView extends StatelessWidget {
@@ -12,7 +13,12 @@ class MainView extends StatelessWidget {
       title: 'GRP-Team 14',
       // TO DO: change theme here
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        colorScheme: lightColorScheme,
+        useMaterial3: true
+      ),
+      darkTheme: ThemeData(
+        colorScheme: darkColorScheme,
+        useMaterial3: true
       ),
 
       transitionDuration: const Duration(milliseconds: 500),

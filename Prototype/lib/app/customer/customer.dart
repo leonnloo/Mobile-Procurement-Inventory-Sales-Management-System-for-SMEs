@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:prototype/app/customer/add_customer.dart';
 import 'package:prototype/models/customer_model.dart';
 import 'package:prototype/app/customer/customer_info.dart';
@@ -18,16 +19,16 @@ class _CustomerManagementScreenState extends State<CustomerManagementScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     return Scaffold(
       body: FutureBuilder(
         key: futureBuilderKey,
         future: _fetchCustomerData(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Container(
-              height: double.infinity,
+            return SizedBox(
+              height: size.height * 0.9,
               width: double.infinity,
-              color: Colors.red[400],
               child: const Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -40,7 +41,7 @@ class _CustomerManagementScreenState extends State<CustomerManagementScreen> {
                   SizedBox(height: 16.0),
                   Text(
                     'Loading...',
-                    style: TextStyle(fontSize: 16.0, color: Colors.white),
+                    style: TextStyle(fontSize: 16.0, color: Colors.black),
                   ),
                 ],
               ),
@@ -49,7 +50,7 @@ class _CustomerManagementScreenState extends State<CustomerManagementScreen> {
             return Container(
               color: Colors.red[400],
               width: double.infinity,
-              height: double.infinity,
+              height: size.height * 0.9,
               padding: const EdgeInsets.only(top: 20.0),
               child: const Column(
                 mainAxisAlignment: MainAxisAlignment.center,

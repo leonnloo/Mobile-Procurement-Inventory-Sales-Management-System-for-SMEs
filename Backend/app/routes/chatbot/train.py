@@ -47,7 +47,7 @@ for (pattern_sentence, tag) in xy:
     bag = bag_of_words(pattern_sentence, all_words)
     X_train.append(bag)
     # y: PyTorch CrossEntropyLoss needs only class labels, not one-hot
-    label = tags.index(tag)
+    label = tags.index(tag) 
     y_train.append(label)
 
 X_train = np.array(X_train)

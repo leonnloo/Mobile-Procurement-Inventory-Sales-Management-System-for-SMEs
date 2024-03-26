@@ -8,13 +8,14 @@ nn
 spacy
 spacy-llm
 transformers
+python-dateutil
 # torch
 # torchvision 
 # torchaudio
 # pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
 
 # install this seperately
-python -m spacy download en_core_web_bg
+# python -m spacy download en_core_web_lg
 
 # to install torch
 # New-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\FileSystem" -Name "LongPathsEnabled" -Value 1 -PropertyType DWORD -Force
