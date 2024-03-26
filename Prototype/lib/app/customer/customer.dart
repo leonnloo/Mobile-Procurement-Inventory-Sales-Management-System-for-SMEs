@@ -139,6 +139,8 @@ class _CustomerManagementScreenState extends State<CustomerManagementScreen> {
         },
       ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        foregroundColor: Theme.of(context).colorScheme.onSecondary,
         onPressed: () {
           // Navigate to a screen for adding new customer info
           Navigator.of(context).push(

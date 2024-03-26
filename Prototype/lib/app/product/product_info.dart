@@ -25,17 +25,15 @@ class ProductDetailScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildDetailRow('Product ID', product.productID.toString()),
-            _buildDetailRow('Product Name', product.productName),
-            _buildDetailRow('Unit Price', '\$${product.unitPrice.toStringAsFixed(2).toString()}'),
-            _buildDetailRow('Selling Price', '\$${product.sellingPrice.toStringAsFixed(2).toString()}'),
-            _buildDetailRow('Quantity', product.quantity.toString()),
-            
-            _buildDetailRow('Safety Quantity', product.criticalLvl.toString()),
-            _buildDetailRow('Markup', product.markup.toString()),
-            _buildDetailRow('Margin', product.margin.toString()),
-            
-            _buildDetailRow('Status', product.status),
+            _buildDetailRow('Product ID', product.productID.toString(), context),
+            _buildDetailRow('Product Name', product.productName, context),
+            _buildDetailRow('Unit Price', '\$${product.unitPrice.toStringAsFixed(2).toString()}', context),
+            _buildDetailRow('Selling Price', '\$${product.sellingPrice.toStringAsFixed(2).toString()}', context),
+            _buildDetailRow('Quantity', product.quantity.toString(), context),
+            _buildDetailRow('Safety Quantity', product.criticalLvl.toString(), context),
+            _buildDetailRow('Markup', product.markup.toString(), context),
+            _buildDetailRow('Margin', product.margin.toString(), context),
+            _buildDetailRow('Status', product.status, context),
             // Add more details based on your product data model
           ],
         ),
@@ -43,14 +41,14 @@ class ProductDetailScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildDetailRow(String label, String value) {
+  Widget _buildDetailRow(String label, String value, BuildContext context){
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(label, style: const TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold)),
-          Text(value, style: const TextStyle(fontSize: 18.0)),
+          Text(label, style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.onSurface)),
+          Text(value, style: TextStyle(fontSize: 18.0, color: Theme.of(context).colorScheme.onSurface)),
         ],
       ),
     );

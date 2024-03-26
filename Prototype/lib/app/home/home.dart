@@ -150,16 +150,17 @@ class HomeScreenState extends State<HomeScreen> {
       child: SpeedDial(
         icon: Icons.add_outlined,
         activeIcon: Icons.close_outlined,
-        backgroundColor: Theme.of(context).colorScheme.onSurface,
-        foregroundColor: Theme.of(context).colorScheme.surface,
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        foregroundColor: Theme.of(context).colorScheme.onSecondary,
         spaceBetweenChildren: 10,
         overlayOpacity: 0.5,
         openCloseDial: isDialOpen,
         children: [
           SpeedDialChild(
             child: const Icon(Icons.people),
-            backgroundColor: Theme.of(context).colorScheme.onSurface,
-            foregroundColor: Theme.of(context).colorScheme.surface,
+            backgroundColor: Theme.of(context).colorScheme.primary,
+            foregroundColor: Theme.of(context).colorScheme.onSecondary,
+            labelStyle: TextStyle(color: Theme.of(context).colorScheme.onSurface),
             shape: const CircleBorder(),
             label: 'Add Customer',
             onTap: () {
@@ -168,8 +169,9 @@ class HomeScreenState extends State<HomeScreen> {
           ),
           SpeedDialChild(
             child: const Icon(Icons.supervised_user_circle),
-            backgroundColor: Theme.of(context).colorScheme.onSurface,
-            foregroundColor: Theme.of(context).colorScheme.surface,
+            backgroundColor: Theme.of(context).colorScheme.primary,
+            foregroundColor: Theme.of(context).colorScheme.onSecondary,
+            labelStyle: TextStyle(color: Theme.of(context).colorScheme.onSurface),
             shape: const CircleBorder(),
             label: 'Add Supplier',
             onTap: () {
@@ -178,8 +180,9 @@ class HomeScreenState extends State<HomeScreen> {
           ),
           SpeedDialChild(
             child: const Icon(Icons.shopping_bag),
-            backgroundColor: Theme.of(context).colorScheme.onSurface,
-            foregroundColor: Theme.of(context).colorScheme.surface,
+            backgroundColor: Theme.of(context).colorScheme.primary,
+            foregroundColor: Theme.of(context).colorScheme.onSecondary,
+            labelStyle: TextStyle(color: Theme.of(context).colorScheme.onSurface),
             shape: const CircleBorder(),
             label: 'Add Orders',
             onTap: () {
@@ -188,8 +191,9 @@ class HomeScreenState extends State<HomeScreen> {
           ),
           SpeedDialChild(
             child: const Icon(Icons.shopping_cart),
-            backgroundColor: Theme.of(context).colorScheme.onSurface,
-            foregroundColor: Theme.of(context).colorScheme.surface,
+            backgroundColor: Theme.of(context).colorScheme.primary,
+            foregroundColor: Theme.of(context).colorScheme.onSecondary,
+            labelStyle: TextStyle(color: Theme.of(context).colorScheme.onSurface),
             shape: const CircleBorder(),
             label: 'Add Purchase',
             onTap: () {
@@ -198,8 +202,9 @@ class HomeScreenState extends State<HomeScreen> {
           ),
           SpeedDialChild(
             child: const Icon(Icons.category),
-            backgroundColor: Theme.of(context).colorScheme.onSurface,
-            foregroundColor: Theme.of(context).colorScheme.surface,
+            backgroundColor: Theme.of(context).colorScheme.primary,
+            foregroundColor: Theme.of(context).colorScheme.onSecondary,
+            labelStyle: TextStyle(color: Theme.of(context).colorScheme.onSurface),
             shape: const CircleBorder(),
             label: 'Stock In/Out Product',
             onTap: () {
@@ -208,8 +213,9 @@ class HomeScreenState extends State<HomeScreen> {
           ),
           SpeedDialChild(
             child: const Icon(Icons.inventory),
-            backgroundColor: Theme.of(context).colorScheme.onSurface,
-            foregroundColor: Theme.of(context).colorScheme.surface,
+            backgroundColor: Theme.of(context).colorScheme.primary,
+            foregroundColor: Theme.of(context).colorScheme.onSecondary,
+            labelStyle: TextStyle(color: Theme.of(context).colorScheme.onSurface),
             shape: const CircleBorder(),
             label: 'Stock In/Out Inventory',
             onTap: () {
