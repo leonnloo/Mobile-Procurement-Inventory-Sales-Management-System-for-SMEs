@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import "package:flutter/material.dart";
 import 'package:prototype/models/customer_model.dart';
 import 'package:prototype/models/edit_type.dart';
@@ -28,29 +30,29 @@ class CustomerDetailScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildDetailRow('Customer ID', customer.customerID),
-            _buildDetailRow('Business Name', customer.businessName),
-            _buildDetailRow('Contact Person', customer.contactPerson),
-            _buildDetailRow('Email', customer.email),
-            _buildDetailRow('Phone Number', customer.phoneNo),
-            _buildDetailRow('Billing Address', customer.billingAddress),
-            _buildDetailRow('Shipping Address', customer.shippingAddress),
+            _buildDetailRow('Customer ID', customer.customerID, context),
+            _buildDetailRow('Business Name', customer.businessName, context),
+            _buildDetailRow('Contact Person', customer.contactPerson, context),
+            _buildDetailRow('Email', customer.email, context),
+            _buildDetailRow('Phone Number', customer.phoneNo, context),
+            _buildDetailRow('Billing Address', customer.billingAddress, context),
+            _buildDetailRow('Shipping Address', customer.shippingAddress, context),
 
             const SizedBox(height: 6.0), // Add some spacing
             _buildNotes(context),
             
             const SizedBox(height: 6.0),
-            _buildHistory(),
+            _buildHistory(context),
 
             const SizedBox(height: 6.0),
-            _buildPastOrders()
+            _buildPastOrders(context)
           ],
         ),
       ),
     );
   }
 
-  Widget _buildDetailRow(String label, String value) {
+  Widget _buildDetailRow(String label, String value, BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Row(
@@ -59,13 +61,13 @@ class CustomerDetailScreen extends StatelessWidget {
         children: [
           Text(
             label,
-            style: const TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+            style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.onSurface),
           ),
           const SizedBox(width: 30.0), // Increase the spacing between label and text
           Flexible(
             child: Text(
               value,
-              style: const TextStyle(fontSize: 18.0),
+              style: TextStyle(fontSize: 18.0, color: Theme.of(context).colorScheme.onSurface),
             ),
           ),
         ],
@@ -99,10 +101,10 @@ class CustomerDetailScreen extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const SizedBox(
+                      SizedBox(
                         child: Text(
                           'Note:',
-                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.onSurface),
                         ),
                       ),
                       SizedBox(
@@ -120,9 +122,9 @@ class CustomerDetailScreen extends StatelessWidget {
                             }
                             else {
                               ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text('Note save failed!'),
-                                  backgroundColor: Colors.red,
+                                SnackBar(
+                                  content: const Text('Note save failed!'),
+                                  backgroundColor: Theme.of(context).colorScheme.error,
                                 ),
                               );
                             }
@@ -164,7 +166,7 @@ List<String> generateRandomHistory() {
   });
 }
 
-Widget _buildHistory() {
+Widget _buildHistory(BuildContext context) {
   List<SalesOrder>? pastOrders = customer.pastOrder;
 
   return Padding(
@@ -174,9 +176,9 @@ Widget _buildHistory() {
       children: pastOrders?.map((order) {
         return Row(
           children: [
-            const Icon(Icons.history, color: Colors.blue),
+            Icon(Icons.history, color: Theme.of(context).colorScheme.primary),
             const SizedBox(width: 8.0),
-            Text('Placed an order on ${order.orderDate} - ${order.orderStatus}'),
+            Text('Placed an order on ${order.orderDate} - ${order.orderStatus}', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
           ],
         );
         // ! do empty history after completing adding orders
@@ -197,15 +199,15 @@ List<PastOrder> generatePastOrders() {
     });
   }
 
-  Widget _buildPastOrders() {
+  Widget _buildPastOrders(BuildContext context) {
     List<PastOrder> pastOrders = generatePastOrders();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
+        Text(
           'Past Orders:',
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.onSurface),
         ),
         const SizedBox(height: 8.0),
         Column(
@@ -216,7 +218,7 @@ List<PastOrder> generatePastOrders() {
                 children: [
                   const Icon(Icons.shopping_cart, color: Colors.green),
                   const SizedBox(width: 8.0),
-                  Text('Order ${order.orderNumber} - ${order.orderDate} - \$${order.totalAmount.toStringAsFixed(2)}'),
+                  Text('Order ${order.orderNumber} - ${order.orderDate} - \$${order.totalAmount.toStringAsFixed(2)}', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
                 ],
               ),
             );
