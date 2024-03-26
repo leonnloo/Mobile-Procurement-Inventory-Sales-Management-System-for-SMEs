@@ -18,6 +18,7 @@ class ProductStatusWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     String currentDate = DateFormat('MMMM d').format(DateTime.now());
     return Card(
+      color: Theme.of(context).colorScheme.onPrimary,
       elevation: 4.0,
       // color: const Color.fromARGB(255, 11, 238, 181),
       margin: const EdgeInsets.all(16.0),
@@ -31,9 +32,9 @@ class ProductStatusWidget extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text(
+                    Text(
                       'Product Overview',
-                      style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
+                      style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.onSurface),
                     ),
                     const SizedBox(width: 10.0,),
                     Text(

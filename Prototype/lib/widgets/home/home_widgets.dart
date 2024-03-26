@@ -22,7 +22,7 @@ class HomeWidgets extends StatelessWidget {
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
-          color: Colors.red[400],
+          color: Theme.of(context).colorScheme.onPrimaryContainer,
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -62,12 +62,12 @@ class HomeWidgets extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Padding(
-                        padding: EdgeInsets.only(right: 15.0, left: 15.0, top: 20.0),
+                      Padding(
+                        padding: const EdgeInsets.only(right: 15.0, left: 15.0, top: 20.0),
                         child: Text(
                           'Dashboard',
                           style: TextStyle(
-                            color: Colors.white,
+                            color: Theme.of(context).colorScheme.onPrimary,
                             fontSize: 38.0, 
                             fontWeight: FontWeight.bold, 
                             letterSpacing: 2.0
@@ -114,9 +114,9 @@ class HomeWidgets extends StatelessWidget {
                   ),
                 ),
                 Container(
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.only(
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.onPrimary,
+                    borderRadius: const BorderRadius.only(
                       topLeft: Radius.circular(30.0),
                       topRight: Radius.circular(30.0),
                     ),
@@ -130,7 +130,7 @@ class HomeWidgets extends StatelessWidget {
                         width: double.infinity,
                         child: GestureDetector(
                           onTap: () {
-                            controller.changePage(DrawerSections.inventory);
+                            controller.changePage(DrawerSections.product);
                           },
                           child:
                             const ProductStatusWidget(),

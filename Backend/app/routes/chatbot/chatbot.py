@@ -40,7 +40,8 @@ def format_mongo_response(intent, mongo_result):
         response += f"- Contact Person: {mongo_result['contact_person']}\n"
         response += f"- Email {mongo_result['email']}, Phone {mongo_result['phone_number']}\n"
         response += f"- Phone {mongo_result['phone_number']}\n"
-        response += f"- Addresses: Billing/Shipping {mongo_result['billing_address']}\n"
+        response += f"- Billing Address {mongo_result['billing_address']}\n"
+        response += f"- Shipping Address {mongo_result['shipping_address']}\n"
         notes_info = "None provided" if mongo_result.get('notes') is None else mongo_result['notes']
         response += f"- Notes: {notes_info}"
         
