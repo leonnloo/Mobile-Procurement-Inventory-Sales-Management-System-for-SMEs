@@ -30,28 +30,28 @@ class SupplierDetailScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildDetailRow('Supplier ID', supplierData.supplierID),
-            _buildDetailRow('Supplier Name', supplierData.businessName),
-            _buildDetailRow('Contact Person', supplierData.contactPerson),
-            _buildDetailRow('Email', supplierData.email),
-            _buildDetailRow('Phone number', supplierData.phoneNo),
-            _buildDetailRow('Address', supplierData.address),
+            _buildDetailRow('Supplier ID', supplierData.supplierID, context),
+            _buildDetailRow('Supplier Name', supplierData.businessName, context),
+            _buildDetailRow('Contact Person', supplierData.contactPerson, context),
+            _buildDetailRow('Email', supplierData.email, context),
+            _buildDetailRow('Phone number', supplierData.phoneNo, context),
+            _buildDetailRow('Address', supplierData.address, context),
                 
             const SizedBox(height: 6.0), // Add some spacing
             _buildNotes(context),
             
             const SizedBox(height: 6.0),
-            _buildHistory(),
+            _buildHistory(context),
                 
             const SizedBox(height: 6.0),
-            _buildPastOrders()
+            _buildPastOrders(context)
           ],
         ),
       ),
     );
   }
 
-  Widget _buildDetailRow(String label, String value) {
+  Widget _buildDetailRow(String label, String value, BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Row(
@@ -60,13 +60,13 @@ class SupplierDetailScreen extends StatelessWidget {
         children: [
           Text(
             label,
-            style: const TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+            style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.onSurface),
           ),
           const SizedBox(width: 30.0), // Increase the spacing between label and text
           Flexible(
             child: Text(
               value,
-              style: const TextStyle(fontSize: 18.0),
+              style: TextStyle(fontSize: 18.0, color: Theme.of(context).colorScheme.onSurface),
             ),
           ),
         ],
@@ -98,10 +98,10 @@ class SupplierDetailScreen extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const SizedBox(
+                      SizedBox(
                         child: Text(
                           'Note:',
-                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.onSurface),
                         ),
                       ),
                       SizedBox(
@@ -119,9 +119,9 @@ class SupplierDetailScreen extends StatelessWidget {
                             }
                             else {
                               ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text('Note save failed!'),
-                                  backgroundColor: Colors.red,
+                                SnackBar(
+                                  content: const Text('Note save failed!'),
+                                  backgroundColor: Theme.of(context).colorScheme.error,
                                 ),
                               );
                             }
@@ -164,7 +164,7 @@ List<String> generateRandomHistory() {
   });
 }
 
-Widget _buildHistory() {
+Widget _buildHistory(BuildContext context) {
   List<String> historyEntries = generateRandomHistory();
 
   return Padding(
@@ -174,9 +174,9 @@ Widget _buildHistory() {
       children: historyEntries.map((history) {
         return Row(
           children: [
-            const Icon(Icons.history, color: Colors.blue),
+            Icon(Icons.history, color: Theme.of(context).colorScheme.primary),
             const SizedBox(width: 8.0),
-            Text(history),
+            Text(history, style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
           ],
         );
       }).toList(),
@@ -195,15 +195,15 @@ List<PastOrder> generatePastOrders() {
   });
 }
 
-Widget _buildPastOrders() {
+Widget _buildPastOrders(BuildContext context) {
   List<PastOrder> pastOrders = generatePastOrders();
 
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-      const Text(
+      Text(
         'Past Orders:',
-        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.onSurface),
       ),
       const SizedBox(height: 8.0),
       Column(
@@ -214,7 +214,7 @@ Widget _buildPastOrders() {
               children: [
                 const Icon(Icons.shopping_cart, color: Colors.green),
                 const SizedBox(width: 8.0),
-                Text('Order ${order.orderNumber} - ${order.orderDate} - \$${order.totalAmount.toStringAsFixed(2)}'),
+                Text('Order ${order.orderNumber} - ${order.orderDate} - \$${order.totalAmount.toStringAsFixed(2)}', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
               ],
             ),
           );
