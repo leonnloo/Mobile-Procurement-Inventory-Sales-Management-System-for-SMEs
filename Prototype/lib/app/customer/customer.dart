@@ -29,35 +29,34 @@ class _CustomerManagementScreenState extends State<CustomerManagementScreen> {
             return SizedBox(
               height: size.height * 0.9,
               width: double.infinity,
-              child: const Column(
+              child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  SizedBox(height: 26.0),
+                  const SizedBox(height: 26.0),
                   CircularProgressIndicator(
                     backgroundColor: Colors.white,
-                    color: Colors.red,
+                    color: Theme.of(context).colorScheme.error,
                   ),
-                  SizedBox(height: 16.0),
+                  const SizedBox(height: 16.0),
                   Text(
                     'Loading...',
-                    style: TextStyle(fontSize: 16.0, color: Colors.black),
+                    style: TextStyle(fontSize: 16.0, color: Theme.of(context).colorScheme.onSurface),
                   ),
                 ],
               ),
             );
           } else if (snapshot.hasError) {
             return Container(
-              color: Colors.red[400],
               width: double.infinity,
               height: size.height * 0.9,
               padding: const EdgeInsets.only(top: 20.0),
-              child: const Column(
+              child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
                     "Unable to load customer data",
-                    style: TextStyle(color: Colors.white, fontSize: 20),
+                    style: TextStyle(color: Theme.of(context).colorScheme.onSurface, fontSize: 20),
                   ),
                 ],
               ),
@@ -73,56 +72,56 @@ class _CustomerManagementScreenState extends State<CustomerManagementScreen> {
                 child: DataTable(
                   columnSpacing: 16.0,
                   horizontalMargin: 16.0,
-                  columns: const [
-                    DataColumn(label: Text('ID')),
-                    DataColumn(label: Text('Business Name')),
-                    DataColumn(label: Text('Contact Person')),
-                    DataColumn(label: Text('Email')),
-                    DataColumn(label: Text('Phone No')),
-                    DataColumn(label: Text('Billing Address')),
-                    DataColumn(label: Text('Shipping Address')),
+                  columns: [
+                    DataColumn(label: Text('ID', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),)),
+                    DataColumn(label: Text('Business Name', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),)),
+                    DataColumn(label: Text('Contact Person', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),)),
+                    DataColumn(label: Text('Email', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),)),
+                    DataColumn(label: Text('Phone No', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),)),
+                    DataColumn(label: Text('Billing Address', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),)),
+                    DataColumn(label: Text('Shipping Address', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),)),
                   ],
                   rows: customerData.map((CustomerData customer) {
                     return DataRow(
                       cells: [
                         DataCell(
-                          Text(customer.customerID),
+                          Text(customer.customerID, style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
                           onTap: () {
                             navigateToCustomerDetail(context, customer, updateData);
                           },
                         ),
                         DataCell(
-                          Text(customer.businessName),
+                          Text(customer.businessName, style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
                           onTap: () {
                             navigateToCustomerDetail(context, customer, updateData);
                           },
                         ),
                         DataCell(
-                          Text(customer.contactPerson),
+                          Text(customer.contactPerson, style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
                           onTap: () {
                             navigateToCustomerDetail(context, customer, updateData);
                           },
                         ),
                         DataCell(
-                          Text(customer.email),
+                          Text(customer.email, style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
                           onTap: () {
                             navigateToCustomerDetail(context, customer, updateData);
                           },
                         ),
                         DataCell(
-                          Text(customer.phoneNo),
+                          Text(customer.phoneNo, style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
                           onTap: () {
                             navigateToCustomerDetail(context, customer, updateData);
                           },
                         ),
                         DataCell(
-                          Text(customer.billingAddress),
+                          Text(customer.billingAddress, style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
                           onTap: () {
                             navigateToCustomerDetail(context, customer, updateData);
                           },
                         ),
                         DataCell(
-                          Text(customer.shippingAddress),
+                          Text(customer.shippingAddress, style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
                           onTap: () {
                             navigateToCustomerDetail(context, customer, updateData);
                           },

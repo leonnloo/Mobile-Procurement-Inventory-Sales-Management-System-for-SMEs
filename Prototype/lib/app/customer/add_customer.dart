@@ -97,9 +97,9 @@ class AddCustomerScreenState extends State<AddCustomerScreen> {
                       // Display validation error messages
                       _formKey.currentState?.validate();
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Please fill in all the required fields.'),
-                          backgroundColor: Colors.red,
+                        SnackBar(
+                          content: const Text('Please fill in all the required fields.'),
+                          backgroundColor: Theme.of(context).colorScheme.error,
                         ),
                       );
                     } else {                
@@ -123,7 +123,7 @@ class AddCustomerScreenState extends State<AddCustomerScreen> {
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
                             content: Text(jsonDecode(response.body)['detail']),
-                            backgroundColor: Colors.red,
+                            backgroundColor: Theme.of(context).colorScheme.error,
                           ),
                         );
                       }
