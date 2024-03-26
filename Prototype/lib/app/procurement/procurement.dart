@@ -35,12 +35,13 @@ class _ProcurementScreenState extends State<ProcurementScreen> {
                     onTap: () {
                       Get.to(() => const FilterSystem());
                     },
-                    child: const TextField(
+                    child: TextField(
                       decoration: InputDecoration(
                       enabled: false,
-                      prefixIcon: Icon(Icons.search),
+                      prefixIcon: Icon(Icons.search, color: Theme.of(context).colorScheme.onSurface,),
+                      labelStyle: TextStyle(color: Theme.of(context).colorScheme.onSurface),
                       labelText: 'Search',
-                      border: OutlineInputBorder(
+                      border: const OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(12.0)),
                       ),
                     ),
@@ -131,38 +132,37 @@ class _ProcurementTabState extends State<ProcurementTab> {
       future: _fetchProcurementData(widget.category, widget.dummy),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-            return const SizedBox(
+            return SizedBox(
               height: double.infinity,
               width: double.infinity,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  SizedBox(height: 26.0),
+                  const SizedBox(height: 26.0),
                   CircularProgressIndicator(
                     backgroundColor: Colors.white,
-                    color: Colors.red,
+                    color: Theme.of(context).colorScheme.error,
                   ),
-                  SizedBox(height: 16.0),
+                  const SizedBox(height: 16.0),
                   Text(
                     'Loading...',
-                    style: TextStyle(fontSize: 16.0, color: Colors.white),
+                    style: TextStyle(fontSize: 16.0, color: Theme.of(context).colorScheme.onSurface),
                   ),
                 ],
               ),
             );
           } else if (snapshot.hasError) {
             return Container(
-              color: Colors.red[400],
               width: double.infinity,
               height: double.infinity,
               padding: const EdgeInsets.only(top: 20.0),
-              child: const Column(
+              child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
                     "Unable to load procurement data",
-                    style: TextStyle(color: Colors.white, fontSize: 20),
+                    style: TextStyle(color: Theme.of(context).colorScheme.onSurface, fontSize: 20),
                   ),
                 ],
               ),
@@ -178,70 +178,70 @@ class _ProcurementTabState extends State<ProcurementTab> {
                   DataTable(
                     columnSpacing: 16.0, // Adjust the spacing between columns
                     horizontalMargin: 16.0, // Adjust the horizontal margin
-                    columns: const [
-                      DataColumn(label: Text('Order ID'),),
-                      DataColumn(label: Text('Item'),),
-                      DataColumn(label: Text('Supplier'),),
-                      DataColumn(label: Text('Order Date'),),
-                      DataColumn(label: Text('Delivery Date'),),
-                      DataColumn(label: Text('Quantity'),),
-                      DataColumn(label: Text('Unit Price'),),
-                      DataColumn(label: Text('Total Price'),),
-                      DataColumn(label: Text('Status'),),
+                    columns: [
+                      DataColumn(label: Text('Order ID', style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),),
+                      DataColumn(label: Text('Item', style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),),
+                      DataColumn(label: Text('Supplier', style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),),
+                      DataColumn(label: Text('Order Date', style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),),
+                      DataColumn(label: Text('Delivery Date', style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),),
+                      DataColumn(label: Text('Quantity', style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),),
+                      DataColumn(label: Text('Unit Price', style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),),
+                      DataColumn(label: Text('Total Price', style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),),
+                      DataColumn(label: Text('Status', style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),),
                     ],
                     rows: orders.map((order) {
                       return DataRow(
                         cells: [
                           DataCell(
-                            Text(order.purchaseID),
+                            Text(order.purchaseID, style: TextStyle(color: Theme.of(context).colorScheme.error)),
                             onTap: () {
                               navigateToOrderDetail(context, order, updateData);
                             },
                           ),
                           DataCell(
-                            Text(order.itemName),
+                            Text(order.itemName, style: TextStyle(color: Theme.of(context).colorScheme.error)),
                             onTap: () {
                               navigateToOrderDetail(context, order, updateData);
                             },
                           ),
                           DataCell(
-                            Text(order.supplierName),
+                            Text(order.supplierName, style: TextStyle(color: Theme.of(context).colorScheme.error)),
                             onTap: () {
                               navigateToOrderDetail(context, order, updateData);
                             },
                           ),
                           DataCell(
-                            Text(order.orderDate),
+                            Text(order.orderDate, style: TextStyle(color: Theme.of(context).colorScheme.error)),
                             onTap: () {
                               navigateToOrderDetail(context, order, updateData);
                             },
                           ),
                           DataCell(
-                            Text(order.deliveryDate),
+                            Text(order.deliveryDate, style: TextStyle(color: Theme.of(context).colorScheme.error)),
                             onTap: () {
                               navigateToOrderDetail(context, order, updateData);
                             },
                           ),
                           DataCell(
-                            Text(order.quantity.toString()),
+                            Text(order.quantity.toString(), style: TextStyle(color: Theme.of(context).colorScheme.error)),
                             onTap: () {
                               navigateToOrderDetail(context, order, updateData);
                             },
                           ),
                           DataCell(
-                            Text(order.unitPrice.toStringAsFixed(2).toString()),
+                            Text(order.unitPrice.toStringAsFixed(2).toString(), style: TextStyle(color: Theme.of(context).colorScheme.error)),
                             onTap: () {
                               navigateToOrderDetail(context, order, updateData);
                             },
                           ),
                           DataCell(
-                            Text(order.totalPrice.toStringAsFixed(2).toString()),
+                            Text(order.totalPrice.toStringAsFixed(2).toString(), style: TextStyle(color: Theme.of(context).colorScheme.error)),
                             onTap: () {
                               navigateToOrderDetail(context, order, updateData);
                             },
                           ),
                           DataCell(
-                            Text(order.status),
+                            Text(order.status, style: TextStyle(color: Theme.of(context).colorScheme.error)),
                             onTap: () {
                               navigateToOrderDetail(context, order, updateData);
                             },
@@ -257,12 +257,12 @@ class _ProcurementTabState extends State<ProcurementTab> {
               width: double.infinity,
               height: double.infinity,
               padding: const EdgeInsets.only(top: 20.0),
-              child: const Column(
+              child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
                     "Unable to load procurement data",
-                    style: TextStyle(color: Colors.white, fontSize: 20),
+                    style: TextStyle(color: Theme.of(context).colorScheme.onSurface, fontSize: 20),
                   ),
                 ],
               ),

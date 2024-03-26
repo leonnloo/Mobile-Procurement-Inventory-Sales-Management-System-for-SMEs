@@ -1,7 +1,7 @@
 // main.dart
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:prototype/models/procurement_model.dart';
+import 'package:prototype/widgets/appbar/common_appbar.dart';
 
 class FilterSystem extends StatefulWidget {
   const FilterSystem({super.key});
@@ -25,9 +25,7 @@ class FilterSystemState extends State<FilterSystem>{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Purchasing Info Record'),
-      ),
+      appBar: const CommonAppBar(currentTitle: 'Purchasing records'),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -60,12 +58,13 @@ class FilterSystemState extends State<FilterSystem>{
                     child: ListTile(
                       title: Text(
                         '${displayList[index].purchaseID} ${displayList[index].status}',
-                        style: const TextStyle(
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.onSurface,
                           fontSize: 20.0,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      subtitle: Text('${displayList[index].orderDate} to ${displayList[index].deliveryDate}'),
+                      subtitle: Text('${displayList[index].orderDate} to ${displayList[index].deliveryDate}', style: TextStyle(color: Theme.of(context).colorScheme.error),),
                       
                     ),
                   );
