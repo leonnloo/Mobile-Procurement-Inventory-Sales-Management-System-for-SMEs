@@ -17,6 +17,7 @@ Widget inventorySpeedDial(BuildContext context, Function updateData) {
           child: const Icon(Icons.new_label),
           backgroundColor: Theme.of(context).colorScheme.primary,
           foregroundColor: Theme.of(context).colorScheme.onSecondary,
+          labelStyle: TextStyle(color: Theme.of(context).colorScheme.onSurface),
           shape: const CircleBorder(),
           label: 'Add New Item',
           onTap: () {
@@ -27,6 +28,7 @@ Widget inventorySpeedDial(BuildContext context, Function updateData) {
           child: const Icon(Icons.inventory),
           backgroundColor: Theme.of(context).colorScheme.primary,
           foregroundColor: Theme.of(context).colorScheme.onSecondary,
+          labelStyle: TextStyle(color: Theme.of(context).colorScheme.onSurface),
           shape: const CircleBorder(),
           label: 'Stock In/Out',
           onTap: () {

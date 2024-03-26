@@ -49,45 +49,45 @@ class ProductManagementScreenState extends State<ProductManagementScreen> {
                       });
                     },
                     itemBuilder: (BuildContext context) => [
-                      const PopupMenuItem(
+                      PopupMenuItem(
                         value: 'ID',
-                        child: Text('ID'),
+                        child: Text('ID', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
                       ),
-                      const PopupMenuItem(
+                      PopupMenuItem(
                         value: 'Product',
-                        child: Text('Product'),
+                        child: Text('Product', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
                       ),
-                      const PopupMenuItem(
+                      PopupMenuItem(
                         value: 'Unit Price',
-                        child: Text('Unit Price'),
+                        child: Text('Unit Price', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
                       ),
-                      const PopupMenuItem(
+                      PopupMenuItem(
                         value: 'Selling Price',
-                        child: Text('Selling Price'),
+                        child: Text('Selling Price', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
                       ),
-                      const PopupMenuItem(
+                      PopupMenuItem(
                         value: 'Quantity',
-                        child: Text('Quantity'),
+                        child: Text('Quantity', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
                       ),
-                      const PopupMenuItem(
+                      PopupMenuItem(
                         value: 'Weight',
-                        child: Text('Weight'),
+                        child: Text('Weight', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
                       ),
-                      const PopupMenuItem(
+                      PopupMenuItem(
                         value: 'Safety Quantity',
-                        child: Text('Safety Quantity'),
+                        child: Text('Safety Quantity', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
                       ),
-                      const PopupMenuItem(
+                      PopupMenuItem(
                         value: 'Markup',
-                        child: Text('Markup'),
+                        child: Text('Markup', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
                       ),
-                      const PopupMenuItem(
+                      PopupMenuItem(
                         value: 'Margin',
-                        child: Text('Margin'),
+                        child: Text('Margin', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
                       ),
-                      const PopupMenuItem(
+                      PopupMenuItem(
                         value: 'Status',
-                        child: Text('Status'),
+                        child: Text('Status', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
                       ),
                     ],
                   ),
@@ -104,19 +104,18 @@ class ProductManagementScreenState extends State<ProductManagementScreen> {
                 return SizedBox(
                   height: size.height * 0.8,
                   width: double.infinity,
-                  child: const Column(
+                  child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      SizedBox(height: 26.0),
+                      const SizedBox(height: 26.0),
                       CircularProgressIndicator(
-                        backgroundColor: Colors.white,
-                        color: Colors.red,
+                        color: Theme.of(context).colorScheme.error,
                       ),
-                      SizedBox(height: 16.0),
+                      const SizedBox(height: 16.0),
                       Text(
                         'Loading...',
-                        style: TextStyle(fontSize: 16.0, color: Colors.white),
+                        style: TextStyle(fontSize: 16.0, color: Theme.of(context).colorScheme.onSurface),
                       ),
                     ],
                   ),
@@ -126,12 +125,12 @@ class ProductManagementScreenState extends State<ProductManagementScreen> {
                   height: size.height * 0.8,
                   width: double.infinity,
                   padding: const EdgeInsets.only(top: 20.0),
-                  child: const Column(
+                  child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
                         "Unable to load products",
-                        style: TextStyle(color: Colors.white, fontSize: 20),
+                        style: TextStyle(color: Theme.of(context).colorScheme.onSurface, fontSize: 20),
                       ),
                     ],
                   ),
@@ -141,12 +140,12 @@ class ProductManagementScreenState extends State<ProductManagementScreen> {
                   width: double.infinity,
                   height: size.height * 0.8,
                   padding: const EdgeInsets.only(top: 20.0),
-                  child: const Column(
+                  child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
                         "No products available",
-                        style: TextStyle(color: Colors.white, fontSize: 20),
+                        style: TextStyle(color: Theme.of(context).colorScheme.onSurface, fontSize: 20),
                       ),
                     ],
                   ),
@@ -159,15 +158,15 @@ class ProductManagementScreenState extends State<ProductManagementScreen> {
                     SingleChildScrollView(
                       scrollDirection: Axis.vertical,
                       child: DataTable(
-                        columns: const [
-                          DataColumn(label: Text('ID')),
-                          DataColumn(label: Text('Product')),
-                          DataColumn(label: Text('Unit Price')),
-                          DataColumn(label: Text('Selling Price')),
-                          DataColumn(label: Text('Quantity')),
-                          DataColumn(label: Text('Margin')),
-                          DataColumn(label: Text('Markup')),
-                          DataColumn(label: Text('Status')),
+                        columns: [
+                          DataColumn(label: Text('ID', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),)),
+                          DataColumn(label: Text('Product', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),)),
+                          DataColumn(label: Text('Unit Price', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),)),
+                          DataColumn(label: Text('Selling Price', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),)),
+                          DataColumn(label: Text('Quantity', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),)),
+                          DataColumn(label: Text('Margin', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),)),
+                          DataColumn(label: Text('Markup', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),)),
+                          DataColumn(label: Text('Status', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),)),
                         ],
                         rows: products.map((product) {
                           return DataRow(cells: [

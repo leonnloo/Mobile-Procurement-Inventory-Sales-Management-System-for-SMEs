@@ -26,25 +26,21 @@ class _SupplierManagementScreenState extends State<SupplierManagementScreen> {
         future: _fetchSupplierData(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Container(
-              height: double.infinity,
-              width: double.infinity,
-              child: const Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  SizedBox(height: 26.0),
-                  CircularProgressIndicator(
-                    backgroundColor: Colors.white,
-                    color: Colors.red,
-                  ),
-                  SizedBox(height: 16.0),
-                  Text(
-                    'Loading...',
-                    style: TextStyle(fontSize: 16.0, color: Colors.black),
-                  ),
-                ],
-              ),
+            return const Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                SizedBox(height: 26.0),
+                CircularProgressIndicator(
+                  backgroundColor: Colors.white,
+                  color: Colors.red,
+                ),
+                SizedBox(height: 16.0),
+                Text(
+                  'Loading...',
+                  style: TextStyle(fontSize: 16.0, color: Colors.black),
+                ),
+              ],
             );
           } else if (snapshot.hasError) {
             return Container(
@@ -132,6 +128,8 @@ class _SupplierManagementScreenState extends State<SupplierManagementScreen> {
         }
       ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        foregroundColor: Theme.of(context).colorScheme.onSecondary,
         onPressed: () {
           // Navigate to a screen for adding new supplier info
           Navigator.of(context).push(
