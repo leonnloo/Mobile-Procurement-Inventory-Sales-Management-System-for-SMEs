@@ -44,9 +44,9 @@ class ProductStatusWidget extends StatelessWidget {
                   ],
                 ),
               ),
-              const Divider(
+              Divider(
                 thickness: 3.0,
-                color: Colors.black,
+                color: Theme.of(context).colorScheme.onSurface,
               ),
               InventoryCount(),
             ],
