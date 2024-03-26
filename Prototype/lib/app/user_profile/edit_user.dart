@@ -70,6 +70,9 @@ class EditUserState extends State<EditUser> {
             ),
           ),
         ],
+        iconTheme: IconThemeData(
+          color: Theme.of(context).colorScheme.surface,
+        ),
       ),
       body: Container(
         padding: const EdgeInsets.all(30.0),
@@ -104,8 +107,8 @@ class EditUserState extends State<EditUser> {
                       width: double.infinity,
                       child: ElevatedButton(
                         style: TextButton.styleFrom(
-                          foregroundColor: Colors.white,
-                          backgroundColor: Colors.black,
+                          foregroundColor: Theme.of(context).colorScheme.onPrimary,
+                          backgroundColor: Theme.of(context).colorScheme.onSecondaryContainer,
                           side: const BorderSide(color: Colors.black),
                           shape: const RoundedRectangleBorder(),
                           padding: const EdgeInsets.symmetric(vertical: 15.0)

@@ -6,6 +6,7 @@ import 'package:prototype/models/drawer_sections.dart';
 final controller = Get.put(CustomDrawerController());
 Widget drawerList(BuildContext context) {
   return Container(
+    color: Theme.of(context).colorScheme.onPrimary,
     padding: const EdgeInsets.only(
       top: 15,
     ),
@@ -43,7 +44,7 @@ Widget drawerList(BuildContext context) {
 
 Widget menuItem(int id, String title, IconData icon, bool selected, BuildContext context) {
   return Material(
-    color: selected ? Colors.grey[300] : Colors.transparent,
+    color: selected ? Theme.of(context).colorScheme.secondaryContainer : Colors.transparent,
     child: InkWell(
       onTap: () {
         Navigator.pop(context);
@@ -75,15 +76,15 @@ Widget menuItem(int id, String title, IconData icon, bool selected, BuildContext
               child: Icon(
                 icon,
                 size: 20,
-                color: Colors.black,
+                color: Theme.of(context).colorScheme.onSurface,
               ),
             ),
             Expanded(
               flex: 3,
               child: Text(
                 title,
-                style: const TextStyle(
-                  color: Colors.black,
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.onSurface,
                   fontSize: 16,
                 ),
               ),

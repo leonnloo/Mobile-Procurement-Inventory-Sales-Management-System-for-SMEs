@@ -23,6 +23,7 @@ class BuildDateFieldState extends State<BuildDateField> {
         child: TextFormField(
           controller: widget.controller,
           decoration: InputDecoration(
+            labelStyle: TextStyle(color: Theme.of(context).colorScheme.onSurface),
             labelText: widget.labelText,
             hintText: widget.labelText,
             border: const OutlineInputBorder(),

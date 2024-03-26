@@ -25,28 +25,28 @@ class ItemDetailScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildDetailRow('Item ID', item.itemID.toString()),
-            _buildDetailRow('Item Name', item.itemName),
-            _buildDetailRow('Category', item.category),
-            _buildDetailRow('Quantity', item.quantity.toString()),
-            _buildDetailRow('Unit Price', '\$${item.unitPrice.toStringAsFixed(2).toString()}'),
-            _buildDetailRow('Total Price', '\$${item.totalPrice.toStringAsFixed(2).toString()}'),
-            _buildDetailRow('Status', item.status),
-            _buildDetailRow('Critical Level', item.criticalLvl.toString()),
+            _buildDetailRow('Item ID', item.itemID.toString(), context),
+            _buildDetailRow('Item Name', item.itemName, context),
+            _buildDetailRow('Category', item.category, context),
+            _buildDetailRow('Quantity', item.quantity.toString(), context),
+            _buildDetailRow('Unit Price', '\$${item.unitPrice.toStringAsFixed(2).toString()}', context),
+            _buildDetailRow('Total Price', '\$${item.totalPrice.toStringAsFixed(2).toString()}', context),
+            _buildDetailRow('Status', item.status, context),
+            _buildDetailRow('Critical Level', item.criticalLvl.toString(), context),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildDetailRow(String label, String value) {
+  Widget _buildDetailRow(String label, String value, BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(label, style: const TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold)),
-          Text(value, style: const TextStyle(fontSize: 18.0)),
+          Text(label, style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.onSurface)),
+          Text(value, style: TextStyle(fontSize: 18.0, color: Theme.of(context).colorScheme.onSurface)),
         ],
       ),
     );

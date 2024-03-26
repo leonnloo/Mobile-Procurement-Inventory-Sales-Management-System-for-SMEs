@@ -61,6 +61,9 @@ class EditSupplierState extends State<EditSupplier> {
             ),
           ),
         ],
+        iconTheme: IconThemeData(
+          color: Theme.of(context).colorScheme.surface,
+        ),
       ),
       body: Container(
         padding: const EdgeInsets.all(30.0),
@@ -85,12 +88,12 @@ class EditSupplierState extends State<EditSupplier> {
                     width: double.infinity,
                     child: ElevatedButton(
                       style: TextButton.styleFrom(
-                                    foregroundColor: Colors.white,
-                                    backgroundColor: Colors.black,
-                                    side: const BorderSide(color: Colors.black),
-                                    shape: const RoundedRectangleBorder(),
-                                    padding: const EdgeInsets.symmetric(vertical: 15.0)
-                                  ),
+                        foregroundColor: Theme.of(context).colorScheme.onPrimary,
+                        backgroundColor: Theme.of(context).colorScheme.onSecondaryContainer,
+                        side: const BorderSide(color: Colors.black),
+                        shape: const RoundedRectangleBorder(),
+                        padding: const EdgeInsets.symmetric(vertical: 15.0)
+                      ),
                       onPressed: () async {
                         String? businessName = validateTextField(_businessNameController.text);
                         String? contactPerson = validateTextField(_contactPersonController.text);

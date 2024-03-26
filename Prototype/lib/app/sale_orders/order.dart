@@ -25,22 +25,22 @@ class _SalesOrderScreenState extends State<SalesOrderScreen> {
         future: _fetchSalesOrderData(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-              return const SizedBox(
+              return SizedBox(
                 height: double.infinity,
                 width: double.infinity,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    SizedBox(height: 26.0),
+                    const SizedBox(height: 26.0),
                     CircularProgressIndicator(
                       backgroundColor: Colors.white,
-                      color: Colors.red,
+                      color: Theme.of(context).colorScheme.onSurface,
                     ),
-                    SizedBox(height: 16.0),
+                    const SizedBox(height: 16.0),
                     Text(
                       'Loading...',
-                      style: TextStyle(fontSize: 16.0, color: Colors.black),
+                      style: TextStyle(fontSize: 16.0, color: Theme.of(context).colorScheme.onSurface),
                     ),
                   ],
                 ),
@@ -50,12 +50,12 @@ class _SalesOrderScreenState extends State<SalesOrderScreen> {
                 width: double.infinity,
                 height: double.infinity,
                 padding: const EdgeInsets.only(top: 20.0),
-                child: const Column(
+                child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
                       "Unable to load order data",
-                      style: TextStyle(color: Colors.black, fontSize: 20),
+                      style: TextStyle(color: Theme.of(context).colorScheme.onSurface, fontSize: 20),
                     ),
                   ],
                 ),
@@ -70,18 +70,18 @@ class _SalesOrderScreenState extends State<SalesOrderScreen> {
                     DataTable(
                       columnSpacing: 16.0, // Adjust the spacing between columns
                       horizontalMargin: 16.0, // Adjust the horizontal margin
-                      columns: const [
-                        DataColumn(label: Text('Order ID'),),
-                        DataColumn(label: Text('Customer'),),
-                        DataColumn(label: Text('Customer ID'),),
-                        DataColumn(label: Text('Product'),),
-                        DataColumn(label: Text('Product ID'),),
-                        DataColumn(label: Text('Order Date'),),
-                        DataColumn(label: Text('Quantity'),),
-                        DataColumn(label: Text('Unit Price'),),
-                        DataColumn(label: Text('Total Price'),),
-                        DataColumn(label: Text('Status'),),
-                        DataColumn(label: Text('Order by'),),
+                      columns: [
+                        DataColumn(label: Text('Order ID', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),),
+                        DataColumn(label: Text('Customer', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),),
+                        DataColumn(label: Text('Customer ID', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),),
+                        DataColumn(label: Text('Product', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),),
+                        DataColumn(label: Text('Product ID', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),),
+                        DataColumn(label: Text('Order Date', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),),
+                        DataColumn(label: Text('Quantity', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),),
+                        DataColumn(label: Text('Unit Price', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),),
+                        DataColumn(label: Text('Total Price', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),),
+                        DataColumn(label: Text('Status', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),),
+                        DataColumn(label: Text('Order by', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),),
                       ],
                       rows: orders.map((order) {
                         return DataRow(
@@ -164,12 +164,12 @@ class _SalesOrderScreenState extends State<SalesOrderScreen> {
                 width: double.infinity,
                 height: double.infinity,
                 padding: const EdgeInsets.only(top: 20.0),
-                child: const Column(
+                child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
                       "Unable to load order data",
-                      style: TextStyle(color: Colors.black, fontSize: 20),
+                      style: TextStyle(color: Theme.of(context).colorScheme.onSurface, fontSize: 20),
                     ),
                   ],
                 ),

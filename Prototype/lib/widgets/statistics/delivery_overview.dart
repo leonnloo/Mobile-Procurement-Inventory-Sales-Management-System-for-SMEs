@@ -17,11 +17,11 @@ class DeliveryOverview extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Padding(
-            padding: EdgeInsets.only(left: 8.0),
+          Padding(
+            padding: const EdgeInsets.only(left: 8.0),
             child: Text(
               'Delivery',
-              style: TextStyle(fontSize: 30.0, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 30.0, fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.onSurface),
             ),
           ),
           Row(
@@ -29,17 +29,19 @@ class DeliveryOverview extends StatelessWidget {
             children: [
               Expanded(
                 child: Card(
+                  color: Theme.of(context).colorScheme.secondaryContainer,
                   elevation: 4.0,
                   child: Padding(
                     padding: const EdgeInsets.all(20.0),
                     child: Column(
                       children: [
-                        const Row(
+                        Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
                               'Incoming',
                               style: TextStyle(
+                                color: Theme.of(context).colorScheme.onSurface,
                                 fontSize: 20.0,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -56,17 +58,17 @@ class DeliveryOverview extends StatelessWidget {
                                     value: null, // null indicates an indeterminate progress which spins
                                     strokeWidth: 4.0, // Thickness of the circle line
                                     backgroundColor: Colors.grey[200], // Color of the background circle
-                                    color: Colors.red[400], // Color of the progress indicator
+                                    color: Theme.of(context).colorScheme.onSurface, // Color of the progress indicator
                                   ),
                                 ),
                               );
                             } else if (snapshot.hasError) {
                               return Text('Error: ${snapshot.error}');
                             } else if (!snapshot.hasData) {
-                              return const SizedBox(
+                              return SizedBox(
                                 height: 150.0,
                                 child: Center(
-                                  child: Text('Unable to load', style: TextStyle(fontSize: 14.0),),
+                                  child: Text('Unable to load', style: TextStyle(fontSize: 14.0, color: Theme.of(context).colorScheme.onSurface),),
                                 ),
                               );
                             } else {
@@ -75,7 +77,7 @@ class DeliveryOverview extends StatelessWidget {
                               return Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Text(ingoing.toString(), style: const TextStyle(fontSize: 20.0),),
+                                  Text(ingoing.toString(), style: TextStyle(fontSize: 20.0, color: Theme.of(context).colorScheme.onSurface),),
                                 ],
                               );
                             }
@@ -89,18 +91,20 @@ class DeliveryOverview extends StatelessWidget {
               const SizedBox(width: 12.0,),
               Expanded(
                 child: Card(
+                  color: Theme.of(context).colorScheme.secondaryContainer,
                   elevation: 4.0,
                   child: Padding(
                     padding: const EdgeInsets.all(20.0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Row(
+                        Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
                               'Outgoing',
                               style: TextStyle(
+                                color: Theme.of(context).colorScheme.onSurface,
                                 fontSize: 20.0,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -117,17 +121,17 @@ class DeliveryOverview extends StatelessWidget {
                                     value: null, // null indicates an indeterminate progress which spins
                                     strokeWidth: 4.0, // Thickness of the circle line
                                     backgroundColor: Colors.grey[200], // Color of the background circle
-                                    color: Colors.red[400], // Color of the progress indicator
+                                    color: Theme.of(context).colorScheme.onSurface, // Color of the progress indicator
                                   ),
                                 ),
                               );
                             } else if (snapshot.hasError) {
                               return Text('Error: ${snapshot.error}');
                             } else if (!snapshot.hasData) {
-                              return const SizedBox(
+                              return SizedBox(
                                 height: 150.0,
                                 child: Center(
-                                  child: Text('Unable to load', style: TextStyle(fontSize: 14.0),),
+                                  child: Text('Unable to load', style: TextStyle(fontSize: 14.0, color: Theme.of(context).colorScheme.onSurface),),
                                 ),
                               );
                             } else {
@@ -136,7 +140,7 @@ class DeliveryOverview extends StatelessWidget {
                               return Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Text(outgoing.toString(), style: const TextStyle(fontSize: 20.0),),
+                                  Text(outgoing.toString(), style: TextStyle(fontSize: 20.0, color: Theme.of(context).colorScheme.onSurface),),
                                 ],
                               );
                             }

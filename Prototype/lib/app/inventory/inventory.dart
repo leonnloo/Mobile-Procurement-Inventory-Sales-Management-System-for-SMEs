@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/get_navigation.dart';
@@ -64,9 +63,9 @@ class _InventoryScreenState extends State<InventoryScreen> {
             //   ),
             // ),
             TabBar(
-              labelColor: Colors.black,
-              unselectedLabelColor: Colors.black,
-              indicatorColor: Colors.red[400],
+              labelColor: Theme.of(context).colorScheme.onPrimaryContainer,
+              unselectedLabelColor: Theme.of(context).colorScheme.onPrimaryContainer,
+              indicatorColor: Theme.of(context).colorScheme.primary,
               indicatorSize: TabBarIndicatorSize.label,
               indicatorWeight: 2.0,
               labelPadding: const EdgeInsets.all(10),
@@ -118,32 +117,32 @@ class _InventoryScreenState extends State<InventoryScreen> {
         child: DataTable(
           columnSpacing: 16.0,
           horizontalMargin: 16.0,
-          columns: const [
-            DataColumn(label: Text('Item ID')),
-            DataColumn(label: Text('Item')),
-            DataColumn(label: Text('Category')),
-            DataColumn(label: Text('Quantity')),
-            DataColumn(label: Text('Unit Price')),
-            DataColumn(label: Text('Total Price')),
-            DataColumn(label: Text('Status')),
+          columns: [
+            DataColumn(label: Text('Item ID', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),)),
+            DataColumn(label: Text('Item', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),)),
+            DataColumn(label: Text('Category', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),)),
+            DataColumn(label: Text('Quantity', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),)),
+            DataColumn(label: Text('Unit Price', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),)),
+            DataColumn(label: Text('Total Price', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),)),
+            DataColumn(label: Text('Status', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),)),
           ],
           rows: inventoryItems.map((InventoryItem item) {
             return DataRow(
               cells: [
                 DataCell(
-                  Text(item.itemID),
+                  Text(item.itemID, style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
                   onTap: () {
                     navigateToItemDetail(context, item, updateData);
                   },
                 ),
                 DataCell(
-                  Text(item.itemName),
+                  Text(item.itemName, style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
                   onTap: () {
                     navigateToItemDetail(context, item, updateData);
                   },
                 ),
                 DataCell(
-                  Text(item.category),
+                  Text(item.category, style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
                   onTap: () {
                     navigateToItemDetail(context, item, updateData);
                   },
@@ -163,19 +162,19 @@ class _InventoryScreenState extends State<InventoryScreen> {
                   },
                 ),
                 DataCell(
-                  Text('\$${item.unitPrice.toStringAsFixed(2)}'),
+                  Text('\$${item.unitPrice.toStringAsFixed(2)}', style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
                   onTap: () {
                     navigateToItemDetail(context, item, updateData);
                   },
                 ),
                 DataCell(
-                  Text('\$${item.totalPrice.toStringAsFixed(2)}'),
+                  Text('\$${item.totalPrice.toStringAsFixed(2)}', style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
                   onTap: () {
                     navigateToItemDetail(context, item, updateData);
                   },
                 ),
                 DataCell(
-                  Text(item.status),
+                  Text(item.status, style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
                   onTap: () {
                     navigateToItemDetail(context, item, updateData);
                   },
@@ -210,7 +209,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
     });
   }
   Color _getQuantityColor(int quantity, int safetyQuantity) {
-    return quantity < safetyQuantity ? Colors.red : Colors.black;
+    return quantity < safetyQuantity ? Theme.of(context).colorScheme.error : Theme.of(context).colorScheme.onSurface;
   }
 }
 

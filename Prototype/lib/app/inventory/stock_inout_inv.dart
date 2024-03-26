@@ -50,9 +50,9 @@ class StockInOutInventoryState extends State<StockInOutInventory> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 const SizedBox(height: 30.0),
-                const Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: Text('Stock In', style: TextStyle(fontSize: 24.0),),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text('Stock In', style: TextStyle(fontSize: 24.0, color: Theme.of(context).colorScheme.onSurface),),
                 ),
                 const SizedBox(height: 16.0),
                 DropdownTextField(
@@ -73,8 +73,8 @@ class StockInOutInventoryState extends State<StockInOutInventory> {
                   width: double.infinity,
                   child: ElevatedButton(
                     style: TextButton.styleFrom(
-                      foregroundColor: Colors.white,
-                      backgroundColor: Colors.black,
+                      foregroundColor: Theme.of(context).colorScheme.onPrimary,
+                      backgroundColor: Theme.of(context).colorScheme.onSecondaryContainer,
                       side: const BorderSide(color: Colors.black),
                       shape: const RoundedRectangleBorder(),
                       padding: const EdgeInsets.symmetric(vertical: 15.0)
@@ -87,9 +87,9 @@ class StockInOutInventoryState extends State<StockInOutInventory> {
                         // Display validation error messages
                         _formKey.currentState?.validate();
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Please fill in all the required fields.'),
-                            backgroundColor: Colors.red,
+                          SnackBar(
+                            content: const Text('Please fill in all the required fields.'),
+                            backgroundColor: Theme.of(context).colorScheme.error,
                           ),
                         );
                       } else {                
@@ -111,9 +111,9 @@ class StockInOutInventoryState extends State<StockInOutInventory> {
                         } else {
                           // Display an error message to the user
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Stock In failed'),
-                              backgroundColor: Colors.red,
+                            SnackBar(
+                              content: const Text('Stock In failed'),
+                              backgroundColor: Theme.of(context).colorScheme.error,
                             ),
                           );
                         }
@@ -124,9 +124,9 @@ class StockInOutInventoryState extends State<StockInOutInventory> {
                 ),
                 // -----------------------------------------------------------------
                 const SizedBox(height: 30.0),
-                const Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: Text('Stock Out', style: TextStyle(fontSize: 24.0),),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text('Stock Out', style: TextStyle(fontSize: 24.0, color: Theme.of(context).colorScheme.onSurface),),
                 ),
                 const SizedBox(height: 16.0),
                 DropdownTextField(
@@ -147,8 +147,8 @@ class StockInOutInventoryState extends State<StockInOutInventory> {
                   width: double.infinity,
                   child: ElevatedButton(
                     style: TextButton.styleFrom(
-                      foregroundColor: Colors.white,
-                      backgroundColor: Colors.black,
+                      foregroundColor: Theme.of(context).colorScheme.onPrimary,
+                      backgroundColor: Theme.of(context).colorScheme.onSecondaryContainer,
                       side: const BorderSide(color: Colors.black),
                       shape: const RoundedRectangleBorder(),
                       padding: const EdgeInsets.symmetric(vertical: 15.0)
@@ -161,9 +161,9 @@ class StockInOutInventoryState extends State<StockInOutInventory> {
                         // Display validation error messages
                         _formKey.currentState?.validate();
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Please fill in all the required fields.'),
-                            backgroundColor: Colors.red,
+                          SnackBar(
+                            content: const Text('Please fill in all the required fields.'),
+                            backgroundColor: Theme.of(context).colorScheme.error,
                           ),
                         );
                       } else {                
@@ -185,9 +185,9 @@ class StockInOutInventoryState extends State<StockInOutInventory> {
                         } else {
                           // Display an error message to the user
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Stock Out failed'),
-                              backgroundColor: Colors.red,
+                            SnackBar(
+                              content: const Text('Stock Out failed'),
+                              backgroundColor: Theme.of(context).colorScheme.error,
                             ),
                           );
                         }
