@@ -1,9 +1,9 @@
-import 'dart:convert';
-
 import "package:flutter/material.dart";
+import 'package:get/get.dart';
 import 'package:prototype/app/sale_orders/add_order.dart';
 import 'package:prototype/models/order_model.dart';
 import 'package:prototype/app/sale_orders/order_info.dart';
+import 'package:prototype/util/get_controllers/order_controller.dart';
 import 'package:prototype/util/request_util.dart';
 
 
@@ -16,13 +16,15 @@ class SalesOrderScreen extends StatefulWidget {
 
 class _SalesOrderScreenState extends State<SalesOrderScreen> {
   final RequestUtil requestUtil = RequestUtil();
+  final orderController = Get.put(OrderController());
 
   @override
   Widget build(BuildContext context) {
+    orderController.updateData.value = updateData;
     return Scaffold(
       body: FutureBuilder(
         key: futureBuilderKey,
-        future: _fetchSalesOrderData(),
+        future: orderController.getOrders(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
               return SizedBox(
@@ -89,67 +91,67 @@ class _SalesOrderScreenState extends State<SalesOrderScreen> {
                             DataCell(
                               Text(order.orderID),
                               onTap: () {
-                                navigateToOrderDetail(context, order, updateData);
+                                navigateToOrderDetail(context, order);
                               },
                             ),
                             DataCell(
                               Text(order.customerName),
                               onTap: () {
-                                navigateToOrderDetail(context, order, updateData);
+                                navigateToOrderDetail(context, order);
                               },
                             ),
                             DataCell(
                               Text(order.customerID),
                               onTap: () {
-                                navigateToOrderDetail(context, order, updateData);
+                                navigateToOrderDetail(context, order);
                               },
                             ),
                             DataCell(
                               Text(order.productName),
                               onTap: () {
-                                navigateToOrderDetail(context, order, updateData);
+                                navigateToOrderDetail(context, order);
                               },
                             ),
                             DataCell(
                               Text(order.productID),
                               onTap: () {
-                                navigateToOrderDetail(context, order, updateData);
+                                navigateToOrderDetail(context, order);
                               },
                             ),
                             DataCell(
                               Text(order.orderDate),
                               onTap: () {
-                                navigateToOrderDetail(context, order, updateData);
+                                navigateToOrderDetail(context, order);
                               },
                             ),
                             DataCell(
                               Text(order.quantity.toString()),
                               onTap: () {
-                                navigateToOrderDetail(context, order, updateData);
+                                navigateToOrderDetail(context, order);
                               },
                             ),
                             DataCell(
-                              Text(order.unitPrice.toStringAsFixed(2).toString()),
+                              Text(order.unitPrice.toStringAsFixed(2)),
                               onTap: () {
-                                navigateToOrderDetail(context, order, updateData);
+                                navigateToOrderDetail(context, order);
                               },
                             ),
                             DataCell(
-                              Text(order.totalPrice.toStringAsFixed(2).toString()),
+                              Text(order.totalPrice.toStringAsFixed(2)),
                               onTap: () {
-                                navigateToOrderDetail(context, order, updateData);
+                                navigateToOrderDetail(context, order);
                               },
                             ),
                             DataCell(
                               Text(order.orderStatus),
                               onTap: () {
-                                navigateToOrderDetail(context, order, updateData);
+                                navigateToOrderDetail(context, order);
                               },
                             ),
                             DataCell(
                               Text(order.employee),
                               onTap: () {
-                                navigateToOrderDetail(context, order, updateData);
+                                navigateToOrderDetail(context, order);
                               },
                             ),
                           ],
@@ -192,25 +194,6 @@ class _SalesOrderScreenState extends State<SalesOrderScreen> {
         child: const Icon(Icons.add),
       ),
     );
-  }
-
-  Future<List<SalesOrder>> _fetchSalesOrderData() async {
-    try {
-      final order = await requestUtil.getSaleOrders();
-      if (order.statusCode == 200) {
-        // Assuming the JSON response is a list of objects
-        List<dynamic> jsonData = jsonDecode(order.body);
-        
-        // Map each dynamic object to SalesOrder
-        List<SalesOrder> orderData = jsonData.map((data) => SalesOrder.fromJson(data)).toList();
-        return orderData;
-      } else {
-        throw Exception('Unable to fetch order data.');
-      }
-    } catch (error) {
-      // print('Error in _fetchCustomerData: $error');
-      rethrow; // Rethrow the error to be caught by FutureBuilder
-    }
   }
 
   Key futureBuilderKey = UniqueKey();

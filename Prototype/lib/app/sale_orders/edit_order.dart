@@ -3,9 +3,11 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:prototype/app/procurement/get_procurement.dart';
 import 'package:prototype/app/sale_orders/get_order.dart';
 import 'package:prototype/models/order_model.dart';
+import 'package:prototype/util/get_controllers/order_controller.dart';
 import 'package:prototype/util/request_util.dart';
 import 'package:prototype/util/validate_text.dart';
 import 'package:prototype/widgets/forms/date_field.dart';
@@ -35,6 +37,7 @@ class EditOrderState extends State<EditOrder> {
   final TextEditingController _employeeNameController = TextEditingController();
   final TextEditingController _employeeIDController = TextEditingController();
   final RequestUtil requestUtil = RequestUtil();
+  final orderController = Get.put(OrderController());
 
   @override
   void initState() {
@@ -224,10 +227,13 @@ class EditOrderState extends State<EditOrder> {
                           );
                           
                           if (response.statusCode == 200) {
-                            if (widget.updateData!= null){
-                              widget.updateData!();
-  
-                            }
+                            Function? update = orderController.updateData.value;
+                            Function? updateEdit = orderController.updateEditData.value;
+                            orderController.updateOrderInfo(SalesOrder(orderID: widget.orderData.orderID, orderDate: orderDate, customerID: customerID, customerName: customerName, productID: productID, productName: productName, quantity: int.parse(quantity), unitPrice: double.parse(unitPrice), totalPrice: double.parse(totalPrice), completionStatus: completionStatus, orderStatus: orderStatus, employee: employee, employeeID: employeeID));
+                            orderController.clearOrders();
+                            orderController.getOrders();
+                            update!();
+                            updateEdit!();
                             Navigator.pop(context);
                             Navigator.pop(context);
                             ScaffoldMessenger.of(context).showSnackBar(
@@ -281,9 +287,10 @@ class EditOrderState extends State<EditOrder> {
                 final response = await requestUtil.deleteOrder(widget.orderData.orderID);
                 
                 if (response.statusCode == 200) {
-                  if (widget.updateData!= null){
-                    widget.updateData!();
-                  }
+                  Function? update = orderController.updateData.value;
+                  orderController.clearOrders();
+                  orderController.getOrders();
+                  update!();
                   Navigator.pop(context);
                   Navigator.pop(context);
                   ScaffoldMessenger.of(context).showSnackBar(

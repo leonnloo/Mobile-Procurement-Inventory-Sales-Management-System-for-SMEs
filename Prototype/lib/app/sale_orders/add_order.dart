@@ -3,8 +3,10 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:prototype/app/procurement/get_procurement.dart';
 import 'package:prototype/app/sale_orders/get_order.dart';
+import 'package:prototype/util/get_controllers/order_controller.dart';
 import 'package:prototype/util/request_util.dart';
 import 'package:prototype/util/validate_text.dart';
 import 'package:prototype/widgets/appbar/common_appbar.dart';
@@ -31,6 +33,7 @@ class AddOrderScreenState extends State<AddOrderScreen> {
   late TextEditingController _totalPriceController;
   late TextEditingController _quantityController;
   late TextEditingController _statusController;
+  final orderController = Get.put(OrderController());
 
   @override
   void initState() {

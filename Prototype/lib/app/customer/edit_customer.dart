@@ -129,6 +129,7 @@ class EditCustomerState extends State<EditCustomer> {
                           if (response.statusCode == 200) {
                             Function? update = customerController.updateData.value;
                             Function? updateEdit = customerController.updateEditData.value;
+                            customerController.updateCustomerInfo(CustomerData(customerID: widget.customerData.customerID, businessName: businessName, contactPerson: contactPerson, email: email, phoneNo: phoneNumber, billingAddress: billingAddress, shippingAddress: shippingAddress, notes: widget.customerData.notes));
                             customerController.clearCustomers();
                             customerController.getCustomers();
                             update!();

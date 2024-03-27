@@ -144,6 +144,7 @@ class EditInventoryState extends State<EditInventory> {
                           if (response.statusCode == 200) {
                             Function? update = inventoryController.updateData.value;
                             Function? updateEdit = inventoryController.updateEditData.value;
+                            inventoryController.updateInventoryInfo(InventoryItem(itemID: widget.inventoryData.itemID, itemName: itemName, category: category, quantity: int.parse(quantity), unitPrice: double.parse(unitPrice), totalPrice: double.parse(unitPrice) * double.parse(quantity), criticalLvl: int.parse(criticalLevel), status: widget.inventoryData.status));
                             inventoryController.clearInventories();
                             inventoryController.getInventories();
                             update!();

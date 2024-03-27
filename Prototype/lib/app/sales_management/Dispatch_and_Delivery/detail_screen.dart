@@ -273,7 +273,7 @@ class _DataSearch extends SearchDelegate<String> {
 void navigateToOrderDetail(BuildContext context, SalesOrder item) {
   Navigator.of(context).push(
     MaterialPageRoute(
-      builder: (context) => ItemDetailScreen(item: item),
+      builder: (context) => OrderDetailScreen(item: item),
     ),
   );
 }

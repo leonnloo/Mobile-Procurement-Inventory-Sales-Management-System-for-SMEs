@@ -207,6 +207,7 @@ class EditProcurementState extends State<EditProcurement> {
                             Function? updateEdit = procurementController.updateEditData.value;
                             procurementController.clearPurchases();
                             procurementController.getPurchases('update');
+                            procurementController.updatePurchaseInfo(PurchasingOrder(purchaseID: widget.procurementData.purchaseID, itemType: itemType, itemID: itemID, itemName: itemName, supplierName: supplierName, orderDate: orderDate, deliveryDate: deliveryDate, quantity: int.parse(quantity), unitPrice: double.parse(unitPrice), totalPrice: double.parse(totalPrice), status: status));
                             update!();
                             updateEdit!();
                             Navigator.pop(context);
