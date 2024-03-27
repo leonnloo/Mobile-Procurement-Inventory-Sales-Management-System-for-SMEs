@@ -10,9 +10,6 @@ class MonthlySaleController extends GetxController {
   Rx<List<MonthlySales>?> currentMonthlySaleList = Rx<List<MonthlySales>?>(null);
   Rx<MonthlySales?> currentMonthlySaleInfo = Rx<MonthlySales?>(null);
   Rx<Function?> updateData = Rx<Function?>(null);
-  Rx<Function?> updateEditData = Rx<Function?>(null);
-  Rx<Function?> updateDispatchMenuData = Rx<Function?>(null);
-
 
   Future<void> updateMonthlySaleList() async {
     try {
@@ -22,7 +19,7 @@ class MonthlySaleController extends GetxController {
         List<MonthlySales> monthlySaleData = jsonData.map((data) => MonthlySales.fromJson(data)).toList();
         currentMonthlySaleList.value = monthlySaleData;
       } else {
-        throw Exception('Unable to fetch monthlySale data.');
+        throw Exception('Unable to fetch monthly sale data.');
       }
     } catch (error) {
       // print('Error in _fetchMonthlySaleData: $error');

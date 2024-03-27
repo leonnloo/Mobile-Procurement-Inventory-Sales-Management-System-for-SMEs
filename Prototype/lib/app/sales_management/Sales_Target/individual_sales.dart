@@ -123,12 +123,12 @@ class _IndividualSalesScreenState extends State<IndividualSalesScreen> {
                     const SizedBox(height: 26.0),
                     CircularProgressIndicator(
                       backgroundColor: Colors.transparent,
-                      color: Theme.of(context).colorScheme.error,
+                      color: Theme.of(context).colorScheme.onPrimaryContainer,
                     ),
                     const SizedBox(height: 16.0),
                     Text(
                       'Loading...',
-                      style: TextStyle(fontSize: 16.0, color: Theme.of(context).colorScheme.onSurface),
+                      style: TextStyle(fontSize: 16.0, color: Theme.of(context).colorScheme.onPrimaryContainer),
                     ),
                   ],
                 ),
