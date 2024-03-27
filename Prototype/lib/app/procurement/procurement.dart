@@ -1,13 +1,13 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_navigation/get_navigation.dart';
+import 'package:get/get.dart';
 import 'package:prototype/app/procurement/add_procurement.dart';
 import 'package:prototype/models/procurement_model.dart';
 import 'package:prototype/app/procurement/procurement_info.dart';
 import 'package:prototype/app/procurement/procurement_filter_system.dart';
+import 'package:prototype/util/get_controllers/procurement_controller.dart';
 import 'package:prototype/util/request_util.dart';
+
+final procurementController = Get.put(PurchaseController());
 
 class ProcurementScreen extends StatefulWidget {
   const ProcurementScreen({super.key});
@@ -19,7 +19,7 @@ class ProcurementScreen extends StatefulWidget {
 class _ProcurementScreenState extends State<ProcurementScreen> {
   @override
   Widget build(BuildContext context) {
-    String dummy = '';
+    procurementController.updateData.value = updateData;
     return DefaultTabController(
       length: 2,
       child: Scaffold(
@@ -79,12 +79,12 @@ class _ProcurementScreenState extends State<ProcurementScreen> {
                 Tab(text: 'Ongoing'),
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 400,
               child: TabBarView(
                 children: [
-                  ProcurementTab(category: 'Past', dummy: dummy,),
-                  ProcurementTab(category: 'Present', dummy: dummy,),
+                  ProcurementTab(category: 'Past',),
+                  ProcurementTab(category: 'Present',),
                 ],
               ),
             ),
@@ -97,7 +97,7 @@ class _ProcurementScreenState extends State<ProcurementScreen> {
             // Navigate to a screen for adding new customer info
             Navigator.of(context).push(
               MaterialPageRoute(
-                builder: (context) => AddProcurementScreen(updateData: updateData,),
+                builder: (context) => const AddProcurementScreen(),
               ),
             );
           },
@@ -115,8 +115,7 @@ class _ProcurementScreenState extends State<ProcurementScreen> {
 
 class ProcurementTab extends StatefulWidget {
   final String category;
-  final String dummy;
-  const ProcurementTab({super.key, required this.category, required this.dummy});
+  const ProcurementTab({super.key, required this.category});
 
   @override
   State<ProcurementTab> createState() => _ProcurementTabState();
@@ -127,9 +126,10 @@ class _ProcurementTabState extends State<ProcurementTab> {
 
   @override
   Widget build(BuildContext context) {
+    procurementController.updateData.value = updateData;
     return FutureBuilder(
       key: futureBuilderKey,
-      future: _fetchProcurementData(widget.category, widget.dummy),
+      future: procurementController.getPurchases(widget.category),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
             return SizedBox(
@@ -141,7 +141,7 @@ class _ProcurementTabState extends State<ProcurementTab> {
                 children: [
                   const SizedBox(height: 26.0),
                   CircularProgressIndicator(
-                    backgroundColor: Colors.white,
+                    backgroundColor: Colors.transparent,
                     color: Theme.of(context).colorScheme.error,
                   ),
                   const SizedBox(height: 16.0),
@@ -195,55 +195,55 @@ class _ProcurementTabState extends State<ProcurementTab> {
                           DataCell(
                             Text(order.purchaseID, style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
                             onTap: () {
-                              navigateToOrderDetail(context, order, updateData);
+                              navigateToOrderDetail(context, order);
                             },
                           ),
                           DataCell(
                             Text(order.itemName, style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
                             onTap: () {
-                              navigateToOrderDetail(context, order, updateData);
+                              navigateToOrderDetail(context, order);
                             },
                           ),
                           DataCell(
                             Text(order.supplierName, style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
                             onTap: () {
-                              navigateToOrderDetail(context, order, updateData);
+                              navigateToOrderDetail(context, order);
                             },
                           ),
                           DataCell(
                             Text(order.orderDate, style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
                             onTap: () {
-                              navigateToOrderDetail(context, order, updateData);
+                              navigateToOrderDetail(context, order);
                             },
                           ),
                           DataCell(
                             Text(order.deliveryDate, style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
                             onTap: () {
-                              navigateToOrderDetail(context, order, updateData);
+                              navigateToOrderDetail(context, order);
                             },
                           ),
                           DataCell(
                             Text(order.quantity.toString(), style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
                             onTap: () {
-                              navigateToOrderDetail(context, order, updateData);
+                              navigateToOrderDetail(context, order);
                             },
                           ),
                           DataCell(
                             Text(order.unitPrice.toStringAsFixed(2).toString(), style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
                             onTap: () {
-                              navigateToOrderDetail(context, order, updateData);
+                              navigateToOrderDetail(context, order);
                             },
                           ),
                           DataCell(
                             Text(order.totalPrice.toStringAsFixed(2).toString(), style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
                             onTap: () {
-                              navigateToOrderDetail(context, order, updateData);
+                              navigateToOrderDetail(context, order);
                             },
                           ),
                           DataCell(
                             Text(order.status, style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
                             onTap: () {
-                              navigateToOrderDetail(context, order, updateData);
+                              navigateToOrderDetail(context, order);
                             },
                           ),
                         ],
@@ -271,33 +271,6 @@ class _ProcurementTabState extends State<ProcurementTab> {
         });
   }
 
-  Future<List<PurchasingOrder>> _fetchProcurementData(String category, String dummy) async {
-    try {
-      String newCategory;
-      if (category == 'Past') {
-        newCategory = 'Completed';
-      } else {
-        newCategory = 'Delivering';
-      }
-
-      final procurement = await requestUtil.getProcurementCategory(newCategory);
-      if (procurement.statusCode == 200) {
-        // Assuming the JSON response is a list of objects
-        List<dynamic> jsonData = jsonDecode(procurement.body);
-
-        // Map each dynamic object to PurchasingOrder
-        List<PurchasingOrder> procurementData =
-            jsonData.map((data) => PurchasingOrder.fromJson(data)).toList();
-        return procurementData;
-      } else {
-        throw Exception('Unable to fetch procurement data.');
-      }
-    } catch (error) {
-      // print('Error in _fetchCustomerData: $error');
-      rethrow; // Rethrow the error to be caught by FutureBuilder
-    }
-  }
-
   Key futureBuilderKey = UniqueKey();
 
   void updateData() async {
@@ -307,9 +280,9 @@ class _ProcurementTabState extends State<ProcurementTab> {
   }
 }
 
-void navigateToOrderDetail(BuildContext context, PurchasingOrder order, Function updateData) {
+void navigateToOrderDetail(BuildContext context, PurchasingOrder purchase) {
   Navigator.push(
     context,
-    MaterialPageRoute(builder: (context) => OrderDetailScreen(order: order, updateData: updateData)),
+    MaterialPageRoute(builder: (context) => OrderDetailScreen(purchase: purchase)),
   );
 }
