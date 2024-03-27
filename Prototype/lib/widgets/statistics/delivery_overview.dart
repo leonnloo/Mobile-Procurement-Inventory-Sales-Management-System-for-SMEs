@@ -1,13 +1,15 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:prototype/app/sales_management/Claims_and_Refunds/get_refunds.dart';
+import 'package:get/get.dart';
 import 'package:prototype/models/order_model.dart';
 import 'package:prototype/models/procurement_model.dart';
+import 'package:prototype/util/get_controllers/order_controller.dart';
+import 'package:prototype/util/get_controllers/procurement_controller.dart';
 
+// ignore: must_be_immutable
 class DeliveryOverview extends StatelessWidget {
   DeliveryOverview({super.key,});
-
+  final orderController = Get.put(OrderController());
+  final purchaseController = Get.put(PurchaseController());
   int ingoing = 0;
   int outgoing = 0;
   @override
@@ -25,8 +27,8 @@ class DeliveryOverview extends StatelessWidget {
                   'Delivery',
                   style: TextStyle(fontSize: 30.0, fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.onSurface),
                 ),
-                const SizedBox(width: 10.0,),
-                Icon(Icons.delivery_dining_rounded, color: Theme.of(context).colorScheme.onSurface, size: 30,),
+                const SizedBox(width: 14.0,),
+                Icon(Icons.local_shipping, color: Theme.of(context).colorScheme.onSurface, size: 30,),
               ],
             ),
           ),
@@ -55,7 +57,7 @@ class DeliveryOverview extends StatelessWidget {
                           ],
                         ),
                         FutureBuilder(
-                          future: _fetchProcurementList(),
+                          future: purchaseController.getPurchases('all'),
                           builder: (context, snapshot) {
                             if (snapshot.connectionState == ConnectionState.waiting) {
                               return SizedBox(
@@ -63,7 +65,7 @@ class DeliveryOverview extends StatelessWidget {
                                   child: CircularProgressIndicator(
                                     value: null, // null indicates an indeterminate progress which spins
                                     strokeWidth: 4.0, // Thickness of the circle line
-                                    backgroundColor: Colors.grey[200], // Color of the background circle
+                                    backgroundColor: Colors.transparent, // Color of the background circle
                                     color: Theme.of(context).colorScheme.onSurface, // Color of the progress indicator
                                   ),
                                 ),
@@ -118,7 +120,7 @@ class DeliveryOverview extends StatelessWidget {
                           ],
                         ),
                         FutureBuilder(
-                          future: getOrderList(),
+                          future: orderController.getOrders(),
                           builder: (context, snapshot) {
                             if (snapshot.connectionState == ConnectionState.waiting) {
                               return SizedBox(
@@ -126,7 +128,7 @@ class DeliveryOverview extends StatelessWidget {
                                   child: CircularProgressIndicator(
                                     value: null, // null indicates an indeterminate progress which spins
                                     strokeWidth: 4.0, // Thickness of the circle line
-                                    backgroundColor: Colors.grey[200], // Color of the background circle
+                                    backgroundColor: Colors.transparent, // Color of the background circle
                                     color: Theme.of(context).colorScheme.onSurface, // Color of the progress indicator
                                   ),
                                 ),
@@ -162,17 +164,6 @@ class DeliveryOverview extends StatelessWidget {
         ],
       ),
     );
-  }
-
-  Future<List<PurchasingOrder>> _fetchProcurementList() async {
-    final procurement = await requestUtil.getProcurement();
-    if (procurement.statusCode == 200) {
-      List<dynamic> jsonData = jsonDecode(procurement.body);
-      List<PurchasingOrder> procurementList = jsonData.map((data) => PurchasingOrder.fromJson(data)).toList();
-      return procurementList;
-    } else {
-      throw Exception('Unable to fetch procurement data.');
-    }
   }
   
   void calculateOutgoing(List<SalesOrder> sales) {

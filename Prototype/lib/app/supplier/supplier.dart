@@ -137,6 +137,7 @@ class _SupplierManagementScreenState extends State<SupplierManagementScreen> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: Theme.of(context).colorScheme.primary,
         foregroundColor: Theme.of(context).colorScheme.onSecondary,
+        shape: const CircleBorder(),
         onPressed: () {
           // Navigate to a screen for adding new supplier info
           Navigator.of(context).push(
