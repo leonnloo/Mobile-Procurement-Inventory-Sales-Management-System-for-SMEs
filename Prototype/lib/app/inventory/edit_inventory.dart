@@ -1,8 +1,10 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:prototype/app/inventory/get_inventory.dart';
 import 'package:prototype/models/inventory_model.dart';
+import 'package:prototype/util/get_controllers/inventory_controller.dart';
 import 'package:prototype/util/request_util.dart';
 import 'package:prototype/util/validate_text.dart';
 import 'package:prototype/widgets/forms/dropdown_field.dart';
@@ -24,7 +26,7 @@ class EditInventoryState extends State<EditInventory> {
   final TextEditingController _unitPriceController = TextEditingController();
   final TextEditingController _criticalLevelController = TextEditingController();
   final RequestUtil requestUtil = RequestUtil();
-
+  final inventoryController = Get.put(InventoryController());
   @override
   void initState() {
     super.initState();
@@ -47,6 +49,7 @@ class EditInventoryState extends State<EditInventory> {
 
   @override
   Widget build(BuildContext context) {
+    // ignore: unused_local_variable
     final size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
@@ -139,7 +142,12 @@ class EditInventoryState extends State<EditInventory> {
                           );
                           
                           if (response.statusCode == 200) {
-                            widget.updateData();
+                            Function? update = inventoryController.updateData.value;
+                            Function? updateEdit = inventoryController.updateEditData.value;
+                            inventoryController.clearInventories();
+                            inventoryController.getInventories();
+                            update!();
+                            updateEdit!();
                             Navigator.pop(context);
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
@@ -192,7 +200,10 @@ class EditInventoryState extends State<EditInventory> {
                 final response = await requestUtil.deleteInventory(widget.inventoryData.itemID);
                 
                 if (response.statusCode == 200) {
-                  widget.updateData();
+                  Function? update = inventoryController.updateData.value;
+                  inventoryController.clearInventories();
+                  inventoryController.getInventories();
+                  update!();
                   Navigator.pop(context);
                   Navigator.pop(context);
                   ScaffoldMessenger.of(context).showSnackBar(
@@ -204,9 +215,9 @@ class EditInventoryState extends State<EditInventory> {
                 } else {
                   // Display an error message to the user
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Delete Inventory failed'),
-                      backgroundColor: Colors.red,
+                    SnackBar(
+                      content: const Text('Delete Inventory failed'),
+                      backgroundColor: Theme.of(context).colorScheme.error,
                     ),
                   );
                 }

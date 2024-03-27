@@ -1,7 +1,9 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:prototype/app/inventory/get_inventory.dart';
+import 'package:prototype/util/get_controllers/inventory_controller.dart';
 import 'package:prototype/util/request_util.dart';
 import 'package:prototype/util/validate_text.dart';
 import 'package:prototype/widgets/appbar/common_appbar.dart';
@@ -9,8 +11,7 @@ import 'package:prototype/widgets/forms/dropdown_field.dart';
 import 'package:prototype/widgets/forms/number_field.dart';
 
 class StockInOutInventory extends StatefulWidget {
-  const StockInOutInventory({super.key, this.updateData});
-  final Function? updateData;
+  const StockInOutInventory({super.key});
   @override
   StockInOutInventoryState createState() => StockInOutInventoryState();
 }
@@ -39,6 +40,7 @@ class StockInOutInventoryState extends State<StockInOutInventory> {
 
   @override
   Widget build(BuildContext context) {
+    final inventoryController = Get.put(InventoryController());
     return Scaffold(
       appBar: const CommonAppBar(currentTitle: 'Stock In/Out Inventory'),
       body: Padding(
@@ -98,9 +100,10 @@ class StockInOutInventoryState extends State<StockInOutInventory> {
                         );
                         
                         if (response.statusCode == 200) {
-                          if (widget.updateData != null) {
-                            widget.updateData!();
-                          }
+                          Function? update = inventoryController.updateData.value;
+                          inventoryController.clearInventories();
+                          inventoryController.getInventories();
+                          update!();
                           Navigator.pop(context);
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
@@ -172,9 +175,10 @@ class StockInOutInventoryState extends State<StockInOutInventory> {
                         );
                         
                         if (response.statusCode == 200) {
-                          if (widget.updateData != null) {
-                            widget.updateData!();
-                          }
+                          Function? update = inventoryController.updateData.value;
+                          inventoryController.clearInventories();
+                          inventoryController.getInventories();
+                          update!();
                           Navigator.pop(context);
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
