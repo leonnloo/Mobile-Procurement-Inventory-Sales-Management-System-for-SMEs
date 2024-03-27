@@ -19,9 +19,15 @@ class DeliveryOverview extends StatelessWidget {
         children: [
           Padding(
             padding: const EdgeInsets.only(left: 8.0),
-            child: Text(
-              'Delivery',
-              style: TextStyle(fontSize: 30.0, fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.onSurface),
+            child: Row(
+              children: [
+                Text(
+                  'Delivery',
+                  style: TextStyle(fontSize: 30.0, fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.onSurface),
+                ),
+                const SizedBox(width: 10.0,),
+                Icon(Icons.delivery_dining_rounded, color: Theme.of(context).colorScheme.onSurface, size: 30,),
+              ],
             ),
           ),
           Row(

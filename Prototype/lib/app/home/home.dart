@@ -129,6 +129,7 @@ class HomeScreenState extends State<HomeScreen> {
           ),
           body: container,
           drawer: Drawer(
+            backgroundColor: Theme.of(context).colorScheme.onPrimary,
             child: SingleChildScrollView(
               child: Column(
                   children: [

@@ -111,8 +111,8 @@ class AddClaimRefundFormState extends State<AddClaimRefundForm> {
                         child: CircularProgressIndicator(
                           value: null, // null indicates an indeterminate progress which spins
                           strokeWidth: 4.0, // Thickness of the circle line
-                          backgroundColor: Colors.grey[200], // Color of the background circle
-                          color: Colors.red[400], // Color of the progress indicator
+                          backgroundColor: Colors.transparent, // Color of the background circle
+                          color: Theme.of(context).colorScheme.onPrimaryContainer, // Color of the progress indicator
                         ),
                       ),
                     );
@@ -135,21 +135,21 @@ class AddClaimRefundFormState extends State<AddClaimRefundForm> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
-                            Text('Order ID: ${order.orderID}', style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                            Text('Order ID: ${order.orderID}', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.onSurface)),
                             const SizedBox(height: 8),
-                            Text('Order Date: ${order.orderDate}', style: const TextStyle(fontSize: 16)),
+                            Text('Order Date: ${order.orderDate}', style: TextStyle(fontSize: 16, color: Theme.of(context).colorScheme.onSurface)),
                             const SizedBox(height: 8),
-                            Text('Customer: ${order.customerName}', style: const TextStyle(fontSize: 16)),
+                            Text('Customer: ${order.customerName}', style: TextStyle(fontSize: 16, color: Theme.of(context).colorScheme.onSurface)),
                             const SizedBox(height: 8),
-                            Text('Product: ${order.productName}', style: const TextStyle(fontSize: 16)),
+                            Text('Product: ${order.productName}', style: TextStyle(fontSize: 16, color: Theme.of(context).colorScheme.onSurface)),
                             const SizedBox(height: 8),
-                            Text('Quantity: ${order.quantity}', style: const TextStyle(fontSize: 16)),
+                            Text('Quantity: ${order.quantity}', style: TextStyle(fontSize: 16, color: Theme.of(context).colorScheme.onSurface)),
                             const SizedBox(height: 8),
-                            Text('Unit Price: \$${order.unitPrice.toStringAsFixed(2)}', style: const TextStyle(fontSize: 16)),
+                            Text('Unit Price: \$${order.unitPrice.toStringAsFixed(2)}', style: TextStyle(fontSize: 16, color: Theme.of(context).colorScheme.onSurface)),
                             const SizedBox(height: 8),
-                            Text('Total Price: \$${order.totalPrice.toStringAsFixed(2)}', style: const TextStyle(fontSize: 16)),
+                            Text('Total Price: \$${order.totalPrice.toStringAsFixed(2)}', style: TextStyle(fontSize: 16, color: Theme.of(context).colorScheme.onSurface)),
                             const SizedBox(height: 8),
-                            Text('Status: ${order.orderStatus}', style: const TextStyle(fontSize: 16)),
+                            Text('Status: ${order.orderStatus}', style: TextStyle(fontSize: 16, color: Theme.of(context).colorScheme.onSurface)),
                             // Add more fields as needed
                           ],
                         ),
@@ -219,17 +219,17 @@ class AddClaimRefundFormState extends State<AddClaimRefundForm> {
                       // Display validation error messages
                       _formKey.currentState?.validate();
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Please fill in all the required fields.'),
-                          backgroundColor: Colors.red,
+                        SnackBar(
+                          content: const Text('Please fill in all the required fields.'),
+                          backgroundColor: Theme.of(context).colorScheme.error,
                         ),
                       );
                     } else {         
                       if (int.parse(refundQuantity) > orderQuantity!) {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Refund quantity cannot be over the initial order quantity.'),
-                            backgroundColor: Colors.red,
+                          SnackBar(
+                            content: const Text('Refund quantity cannot be over the initial order quantity.'),
+                            backgroundColor: Theme.of(context).colorScheme.error,
                           ),
                         );
                         return;
@@ -261,7 +261,7 @@ class AddClaimRefundFormState extends State<AddClaimRefundForm> {
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
                             content: Text('Refund failed: ${jsonDecode(response.body)['detail']}'),
-                            backgroundColor: Colors.red,
+                            backgroundColor: Theme.of(context).colorScheme.error,
                           ),
                         );
                       }

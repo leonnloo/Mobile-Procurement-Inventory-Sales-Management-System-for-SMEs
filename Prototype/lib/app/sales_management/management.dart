@@ -14,76 +14,74 @@ class SalesManagementScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              SizedBox(height: size.height * 0.030,),
-              buildButtonWithIcon(
-                onPressed: () {
-                  // 导航到个人员工销售页面
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const SalesTargetScreen() ),
-                  );
-                },
-                icon: Icons.trending_up_rounded,
-                label: 'Sales Target',
-              ),
-              const SizedBox(height: 20.0),
-              buildButtonWithIcon(
-                onPressed: () {
-                  // 导航到个人员工销售页面
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const DispatchDeliveryScreen() ),
-                  );
-                },
-                icon: Icons.local_shipping,
-                label: 'Order Dispatch and Delivery',
-              ),
-              const SizedBox(height: 20.0),
-              buildButtonWithIcon(
-                onPressed: () {
-                  // 导航到按日期销售页面
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const ProductSalesByMonth() ),
-                  );
-                },
-                icon: Icons.sell_outlined,
-                label: 'Product Sales by Month',
-              ),
-              const SizedBox(height: 20.0),
-              buildButtonWithIcon(
-                onPressed: () {
-                  // 导航到个人员工销售页面
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const CustomerClaimsRefundsScreen() ),
-                  );
-                },
-                icon: Icons.replay,
-                label: 'Customer Claims and Refunds',
-              ),
-              SizedBox(height: size.height * 0.045,),
-              // Add the charts below the buttons
-              Card(
-                elevation: 4.0,
-                margin: const EdgeInsets.all(16.0),
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-          
-                  child: MonthlySalesBarChart(),
+      body: SizedBox(
+        height: size.height * 0.8,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    SizedBox(height: size.height * 0.030,),
+                    buildButtonWithIcon(
+                      onPressed: () {
+                        // 导航到个人员工销售页面
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => const SalesTargetScreen() ),
+                        );
+                      },
+                      icon: Icons.trending_up_rounded,
+                      label: 'Sales Target',
+                      context: context
+                    ),
+                    const SizedBox(height: 20.0),
+                    buildButtonWithIcon(
+                      onPressed: () {
+                        // 导航到个人员工销售页面
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => const DispatchDeliveryScreen() ),
+                        );
+                      },
+                      icon: Icons.local_shipping,
+                      label: 'Order Dispatch and Delivery',
+                      context: context
+                    ),
+                    const SizedBox(height: 20.0),
+                    buildButtonWithIcon(
+                      onPressed: () {
+                        // 导航到按日期销售页面
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => const ProductSalesByMonth() ),
+                        );
+                      },
+                      icon: Icons.sell_outlined,
+                      label: 'Product Sales by Month',
+                      context: context
+                    ),
+                    const SizedBox(height: 20.0),
+                    buildButtonWithIcon(
+                      onPressed: () {
+                        // 导航到个人员工销售页面
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => const CustomerClaimsRefundsScreen() ),
+                        );
+                      },
+                      icon: Icons.replay,
+                      label: 'Customer Claims and Refunds',
+                      context: context
+                    ),
+                  ],
                 ),
               ),
-              const ProductSalesPieChart(),
-          
-              // IndividualSales(),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

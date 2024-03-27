@@ -46,6 +46,7 @@ class DispatchDeliveryScreenState extends State<DispatchDeliveryScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: const CommonAppBar(currentTitle: 'Dispatch and Delivery'),
       body: Padding(
@@ -58,48 +59,55 @@ class DispatchDeliveryScreenState extends State<DispatchDeliveryScreen> {
               future: _fetchSalesOrderData(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const SizedBox(
+                  return SizedBox(
+                    height: size.height * 0.8,
                     width: double.infinity,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        SizedBox(height: 26.0),
+                        const SizedBox(height: 26.0),
                         CircularProgressIndicator(
                           backgroundColor: Colors.white,
-                          color: Colors.red,
+                          color: Theme.of(context).colorScheme.onPrimaryContainer,
                         ),
-                        SizedBox(height: 16.0),
+                        const SizedBox(height: 16.0),
                         Text(
                           'Loading...',
-                          style: TextStyle(fontSize: 16.0, color: Colors.black),
+                          style: TextStyle(fontSize: 16.0, color: Theme.of(context).colorScheme.onPrimaryContainer),
                         ),
                       ],
                     ),
                   );
                 } else if (snapshot.hasError) {
-                  return Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      _buildItem(context, [], '10\nQuantasdity to be Packaged', Icons.shopping_cart, 'To be Packaged', packagedCount),
-                      const SizedBox(height: 20.0),
-                      _buildItem(context, [], '10\nPackages to be Shipped', Icons.local_shipping, 'To be Shipped', shippedCount),
-                      const SizedBox(height: 20.0),
-                      _buildItem(context, [], '10\nPackages to be Delivered', Icons.delivery_dining, 'To be Delivered', deliveredCount),
-                    ],
+                  return SizedBox(
+                    height: size.height * 0.8,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        _buildItem(context, [], '10\nQuantasdity to be Packaged', Icons.shopping_cart, 'To be Packaged', packagedCount),
+                        const SizedBox(height: 20.0),
+                        _buildItem(context, [], '10\nPackages to be Shipped', Icons.local_shipping, 'To be Shipped', shippedCount),
+                        const SizedBox(height: 20.0),
+                        _buildItem(context, [], '10\nPackages to be Delivered', Icons.delivery_dining, 'To be Delivered', deliveredCount),
+                      ],
+                    ),
                   );
                 } else if (!snapshot.hasData) {
-                  return Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      _buildItem(context, [], '10\nQuantasdity to be Packaged', Icons.shopping_cart, 'To be Packaged', packagedCount),
-                      const SizedBox(height: 20.0),
-                      _buildItem(context, [], '10\nPackages to be Shipped', Icons.local_shipping, 'To be Shipped', shippedCount),
-                      const SizedBox(height: 20.0),
-                      _buildItem(context, [], '10\nPackages to be Delivered', Icons.delivery_dining, 'To be Delivered', deliveredCount),
-                    ],
+                  return SizedBox(
+                    height: size.height * 0.8,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        _buildItem(context, [], '10\nQuantasdity to be Packaged', Icons.shopping_cart, 'To be Packaged', packagedCount),
+                        const SizedBox(height: 20.0),
+                        _buildItem(context, [], '10\nPackages to be Shipped', Icons.local_shipping, 'To be Shipped', shippedCount),
+                        const SizedBox(height: 20.0),
+                        _buildItem(context, [], '10\nPackages to be Delivered', Icons.delivery_dining, 'To be Delivered', deliveredCount),
+                      ],
+                    ),
                   );
                 } else if (snapshot.hasData) {
                   List<SalesOrder> salesData = snapshot.data as List<SalesOrder>;

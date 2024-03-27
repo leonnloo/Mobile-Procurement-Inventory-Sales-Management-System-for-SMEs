@@ -28,6 +28,7 @@ class CustomerClaimsRefundsScreen extends StatelessWidget {
                 },
                 icon: Icons.description,
                 label: 'Submit New Refund Form',
+              context: context
               ),
               const SizedBox(height: 40.0),
               buildButtonWithIcon(
@@ -40,6 +41,7 @@ class CustomerClaimsRefundsScreen extends StatelessWidget {
                 },
                 icon: Icons.history,
                 label: 'View Refund History',
+              context: context
               ),
               const SizedBox(height: 40.0),
               buildButtonWithIcon(
@@ -50,7 +52,7 @@ class CustomerClaimsRefundsScreen extends StatelessWidget {
                     builder: (BuildContext context) {
                       return AlertDialog(
                         title: const Text('Help'),
-                        content: const Text('If you need assistance, please contact 18069030677.'),
+                        content: const Text('If you need assistance, please contact GRP14@nottingham.edu.cn.'),
                         actions: [
                           TextButton(
                             onPressed: () {
@@ -65,6 +67,7 @@ class CustomerClaimsRefundsScreen extends StatelessWidget {
                 },
                 icon: Icons.help,
                 label: 'Get Help',
+                context: context
               ),
             ],
           ),

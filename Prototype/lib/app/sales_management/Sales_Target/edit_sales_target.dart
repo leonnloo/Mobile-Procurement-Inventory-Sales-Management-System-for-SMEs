@@ -87,9 +87,9 @@ class EditSalesTargetState extends State<EditSalesTarget> {
                           || targetSales == null) {
                           // Display validation error messages
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Please enter new target.'),
-                              backgroundColor: Colors.red,
+                            SnackBar(
+                              content: const Text('Please enter new target.'),
+                              backgroundColor: Theme.of(context).colorScheme.error,
                             ),
                           );
                         } else {                
@@ -111,7 +111,7 @@ class EditSalesTargetState extends State<EditSalesTarget> {
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
                                 content: Text('Target failed: ${jsonDecode(response.body)['detail']}'),
-                                backgroundColor: Colors.red,
+                                backgroundColor: Theme.of(context).colorScheme.error,
                               ),
                             );
                           }
