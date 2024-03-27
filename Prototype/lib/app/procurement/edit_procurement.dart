@@ -3,8 +3,10 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:prototype/app/procurement/get_procurement.dart';
 import 'package:prototype/models/procurement_model.dart';
+import 'package:prototype/util/get_controllers/procurement_controller.dart';
 import 'package:prototype/util/request_util.dart';
 import 'package:prototype/util/validate_text.dart';
 import 'package:prototype/widgets/forms/dropdown_field.dart';
@@ -31,6 +33,7 @@ class EditProcurementState extends State<EditProcurement> {
   final TextEditingController _quantityController = TextEditingController();
   final TextEditingController _statusController = TextEditingController();
   final RequestUtil requestUtil = RequestUtil();
+  final procurementController = Get.put(PurchaseController());
   late String type = 'Product';
   bool changeType = true;
   @override
@@ -200,7 +203,12 @@ class EditProcurementState extends State<EditProcurement> {
                           );
                           
                           if (response.statusCode == 200) {
-                            widget.updateData();
+                            Function? update = procurementController.updateData.value;
+                            Function? updateEdit = procurementController.updateEditData.value;
+                            procurementController.clearPurchases();
+                            procurementController.getPurchases('update');
+                            update!();
+                            updateEdit!();
                             Navigator.pop(context);
                             Navigator.pop(context);
                             ScaffoldMessenger.of(context).showSnackBar(
@@ -250,7 +258,10 @@ class EditProcurementState extends State<EditProcurement> {
               onPressed: () async {
                 final response = await requestUtil.deleteProcurement(widget.procurementData.purchaseID);
                 if (response.statusCode == 200) {
-                  widget.updateData();
+                  Function? update = procurementController.updateData.value;
+                  procurementController.clearPurchases();
+                  procurementController.getPurchases('update');
+                  update!();
                   Navigator.pop(context);
                   Navigator.pop(context);
                   ScaffoldMessenger.of(context).showSnackBar(

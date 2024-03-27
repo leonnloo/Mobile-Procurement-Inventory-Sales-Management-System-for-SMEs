@@ -38,6 +38,7 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
+    customerController.updateEditData.value = updateEditData;
     return Scaffold(
       appBar: InfoAppBar(currentTitle: 'Customer Details', currentData: widget.customer, editType: EditType.customer),
       body: SingleChildScrollView(

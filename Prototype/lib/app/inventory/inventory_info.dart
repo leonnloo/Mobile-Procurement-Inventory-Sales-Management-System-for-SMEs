@@ -32,6 +32,7 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
   }
   @override
   Widget build(BuildContext context) {
+    inventoryController.updateEditData.value = updateData;
     return Scaffold(
       appBar: InfoAppBar(currentTitle: 'Item Details', currentData: widget.item, editType: EditType.inventory),
       body: Padding(

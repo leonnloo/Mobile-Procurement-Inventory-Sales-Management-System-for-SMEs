@@ -1,22 +1,32 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:prototype/models/edit_type.dart';
 import 'package:prototype/models/procurement_model.dart';
 import 'package:prototype/models/supplier_model.dart';
+import 'package:prototype/util/get_controllers/procurement_controller.dart';
 import 'package:prototype/util/request_util.dart';
 import 'package:prototype/widgets/appbar/info_appbar.dart';
 
 final RequestUtil requestUtil = RequestUtil();
-class OrderDetailScreen extends StatelessWidget {
-  final PurchasingOrder order;
-  final Function updateData;
-  const OrderDetailScreen({super.key, required this.order, required this.updateData});
+// ignore: must_be_immutable
+class OrderDetailScreen extends StatefulWidget {
+  PurchasingOrder purchase;
+  OrderDetailScreen({super.key, required this.purchase});
+
+  @override
+  State<OrderDetailScreen> createState() => _OrderDetailScreenState();
+}
+
+class _OrderDetailScreenState extends State<OrderDetailScreen> {
+  final procurementController = Get.put(PurchaseController());
 
   @override
   Widget build(BuildContext context) {
+    procurementController.updateEditData.value = updateData;
     return Scaffold(
-      appBar: InfoAppBar(currentTitle: 'Purchase Details', currentData: order, editType: EditType.procurement, updateData: updateData,),
+      appBar: InfoAppBar(currentTitle: 'Purchase Details', currentData: widget.purchase, editType: EditType.procurement),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: SingleChildScrollView(
@@ -25,22 +35,27 @@ class OrderDetailScreen extends StatelessWidget {
             children: [
               Text('Order Information', style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.onSurface)),
               const SizedBox(height: 16.0),
-              OrderInformation(order: order), // Display order information
+              OrderInformation(purchase: widget.purchase), // Display purchase information
               const SizedBox(height: 16.0),
               Text('Supplier Information', style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.onSurface)),
               const SizedBox(height: 16.0),
-              SupplierInformation(order: order), // Display supplier's information
+              SupplierInformation(purchase: widget.purchase), // Display supplier's information
             ],
           ),
         ),
       ),
     );
   }
+  void updateData(){
+    setState(() {
+      widget.purchase = procurementController.currentPurchaseInfo.value!;
+    });
+  }
 }
 
 class SupplierInformation extends StatelessWidget {
-  const SupplierInformation({super.key, required this.order});
-  final PurchasingOrder order;
+  const SupplierInformation({super.key, required this.purchase});
+  final PurchasingOrder purchase;
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
@@ -112,7 +127,7 @@ class SupplierInformation extends StatelessWidget {
 
   Future<SupplierData> _fetchSupplierData() async {
     try {
-      final supplier = await requestUtil.getSupplier(order.supplierName);
+      final supplier = await requestUtil.getSupplier(purchase.supplierName);
       if (supplier.statusCode == 200) {
         dynamic jsonData = jsonDecode(supplier.body);
         SupplierData supplierData = SupplierData.fromJson(jsonData);
@@ -128,9 +143,9 @@ class SupplierInformation extends StatelessWidget {
 }
 
 class OrderInformation extends StatelessWidget {
-  final PurchasingOrder order;
+  final PurchasingOrder purchase;
 
-  const OrderInformation({super.key, required this.order});
+  const OrderInformation({super.key, required this.purchase});
 
   @override
   Widget build(BuildContext context) {
@@ -139,44 +154,44 @@ class OrderInformation extends StatelessWidget {
       children: [
         ListTile(
           leading: Icon(Icons.receipt, color: Theme.of(context).colorScheme.onSurface,),
-          title: Text('Order ID: ${order.purchaseID}', style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
+          title: Text('Order ID: ${purchase.purchaseID}', style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
         ),
         ListTile(
           leading: Icon(Icons.category, color: Theme.of(context).colorScheme.onSurface,),
-          title: Text('Type: ${order.itemType}', style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
+          title: Text('Type: ${purchase.itemType}', style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
         ),
         ListTile(
           leading: Icon(Icons.info, color: Theme.of(context).colorScheme.onSurface,),
-          title: Text('Item ID: ${order.itemID}', style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
+          title: Text('Item ID: ${purchase.itemID}', style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
         ),
         ListTile(
           leading: Icon(Icons.shopping_cart, color: Theme.of(context).colorScheme.onSurface,),
-          title: Text('Item: ${order.itemName}', style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
+          title: Text('Item: ${purchase.itemName}', style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
         ),
         ListTile(
           leading: Icon(Icons.calendar_today, color: Theme.of(context).colorScheme.onSurface,),
-          title: Text('Order Date: ${order.orderDate}', style: TextStyle(color: Theme.of(context).colorScheme.onSurface)), // Corrected to orderDate
+          title: Text('Order Date: ${purchase.orderDate}', style: TextStyle(color: Theme.of(context).colorScheme.onSurface)), // Corrected to orderDate
         ),
         ListTile(
           leading: Icon(Icons.schedule, color: Theme.of(context).colorScheme.onSurface,),
-          title: Text('Order Date: ${order.deliveryDate}', style: TextStyle(color: Theme.of(context).colorScheme.onSurface)), // Corrected to orderDate
+          title: Text('Order Date: ${purchase.deliveryDate}', style: TextStyle(color: Theme.of(context).colorScheme.onSurface)), // Corrected to orderDate
         ),
         ListTile(
           leading: Icon(Icons.delivery_dining, color: Theme.of(context).colorScheme.onSurface,),
-          title: Text('Quantity: ${order.quantity.toString()}', style: TextStyle(color: Theme.of(context).colorScheme.onSurface)), // You might want to replace productID with the actual delivery status field
+          title: Text('Quantity: ${purchase.quantity.toString()}', style: TextStyle(color: Theme.of(context).colorScheme.onSurface)), // You might want to replace productID with the actual delivery status field
         ),
         ListTile(
           leading: Icon(Icons.attach_money, color: Theme.of(context).colorScheme.onSurface,),
-          title: Text('Unit Price: \$${order.unitPrice.toStringAsFixed(2).toString()}', style: TextStyle(color: Theme.of(context).colorScheme.onSurface)), // Corrected to totalPrice
+          title: Text('Unit Price: \$${purchase.unitPrice.toStringAsFixed(2).toString()}', style: TextStyle(color: Theme.of(context).colorScheme.onSurface)), // Corrected to totalPrice
         ),
         ListTile(
           leading: Icon(Icons.attach_money, color: Theme.of(context).colorScheme.onSurface,),
-          title: Text('Total Amount: \$${order.totalPrice.toStringAsFixed(2).toString()}', style: TextStyle(color: Theme.of(context).colorScheme.onSurface)), // Corrected to totalPrice
+          title: Text('Total Amount: \$${purchase.totalPrice.toStringAsFixed(2).toString()}', style: TextStyle(color: Theme.of(context).colorScheme.onSurface)), // Corrected to totalPrice
         ),
 
         ListTile(
           leading: Icon(Icons.shopping_bag, color: Theme.of(context).colorScheme.onSurface,),
-          title: Text('Status: ${order.status}', style: TextStyle(color: Theme.of(context).colorScheme.onSurface)), // You might want to replace totalPrice with the actual supplier name field
+          title: Text('Status: ${purchase.status}', style: TextStyle(color: Theme.of(context).colorScheme.onSurface)), // You might want to replace totalPrice with the actual supplier name field
         ),
       ],
     );

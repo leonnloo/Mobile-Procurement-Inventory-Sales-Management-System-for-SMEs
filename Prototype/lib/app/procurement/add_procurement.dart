@@ -1,7 +1,9 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:prototype/app/procurement/get_procurement.dart';
+import 'package:prototype/util/get_controllers/procurement_controller.dart';
 import 'package:prototype/util/request_util.dart';
 import 'package:prototype/util/validate_text.dart';
 import 'package:prototype/widgets/appbar/common_appbar.dart';
@@ -30,6 +32,7 @@ class AddProcurementScreenState extends State<AddProcurementScreen> {
   late TextEditingController _quantityController;
   late TextEditingController _statusController;
   late String type = 'Product';
+  final procurementController = Get.put(PurchaseController());
 
   @override
   void initState() {
@@ -185,9 +188,10 @@ class AddProcurementScreenState extends State<AddProcurementScreen> {
                         );
                         
                         if (response.statusCode == 200) {
-                          if (widget.updateData != null) {
-                            widget.updateData!();
-                          }
+                          Function? update = procurementController.updateData.value;
+                          procurementController.clearPurchases();
+                          procurementController.getPurchases('update');
+                          update!();
                           Navigator.pop(context);
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
