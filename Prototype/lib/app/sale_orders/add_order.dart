@@ -163,9 +163,9 @@ class AddOrderScreenState extends State<AddOrderScreen> {
                         // Display validation error messages
                         _formKey.currentState?.validate();
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Please fill in all the required fields.'),
-                            backgroundColor: Colors.red,
+                          SnackBar(
+                            content: const Text('Please fill in all the required fields.'),
+                            backgroundColor: Theme.of(context).colorScheme.error,
                           ),
                         );
                       } else {                
@@ -174,8 +174,11 @@ class AddOrderScreenState extends State<AddOrderScreen> {
                         );
                         
                         if (response.statusCode == 200) {
-                          if (widget.updateData != null) {
-                            widget.updateData!();
+                          Function? update = orderController.updateData.value;
+                          orderController.clearOrders();
+                          orderController.getOrders();
+                          if (update != null) {
+                            update();
                           }
                           Navigator.pop(context);
                           ScaffoldMessenger.of(context).showSnackBar(
@@ -189,7 +192,7 @@ class AddOrderScreenState extends State<AddOrderScreen> {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               content: Text('Order added failed: ${jsonDecode(response.body)['detail']}'),
-                              backgroundColor: Colors.red,
+                              backgroundColor: Theme.of(context).colorScheme.error,
                             ),
                           );
                         }
