@@ -270,10 +270,10 @@ class _DataSearch extends SearchDelegate<String> {
 
 
 
-void navigateToOrderDetail(BuildContext context, SalesOrder item) {
+void navigateToOrderDetail(BuildContext context, SalesOrder order) {
   Navigator.of(context).push(
     MaterialPageRoute(
-      builder: (context) => OrderDetailScreen(item: item),
+      builder: (context) => OrderDetailScreen(order: order),
     ),
   );
 }

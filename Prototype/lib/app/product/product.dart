@@ -1,9 +1,9 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:prototype/app/product/speed_dial_product.dart';
 import 'package:prototype/models/product_model.dart';
 import 'package:prototype/app/product/product_info.dart';
+import 'package:prototype/util/get_controllers/product_controller.dart';
 import 'package:prototype/util/request_util.dart';
 
 class ProductManagementScreen extends StatefulWidget {
@@ -17,6 +17,7 @@ class ProductManagementScreen extends StatefulWidget {
 class ProductManagementScreenState extends State<ProductManagementScreen> {
   String? _selectedFilter = 'ID';
   final RequestUtil requestUtil = RequestUtil();
+  Map<String, List<ProductItem>> groupedData = {};
   Color _getQuantityColor(int quantity, int safetyQuantity) {
     return quantity < safetyQuantity ? Theme.of(context).colorScheme.error : Theme.of(context).colorScheme.onSurface;
   }
@@ -31,253 +32,237 @@ class ProductManagementScreenState extends State<ProductManagementScreen> {
 
   @override
   Widget build(BuildContext context) {
+    groupedData['In Stock'] = [];
+    groupedData['Low Stock'] = [];
+    groupedData['Out of Stock'] = [];
+    final productController = Get.put(ProductController());
+    // ignore: unused_local_variable
     final size = MediaQuery.of(context).size;
-    return Scaffold(
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: SizedBox(
-              width: 1100,
-              child: Row(
-                children: [
-                  const Text('Filter Products: '),
-                  PopupMenuButton<String>(
-                    onSelected: (value) {
-                      setState(() {
-                        _selectedFilter = value;
-                      });
-                    },
-                    itemBuilder: (BuildContext context) => [
-                      PopupMenuItem(
-                        value: 'ID',
-                        child: Text('ID', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
-                      ),
-                      PopupMenuItem(
-                        value: 'Product',
-                        child: Text('Product', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
-                      ),
-                      PopupMenuItem(
-                        value: 'Unit Price',
-                        child: Text('Unit Price', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
-                      ),
-                      PopupMenuItem(
-                        value: 'Selling Price',
-                        child: Text('Selling Price', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
-                      ),
-                      PopupMenuItem(
-                        value: 'Quantity',
-                        child: Text('Quantity', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
-                      ),
-                      PopupMenuItem(
-                        value: 'Weight',
-                        child: Text('Weight', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
-                      ),
-                      PopupMenuItem(
-                        value: 'Safety Quantity',
-                        child: Text('Safety Quantity', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
-                      ),
-                      PopupMenuItem(
-                        value: 'Markup',
-                        child: Text('Markup', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
-                      ),
-                      PopupMenuItem(
-                        value: 'Margin',
-                        child: Text('Margin', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
-                      ),
-                      PopupMenuItem(
-                        value: 'Status',
-                        child: Text('Status', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
-                      ),
-                    ],
-                  ),
-                ],
+    productController.updateData.value = updateData;
+    return DefaultTabController(
+      length: groupedData.keys.length,
+      initialIndex: 0,
+      child: Scaffold(
+        body: Column(
+          children: [
+            SizedBox(
+              width: double.infinity,
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Row(
+                  children: [
+                    const Text('Filter Products: '),
+                    PopupMenuButton<String>(
+                      onSelected: (value) {
+                        setState(() {
+                          _selectedFilter = value;
+                        });
+                      },
+                      itemBuilder: (BuildContext context) => [
+                        PopupMenuItem(
+                          value: 'ID',
+                          child: Text('ID', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
+                        ),
+                        PopupMenuItem(
+                          value: 'Product',
+                          child: Text('Product', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
+                        ),
+                        PopupMenuItem(
+                          value: 'Unit Price',
+                          child: Text('Unit Price', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
+                        ),
+                        PopupMenuItem(
+                          value: 'Selling Price',
+                          child: Text('Selling Price', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
+                        ),
+                        PopupMenuItem(
+                          value: 'Quantity',
+                          child: Text('Quantity', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
+                        ),
+                        PopupMenuItem(
+                          value: 'Weight',
+                          child: Text('Weight', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
+                        ),
+                        PopupMenuItem(
+                          value: 'Safety Quantity',
+                          child: Text('Safety Quantity', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
+                        ),
+                        PopupMenuItem(
+                          value: 'Markup',
+                          child: Text('Markup', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
+                        ),
+                        PopupMenuItem(
+                          value: 'Margin',
+                          child: Text('Margin', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
+                        ),
+                        PopupMenuItem(
+                          value: 'Status',
+                          child: Text('Status', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-          
-          FutureBuilder(
-            key: futureBuilderKey,
-            future: _fetchAndFilterProducts(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return SizedBox(
-                  height: size.height * 0.8,
-                  width: double.infinity,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      const SizedBox(height: 26.0),
-                      CircularProgressIndicator(
-                        color: Theme.of(context).colorScheme.error,
-                      ),
-                      const SizedBox(height: 16.0),
-                      Text(
-                        'Loading...',
-                        style: TextStyle(fontSize: 16.0, color: Theme.of(context).colorScheme.onSurface),
-                      ),
-                    ],
-                  ),
-                );
-              } else if (snapshot.hasError) {
-                return Container(
-                  height: size.height * 0.8,
-                  width: double.infinity,
-                  padding: const EdgeInsets.only(top: 20.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "Unable to load products",
-                        style: TextStyle(color: Theme.of(context).colorScheme.onSurface, fontSize: 20),
-                      ),
-                    ],
-                  ),
-                );
-              } else if (!snapshot.hasData) {
-                return Container(
-                  width: double.infinity,
-                  height: size.height * 0.8,
-                  padding: const EdgeInsets.only(top: 20.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "No products available",
-                        style: TextStyle(color: Theme.of(context).colorScheme.onSurface, fontSize: 20),
-                      ),
-                    ],
-                  ),
-                );
-              } else if (snapshot.hasData) {
-                List<ProductItem> products = snapshot.data as List<ProductItem>;
-                return SingleChildScrollView(
-                  scrollDirection: Axis.horizontal, 
-                  child:
-                    SingleChildScrollView(
-                      scrollDirection: Axis.vertical,
-                      child: DataTable(
-                        columns: [
-                          DataColumn(label: Text('ID', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),)),
-                          DataColumn(label: Text('Product', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),)),
-                          DataColumn(label: Text('Unit Price', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),)),
-                          DataColumn(label: Text('Selling Price', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),)),
-                          DataColumn(label: Text('Quantity', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),)),
-                          DataColumn(label: Text('Margin', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),)),
-                          DataColumn(label: Text('Markup', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),)),
-                          DataColumn(label: Text('Status', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),)),
-                        ],
-                        rows: products.map((product) {
-                          return DataRow(cells: [
-                            DataCell(
-                              Text(product.productID.toString()),
-                              onTap: () {
-                                navigateToProductDetail(context, product, updateData);
-                              }
-                            ),
-                            DataCell(
-                              Text(product.productName),
-                              onTap: () {
-                                navigateToProductDetail(context, product, updateData);
-                              }
-                            ),
-                            DataCell(
-                              Text('\$${product.unitPrice.toStringAsFixed(2).toString()}'),
-                              onTap: () {
-                                navigateToProductDetail(context, product, updateData);
-                              }              
-                            ),
-                            DataCell(
-                              Text('\$${product.sellingPrice.toStringAsFixed(2).toString()}'),
-                              onTap: () {
-                                navigateToProductDetail(context, product, updateData);
-                              }              
-                            ),
-                            DataCell(
-                              Text(
-                                product.quantity.toString(),
-                                style: TextStyle(
-                                color: _getQuantityColor(
-                                  product.quantity,
-                                  product.criticalLvl,
-                                  ),
-                                ),
-                              ),
-                              onTap: () {
-                                navigateToProductDetail(context, product, updateData);
-                              }              
-                            ),
-                            DataCell(
-                              Text(product.margin),
-                              onTap: () {
-                                navigateToProductDetail(context, product, updateData);
-                              }              
-                            ),
-                            DataCell(
-                              Text(product.markup),
-                              onTap: () {
-                                navigateToProductDetail(context, product, updateData);
-                              }              
-                            ),
-                            DataCell(
-                              Text(product.status),
-                              onTap: () {
-                                navigateToProductDetail(context, product, updateData);
-                              }              
-                            ),
-                          ]);
-                        }).toList(),
-                      ),
-                    )
-                );
+            TabBar(
+              labelColor: Theme.of(context).colorScheme.onPrimaryContainer,
+              unselectedLabelColor: Theme.of(context).colorScheme.onPrimaryContainer,
+              indicatorColor: Theme.of(context).colorScheme.primary,
+              indicatorSize: TabBarIndicatorSize.label,
+              indicatorWeight: 2.0,
+              labelPadding: const EdgeInsets.all(10),
+              tabs: groupedData.keys.map((status) => Tab(text: status)).toList(),
+            ),
+            FutureBuilder(
+              key: futureBuilderKey,
+              future: productController.getProducts(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const SizedBox();
+                } else if (snapshot.hasError) {
+                  return Text('Error: ${snapshot.error}');
+                } else if (!snapshot.hasData) {
+                  return const SizedBox(
+                    height: 150.0,
+                    child: Center(
+                      child: Text('Unable to load', style: TextStyle(fontSize: 14.0),),
+                    ),
+                  );
+                } else {
+                  List<ProductItem> productItem = snapshot.data!;
+                  for (var data in productItem) {
+                    groupedData[data.status]?.add(data);
+                  }
+                  return Expanded(
+                    child: TabBarView(
+                      children: [
+                        buildProductSection(context, groupedData['In Stock']!),
+                        buildProductSection(context, groupedData['Low Stock']!),
+                        buildProductSection(context, groupedData['Out of Stock']!),
+                      ]
+                    ),
+                  );
+                }
               }
-              else {
-                return Container();
-              }
-            }
-          ),
-        ],
+            ),
+          ],
+        ),
+        floatingActionButton: productSpeedDial(context)
       ),
-      floatingActionButton: productSpeedDial(context, updateData)
     );
   }
 
+  Widget buildProductSection(BuildContext context, List<ProductItem> productList) {
+    productList = _fetchAndFilterProducts(productList);
+    return SingleChildScrollView(
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: DataTable(
+          columnSpacing: 16.0,
+          horizontalMargin: 16.0,
+          columns: [
+            DataColumn(label: Text('ID', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),)),
+            DataColumn(label: Text('Product', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),)),
+            DataColumn(label: Text('Unit Price', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),)),
+            DataColumn(label: Text('Selling Price', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),)),
+            DataColumn(label: Text('Quantity', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),)),
+            DataColumn(label: Text('Margin', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),)),
+            DataColumn(label: Text('Markup', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),)),
+            DataColumn(label: Text('Status', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),)),
+          ],
+          rows: productList.map((ProductItem product) {
+            return DataRow(
+              cells: [
+                DataCell(
+                  Text(product.productID.toString()),
+                  onTap: () {
+                    navigateToProductDetail(context, product);
+                  }
+                ),
+                DataCell(
+                  Text(product.productName),
+                  onTap: () {
+                    navigateToProductDetail(context, product);
+                  }
+                ),
+                DataCell(
+                  Text('\$${product.unitPrice.toStringAsFixed(2)}'),
+                  onTap: () {
+                    navigateToProductDetail(context, product);
+                  }              
+                ),
+                DataCell(
+                  Text('\$${product.sellingPrice.toStringAsFixed(2)}'),
+                  onTap: () {
+                    navigateToProductDetail(context, product);
+                  }              
+                ),
+                DataCell(
+                  Text(
+                    product.quantity.toString(),
+                    style: TextStyle(
+                    color: _getQuantityColor(
+                      product.quantity,
+                      product.criticalLvl,
+                      ),
+                    ),
+                  ),
+                  onTap: () {
+                    navigateToProductDetail(context, product);
+                  }              
+                ),
+                DataCell(
+                  Text(product.margin),
+                  onTap: () {
+                    navigateToProductDetail(context, product);
+                  }              
+                ),
+                DataCell(
+                  Text(product.markup),
+                  onTap: () {
+                    navigateToProductDetail(context, product);
+                  }              
+                ),
+                DataCell(
+                  Text(product.status),
+                  onTap: () {
+                    navigateToProductDetail(context, product);
+                  }              
+                ),
+              ],
+            );
+          }).toList(),
+        )
+      ),
+    );
+  }
 
-  Future<List<ProductItem>> _fetchAndFilterProducts() async {
+  List<ProductItem> _fetchAndFilterProducts(List<ProductItem> products) {
     if (_selectedFilter == null) {
       return [];
     } else {
-      final response = await requestUtil.getProducts();
-      if (response.statusCode == 200) {
-        List<dynamic> jsonData = jsonDecode(response.body);
-        
-        List<ProductItem> products = jsonData.map((data) => ProductItem.fromJson(data)).toList();
-        switch (_selectedFilter) {
-          case 'ID':
-            return products..sort((a, b) => a.productID.compareTo(b.productID));
-          case 'Product':
-            return products..sort((a, b) => a.productName.compareTo(b.productName));
-          case 'Unit Price':
-            return products..sort((a, b) => a.unitPrice.compareTo(b.unitPrice));
-          case 'Selling Price':
-            return products..sort((a, b) => a.sellingPrice.compareTo(b.sellingPrice));
-          case 'Quantity':
-            return products..sort((a, b) => a.quantity.compareTo(b.quantity));
-          case 'Critical Level':
-            return products..sort((a, b) => a.criticalLvl.compareTo(b.criticalLvl));
-          case 'Markup':
-            return products..sort((a, b) => calculateMarkup(a.unitPrice.toDouble(), a.sellingPrice).compareTo(calculateMarkup(b.unitPrice.toDouble(), b.sellingPrice)));
-          case 'Margin':
-            return products..sort((a, b) => calculateMargin(a.unitPrice.toDouble(), a.sellingPrice).compareTo(calculateMargin(b.unitPrice.toDouble(), b.sellingPrice)));
-          case 'Status':
-            return products..sort((a, b) => a.status.compareTo(b.status));
-          default:
-            return products;
-        }
-      }
-      else{
-        return [];
+      switch (_selectedFilter) {
+        case 'ID':
+          return products..sort((a, b) => a.productID.compareTo(b.productID));
+        case 'Product':
+          return products..sort((a, b) => a.productName.compareTo(b.productName));
+        case 'Unit Price':
+          return products..sort((a, b) => a.unitPrice.compareTo(b.unitPrice));
+        case 'Selling Price':
+          return products..sort((a, b) => a.sellingPrice.compareTo(b.sellingPrice));
+        case 'Quantity':
+          return products..sort((a, b) => a.quantity.compareTo(b.quantity));
+        case 'Critical Level':
+          return products..sort((a, b) => a.criticalLvl.compareTo(b.criticalLvl));
+        case 'Markup':
+          return products..sort((a, b) => calculateMarkup(a.unitPrice.toDouble(), a.sellingPrice).compareTo(calculateMarkup(b.unitPrice.toDouble(), b.sellingPrice)));
+        case 'Margin':
+          return products..sort((a, b) => calculateMargin(a.unitPrice.toDouble(), a.sellingPrice).compareTo(calculateMargin(b.unitPrice.toDouble(), b.sellingPrice)));
+        case 'Status':
+          return products..sort((a, b) => a.status.compareTo(b.status));
+        default:
+          return products;
       }
     }
   }

@@ -235,7 +235,6 @@ class EditOrderState extends State<EditOrder> {
                             update!();
                             updateEdit!();
                             Navigator.pop(context);
-                            Navigator.pop(context);
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
                                 content: Text('Order updated successfully.'),

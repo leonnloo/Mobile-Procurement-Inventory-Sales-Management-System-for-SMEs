@@ -1,5 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:prototype/app/inventory/get_inventory.dart';
@@ -173,7 +175,6 @@ class StockInOutInventoryState extends State<StockInOutInventory> {
                         final response = await requestUtil.stockOutInventory(
                           itemName, quantity
                         );
-                        
                         if (response.statusCode == 200) {
                           Function? update = inventoryController.updateData.value;
                           inventoryController.clearInventories();
@@ -190,7 +191,7 @@ class StockInOutInventoryState extends State<StockInOutInventory> {
                           // Display an error message to the user
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
-                              content: const Text('Stock Out failed'),
+                              content: Text('Stock Out Failed: ${jsonDecode(response.body)['detail']}'),
                               backgroundColor: Theme.of(context).colorScheme.error,
                             ),
                           );
