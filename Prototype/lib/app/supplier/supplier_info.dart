@@ -3,8 +3,10 @@
 import "dart:math";
 
 import "package:flutter/material.dart";
+import 'package:get/get.dart';
 import 'package:prototype/models/edit_type.dart';
 import 'package:prototype/models/supplier_model.dart';
+import 'package:prototype/util/get_controllers/supplier_controller.dart';
 import 'package:prototype/util/request_util.dart';
 import 'package:prototype/widgets/appbar/info_appbar.dart';
 
@@ -16,26 +18,34 @@ void navigateToSupplierDetail(BuildContext context, SupplierData supplier, Funct
   );
 }
 
-class SupplierDetailScreen extends StatelessWidget {
-  final SupplierData supplierData;
+// ignore: must_be_immutable
+class SupplierDetailScreen extends StatefulWidget {
+  SupplierData supplierData;
   final Function updateData;
-  const SupplierDetailScreen({super.key, required this.supplierData, required this.updateData});
+  SupplierDetailScreen({super.key, required this.supplierData, required this.updateData});
 
   @override
+  State<SupplierDetailScreen> createState() => _SupplierDetailScreenState();
+}
+
+class _SupplierDetailScreenState extends State<SupplierDetailScreen> {
+  final SupplierController controller = Get.put(SupplierController());
+  @override
   Widget build(BuildContext context) {
+    controller.updateEditData.value = updateData;
     return Scaffold(
-      appBar: InfoAppBar(currentTitle: 'Supplier Details', currentData: supplierData, editType: EditType.supplier, updateData: updateData),
+      appBar: InfoAppBar(currentTitle: 'Supplier Details', currentData: widget.supplierData, editType: EditType.supplier, updateData: widget.updateData),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildDetailRow('Supplier ID', supplierData.supplierID, context),
-            _buildDetailRow('Supplier Name', supplierData.businessName, context),
-            _buildDetailRow('Contact Person', supplierData.contactPerson, context),
-            _buildDetailRow('Email', supplierData.email, context),
-            _buildDetailRow('Phone number', supplierData.phoneNo, context),
-            _buildDetailRow('Address', supplierData.address, context),
+            _buildDetailRow('Supplier ID', widget.supplierData.supplierID, context),
+            _buildDetailRow('Supplier Name', widget.supplierData.businessName, context),
+            _buildDetailRow('Contact Person', widget.supplierData.contactPerson, context),
+            _buildDetailRow('Email', widget.supplierData.email, context),
+            _buildDetailRow('Phone number', widget.supplierData.phoneNo, context),
+            _buildDetailRow('Address', widget.supplierData.address, context),
                 
             const SizedBox(height: 6.0), // Add some spacing
             _buildNotes(context),
@@ -73,9 +83,10 @@ class SupplierDetailScreen extends StatelessWidget {
       ),
     );
   }
+
   Widget _buildNotes(BuildContext context){
     final TextEditingController notesController = TextEditingController();
-    notesController.text = supplierData.notes!;
+    notesController.text = widget.supplierData.notes!;
 
     final RequestUtil requestUtil = RequestUtil();
     return Padding(
@@ -107,9 +118,9 @@ class SupplierDetailScreen extends StatelessWidget {
                       SizedBox(
                         child: TextButton(
                           onPressed: () async {
-                            final response = await requestUtil.updateNote(supplierData.supplierID, notesController.text);
+                            final response = await requestUtil.updateNote(widget.supplierData.supplierID, notesController.text);
                             if (response.statusCode == 200) {
-                              updateData();
+                              widget.updateData();
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
                                   content: Text('Note saved!'),
@@ -147,6 +158,12 @@ class SupplierDetailScreen extends StatelessWidget {
           ),
         ),
     );
+  }
+
+  void updateData(){
+    setState(() {
+      widget.supplierData = controller.currentSupplierInfo.value!;
+    });
   }
 }
 

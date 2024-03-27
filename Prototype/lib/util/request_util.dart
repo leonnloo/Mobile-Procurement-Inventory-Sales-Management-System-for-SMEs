@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
-import 'package:prototype/util/user_controller.dart';
+import 'package:prototype/util/get_controllers/user_controller.dart';
 
 class RequestUtil {
   late final String ipAddress;

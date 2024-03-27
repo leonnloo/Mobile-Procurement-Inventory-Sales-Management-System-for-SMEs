@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:prototype/app/home/chatbot/chatbot.dart';
 import 'package:prototype/app/notification_screen.dart';
-import 'package:prototype/util/user_controller.dart';
+import 'package:prototype/util/get_controllers/user_controller.dart';
 import 'package:prototype/widgets/drawer/drawer_controller.dart';
 import 'package:prototype/models/drawer_sections.dart';
 import 'package:prototype/widgets/statistics/product_sales_pie.dart';

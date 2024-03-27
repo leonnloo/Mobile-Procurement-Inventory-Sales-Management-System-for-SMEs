@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:prototype/app/user_profile/user_profile.dart';
-import 'package:prototype/util/user_controller.dart';
+import 'package:prototype/util/get_controllers/user_controller.dart';
 
 class HeaderDrawer extends StatefulWidget {
   const HeaderDrawer({super.key});
