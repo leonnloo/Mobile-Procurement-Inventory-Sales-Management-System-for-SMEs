@@ -3,8 +3,10 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:prototype/app/product/get_product.dart';
 import 'package:prototype/models/product_model.dart';
+import 'package:prototype/util/get_controllers/product_controller.dart';
 import 'package:prototype/util/request_util.dart';
 import 'package:prototype/util/validate_text.dart';
 import 'package:prototype/widgets/forms/number_field.dart';
@@ -27,7 +29,7 @@ class EditProductState extends State<EditProduct> {
   final TextEditingController _markupController = TextEditingController();
   final TextEditingController _criticalLevelController= TextEditingController();
   final RequestUtil requestUtil = RequestUtil();
-
+  final productController = Get.put(ProductController());
   @override
   void initState() {
     super.initState();
@@ -54,6 +56,7 @@ class EditProductState extends State<EditProduct> {
 
   @override
   Widget build(BuildContext context) {
+    // ignore: unused_local_variable
     final size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
@@ -175,7 +178,13 @@ class EditProductState extends State<EditProduct> {
                           );
                           
                           if (response.statusCode == 200) {
-                            widget.updateData();
+                            Function? update = productController.updateData.value;
+                            Function? updateEdit = productController.updateEditData.value;
+                            productController.updateProductInfo(ProductItem(productID: widget.productData.productID, productName: productName, unitPrice: double.parse(unitPrice), sellingPrice: double.parse(sellingPrice), quantity: int.parse(quantity), markup: markup, margin: margin, criticalLvl: int.parse(criticalLevel), status: widget.productData.status, monthlySales: widget.productData.monthlySales));
+                            productController.clearProducts();
+                            productController.getProducts();
+                            update!();
+                            updateEdit!();
                             Navigator.pop(context);
                             Navigator.pop(context);
                             ScaffoldMessenger.of(context).showSnackBar(
@@ -229,8 +238,10 @@ class EditProductState extends State<EditProduct> {
                 final response = await requestUtil.deleteProduct(widget.productData.productID);
                 
                 if (response.statusCode == 200) {
-                  widget.updateData();
-                  Navigator.pop(context);
+                  Function? update = productController.updateData.value;
+                  productController.clearProducts();
+                  productController.getProducts();
+                  update!();
                   Navigator.pop(context);
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(

@@ -211,7 +211,6 @@ class EditProcurementState extends State<EditProcurement> {
                             update!();
                             updateEdit!();
                             Navigator.pop(context);
-                            Navigator.pop(context);
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
                                 content: Text('Purchase order edited successfully.'),

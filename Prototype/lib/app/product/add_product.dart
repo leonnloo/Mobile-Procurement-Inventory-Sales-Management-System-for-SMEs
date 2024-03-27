@@ -1,7 +1,9 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:prototype/app/product/get_product.dart';
+import 'package:prototype/util/get_controllers/product_controller.dart';
 import 'package:prototype/util/request_util.dart';
 import 'package:prototype/util/validate_text.dart';
 import 'package:prototype/widgets/appbar/common_appbar.dart';
@@ -9,8 +11,7 @@ import 'package:prototype/widgets/forms/number_field.dart';
 import 'package:prototype/widgets/forms/text_field.dart';
 
 class AddProductScreen extends StatefulWidget {
-  const AddProductScreen({super.key, this.updateData});
-  final Function? updateData;
+  const AddProductScreen({super.key});
   @override
   AddProductScreenState createState() => AddProductScreenState();
 }
@@ -26,6 +27,7 @@ class AddProductScreenState extends State<AddProductScreen> {
   late TextEditingController _markupController;
   late TextEditingController _marginController;
   late TextEditingController _criticalLevelController;
+  final productController = Get.put(ProductController());
 
   @override
   void initState() {
@@ -149,9 +151,10 @@ class AddProductScreenState extends State<AddProductScreen> {
                         );
                         
                         if (response.statusCode == 200) {
-                          if (widget.updateData != null) {
-                            widget.updateData!();
-                          }
+                          Function? update = productController.updateData.value;
+                          productController.clearProducts();
+                          productController.getProducts();
+                          update!();
                           Navigator.pop(context);
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(

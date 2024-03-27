@@ -1,7 +1,11 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:prototype/app/sale_orders/get_order.dart';
+import 'package:prototype/util/get_controllers/product_controller.dart';
 import 'package:prototype/util/request_util.dart';
 import 'package:prototype/util/validate_text.dart';
 import 'package:prototype/widgets/appbar/common_appbar.dart';
@@ -9,8 +13,7 @@ import 'package:prototype/widgets/forms/dropdown_field.dart';
 import 'package:prototype/widgets/forms/number_field.dart';
 
 class StockInOutProduct extends StatefulWidget {
-  const StockInOutProduct({super.key, this.updateData});
-  final Function? updateData;
+  const StockInOutProduct({super.key});
   @override
   StockInOutProductState createState() => StockInOutProductState();
 }
@@ -18,6 +21,7 @@ class StockInOutProduct extends StatefulWidget {
 class StockInOutProductState extends State<StockInOutProduct> {
   final _formKey = GlobalKey<FormState>();
   final RequestUtil requestUtil = RequestUtil();
+  final productController = Get.put(ProductController());
 
   late TextEditingController _productItemNameController;
   late TextEditingController _quantityController;
@@ -98,9 +102,10 @@ class StockInOutProductState extends State<StockInOutProduct> {
                         );
                         
                         if (response.statusCode == 200) {
-                          if (widget.updateData != null) {
-                            widget.updateData!();
-                          }
+                          Function? update = productController.updateData.value;
+                          productController.clearProducts();
+                          productController.getProducts();
+                          update!();
                           Navigator.pop(context);
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
@@ -172,9 +177,10 @@ class StockInOutProductState extends State<StockInOutProduct> {
                         );
                         
                         if (response.statusCode == 200) {
-                          if (widget.updateData != null) {
-                            widget.updateData!();
-                          }
+                          Function? update = productController.updateData.value;
+                          productController.clearProducts();
+                          productController.getProducts();
+                          update!();
                           Navigator.pop(context);
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
@@ -186,7 +192,7 @@ class StockInOutProductState extends State<StockInOutProduct> {
                           // Display an error message to the user
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
-                              content: const Text('Stock Out failed'),
+                              content: Text('Stock Out Failed: ${jsonDecode(response.body)['detail']}'),
                               backgroundColor: Theme.of(context).colorScheme.error,
                             ),
                           );
