@@ -153,7 +153,7 @@ class HomeWidgets extends StatelessWidget {
                             
                       GestureDetector(
                         onTap: () {
-                          controller.changePage(DrawerSections.salesManagement);
+                          // controller.changePage(DrawerSections.salesManagement);
                         },
                         child: const ProductSalesPieChart(),
                       ),

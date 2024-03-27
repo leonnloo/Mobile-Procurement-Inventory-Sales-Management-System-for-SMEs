@@ -1,18 +1,20 @@
-import 'dart:convert';
 import 'dart:math';
 
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:prototype/models/monthly_sales_model.dart';
+import 'package:prototype/util/get_controllers/monthly_sale_controller.dart';
 import 'package:prototype/util/management_util.dart';
 
 class MonthlySalesBarChart extends StatelessWidget {
   MonthlySalesBarChart({super.key});
   final ManagementUtil managementUtil = ManagementUtil();
-
+  final monthlySaleController = Get.put(MonthlySaleController());
   @override
   Widget build(BuildContext context) {
+    monthlySaleController.clearMonthlySales();
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -30,24 +32,24 @@ class MonthlySalesBarChart extends StatelessWidget {
         SizedBox(
           height: 230,
           child: FutureBuilder(
-            future: _fetchMonthlySales(),
+            future: monthlySaleController.getMonthlySales(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return const SizedBox(
+                return SizedBox(
                   width: double.infinity,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      SizedBox(height: 26.0),
+                      const SizedBox(height: 26.0),
                       CircularProgressIndicator(
-                        backgroundColor: Colors.white,
-                        color: Colors.red,
+                        backgroundColor: Colors.transparent,
+                        color: Theme.of(context).colorScheme.onPrimaryContainer,
                       ),
-                      SizedBox(height: 16.0),
+                      const SizedBox(height: 16.0),
                       Text(
                         'Loading...',
-                        style: TextStyle(fontSize: 16.0, color: Colors.white),
+                        style: TextStyle(fontSize: 16.0, color: Theme.of(context).colorScheme.onSurface),
                       ),
                     ],
                   ),
@@ -56,27 +58,26 @@ class MonthlySalesBarChart extends StatelessWidget {
                 return Container(
                   width: double.infinity,
                   padding: const EdgeInsets.only(top: 20.0),
-                  child: const Column(
+                  child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
                         "Unable to load monthly sales",
-                        style: TextStyle(color: Colors.black, fontSize: 20),
+                        style: TextStyle(color: Theme.of(context).colorScheme.onSurface, fontSize: 20),
                       ),
                     ],
                   ),
                 );
               } else if (!snapshot.hasData) {
                 return Container(
-                  color: Colors.red[400],
                   width: double.infinity,
                   padding: const EdgeInsets.only(top: 20.0),
-                  child: const Column(
+                  child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
                         "No monthly sales available",
-                        style: TextStyle(color: Colors.white, fontSize: 20),
+                        style: TextStyle(color: Theme.of(context).colorScheme.onSurface, fontSize: 20),
                       ),
                     ],
                   ),
@@ -219,16 +220,4 @@ class MonthlySalesBarChart extends StatelessWidget {
     begin: Alignment.bottomCenter,
     end: Alignment.topCenter,
   );
-
-  Future<List<MonthlySales>> _fetchMonthlySales() async {
-    final response = await managementUtil.getMonthlySales();
-    if (response.statusCode == 200){
-      List<dynamic> data = jsonDecode(response.body);
-      List<MonthlySales> result = data.map((data) => MonthlySales.fromJson(data)).toList();
-      return result;
-    }
-    else {
-      throw Exception('Unable to fetch monthly sales.');
-    }
-  }
 }

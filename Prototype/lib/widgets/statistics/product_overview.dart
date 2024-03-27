@@ -1,19 +1,12 @@
 // ignore_for_file: must_be_immutable
-
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:prototype/models/product_model.dart';
-import 'package:prototype/util/request_util.dart';
+import 'package:prototype/util/get_controllers/product_controller.dart';
 
 class ProductStatusWidget extends StatelessWidget {
   const ProductStatusWidget({super.key});
-  final int inStockCount = 0;
-
-  final int lowStockCount = 0;
-
-  final int outOfStockCount = 0;
   @override
   Widget build(BuildContext context) {
     String currentDate = DateFormat('MMMM d').format(DateTime.now());
@@ -62,12 +55,12 @@ class InventoryCount extends StatelessWidget {
   int inStockCount = 0;
   int outOfStockCount = 0;
   int lowStockCount = 0;
-  final RequestUtil requestUtil = RequestUtil();
+  final productController = Get.put(ProductController());
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: fetchProducts(),
+      future: productController.getProducts(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return SizedBox(
@@ -75,7 +68,7 @@ class InventoryCount extends StatelessWidget {
               child: CircularProgressIndicator(
                 value: null, // null indicates an indeterminate progress which spins
                 strokeWidth: 4.0, // Thickness of the circle line
-                backgroundColor: Colors.grey[200], // Color of the background circle
+                backgroundColor: Colors.transparent, // Color of the background circle
                 color: Theme.of(context).colorScheme.onSurface, // Color of the progress indicator
               ),
             ),
@@ -123,19 +116,6 @@ class InventoryCount extends StatelessWidget {
         ],
       ),
     );
-  }
-  
-  Future<List<ProductItem>> fetchProducts() async {
-    final response = await requestUtil.getProducts();
-    if (response.statusCode == 200){
-      List<dynamic> data = jsonDecode(response.body);
-      List<ProductItem> productItems = data.map((e) => ProductItem.fromJson(e)).toList();
-      return productItems;
-    }
-    else {
-      throw Exception('Failed to load products');
-    }
-
   }
   
   void calculateStock(List<ProductItem> products) {

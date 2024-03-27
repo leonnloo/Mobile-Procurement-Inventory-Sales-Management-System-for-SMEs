@@ -1,10 +1,12 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:get/get.dart';
 import 'package:prototype/models/product_model.dart';
 import 'package:prototype/resources/app_resources.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:prototype/util/get_controllers/product_controller.dart';
 import 'package:prototype/util/request_util.dart';
 import 'package:prototype/widgets/statistics/indicator.dart';
 
@@ -31,6 +33,7 @@ class PieChart2State extends State {
   double allSales = 0.0;
   final StreamController<String> _totalProfitsController = StreamController<String>.broadcast();
   final StreamController<Map<String, double>> _percentagesController = StreamController<Map<String, double>>.broadcast();
+  final productController = Get.put(ProductController());
 
 
   @override
@@ -81,7 +84,7 @@ class PieChart2State extends State {
                       if (_selectedYear == 'YTD') {
                         _selectedMonth = 0;
                       }
-                      fetchProducts().then((_) {
+                      productController.getProducts().then((_) {
                         _totalProfitsController.add(totalProfits.toString()); // Push the new totalProfits to the stream
                       });
                     });
@@ -162,7 +165,7 @@ class PieChart2State extends State {
       child: AspectRatio(
         aspectRatio: 1,
         child: FutureBuilder(
-          future: fetchProducts(),
+          future: productController.getProducts(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const SizedBox();
@@ -303,19 +306,6 @@ class PieChart2State extends State {
     _totalProfitsController.sink.add(allSales.toStringAsFixed(2));
     _percentagesController.sink.add(finalProductSales);
     return finalProductSales;
-  }
-
-  Future<List<ProductItem>> fetchProducts() async {
-    final response = await requestUtil.getProducts();
-    if (response.statusCode == 200){
-      List<dynamic> data = jsonDecode(response.body);
-      List<ProductItem> productItems = data.map((e) => ProductItem.fromJson(e)).toList();
-      return productItems;
-    }
-    else {
-      throw Exception('Failed to load products');
-    }
-
   }
   
   Widget _buildIndicators() {

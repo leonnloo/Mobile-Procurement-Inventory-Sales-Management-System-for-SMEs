@@ -20,7 +20,7 @@ class MainView extends StatelessWidget {
         colorScheme: darkColorScheme,
         useMaterial3: true
       ),
-
+      themeMode: ThemeMode.system,
       transitionDuration: const Duration(milliseconds: 500),
       home: const StartScreen(),
     );
