@@ -229,10 +229,16 @@ class EditOrderState extends State<EditOrder> {
                           if (response.statusCode == 200) {
                             Function? update = orderController.updateData.value;
                             Function? updateEdit = orderController.updateEditData.value;
+                            Function? updateDispatchDetailData = orderController.updateDispatchDetailData.value;
                             orderController.updateOrderInfo(SalesOrder(orderID: widget.orderData.orderID, orderDate: orderDate, customerID: customerID, customerName: customerName, productID: productID, productName: productName, quantity: int.parse(quantity), unitPrice: double.parse(unitPrice), totalPrice: double.parse(totalPrice), completionStatus: completionStatus, orderStatus: orderStatus, employee: employee, employeeID: employeeID));
                             orderController.clearOrders();
                             orderController.getOrders();
-                            update!();
+                            if (update != null){
+                              update();
+                            }
+                            if (updateDispatchDetailData != null){
+                              updateDispatchDetailData();
+                            }
                             updateEdit!();
                             Navigator.pop(context);
                             ScaffoldMessenger.of(context).showSnackBar(
@@ -289,7 +295,9 @@ class EditOrderState extends State<EditOrder> {
                   Function? update = orderController.updateData.value;
                   orderController.clearOrders();
                   orderController.getOrders();
-                  update!();
+                  if (update != null){
+                    update();
+                  }
                   Navigator.pop(context);
                   Navigator.pop(context);
                   ScaffoldMessenger.of(context).showSnackBar(

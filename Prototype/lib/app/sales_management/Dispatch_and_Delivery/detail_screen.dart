@@ -1,8 +1,10 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:prototype/app/sale_orders/order_info.dart';
 import 'package:prototype/models/order_model.dart';
+import 'package:prototype/util/get_controllers/order_controller.dart';
 import 'package:prototype/util/management_util.dart';
 import 'package:prototype/util/request_util.dart';
 
@@ -10,8 +12,7 @@ import 'package:prototype/util/request_util.dart';
 class DetailScreen extends StatefulWidget {
   List<SalesOrder> dispatchData;
   final String selectedStatus;
-  final Function updateData;
-  DetailScreen({super.key, required this.dispatchData, required this.selectedStatus, required this.updateData});
+  DetailScreen({super.key, required this.dispatchData, required this.selectedStatus});
 
   @override
   State<DetailScreen> createState() => _DetailScreenState();
@@ -19,9 +20,12 @@ class DetailScreen extends StatefulWidget {
 
 class _DetailScreenState extends State<DetailScreen> {
   final RequestUtil requestUtil = RequestUtil();
+  final orderController = Get.put(OrderController());
+
   final ManagementUtil managementUtil = ManagementUtil();
   @override
   Widget build(BuildContext context) {
+    orderController.updateDispatchDetailData.value = updateData;
     // 根据订单状态分类
     Map<String, List<SalesOrder>> groupedData = {};
     groupedData['To be Packaged'] = [];
@@ -45,7 +49,8 @@ class _DetailScreenState extends State<DetailScreen> {
             leading: IconButton(
               icon: const Icon(Icons.arrow_back),
               onPressed: () {
-                widget.updateData();
+                Function update = orderController.updateDispatchMenuData.value!;
+                update();
                 Navigator.of(context).pop(); // This will pop the current screen off the navigation stack.
               },
             ),
@@ -111,7 +116,7 @@ class _DetailScreenState extends State<DetailScreen> {
         child: Container(
           decoration: BoxDecoration(
             gradient: const LinearGradient(
-              colors: [Color.fromARGB(255, 60, 141, 235), Color.fromARGB(255, 7, 17, 155)], // Gradient colors
+              colors: [Color.fromARGB(255, 100, 163, 235), Color.fromARGB(255, 92, 100, 216)], // Gradient colors
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
@@ -153,6 +158,10 @@ class _DetailScreenState extends State<DetailScreen> {
                     }
                     final response = await managementUtil.updateDispatch(order.orderID, completionStatus);
                     if (response.statusCode == 200) {
+                      Function update = orderController.updateDispatchMenuData.value!;
+                      orderController.clearOrders();
+                      orderController.getOrders;
+                      update();
                       final List<SalesOrder> updatedDispatchData = await _fetchSalesOrderData();
                       setState(() {
                         widget.dispatchData = updatedDispatchData;
@@ -193,7 +202,6 @@ class _DetailScreenState extends State<DetailScreen> {
 
   void updateData(){
     setState(() {
-      
     });
   }
 }
