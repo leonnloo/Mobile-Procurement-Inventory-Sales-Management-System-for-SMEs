@@ -2,14 +2,15 @@
 
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:prototype/util/get_controllers/customer_controller.dart';
 import 'package:prototype/util/request_util.dart';
 import 'package:prototype/util/validate_text.dart';
 import 'package:prototype/widgets/appbar/common_appbar.dart';
 import 'package:prototype/widgets/forms/text_field.dart';
 
 class AddCustomerScreen extends StatefulWidget {
-  const AddCustomerScreen({super.key, this.updateData});
-  final Function? updateData;
+  const AddCustomerScreen({super.key});
   @override
   AddCustomerScreenState createState() => AddCustomerScreenState();
 }
@@ -17,7 +18,7 @@ class AddCustomerScreen extends StatefulWidget {
 class AddCustomerScreenState extends State<AddCustomerScreen> {
   final _formKey = GlobalKey<FormState>();
   final RequestUtil requestUtil = RequestUtil();
-
+  final customerController = Get.put(CustomerController());
   late TextEditingController _businessNameController;
   late TextEditingController _contactPersonController;
   late TextEditingController _emailController;
@@ -108,9 +109,10 @@ class AddCustomerScreenState extends State<AddCustomerScreen> {
                       );
                       
                       if (response.statusCode == 200) {
-                        if (widget.updateData != null) {
-                          widget.updateData!();
-                        }
+                        Function? update = customerController.updateData.value;
+                        customerController.clearCustomers();
+                        customerController.getCustomers();
+                        update!();
                         Navigator.pop(context);
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(

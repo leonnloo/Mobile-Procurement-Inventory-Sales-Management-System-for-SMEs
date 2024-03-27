@@ -10,8 +10,7 @@ import 'package:prototype/widgets/appbar/common_appbar.dart';
 import 'package:prototype/widgets/forms/text_field.dart';
 
 class AddSupplierScreen extends StatefulWidget {
-  const AddSupplierScreen({super.key, this.updateData});
-  final Function? updateData;
+  const AddSupplierScreen({super.key});
   @override
   AddSupplierScreenState createState() => AddSupplierScreenState();
 }

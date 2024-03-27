@@ -13,8 +13,7 @@ import 'package:prototype/widgets/forms/text_field.dart';
 
 class EditProcurement extends StatefulWidget {
   final PurchasingOrder procurementData;
-  final Function updateData;
-  const EditProcurement({super.key, required this.procurementData, required this.updateData});
+  const EditProcurement({super.key, required this.procurementData});
 
   @override
   EditProcurementState createState() => EditProcurementState();

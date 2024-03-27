@@ -12,8 +12,7 @@ import 'package:prototype/widgets/forms/text_field.dart';
 
 class EditProduct extends StatefulWidget {
   final ProductItem productData;
-  final Function updateData;
-  const EditProduct({super.key, required this.productData, required this.updateData});
+  const EditProduct({super.key, required this.productData});
 
   @override
   EditProductState createState() => EditProductState();
