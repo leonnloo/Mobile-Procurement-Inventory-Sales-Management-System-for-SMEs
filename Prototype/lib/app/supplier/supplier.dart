@@ -1,9 +1,11 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:prototype/app/supplier/add_supplier.dart';
 import 'package:prototype/models/supplier_model.dart';
 import 'package:prototype/app/supplier/supplier_info.dart';
+import 'package:prototype/util/get_controllers/supplier_controller.dart';
 import 'package:prototype/util/request_util.dart';
 
 
@@ -20,26 +22,33 @@ class _SupplierManagementScreenState extends State<SupplierManagementScreen> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final SupplierController controller = Get.put(SupplierController());
+    controller.updateData.value = updateData;
     return Scaffold(
       body: FutureBuilder(
         key: futureBuilderKey,
-        future: _fetchSupplierData(),
+        future: controller.getSuppliers(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const SizedBox(height: 26.0),
-                CircularProgressIndicator(
-                  color: Theme.of(context).colorScheme.error,
-                ),
-                const SizedBox(height: 16.0),
-                Text(
-                  'Loading...',
-                  style: TextStyle(fontSize: 16.0, color: Theme.of(context).colorScheme.onSurface),
-                ),
-              ],
+            return SizedBox(
+              height: size.height * 0.8,
+              width: double.infinity,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const SizedBox(height: 26.0),
+                  CircularProgressIndicator(
+                    backgroundColor: Colors.transparent,
+                    color: Theme.of(context).colorScheme.onPrimaryContainer,
+                  ),
+                  const SizedBox(height: 16.0),
+                  Text(
+                    'Loading...',
+                    style: TextStyle(fontSize: 16.0, color: Theme.of(context).colorScheme.onSurface),
+                  ),
+                ],
+              ),
             );
           } else if (snapshot.hasError) {
             return Container(
@@ -140,26 +149,6 @@ class _SupplierManagementScreenState extends State<SupplierManagementScreen> {
       ),
     );
   }
-
-  Future<List<SupplierData>> _fetchSupplierData() async {
-    try {
-      final customer = await requestUtil.getSuppliers();
-      if (customer.statusCode == 200) {
-        // Assuming the JSON response is a list of objects
-        List<dynamic> jsonData = jsonDecode(customer.body);
-        
-        // Map each dynamic object to SupplierData
-        List<SupplierData> supplierData = jsonData.map((data) => SupplierData.fromJson(data)).toList();
-        return supplierData;
-      } else {
-        throw Exception('Unable to fetch supplier data.');
-      }
-    } catch (error) {
-      // print('Error in _fetchSupplierData: $error');
-      rethrow; // Rethrow the error to be caught by FutureBuilder
-    }
-  }
-
   Key futureBuilderKey = UniqueKey();
 
   void updateData() async {

@@ -6,7 +6,7 @@ import 'package:prototype/app/authenticate/screens/start_screen.dart';
 import 'package:prototype/app/user_profile/edit_user.dart';
 import 'package:prototype/models/user_model.dart';
 import 'package:prototype/util/request_util.dart';
-import 'package:prototype/util/user_controller.dart';
+import 'package:prototype/util/get_controllers/user_controller.dart';
 import 'package:prototype/widgets/fade_in_animation/fade_in_controller.dart';
 
 final RequestUtil requestUtil = RequestUtil();
@@ -26,8 +26,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     final user = userController.currentUserInfo.value!;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('User Profile'),
-        backgroundColor: Colors.red[400],
+        title: Text('User Profile', style: TextStyle(color: Theme.of(context).colorScheme.surface),),
+        backgroundColor: Theme.of(context).colorScheme.onPrimaryContainer,
         actions: [
           IconButton(
             iconSize: 30.0,
@@ -41,6 +41,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             },
           ),
         ],
+        iconTheme: IconThemeData(color: Theme.of(context).colorScheme.surface),
       ),
       body: ListView(
         padding: const EdgeInsets.all(16.0),
@@ -59,23 +60,23 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
           const SizedBox(height: 16.0),
           Text(
             userController.currentUserInfo.value!.employeeName,
-            style: const TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
+            style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.onSurface),
           ),
           const SizedBox(height: 8.0),
           Text(
             user.email,
-            style: const TextStyle(fontSize: 16.0, color: Colors.grey),
+            style: TextStyle(fontSize: 16.0, color: Theme.of(context).colorScheme.onSurface),
           ),
           const SizedBox(height: 16.0),
           const Divider(),
           ListTile(
-            leading: const Icon(Icons.person),
-            title: const Text('Role'),
+            leading: Icon(Icons.person, color: Theme.of(context).colorScheme.onSurface,),
+            title: Text('Role', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
             subtitle: Text(user.role),
           ),
           ListTile(
-            leading: const Icon(Icons.phone),
-            title: const Text('Phone Number'),
+            leading: Icon(Icons.phone, color: Theme.of(context).colorScheme.onSurface,),
+            title: Text('Phone Number', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
             subtitle: Text(user.phoneNumber),
           ),
 

@@ -3,15 +3,16 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:prototype/models/supplier_model.dart';
+import 'package:prototype/util/get_controllers/supplier_controller.dart';
 import 'package:prototype/util/request_util.dart';
 import 'package:prototype/util/validate_text.dart';
 import 'package:prototype/widgets/forms/text_field.dart';
 
 class EditSupplier extends StatefulWidget {
   final SupplierData supplierData;
-  final Function updateData;
-  const EditSupplier({super.key, required this.supplierData, required this.updateData});
+  const EditSupplier({super.key, required this.supplierData});
 
   @override
   EditSupplierState createState() => EditSupplierState();
@@ -24,9 +25,12 @@ class EditSupplierState extends State<EditSupplier> {
   final TextEditingController _phoneNoController = TextEditingController();
   final TextEditingController _addressController = TextEditingController();
   final RequestUtil requestUtil = RequestUtil();
+  final SupplierController controller = Get.put(SupplierController());
+  Function? update;
   @override
   void initState() {
     super.initState();
+    update = controller.updateData.value;
     _businessNameController.text = widget.supplierData.businessName;
     _contactPersonController.text = widget.supplierData.contactPerson;
     _emailController.text = widget.supplierData.email;
@@ -118,11 +122,15 @@ class EditSupplierState extends State<EditSupplier> {
                           );
                           
                           if (response.statusCode == 200) {
-                            widget.updateData();
+                            controller.updateSupplierInfo(SupplierData(supplierID: widget.supplierData.supplierID, businessName: businessName, contactPerson: contactPerson, email: email, phoneNo: phoneNumber, address: address, notes: widget.supplierData.notes));
+                            controller.clearSuppliers();
+                            Function? updateEdit = controller.updateEditData.value;
+                            updateEdit!();
+                            update!();
                             Navigator.pop(context);
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
-                                content: Text('Customer added successfully.'),
+                                content: Text('Supplier edited successfully.'),
                                 backgroundColor: Colors.green,
                               ),
                             );
@@ -130,7 +138,7 @@ class EditSupplierState extends State<EditSupplier> {
                             // Display an error message to the user
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
-                                content: Text(jsonDecode(response.body)['detail']),
+                                content: Text('Supplier edit failed: ${jsonDecode(response.body)['detail']}'),
                                 backgroundColor: Theme.of(context).colorScheme.error,
                               ),
                             );
@@ -171,7 +179,8 @@ class EditSupplierState extends State<EditSupplier> {
                 final response = await requestUtil.deleteSupplier(widget.supplierData.supplierID);
                 
                 if (response.statusCode == 200) {
-                  widget.updateData();
+                  controller.clearSuppliers();
+                  update!();
                   Navigator.of(context).pop();
                   Navigator.pop(context);
                   ScaffoldMessenger.of(context).showSnackBar(
@@ -184,7 +193,7 @@ class EditSupplierState extends State<EditSupplier> {
                   // Display an error message to the user
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      content: Text(jsonDecode(response.body)['detail']),
+                      content: Text('Supplier deletion failed: ${jsonDecode(response.body)['detail']}'),
                       backgroundColor: Theme.of(context).colorScheme.error,
                     ),
                   );

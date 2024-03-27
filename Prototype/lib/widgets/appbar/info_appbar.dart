@@ -31,7 +31,7 @@ class InfoAppBar extends StatelessWidget implements PreferredSizeWidget {
                   if (editType == EditType.customer) {
                     Get.to(() => EditCustomer(customerData: currentData, updateData: updateData));
                   } else if (editType == EditType.supplier) {
-                    Get.to(() => EditSupplier(supplierData: currentData, updateData: updateData!));
+                    Get.to(() => EditSupplier(supplierData: currentData));
                   } else if (editType == EditType.procurement) {
                     Get.to(() => EditProcurement(procurementData: currentData, updateData: updateData!));
                   } else if (editType == EditType.product) {
