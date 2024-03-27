@@ -37,13 +37,31 @@ class DropdownTextFieldState extends State<DropdownTextField> {
       future: widget.options,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Container(); 
+          return DropdownButtonFormField<String>(
+            value: defaultValue,
+            items: [''].map((String value) {
+              return DropdownMenuItem<String>(
+                value: value,
+                child: Text(value, style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
+              );
+            }).toList(),
+            onChanged: (String? newValue) {
+              if (newValue != null) {
+                widget.onChanged(newValue);
+                defaultValue = newValue;
+              }
+            },
+            decoration: InputDecoration(
+              labelText: noOptionText,
+              border: const OutlineInputBorder(),
+            ),
+          );
         } else if (snapshot.hasError) {
           return Text('Error loading options: ${snapshot.error}');
         } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
           return DropdownButtonFormField<String>(
             value: defaultValue,
-            items: snapshot.data!.map((String value) {
+            items: [''].map((String value) {
               return DropdownMenuItem<String>(
                 value: value,
                 child: Text(value, style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
@@ -89,13 +107,31 @@ class DropdownTextFieldState extends State<DropdownTextField> {
       future: widget.options,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Container();
+          return DropdownButtonFormField<String>(
+            value: defaultValue,
+            items: [''].map((String value) {
+              return DropdownMenuItem<String>(
+                value: value,
+                child: Text(value, style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
+              );
+            }).toList(),
+            onChanged: (String? newValue) {
+              if (newValue != null) {
+                widget.onChanged(newValue);
+                defaultValue = newValue;
+              }
+            },
+            decoration: InputDecoration(
+              labelText: noOptionText,
+              border: const OutlineInputBorder(),
+            ),
+          );
         } else if (snapshot.hasError) {
           return Text('Error loading options: ${snapshot.error}');
         } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
           return DropdownButtonFormField<String>(
             value: defaultValue,
-            items: snapshot.data!.map((String value) {
+            items: [''].map((String value) {
               return DropdownMenuItem<String>(
                 value: value,
                 child: Text(value, style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
