@@ -1,11 +1,10 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_navigation/get_navigation.dart';
+import 'package:get/get.dart';
 import 'package:prototype/app/inventory/inventory_filter_system.dart';
 import 'package:prototype/app/inventory/speed_dial_inventory.dart';
 import 'package:prototype/models/inventory_model.dart';
 import 'package:prototype/app/inventory/inventory_info.dart';
+import 'package:prototype/util/get_controllers/inventory_controller.dart';
 import 'package:prototype/util/request_util.dart';
 
 class InventoryScreen extends StatefulWidget {
@@ -17,13 +16,14 @@ class InventoryScreen extends StatefulWidget {
 
 class _InventoryScreenState extends State<InventoryScreen> {
   final RequestUtil requestUtil = RequestUtil();
-
+  final inventoryController = Get.put(InventoryController());
   Map<String, List<InventoryItem>> groupedData = {};
   @override
   Widget build(BuildContext context) {
-  groupedData['In Stock'] = [];
-  groupedData['Low Stock'] = [];
-  groupedData['Out of Stock'] = [];
+    inventoryController.updateData.value = updateData;  
+    groupedData['In Stock'] = [];
+    groupedData['Low Stock'] = [];
+    groupedData['Out of Stock'] = [];
     return DefaultTabController(
       length: groupedData.keys.length,
       initialIndex: 0,
@@ -73,7 +73,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
             ),
             FutureBuilder(
               key: futureBuilderKey,
-              future: _fetchInventoryData(),
+              future: inventoryController.getInventories(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const SizedBox();
@@ -105,7 +105,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
             ),
           ],
         ),
-        floatingActionButton: inventorySpeedDial(context, updateData),
+        floatingActionButton: inventorySpeedDial(context),
       ),
     );
   }
@@ -132,19 +132,19 @@ class _InventoryScreenState extends State<InventoryScreen> {
                 DataCell(
                   Text(item.itemID, style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
                   onTap: () {
-                    navigateToItemDetail(context, item, updateData);
+                    navigateToItemDetail(context, item);
                   },
                 ),
                 DataCell(
                   Text(item.itemName, style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
                   onTap: () {
-                    navigateToItemDetail(context, item, updateData);
+                    navigateToItemDetail(context, item);
                   },
                 ),
                 DataCell(
                   Text(item.category, style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
                   onTap: () {
-                    navigateToItemDetail(context, item, updateData);
+                    navigateToItemDetail(context, item);
                   },
                 ),
                 DataCell(
@@ -158,25 +158,25 @@ class _InventoryScreenState extends State<InventoryScreen> {
                     ),
                   ),
                   onTap: () {
-                    navigateToItemDetail(context, item, updateData);
+                    navigateToItemDetail(context, item);
                   },
                 ),
                 DataCell(
                   Text('\$${item.unitPrice.toStringAsFixed(2)}', style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
                   onTap: () {
-                    navigateToItemDetail(context, item, updateData);
+                    navigateToItemDetail(context, item);
                   },
                 ),
                 DataCell(
                   Text('\$${item.totalPrice.toStringAsFixed(2)}', style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
                   onTap: () {
-                    navigateToItemDetail(context, item, updateData);
+                    navigateToItemDetail(context, item);
                   },
                 ),
                 DataCell(
                   Text(item.status, style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
                   onTap: () {
-                    navigateToItemDetail(context, item, updateData);
+                    navigateToItemDetail(context, item);
                   },
                 ),
               ],
@@ -185,21 +185,6 @@ class _InventoryScreenState extends State<InventoryScreen> {
         )
       ),
     );
-  }
-
-  Future<List<InventoryItem>> _fetchInventoryData() async {
-    try {
-      final item = await requestUtil.getInventories();
-      if (item.statusCode == 200) {
-        List<dynamic> jsonData = jsonDecode(item.body);
-        List<InventoryItem> itemData = jsonData.map((data) => InventoryItem.fromJson(data)).toList();
-        return itemData;
-      } else {
-        throw Exception('Unable to fetch item data.');
-      }
-    } catch (error) {
-      rethrow; // Rethrow the error to be caught by FutureBuilder
-    }
   }
 
   Key futureBuilderKey = UniqueKey();

@@ -1,7 +1,9 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:prototype/app/inventory/get_inventory.dart';
+import 'package:prototype/util/get_controllers/inventory_controller.dart';
 import 'package:prototype/util/request_util.dart';
 import 'package:prototype/util/validate_text.dart';
 import 'package:prototype/widgets/appbar/common_appbar.dart';
@@ -19,6 +21,7 @@ class AddInventoryScreen extends StatefulWidget {
 class AddInventoryScreenState extends State<AddInventoryScreen> {
   final _formKey = GlobalKey<FormState>();
   final RequestUtil requestUtil = RequestUtil();
+  final inventoryController = Get.put(InventoryController());
 
   late TextEditingController _itemNameController;
   late TextEditingController _categoryController;
@@ -112,9 +115,10 @@ class AddInventoryScreenState extends State<AddInventoryScreen> {
                         );
                         
                         if (response.statusCode == 200) {
-                          if (widget.updateData != null) {
-                            widget.updateData!();
-                          }
+                          Function? update = inventoryController.updateData.value;
+                          inventoryController.clearInventories();
+                          inventoryController.getInventories();
+                          update!();
                           Navigator.pop(context);
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
