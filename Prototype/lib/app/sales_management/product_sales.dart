@@ -35,8 +35,8 @@ class _ProductSalesByMonthState extends State<ProductSalesByMonth> {
             children: [
               // Add a GridView for buttons
               // const SizedBox(height: 16),
-              // const ProductSalesPieChart(),
-              // const SizedBox(height: 10,),
+              const ProductSalesPieChart(),
+              const SizedBox(height: 10,),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -50,7 +50,7 @@ class _ProductSalesByMonthState extends State<ProductSalesByMonth> {
                     elevation: 16,
                     underline: Container(
                       height: 1,
-                      color: Colors.black,
+                      color: Theme.of(context).colorScheme.onSurface,
                     ),
                     onChanged: (int? newValue) {
                       setState(() {
@@ -80,7 +80,7 @@ class _ProductSalesByMonthState extends State<ProductSalesByMonth> {
                     elevation: 16,
                     underline: Container(
                       height: 1,
-                      color: Colors.black,
+                      color: Theme.of(context).colorScheme.onSurface,
                     ),
                     onChanged: (int? newValue) {
                       setState(() {
@@ -103,21 +103,21 @@ class _ProductSalesByMonthState extends State<ProductSalesByMonth> {
                 future: _fetchSalesTargetData(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const SizedBox(
+                    return SizedBox(
                       width: double.infinity,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          SizedBox(height: 26.0),
+                          const SizedBox(height: 26.0),
                           CircularProgressIndicator(
-                            backgroundColor: Colors.white,
-                            color: Colors.red,
+                            backgroundColor: Colors.transparent,
+                            color: Theme.of(context).colorScheme.onPrimaryContainer,
                           ),
-                          SizedBox(height: 16.0),
+                          const SizedBox(height: 16.0),
                           Text(
                             'Loading...',
-                            style: TextStyle(fontSize: 16.0, color: Colors.black),
+                            style: TextStyle(fontSize: 16.0, color: Theme.of(context).colorScheme.onPrimaryContainer),
                           ),
                         ],
                       ),
@@ -166,6 +166,7 @@ class _ProductSalesByMonthState extends State<ProductSalesByMonth> {
                         SingleChildScrollView(
                           scrollDirection: Axis.horizontal,
                           child: DataTable(
+                            dataTextStyle: TextStyle(color: Theme.of(context).colorScheme.onSurface),
                             columnSpacing: 20.0, // 调整列之间的间距
                             columns: const [
                               DataColumn(
@@ -256,12 +257,12 @@ class _ProductSalesByMonthState extends State<ProductSalesByMonth> {
                     return Container(
                       width: double.infinity,
                       padding: const EdgeInsets.only(top: 20.0),
-                      child: const Column(
+                      child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
                             "Unable to load product sales",
-                            style: TextStyle(color: Colors.black, fontSize: 20),
+                            style: TextStyle(color: Theme.of(context).colorScheme.onSurface, fontSize: 20),
                           ),
                         ],
                       ),
