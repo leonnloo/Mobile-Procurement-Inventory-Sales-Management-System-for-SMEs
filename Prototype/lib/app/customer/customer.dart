@@ -1,10 +1,9 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:prototype/app/customer/add_customer.dart';
 import 'package:prototype/models/customer_model.dart';
 import 'package:prototype/app/customer/customer_info.dart';
+import 'package:prototype/util/get_controllers/customer_controller.dart';
 import 'package:prototype/util/request_util.dart';
 
 class CustomerManagementScreen extends StatefulWidget {
@@ -16,14 +15,15 @@ class CustomerManagementScreen extends StatefulWidget {
 
 class _CustomerManagementScreenState extends State<CustomerManagementScreen> {
   final RequestUtil requestUtil = RequestUtil();
-
+  final customerController = Get.put(CustomerController());
   @override
   Widget build(BuildContext context) {
+    customerController.updateData.value = updateData;
     final size = MediaQuery.of(context).size;
     return Scaffold(
       body: FutureBuilder(
         key: futureBuilderKey,
-        future: _fetchCustomerData(),
+        future: customerController.getCustomers(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return SizedBox(
@@ -87,43 +87,43 @@ class _CustomerManagementScreenState extends State<CustomerManagementScreen> {
                         DataCell(
                           Text(customer.customerID, style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
                           onTap: () {
-                            navigateToCustomerDetail(context, customer, updateData);
+                            navigateToCustomerDetail(context, customer);
                           },
                         ),
                         DataCell(
                           Text(customer.businessName, style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
                           onTap: () {
-                            navigateToCustomerDetail(context, customer, updateData);
+                            navigateToCustomerDetail(context, customer);
                           },
                         ),
                         DataCell(
                           Text(customer.contactPerson, style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
                           onTap: () {
-                            navigateToCustomerDetail(context, customer, updateData);
+                            navigateToCustomerDetail(context, customer);
                           },
                         ),
                         DataCell(
                           Text(customer.email, style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
                           onTap: () {
-                            navigateToCustomerDetail(context, customer, updateData);
+                            navigateToCustomerDetail(context, customer);
                           },
                         ),
                         DataCell(
                           Text(customer.phoneNo, style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
                           onTap: () {
-                            navigateToCustomerDetail(context, customer, updateData);
+                            navigateToCustomerDetail(context, customer);
                           },
                         ),
                         DataCell(
                           Text(customer.billingAddress, style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
                           onTap: () {
-                            navigateToCustomerDetail(context, customer, updateData);
+                            navigateToCustomerDetail(context, customer);
                           },
                         ),
                         DataCell(
                           Text(customer.shippingAddress, style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
                           onTap: () {
-                            navigateToCustomerDetail(context, customer, updateData);
+                            navigateToCustomerDetail(context, customer);
                           },
                         ),
                       ],
@@ -152,26 +152,6 @@ class _CustomerManagementScreenState extends State<CustomerManagementScreen> {
       ),
     );
   }
-
-  Future<List<CustomerData>> _fetchCustomerData() async {
-    try {
-      final customer = await requestUtil.getCustomers();
-      if (customer.statusCode == 200) {
-        // Assuming the JSON response is a list of objects
-        List<dynamic> jsonData = jsonDecode(customer.body);
-        
-        // Map each dynamic object to CustomerData
-        List<CustomerData> customerData = jsonData.map((data) => CustomerData.fromJson(data)).toList();
-        return customerData;
-      } else {
-        throw Exception('Unable to fetch customer data.');
-      }
-    } catch (error) {
-      // print('Error in _fetchCustomerData: $error');
-      rethrow; // Rethrow the error to be caught by FutureBuilder
-    }
-  }
-
   Key futureBuilderKey = UniqueKey();
 
   void updateData() async {

@@ -3,15 +3,16 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:prototype/models/customer_model.dart';
+import 'package:prototype/util/get_controllers/customer_controller.dart';
 import 'package:prototype/util/request_util.dart';
 import 'package:prototype/util/validate_text.dart';
 import 'package:prototype/widgets/forms/text_field.dart';
 
 class EditCustomer extends StatefulWidget {
   final CustomerData customerData;
-  final Function? updateData;
-  const EditCustomer({super.key, required this.customerData, this.updateData});
+  const EditCustomer({super.key, required this.customerData});
 
   @override
   EditCustomerState createState() => EditCustomerState();
@@ -25,6 +26,7 @@ class EditCustomerState extends State<EditCustomer> {
   final TextEditingController _billingAddressController = TextEditingController();
   final TextEditingController _shippingAddressController = TextEditingController();
   final RequestUtil requestUtil = RequestUtil();
+  final customerController = Get.put(CustomerController());
   @override
   void initState() {
     super.initState();
@@ -125,9 +127,12 @@ class EditCustomerState extends State<EditCustomer> {
                           );
                           
                           if (response.statusCode == 200) {
-                            if (widget.updateData != null) {
-                              widget.updateData!();
-                            }
+                            Function? update = customerController.updateData.value;
+                            Function? updateEdit = customerController.updateEditData.value;
+                            customerController.clearCustomers();
+                            customerController.getCustomers();
+                            update!();
+                            updateEdit!();
                             Navigator.pop(context);
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
@@ -180,9 +185,12 @@ class EditCustomerState extends State<EditCustomer> {
                 final response = await requestUtil.deleteCustomer(widget.customerData.customerID);
                 
                 if (response.statusCode == 200) {
-                  if (widget.updateData != null) {
-                    widget.updateData!();
-                  }
+                  Function? update = customerController.updateData.value;
+                  Function? updateEdit = customerController.updateEditData.value;
+                  customerController.clearCustomers();
+                  customerController.getCustomers();
+                  update!();
+                  updateEdit!();
                   Navigator.pop(context);
                   Navigator.of(context).pop();
                   ScaffoldMessenger.of(context).showSnackBar(

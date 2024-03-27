@@ -11,8 +11,7 @@ import 'package:prototype/widgets/forms/text_field.dart';
 
 class EditInventory extends StatefulWidget {
   final InventoryItem inventoryData;
-  final Function updateData;
-  const EditInventory({super.key, required this.inventoryData, required this.updateData});
+  const EditInventory({super.key, required this.inventoryData});
 
   @override
   EditInventoryState createState() => EditInventoryState();

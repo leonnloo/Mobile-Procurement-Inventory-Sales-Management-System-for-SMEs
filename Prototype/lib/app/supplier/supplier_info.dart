@@ -10,10 +10,10 @@ import 'package:prototype/util/get_controllers/supplier_controller.dart';
 import 'package:prototype/util/request_util.dart';
 import 'package:prototype/widgets/appbar/info_appbar.dart';
 
-void navigateToSupplierDetail(BuildContext context, SupplierData supplier, Function updateData) {
+void navigateToSupplierDetail(BuildContext context, SupplierData supplier) {
   Navigator.of(context).push(
     MaterialPageRoute(
-      builder: (context) => SupplierDetailScreen(supplierData: supplier, updateData: updateData,),
+      builder: (context) => SupplierDetailScreen(supplierData: supplier),
     ),
   );
 }
@@ -21,8 +21,7 @@ void navigateToSupplierDetail(BuildContext context, SupplierData supplier, Funct
 // ignore: must_be_immutable
 class SupplierDetailScreen extends StatefulWidget {
   SupplierData supplierData;
-  final Function updateData;
-  SupplierDetailScreen({super.key, required this.supplierData, required this.updateData});
+  SupplierDetailScreen({super.key, required this.supplierData});
 
   @override
   State<SupplierDetailScreen> createState() => _SupplierDetailScreenState();
@@ -34,7 +33,7 @@ class _SupplierDetailScreenState extends State<SupplierDetailScreen> {
   Widget build(BuildContext context) {
     controller.updateEditData.value = updateData;
     return Scaffold(
-      appBar: InfoAppBar(currentTitle: 'Supplier Details', currentData: widget.supplierData, editType: EditType.supplier, updateData: widget.updateData),
+      appBar: InfoAppBar(currentTitle: 'Supplier Details', currentData: widget.supplierData, editType: EditType.supplier),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -120,7 +119,8 @@ class _SupplierDetailScreenState extends State<SupplierDetailScreen> {
                           onPressed: () async {
                             final response = await requestUtil.updateNote(widget.supplierData.supplierID, notesController.text);
                             if (response.statusCode == 200) {
-                              widget.updateData();
+                              controller.clearSuppliers();
+                              controller.getSuppliers();
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
                                   content: Text('Note saved!'),

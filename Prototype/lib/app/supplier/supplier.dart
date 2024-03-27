@@ -89,37 +89,37 @@ class _SupplierManagementScreenState extends State<SupplierManagementScreen> {
                         DataCell(
                           Text(supplier.supplierID, style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
                           onTap: () {
-                            navigateToSupplierDetail(context, supplier, updateData);
+                            navigateToSupplierDetail(context, supplier);
                           },
                         ),
                         DataCell(
                           Text(supplier.businessName, style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
                           onTap: () {
-                            navigateToSupplierDetail(context, supplier, updateData);
+                            navigateToSupplierDetail(context, supplier);
                           },
                         ),
                         DataCell(
                           Text(supplier.contactPerson, style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
                           onTap: () {
-                            navigateToSupplierDetail(context, supplier, updateData);
+                            navigateToSupplierDetail(context, supplier);
                           },
                         ),
                         DataCell(
                           Text(supplier.email, style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
                           onTap: () {
-                            navigateToSupplierDetail(context, supplier, updateData);
+                            navigateToSupplierDetail(context, supplier);
                           },
                         ),
                         DataCell(
                           Text(supplier.phoneNo, style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
                           onTap: () {
-                            navigateToSupplierDetail(context, supplier, updateData);
+                            navigateToSupplierDetail(context, supplier);
                           },
                         ),
                         DataCell(
                           Text(supplier.address, style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
                           onTap: () {
-                            navigateToSupplierDetail(context, supplier, updateData);
+                            navigateToSupplierDetail(context, supplier);
                           },
                         ),
                       ],
@@ -141,7 +141,7 @@ class _SupplierManagementScreenState extends State<SupplierManagementScreen> {
           // Navigate to a screen for adding new supplier info
           Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (context) => AddSupplierScreen(updateData: updateData,),
+              builder: (context) => const AddSupplierScreen(),
             ),
           );
         },
