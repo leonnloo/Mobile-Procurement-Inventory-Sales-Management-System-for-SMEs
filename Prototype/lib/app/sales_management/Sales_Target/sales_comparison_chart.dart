@@ -26,9 +26,9 @@ class SalesComparisonScreenState extends State<SalesComparisonScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text(
+                Text(
                   'Select Year',
-                  style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.onSurface),
                 ),
                 const SizedBox(height: 10.0),
                 DropdownButton<int>(
@@ -36,7 +36,7 @@ class SalesComparisonScreenState extends State<SalesComparisonScreen> {
                   elevation: 16,
                   underline: Container(
                     height: 1,
-                    color: Colors.black,
+                    color: Theme.of(context).colorScheme.onSurface,
                   ),
                   onChanged: (int? newValue) {
                     setState(() {
@@ -59,21 +59,21 @@ class SalesComparisonScreenState extends State<SalesComparisonScreen> {
               future: _fetchSalesTargetData(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const SizedBox(
+                  return SizedBox(
                     width: double.infinity,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        SizedBox(height: 26.0),
+                        const SizedBox(height: 26.0),
                         CircularProgressIndicator(
-                          backgroundColor: Colors.white,
-                          color: Colors.red,
+                          backgroundColor: Colors.transparent,
+                          color: Theme.of(context).colorScheme.onSurface,
                         ),
-                        SizedBox(height: 16.0),
+                        const SizedBox(height: 16.0),
                         Text(
                           'Loading...',
-                          style: TextStyle(fontSize: 16.0, color: Colors.black),
+                          style: TextStyle(fontSize: 16.0, color: Theme.of(context).colorScheme.onSurface),
                         ),
                       ],
                     ),
@@ -82,12 +82,12 @@ class SalesComparisonScreenState extends State<SalesComparisonScreen> {
                   return Container(
                     width: double.infinity,
                     padding: const EdgeInsets.only(top: 20.0),
-                    child: const Column(
+                    child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
                           "Unable to load target sales data",
-                          style: TextStyle(color: Colors.black, fontSize: 20),
+                          style: TextStyle(color: Theme.of(context).colorScheme.onSurface, fontSize: 20),
                         ),
                       ],
                     ),
@@ -97,16 +97,18 @@ class SalesComparisonScreenState extends State<SalesComparisonScreen> {
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      const Text(
+                      Text(
                         'Monthly Sales',
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
+                          color: Theme.of(context).colorScheme.onSurface
                         ),
                       ),
                       const SizedBox(height: 10),
                       DataTable(
                         columnSpacing: 20.0, // 调整列之间的间距
+                        dataTextStyle: TextStyle(color: Theme.of(context).colorScheme.onSurface),
                         columns: const [
                           DataColumn(
                             label: Text(
@@ -136,7 +138,7 @@ class SalesComparisonScreenState extends State<SalesComparisonScreen> {
                         rows: data.map((data) {
                           final difference = data.actualSales - data.targetSales;
                           final differenceText = difference.toStringAsFixed(2);
-                          final differenceColor = difference < 0 ? Colors.red : null; // 若差值为负数则设置颜色为红色
+                          final differenceColor = difference < 0 ? Theme.of(context).colorScheme.error : null; // 若差值为负数则设置颜色为红色
                           if (data.year == _selectedYear){
                             return DataRow(cells: [
                               DataCell(
@@ -186,12 +188,12 @@ class SalesComparisonScreenState extends State<SalesComparisonScreen> {
                   return Container(
                     width: double.infinity,
                     padding: const EdgeInsets.only(top: 20.0),
-                    child: const Column(
+                    child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
                           "Unable to load sales target",
-                          style: TextStyle(color: Colors.black, fontSize: 20),
+                          style: TextStyle(color: Theme.of(context).colorScheme.onPrimaryContainer, fontSize: 20),
                         ),
                       ],
                     ),

@@ -109,6 +109,7 @@ class SupplierDetailScreen extends StatelessWidget {
                           onPressed: () async {
                             final response = await requestUtil.updateNote(supplierData.supplierID, notesController.text);
                             if (response.statusCode == 200) {
+                              updateData();
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
                                   content: Text('Note saved!'),

@@ -29,7 +29,9 @@ class OrderDropdownTextFieldState extends State<OrderDropdownTextField> {
       future: widget.options,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Container(); 
+          return Container(
+            height: 45,
+          ); 
         } else if (snapshot.hasError) {
           return Text('Error loading options: ${snapshot.error}');
         } else if (!snapshot.hasData || snapshot.data!.isEmpty) {

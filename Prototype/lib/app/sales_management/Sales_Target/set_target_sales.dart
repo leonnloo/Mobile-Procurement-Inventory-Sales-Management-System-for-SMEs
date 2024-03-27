@@ -36,9 +36,9 @@ class SetSalesTargetScreenState extends State<SetSalesTargetScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text(
+                Text(
                   'Select Year',
-                  style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.onSurface),
                 ),
                 const SizedBox(height: 10.0),
                 DropdownButton<int>(
@@ -46,7 +46,7 @@ class SetSalesTargetScreenState extends State<SetSalesTargetScreen> {
                   elevation: 16,
                   underline: Container(
                     height: 1,
-                    color: Colors.black,
+                    color: Theme.of(context).colorScheme.onSurface,
                   ),
                   onChanged: (int? newValue) {
                     setState(() {
@@ -67,9 +67,9 @@ class SetSalesTargetScreenState extends State<SetSalesTargetScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text(
+                Text(
                   'Select Month',
-                  style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.onSurface),
                 ),
                 const SizedBox(height: 10.0),
                 DropdownButton<int>(
@@ -77,7 +77,7 @@ class SetSalesTargetScreenState extends State<SetSalesTargetScreen> {
                   elevation: 16,
                   underline: Container(
                     height: 1,
-                    color: Colors.black,
+                    color: Theme.of(context).colorScheme.onSurface,
                   ),
                   onChanged: (int? newValue) {
                     setState(() {
@@ -96,9 +96,9 @@ class SetSalesTargetScreenState extends State<SetSalesTargetScreen> {
               ],
             ),
             const SizedBox(height: 20.0),
-            const Text(
+            Text(
               'Set Monthly Target',
-              style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.onSurface),
             ),
             const SizedBox(height: 10.0),
             Form(
@@ -156,7 +156,7 @@ class SetSalesTargetScreenState extends State<SetSalesTargetScreen> {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: Text('Target added failed: ${jsonDecode(response.body)['detail']}'),
-                      backgroundColor: Colors.red,
+                      backgroundColor: Theme.of(context).colorScheme.error,
                     ),
                   );
                 }

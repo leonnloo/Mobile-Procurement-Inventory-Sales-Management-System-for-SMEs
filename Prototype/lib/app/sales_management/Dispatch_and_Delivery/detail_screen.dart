@@ -38,10 +38,10 @@ class _DetailScreenState extends State<DetailScreen> {
       child: Scaffold(
         appBar: AppBar(
             toolbarHeight: 60.0,
-            backgroundColor: Colors.red[400],
+            backgroundColor: Theme.of(context).colorScheme.onPrimaryContainer,
             centerTitle: true,
             automaticallyImplyLeading: false,
-            title: const Text('Orders'),
+            title: Text('Orders', style: TextStyle(color: Theme.of(context).colorScheme.surface),),
             leading: IconButton(
               icon: const Icon(Icons.arrow_back),
               onPressed: () {
@@ -57,15 +57,16 @@ class _DetailScreenState extends State<DetailScreen> {
                 },
               )
             ],
+            iconTheme: IconThemeData(color: Theme.of(context).colorScheme.surface),
           ),
         body: Column(
           children: <Widget>[
             // Style this Container to match your AppBar if needed
             TabBar(
               isScrollable: true, // This needs to be true for long labels
-              labelColor: Colors.black,
-              unselectedLabelColor: Colors.black,
-              indicatorColor: Colors.red[400],
+              labelColor: Theme.of(context).colorScheme.onSurface,
+              unselectedLabelColor: Theme.of(context).colorScheme.onSurface,
+              indicatorColor: Theme.of(context).colorScheme.primary,
               indicatorSize: TabBarIndicatorSize.label,
               indicatorWeight: 2.0,
               labelPadding: const EdgeInsets.all(10),
@@ -109,8 +110,8 @@ class _DetailScreenState extends State<DetailScreen> {
         margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0), // Adjusted horizontal margin
         child: Container(
           decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [const Color.fromARGB(199, 248, 177, 177), Colors.red.shade300], // Gradient colors
+            gradient: const LinearGradient(
+              colors: [Color.fromARGB(255, 60, 141, 235), Color.fromARGB(255, 7, 17, 155)], // Gradient colors
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
@@ -121,15 +122,15 @@ class _DetailScreenState extends State<DetailScreen> {
             child: ListTile(
               title: Text(
                 'Order ID: ${order.orderID}',
-                style: const TextStyle(color: Colors.black), // Text color contrasting with the card's gradient
+                style: TextStyle(color: Theme.of(context).colorScheme.surface), // Text color contrasting with the card's gradient
               ),
               subtitle: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Order Date: ${order.orderDate}', style: TextStyle(color: Colors.black.withOpacity(0.9))),
-                  Text('Customer ID: ${order.customerID}', style: TextStyle(color: Colors.black.withOpacity(0.9))),
-                  Text('Product ID: ${order.productID}', style: TextStyle(color: Colors.black.withOpacity(0.9))),
-                  Text('Status: ${order.completionStatus}', style: TextStyle(color: Colors.black.withOpacity(0.9))),
+                  Text('Order Date: ${order.orderDate}', style: TextStyle(color: Theme.of(context).colorScheme.surface)),
+                  Text('Customer ID: ${order.customerID}', style: TextStyle(color: Theme.of(context).colorScheme.surface)),
+                  Text('Product ID: ${order.productID}', style: TextStyle(color: Theme.of(context).colorScheme.surface)),
+                  Text('Status: ${order.completionStatus}', style: TextStyle(color: Theme.of(context).colorScheme.surface)),
                 ],
               ),
               onTap: () {
@@ -140,7 +141,7 @@ class _DetailScreenState extends State<DetailScreen> {
                 width: size.width * 0.25,
                 height: 50.0,
                 child: deliveredButton ? IconButton(
-                  icon: const Icon(Icons.check_circle_outline, color: Colors.black, size: 30,), // Icon color
+                  icon: Icon(Icons.check_circle_outline, color: Theme.of(context).colorScheme.surface, size: 30,), // Icon color
                   onPressed: () async {
                     String completionStatus = '';
                     if (order.completionStatus == 'To be Packaged') {

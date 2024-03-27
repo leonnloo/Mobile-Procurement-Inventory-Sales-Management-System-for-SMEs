@@ -18,9 +18,9 @@ class _ClaimRefundHistoryScreenState extends State<ClaimRefundHistoryScreen> {
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 60.0,
-        backgroundColor: Colors.red[400],
+        backgroundColor: Theme.of(context).colorScheme.onPrimaryContainer,
         centerTitle: true,
-        title: const Text('Orders'),
+        title: Text('Orders', style: TextStyle(color: Theme.of(context).colorScheme.surface),),
         actions: [
           IconButton(
             icon: const Icon(Icons.search),
@@ -29,27 +29,28 @@ class _ClaimRefundHistoryScreenState extends State<ClaimRefundHistoryScreen> {
             },
           )
         ],
+        iconTheme: IconThemeData(color: Theme.of(context).colorScheme.surface),
       ),
       body: FutureBuilder(
         future: fetchRefundData(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-              return const SizedBox(
+              return SizedBox(
                 height: double.infinity,
                 width: double.infinity,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    SizedBox(height: 26.0),
+                    const SizedBox(height: 26.0),
                     CircularProgressIndicator(
-                      backgroundColor: Colors.white,
-                      color: Colors.red,
+                      backgroundColor: Colors.transparent,
+                      color: Theme.of(context).colorScheme.error,
                     ),
-                    SizedBox(height: 16.0),
+                    const SizedBox(height: 16.0),
                     Text(
                       'Loading...',
-                      style: TextStyle(fontSize: 16.0, color: Colors.black),
+                      style: TextStyle(fontSize: 16.0, color: Theme.of(context).colorScheme.onSurface),
                     ),
                   ],
                 ),

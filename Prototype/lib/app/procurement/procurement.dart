@@ -193,55 +193,55 @@ class _ProcurementTabState extends State<ProcurementTab> {
                       return DataRow(
                         cells: [
                           DataCell(
-                            Text(order.purchaseID, style: TextStyle(color: Theme.of(context).colorScheme.error)),
+                            Text(order.purchaseID, style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
                             onTap: () {
                               navigateToOrderDetail(context, order, updateData);
                             },
                           ),
                           DataCell(
-                            Text(order.itemName, style: TextStyle(color: Theme.of(context).colorScheme.error)),
+                            Text(order.itemName, style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
                             onTap: () {
                               navigateToOrderDetail(context, order, updateData);
                             },
                           ),
                           DataCell(
-                            Text(order.supplierName, style: TextStyle(color: Theme.of(context).colorScheme.error)),
+                            Text(order.supplierName, style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
                             onTap: () {
                               navigateToOrderDetail(context, order, updateData);
                             },
                           ),
                           DataCell(
-                            Text(order.orderDate, style: TextStyle(color: Theme.of(context).colorScheme.error)),
+                            Text(order.orderDate, style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
                             onTap: () {
                               navigateToOrderDetail(context, order, updateData);
                             },
                           ),
                           DataCell(
-                            Text(order.deliveryDate, style: TextStyle(color: Theme.of(context).colorScheme.error)),
+                            Text(order.deliveryDate, style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
                             onTap: () {
                               navigateToOrderDetail(context, order, updateData);
                             },
                           ),
                           DataCell(
-                            Text(order.quantity.toString(), style: TextStyle(color: Theme.of(context).colorScheme.error)),
+                            Text(order.quantity.toString(), style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
                             onTap: () {
                               navigateToOrderDetail(context, order, updateData);
                             },
                           ),
                           DataCell(
-                            Text(order.unitPrice.toStringAsFixed(2).toString(), style: TextStyle(color: Theme.of(context).colorScheme.error)),
+                            Text(order.unitPrice.toStringAsFixed(2).toString(), style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
                             onTap: () {
                               navigateToOrderDetail(context, order, updateData);
                             },
                           ),
                           DataCell(
-                            Text(order.totalPrice.toStringAsFixed(2).toString(), style: TextStyle(color: Theme.of(context).colorScheme.error)),
+                            Text(order.totalPrice.toStringAsFixed(2).toString(), style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
                             onTap: () {
                               navigateToOrderDetail(context, order, updateData);
                             },
                           ),
                           DataCell(
-                            Text(order.status, style: TextStyle(color: Theme.of(context).colorScheme.error)),
+                            Text(order.status, style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
                             onTap: () {
                               navigateToOrderDetail(context, order, updateData);
                             },

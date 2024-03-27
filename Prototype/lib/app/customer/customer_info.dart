@@ -112,6 +112,7 @@ class CustomerDetailScreen extends StatelessWidget {
                           onPressed: () async {
                             final response = await requestUtil.updateNote(customer.customerID, notesController.text);
                             if (response.statusCode == 200) {
+                              updateData();
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
                                   content: Text('Note saved!'),
