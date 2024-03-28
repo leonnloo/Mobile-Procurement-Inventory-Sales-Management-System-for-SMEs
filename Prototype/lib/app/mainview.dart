@@ -14,7 +14,7 @@ class MainView extends StatelessWidget {
       title: 'GRP-Team 14',
       themeMode: ThemeMode.light,
       theme: ThemeData(
-        fontFamily: GoogleFonts.chivo().fontFamily,
+        fontFamily: GoogleFonts.lato().fontFamily,
         colorScheme: lightColorScheme,
         useMaterial3: true
       ),

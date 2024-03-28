@@ -1,17 +1,16 @@
 // ignore_for_file: must_be_immutable
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:prototype/models/product_model.dart';
-import 'package:prototype/util/get_controllers/product_controller.dart';
+import 'package:prototype/models/inventory_model.dart';
+import 'package:prototype/util/get_controllers/inventory_controller.dart';
 
-class ProductStatusWidget extends StatelessWidget {
-  const ProductStatusWidget({super.key});
+class InventoryStatusWidget extends StatelessWidget {
+  const InventoryStatusWidget({super.key});
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Card(
-        color: Color(0xFFFFDAB9),
-        // color: Color.fromARGB(255, 250, 193, 69),
+        color: Color(0xFFD8BFD8),
         // color: Theme.of(context).colorScheme.background,
         elevation: 4.0,
         // color: const Color.fromARGB(255, 11, 238, 181),
@@ -27,7 +26,7 @@ class ProductStatusWidget extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        'Product Overview',
+                        'Inventory Overview',
                         style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.onSurface),
                       ),
                     ],
@@ -38,7 +37,7 @@ class ProductStatusWidget extends StatelessWidget {
                   color: Theme.of(context).colorScheme.onSurface,
                 ),
                 const SizedBox(height: 5,),
-                ProductCount(),
+                InventoryCount(),
               ],
             ),
           ),
@@ -47,18 +46,18 @@ class ProductStatusWidget extends StatelessWidget {
   }
 }
 
-class ProductCount extends StatelessWidget {
-  ProductCount({super.key,});
+class InventoryCount extends StatelessWidget {
+  InventoryCount({super.key,});
 
   int inStockCount = 0;
   int outOfStockCount = 0;
   int lowStockCount = 0;
-  final productController = Get.put(ProductController());
+  final inventoryController = Get.put(InventoryController());
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: productController.getProducts(),
+      future: inventoryController.getInventories(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return SizedBox(
@@ -81,9 +80,11 @@ class ProductCount extends StatelessWidget {
             ),
           );
         } else {
-          List<ProductItem> products = snapshot.data!;
-          calculateStock(products);
+          List<InventoryItem> inventorys = snapshot.data!;
+          calculateStock(inventorys);
           return Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               _buildCol('$inStockCount', 'In Stock', context),
               _buildCol('$lowStockCount', 'Low Stock', context),
@@ -118,11 +119,11 @@ class ProductCount extends StatelessWidget {
     );
   }
   
-  void calculateStock(List<ProductItem> products) {
-    for (var product in products) {
-      if (product.status == 'In Stock') {
+  void calculateStock(List<InventoryItem> inventorys) {
+    for (var inventory in inventorys) {
+      if (inventory.status == 'In Stock') {
         inStockCount++;
-      } else if (product.status == 'Low Stock') {
+      } else if (inventory.status == 'Low Stock') {
         lowStockCount++;
       } else {
         outOfStockCount++;
