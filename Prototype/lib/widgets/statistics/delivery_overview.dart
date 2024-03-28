@@ -48,6 +48,7 @@ class DeliveryOverview extends StatelessWidget {
             children: [
               Expanded(
                 child: Card(
+                  shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20.0))),
                   color: Theme.of(context).colorScheme.secondaryContainer,
                   elevation: 4.0,
                   child: Padding(
@@ -111,6 +112,7 @@ class DeliveryOverview extends StatelessWidget {
               Expanded(
                 child: Card(
                   color: Theme.of(context).colorScheme.secondaryContainer,
+                  shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20.0))),
                   elevation: 4.0,
                   child: Padding(
                     padding: const EdgeInsets.all(20.0),

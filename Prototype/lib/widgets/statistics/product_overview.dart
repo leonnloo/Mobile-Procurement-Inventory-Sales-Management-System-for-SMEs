@@ -10,7 +10,8 @@ class ProductStatusWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Card(
-        color: Color(0xFFFFDAB9),
+        color: const Color(0xFFFFDAB9),
+        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20.0))),
         // color: Color.fromARGB(255, 250, 193, 69),
         // color: Theme.of(context).colorScheme.background,
         elevation: 4.0,
