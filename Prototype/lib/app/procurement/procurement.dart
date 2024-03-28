@@ -1,14 +1,18 @@
+// ignore_for_file: use_build_context_synchronously
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:prototype/app/procurement/add_procurement.dart';
 import 'package:prototype/models/procurement_model.dart';
 import 'package:prototype/app/procurement/procurement_info.dart';
 import 'package:prototype/app/procurement/procurement_filter_system.dart';
+import 'package:prototype/util/get_controllers/inventory_controller.dart';
 import 'package:prototype/util/get_controllers/procurement_controller.dart';
-import 'package:prototype/util/request_util.dart';
+import 'package:prototype/util/get_controllers/product_controller.dart';
 
 final procurementController = Get.put(PurchaseController());
-
+final inventoryController = Get.put(InventoryController());
+final productController = Get.put(ProductController());
 class ProcurementScreen extends StatefulWidget {
   const ProcurementScreen({super.key});
 
@@ -17,13 +21,25 @@ class ProcurementScreen extends StatefulWidget {
 }
 
 class _ProcurementScreenState extends State<ProcurementScreen> {
+  String dummy = '';
+  Map<String, List<PurchasingOrder>> groupedData = {};
+
+  Key futureBuilderKey = UniqueKey();
+  void updateData() async {
+    setState(() {
+      futureBuilderKey = UniqueKey();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     procurementController.updateData.value = updateData;
+    groupedData['Completed'] = [];
+    groupedData['Delivering'] = [];
     return DefaultTabController(
       length: 2,
       child: Scaffold(
-        body: ListView(
+        body: Column(
           children:  <Widget>[
             //filter system
               SizedBox(
@@ -75,19 +91,41 @@ class _ProcurementScreenState extends State<ProcurementScreen> {
               indicatorWeight: 2.0,
               labelPadding: const EdgeInsets.all(10),
               tabs: const [
-                Tab(text: 'Delivered'),
+                Tab(text: 'Completed',),
                 Tab(text: 'Ongoing'),
               ],
             ),
-            const SizedBox(
-              height: 400,
-              child: TabBarView(
-                children: [
-                  ProcurementTab(category: 'Past',),
-                  ProcurementTab(category: 'Present',),
-                ],
-              ),
-            ),
+            FutureBuilder(
+              key: futureBuilderKey,
+              future: procurementController.getPurchases(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const SizedBox();
+                } else if (snapshot.hasError) {
+                  return Text('Error: ${snapshot.error}');
+                } else if (!snapshot.hasData) {
+                  return const SizedBox(
+                    height: 150.0,
+                    child: Center(
+                      child: Text('Unable to load', style: TextStyle(fontSize: 14.0),),
+                    ),
+                  );
+                } else {
+                  List<PurchasingOrder> purchaseList = snapshot.data!;
+                  for (var data in purchaseList) {
+                    groupedData[data.status]?.add(data);
+                  }
+                  return Expanded(
+                    child: TabBarView(
+                      children: [
+                        buildPurchaseSection(context, groupedData['Completed']!),
+                        buildPurchaseSection(context, groupedData['Delivering']!),
+                      ]
+                    ),
+                  );
+                }
+              }
+            ),  
           ],
         ),
         floatingActionButton: FloatingActionButton(
@@ -107,177 +145,140 @@ class _ProcurementScreenState extends State<ProcurementScreen> {
       ),
     );
   }
-  void updateData(){
-    setState(() {
-      
-    });
-  }
-}
-
-class ProcurementTab extends StatefulWidget {
-  final String category;
-  const ProcurementTab({super.key, required this.category});
-
-  @override
-  State<ProcurementTab> createState() => _ProcurementTabState();
-}
-
-class _ProcurementTabState extends State<ProcurementTab> {
-  final RequestUtil requestUtil = RequestUtil();
-
-  @override
-  Widget build(BuildContext context) {
-    procurementController.updateData.value = updateData;
-    return FutureBuilder(
-      key: futureBuilderKey,
-      future: procurementController.getPurchases(widget.category),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-            return SizedBox(
-              height: double.infinity,
-              width: double.infinity,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const SizedBox(height: 26.0),
-                  CircularProgressIndicator(
-                    backgroundColor: Colors.transparent,
-                    color: Theme.of(context).colorScheme.error,
-                  ),
-                  const SizedBox(height: 16.0),
-                  Text(
-                    'Loading...',
-                    style: TextStyle(fontSize: 16.0, color: Theme.of(context).colorScheme.onSurface),
-                  ),
-                ],
-              ),
-            );
-          } else if (snapshot.hasError) {
-            return Container(
-              width: double.infinity,
-              height: double.infinity,
-              padding: const EdgeInsets.only(top: 20.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    "Unable to load procurement data",
-                    style: TextStyle(color: Theme.of(context).colorScheme.onSurface, fontSize: 20),
-                  ),
-                ],
-              ),
-            );
-          } else if (snapshot.hasData) {
-            List<PurchasingOrder> orders =
-                snapshot.data as List<PurchasingOrder>;
-            return SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: SingleChildScrollView(
-                scrollDirection: Axis.vertical,
-                child: 
-                  DataTable(
-                    columnSpacing: 16.0, // Adjust the spacing between columns
-                    horizontalMargin: 16.0, // Adjust the horizontal margin
-                    columns: [
-                      DataColumn(label: Text('Order ID', style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),),
-                      DataColumn(label: Text('Item', style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),),
-                      DataColumn(label: Text('Supplier', style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),),
-                      DataColumn(label: Text('Order Date', style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),),
-                      DataColumn(label: Text('Delivery Date', style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),),
-                      DataColumn(label: Text('Quantity', style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),),
-                      DataColumn(label: Text('Unit Price', style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),),
-                      DataColumn(label: Text('Total Price', style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),),
-                      DataColumn(label: Text('Status', style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),),
-                    ],
-                    rows: orders.map((order) {
-                      return DataRow(
-                        cells: [
-                          DataCell(
-                            Text(order.purchaseID, style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
-                            onTap: () {
-                              navigateToOrderDetail(context, order);
-                            },
-                          ),
-                          DataCell(
-                            Text(order.itemName, style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
-                            onTap: () {
-                              navigateToOrderDetail(context, order);
-                            },
-                          ),
-                          DataCell(
-                            Text(order.supplierName, style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
-                            onTap: () {
-                              navigateToOrderDetail(context, order);
-                            },
-                          ),
-                          DataCell(
-                            Text(order.orderDate, style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
-                            onTap: () {
-                              navigateToOrderDetail(context, order);
-                            },
-                          ),
-                          DataCell(
-                            Text(order.deliveryDate, style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
-                            onTap: () {
-                              navigateToOrderDetail(context, order);
-                            },
-                          ),
-                          DataCell(
-                            Text(order.quantity.toString(), style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
-                            onTap: () {
-                              navigateToOrderDetail(context, order);
-                            },
-                          ),
-                          DataCell(
-                            Text(order.unitPrice.toStringAsFixed(2).toString(), style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
-                            onTap: () {
-                              navigateToOrderDetail(context, order);
-                            },
-                          ),
-                          DataCell(
-                            Text(order.totalPrice.toStringAsFixed(2).toString(), style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
-                            onTap: () {
-                              navigateToOrderDetail(context, order);
-                            },
-                          ),
-                          DataCell(
-                            Text(order.status, style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
-                            onTap: () {
-                              navigateToOrderDetail(context, order);
-                            },
-                          ),
-                        ],
+  
+  Widget buildPurchaseSection(BuildContext context, List<PurchasingOrder> purchaseList) {
+    bool check = false; // Initialize check variable
+    for (var order in purchaseList) {
+      if (order.status == 'Delivering') { 
+        check = true;
+        break;
+      }
+    }
+    return SingleChildScrollView(
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: DataTable(
+          columnSpacing: 16.0,
+          horizontalMargin: 16.0,
+            columns: [
+              if (check) DataColumn(label: Text('', style: TextStyle(color: Theme.of(context).colorScheme.onSurface))),
+              DataColumn(label: Text('Order ID', style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),),
+              DataColumn(label: Text('Item', style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),),
+              DataColumn(label: Text('Supplier', style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),),
+              DataColumn(label: Text('Order Date', style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),),
+              DataColumn(label: Text('Delivery Date', style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),),
+              DataColumn(label: Text('Quantity', style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),),
+              DataColumn(label: Text('Unit Price', style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),),
+              DataColumn(label: Text('Total Price', style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),),
+              DataColumn(label: Text('Status', style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),),
+            ],
+          rows: purchaseList.map((PurchasingOrder order) {
+            return DataRow(
+              cells: [
+                if (check) DataCell(
+                  Icon(Icons.check, color: Theme.of(context).colorScheme.onSurface),
+                  onTap: () async {
+                    final response = await requestUtil.updateProcurementStatus(
+                      order.purchaseID, order.itemName, order.itemType, order.itemID, order.supplierName, order.orderDate, order.deliveryDate, order.unitPrice, order.totalPrice, order.quantity, order.status
+                    );
+                    
+                    if (response.statusCode == 200) {
+                      Function? update = procurementController.updateData.value;
+                      procurementController.clearPurchases();
+                      procurementController.getPurchases();
+                      update!();
+                      Function? updateInventory = inventoryController.updateData.value;
+                      inventoryController.clearInventories();
+                      inventoryController.getInventories();
+                      if (updateInventory!= null){
+                        updateInventory();
+                      }
+                      Function? updateProduct = productController.updateData.value;
+                      productController.clearProducts();
+                      productController.getProducts();
+                      if (updateProduct!= null){
+                        updateProduct();
+                      }
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Purchase order completed.'),
+                          backgroundColor: Colors.green,
+                        ),
                       );
-                    }).toList(),
-                  ),
+                      setState(() {
+                        
+                      });
+                    } else {
+                      // Display an error message to the user
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('Purchase complete failed: ${jsonDecode(response.body)['detail']}'),
+                          backgroundColor: Theme.of(context).colorScheme.error,
+                        ),
+                      );
+                    }
+                  },
                 ),
+                DataCell(
+                  Text(order.purchaseID, style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
+                  onTap: () {
+                    navigateToOrderDetail(context, order);
+                  },
+                ),
+                DataCell(
+                  Text(order.itemName, style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
+                  onTap: () {
+                    navigateToOrderDetail(context, order);
+                  },
+                ),
+                DataCell(
+                  Text(order.supplierName, style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
+                  onTap: () {
+                    navigateToOrderDetail(context, order);
+                  },
+                ),
+                DataCell(
+                  Text(order.orderDate, style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
+                  onTap: () {
+                    navigateToOrderDetail(context, order);
+                  },
+                ),
+                DataCell(
+                  Text(order.deliveryDate, style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
+                  onTap: () {
+                    navigateToOrderDetail(context, order);
+                  },
+                ),
+                DataCell(
+                  Text(order.quantity.toString(), style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
+                  onTap: () {
+                    navigateToOrderDetail(context, order);
+                  },
+                ),
+                DataCell(
+                  Text(order.unitPrice.toStringAsFixed(2).toString(), style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
+                  onTap: () {
+                    navigateToOrderDetail(context, order);
+                  },
+                ),
+                DataCell(
+                  Text(order.totalPrice.toStringAsFixed(2).toString(), style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
+                  onTap: () {
+                    navigateToOrderDetail(context, order);
+                  },
+                ),
+                DataCell(
+                  Text(order.status, style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
+                  onTap: () {
+                    navigateToOrderDetail(context, order);
+                  },
+                ),
+              ],
             );
-          } else {
-            return Container(
-              width: double.infinity,
-              height: double.infinity,
-              padding: const EdgeInsets.only(top: 20.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    "Unable to load procurement data",
-                    style: TextStyle(color: Theme.of(context).colorScheme.onSurface, fontSize: 20),
-                  ),
-                ],
-              ),
-            );
-          }
-        });
-  }
-
-  Key futureBuilderKey = UniqueKey();
-
-  void updateData() async {
-    setState(() {
-      futureBuilderKey = UniqueKey();
-    });
+          }).toList(),
+        )
+      ),
+    );
   }
 }
 

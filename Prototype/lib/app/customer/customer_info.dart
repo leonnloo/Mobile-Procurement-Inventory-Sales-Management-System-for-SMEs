@@ -57,11 +57,11 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
             const SizedBox(height: 6.0), // Add some spacing
             _buildNotes(context),
             
-            const SizedBox(height: 6.0),
-            _buildHistory(context),
+            // const SizedBox(height: 6.0),
+            // _buildHistory(context),
 
-            const SizedBox(height: 6.0),
-            _buildPastOrders(context)
+            // const SizedBox(height: 6.0),
+            // _buildPastOrders(context)
           ],
         ),
       ),

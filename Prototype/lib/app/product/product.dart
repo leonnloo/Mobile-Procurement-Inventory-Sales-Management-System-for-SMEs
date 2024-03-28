@@ -269,8 +269,10 @@ class ProductManagementScreenState extends State<ProductManagementScreen> {
 
   Key futureBuilderKey = UniqueKey();
   void updateData() async {
-    setState(() {
-      futureBuilderKey = UniqueKey();
-    });
+    if (mounted) {
+      setState(() {
+        futureBuilderKey = UniqueKey();
+      });
+    }
   }
 }

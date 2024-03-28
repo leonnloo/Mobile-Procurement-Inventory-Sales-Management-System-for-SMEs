@@ -67,7 +67,7 @@ def create_user(user: NewUser):
     )
     
     # Find the document with the largest employee_id
-    latest_id_document = users_db.find_one(sort=[("employee_id", -1)])
+    latest_id_document = users_db.find_one(sort=[("_id", DESCENDING)])
 
     # Determine the next employee_id
     if latest_id_document:

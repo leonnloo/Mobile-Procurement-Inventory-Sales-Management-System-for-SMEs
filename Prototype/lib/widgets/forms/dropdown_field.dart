@@ -108,7 +108,7 @@ class DropdownTextFieldState extends State<DropdownTextField> {
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return DropdownButtonFormField<String>(
-            value: defaultValue,
+            value: '',
             items: [''].map((String value) {
               return DropdownMenuItem<String>(
                 value: value,

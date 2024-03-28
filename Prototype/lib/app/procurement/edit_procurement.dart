@@ -6,7 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:prototype/app/procurement/get_procurement.dart';
 import 'package:prototype/models/procurement_model.dart';
+import 'package:prototype/util/get_controllers/inventory_controller.dart';
 import 'package:prototype/util/get_controllers/procurement_controller.dart';
+import 'package:prototype/util/get_controllers/product_controller.dart';
 import 'package:prototype/util/request_util.dart';
 import 'package:prototype/util/validate_text.dart';
 import 'package:prototype/widgets/forms/dropdown_field.dart';
@@ -34,6 +36,8 @@ class EditProcurementState extends State<EditProcurement> {
   final TextEditingController _statusController = TextEditingController();
   final RequestUtil requestUtil = RequestUtil();
   final procurementController = Get.put(PurchaseController());
+  final productController = Get.put(ProductController());
+  final inventoryController = Get.put(InventoryController());
   late String type = 'Product';
   bool changeType = true;
   @override
@@ -206,10 +210,24 @@ class EditProcurementState extends State<EditProcurement> {
                             Function? update = procurementController.updateData.value;
                             Function? updateEdit = procurementController.updateEditData.value;
                             procurementController.clearPurchases();
-                            procurementController.getPurchases('update');
+                            procurementController.getPurchases();
                             procurementController.updatePurchaseInfo(PurchasingOrder(purchaseID: widget.procurementData.purchaseID, itemType: itemType, itemID: itemID, itemName: itemName, supplierName: supplierName, orderDate: orderDate, deliveryDate: deliveryDate, quantity: int.parse(quantity), unitPrice: double.parse(unitPrice), totalPrice: double.parse(totalPrice), status: status));
                             update!();
                             updateEdit!();
+                            if (status == 'Completed') {
+                              Function? updateInventory = inventoryController.updateData.value;
+                              inventoryController.clearInventories();
+                              inventoryController.getInventories();
+                              if (updateInventory!= null){
+                                updateInventory();
+                              }
+                              Function? updateProduct = productController.updateData.value;
+                              productController.clearProducts();
+                              productController.getProducts();
+                              if (updateProduct!= null){
+                                updateProduct();
+                              }
+                            }
                             Navigator.pop(context);
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
@@ -260,7 +278,7 @@ class EditProcurementState extends State<EditProcurement> {
                 if (response.statusCode == 200) {
                   Function? update = procurementController.updateData.value;
                   procurementController.clearPurchases();
-                  procurementController.getPurchases('update');
+                  procurementController.getPurchases();
                   update!();
                   Navigator.pop(context);
                   Navigator.pop(context);

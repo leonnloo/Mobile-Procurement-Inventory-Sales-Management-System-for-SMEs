@@ -3,7 +3,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:prototype/app/procurement/get_procurement.dart';
+import 'package:prototype/util/get_controllers/inventory_controller.dart';
 import 'package:prototype/util/get_controllers/procurement_controller.dart';
+import 'package:prototype/util/get_controllers/product_controller.dart';
 import 'package:prototype/util/request_util.dart';
 import 'package:prototype/util/validate_text.dart';
 import 'package:prototype/widgets/appbar/common_appbar.dart';
@@ -33,6 +35,8 @@ class AddProcurementScreenState extends State<AddProcurementScreen> {
   late TextEditingController _statusController;
   late String type = 'Product';
   final procurementController = Get.put(PurchaseController());
+  final productController = Get.put(ProductController());
+  final inventoryController = Get.put(InventoryController());
 
   @override
   void initState() {
@@ -188,10 +192,26 @@ class AddProcurementScreenState extends State<AddProcurementScreen> {
                         );
                         
                         if (response.statusCode == 200) {
-                          Function? update = procurementController.updateData.value;
+                          Function? updatePurchase = procurementController.updateData.value;
                           procurementController.clearPurchases();
-                          procurementController.getPurchases('update');
-                          update!();
+                          procurementController.getPurchases();
+                          if (updatePurchase != null) {
+                            updatePurchase();
+                          }
+                          if (status == 'Completed') {
+                            Function? updateInventory = inventoryController.updateData.value;
+                            inventoryController.clearInventories();
+                            inventoryController.getInventories();
+                            if (updateInventory!= null){
+                              updateInventory();
+                            }
+                            Function? updateProduct = productController.updateData.value;
+                            productController.clearProducts();
+                            productController.getProducts();
+                            if (updateProduct!= null){
+                              updateProduct();
+                            }
+                          }
                           Navigator.pop(context);
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(

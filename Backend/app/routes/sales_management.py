@@ -196,7 +196,7 @@ def get_refunds(token: str = Depends(oauth_scheme)):
 
 @sales_management_router.post("/sales-management/new_refund")
 def new_refund(refund: Refund, token: str = Depends(oauth_scheme)):
-    latest_id_document = refunds_db.find_one(sort=[("refund_id", -1)])
+    latest_id_document = refunds_db.find_one(sort=[("_id", DESCENDING)])
 
     if latest_id_document:
         query_id = latest_id_document.get("refund_id", "-1")

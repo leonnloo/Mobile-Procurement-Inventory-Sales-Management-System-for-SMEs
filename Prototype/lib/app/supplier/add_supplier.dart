@@ -104,7 +104,9 @@ class AddSupplierScreenState extends State<AddSupplierScreen> {
                       if (response.statusCode == 200) {
                         controller.clearSuppliers();
                         Function? update = controller.updateData.value;
-                        update!();
+                        if (update != null){
+                          update();
+                        }
                         Navigator.pop(context);
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(

@@ -38,7 +38,7 @@ class MessagesScreenState extends State<MessagesScreen> {
                     topLeft:
                         Radius.circular(widget.messages[index]['isUserMessage'] ? 20 : 0),
                   ),
-                  color: widget.messages[index]['isUserMessage'] ? Colors.red[300] : Colors.grey[300],
+                  color: widget.messages[index]['isUserMessage'] ? Theme.of(context).colorScheme.secondaryContainer : Colors.grey[300],
                 ),
                 constraints: BoxConstraints(maxWidth: w * 2 / 3),
                 child: Text(widget.messages[index]['message']),

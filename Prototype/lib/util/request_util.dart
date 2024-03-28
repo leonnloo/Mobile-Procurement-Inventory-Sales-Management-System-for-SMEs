@@ -305,6 +305,25 @@ class RequestUtil {
       })
     );
   }
+  
+  Future<http.Response> updateProcurementStatus(String id, dynamic itemName, dynamic itemType, dynamic itemID, dynamic supplierName, dynamic orderDate, dynamic deliveryDate, dynamic unitPrice, dynamic totalPrice, dynamic quantity, dynamic status) async {
+    return http.put(
+      Uri.parse("${endpoint}update_procurement_status/$id"),
+      headers: {"Authorization": "Bearer $token", 'Content-Type': 'application/json'},
+      body: jsonEncode({
+        'item_name': itemName,
+        'item_type': itemType,
+        'item_id': itemID,
+        'supplier_name': supplierName,
+        'order_date': orderDate,
+        'delivery_date': deliveryDate,
+        'unit_price': unitPrice,
+        'total_price':  totalPrice,
+        'quantity': quantity,
+        'status': 'Completed'
+      })
+    );
+  }
 
   Future<http.Response> getProcurement(){
     return http.get(

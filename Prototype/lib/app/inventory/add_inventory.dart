@@ -118,7 +118,9 @@ class AddInventoryScreenState extends State<AddInventoryScreen> {
                           Function? update = inventoryController.updateData.value;
                           inventoryController.clearInventories();
                           inventoryController.getInventories();
-                          update!();
+                          if (update != null){
+                            update();
+                          }
                           Navigator.pop(context);
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(

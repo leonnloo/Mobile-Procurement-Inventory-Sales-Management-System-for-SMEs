@@ -12,17 +12,17 @@ class MainView extends StatelessWidget {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'GRP-Team 14',
+      themeMode: ThemeMode.light,
       theme: ThemeData(
-        fontFamily: GoogleFonts.josefinSans().fontFamily,
+        fontFamily: GoogleFonts.chivo().fontFamily,
         colorScheme: lightColorScheme,
         useMaterial3: true
       ),
-      darkTheme: ThemeData(
-        fontFamily: GoogleFonts.josefinSans().fontFamily,
-        colorScheme: darkColorScheme,
-        useMaterial3: true
-      ),
-      themeMode: ThemeMode.system,
+      // darkTheme: ThemeData(
+      //   fontFamily: GoogleFonts.josefinSans().fontFamily,
+      //   colorScheme: darkColorScheme,
+      //   useMaterial3: true
+      // ),
       transitionDuration: const Duration(milliseconds: 500),
       home: const StartScreen(),
     );

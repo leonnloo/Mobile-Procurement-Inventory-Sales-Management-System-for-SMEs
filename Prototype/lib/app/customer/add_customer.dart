@@ -112,7 +112,9 @@ class AddCustomerScreenState extends State<AddCustomerScreen> {
                         Function? update = customerController.updateData.value;
                         customerController.clearCustomers();
                         customerController.getCustomers();
-                        update!();
+                        if (update != null){
+                          update();
+                        }
                         Navigator.pop(context);
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
