@@ -31,13 +31,13 @@ class _ChatBotState extends State<ChatBot> {
               horizontal: 14,
               vertical: 8,
             ),
-            color: Colors.grey[300],
+            color: Theme.of(context).colorScheme.primaryContainer,
             child: Row(
               children: [
                 Expanded(
                   child: TextField(
                     controller: _controller,
-                    style: const TextStyle(color: Colors.black),
+                    style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
                   )
                 ),
                 IconButton(

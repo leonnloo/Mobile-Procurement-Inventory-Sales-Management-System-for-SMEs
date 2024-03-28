@@ -1,19 +1,27 @@
 from datetime import datetime
 def processNextID(query: str) -> str:
-    # Extract integers from the string
-    extracted_numbers = ''.join(char for char in query if char.isdigit())
-
-    # Convert the extracted numbers to an integer
-    result = int(extracted_numbers) if extracted_numbers else None
-    if result:
-        result += 1
-        # Extract the first two characters from the original query
-        first_two_characters = query[:2]
-        # Append them to the result
-        result_with_prefix = f"{first_two_characters}{result}"
-        return result_with_prefix
+    # Find the index of the first digit in the query
+    index_of_first_digit = next((index for index, char in enumerate(query) if char.isdigit()), None)
+    
+    if index_of_first_digit is not None:
+        # Extract the prefix
+        prefix = query[:index_of_first_digit]
+        
+        # Extract the number part of the ID
+        number_part = query[index_of_first_digit:]
+        
+        # Extract integers from the number part
+        extracted_numbers = ''.join(char for char in number_part if char.isdigit())
+        
+        # Convert the extracted numbers to an integer
+        result = int(extracted_numbers) + 1
+        
+        # Combine prefix and incremented number
+        return f"{prefix}{result}"
     else:
+        # If no digits found, return None
         return None
+
 
 def extract_year_month_day(date_str: str):
     try:

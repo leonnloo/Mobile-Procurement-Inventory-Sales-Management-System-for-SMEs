@@ -154,7 +154,9 @@ class AddProductScreenState extends State<AddProductScreen> {
                           Function? update = productController.updateData.value;
                           productController.clearProducts();
                           productController.getProducts();
-                          update!();
+                          if (update != null){
+                            update();
+                          }
                           Navigator.pop(context);
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(

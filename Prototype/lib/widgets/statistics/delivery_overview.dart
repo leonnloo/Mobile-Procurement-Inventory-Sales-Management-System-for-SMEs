@@ -57,7 +57,7 @@ class DeliveryOverview extends StatelessWidget {
                           ],
                         ),
                         FutureBuilder(
-                          future: purchaseController.getPurchases('all'),
+                          future: purchaseController.getPurchases(),
                           builder: (context, snapshot) {
                             if (snapshot.connectionState == ConnectionState.waiting) {
                               return SizedBox(

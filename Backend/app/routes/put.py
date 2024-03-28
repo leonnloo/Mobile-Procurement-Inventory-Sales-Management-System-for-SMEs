@@ -205,12 +205,12 @@ def update_sale_order(order: SaleOrder, order_id, token: str = Depends(oauth_sch
 def update_procurement(purchase: NewProcurement, procurement_id: str, token: str = Depends(oauth_scheme)):
     old_purchase = procurement_db.find_one({"purchase_id": procurement_id})
     if old_purchase:
-        if purchase.status == "Completed":
+        # add stocks if purchase is delivered
+        if purchase.status == "Completed" and old_purchase['status'] == "Delivering":
             if purchase.item_type == "Product":
                 product = product_db.find_one({"product_id": purchase.item_id})
-                left_product = product["quantity"] - purchase.quantity
-                if left_product >= 0:
-                    product['quantity'] = left_product
+                product['quantity'] += purchase.quantity
+                if product['quantity'] >= 0:
                     if product['quantity'] > 0 and product['quantity'] >= product['critical_level']:
                         new_status = 'In Stock'
                     elif product['quantity'] > 0 and product['quantity'] < product['critical_level']:
@@ -227,9 +227,98 @@ def update_procurement(purchase: NewProcurement, procurement_id: str, token: str
                     )
             elif purchase.item_type == "Inventory":
                 item = inventory_db.find_one({"item_id": purchase.item_id})
-                left_item = item["quantity"] - purchase.quantity
-                if left_item >= 0:
-                    item['quantity'] = left_item
+                item["quantity"] += purchase.quantity
+                if item["quantity"] >= 0:
+                    if item['quantity'] > 0 and item['quantity'] >= item['critical_level']:
+                        new_status = 'In Stock'
+                    elif item['quantity'] > 0 and item['quantity'] < item['critical_level']:
+                        new_status = 'Low Stock'
+                    else:
+                        new_status = 'Out of Stock'
+                    
+                    item['status'] = new_status
+                    inventory_db.update_one({"item_id": purchase.item_id}, {"$set": item})
+                else:
+                    raise HTTPException(
+                    status_code = status.HTTP_403_FORBIDDEN,
+                    detail = "Inventory item ran out of stock",
+                    )
+        # minus stocks if purchase is not completed
+        elif purchase.status == 'Delivering' and old_purchase['status'] == 'Completed':
+            if purchase.item_type == "Product":
+                product = product_db.find_one({"product_id": purchase.item_id})
+                product['quantity'] -= purchase.quantity
+                if product['quantity'] >= 0:
+                    if product['quantity'] > 0 and product['quantity'] >= product['critical_level']:
+                        new_status = 'In Stock'
+                    elif product['quantity'] > 0 and product['quantity'] < product['critical_level']:
+                        new_status = 'Low Stock'
+                    else:
+                        new_status = 'Out of Stock'
+                    
+                    product['status'] = new_status
+                    product_db.update_one({"product_id": purchase.item_id}, {"$set": product})
+                else:
+                    raise HTTPException(
+                    status_code = status.HTTP_403_FORBIDDEN,
+                    detail = "Product ran out of stock",
+                    )
+            elif purchase.item_type == "Inventory":
+                item = inventory_db.find_one({"item_id": purchase.item_id})
+                item["quantity"] -= purchase.quantity
+                if item["quantity"] >= 0:
+                    if item['quantity'] > 0 and item['quantity'] >= item['critical_level']:
+                        new_status = 'In Stock'
+                    elif item['quantity'] > 0 and item['quantity'] < item['critical_level']:
+                        new_status = 'Low Stock'
+                    else:
+                        new_status = 'Out of Stock'
+                    
+                    item['status'] = new_status
+                    inventory_db.update_one({"item_id": purchase.item_id}, {"$set": item})
+                else:
+                    raise HTTPException(
+                    status_code = status.HTTP_403_FORBIDDEN,
+                    detail = "Inventory item ran out of stock",
+                    )
+
+                
+        procurement_db.update_one({"purchase_id": procurement_id}, {"$set": dict(purchase)})
+        return procurement_dict_serial(procurement_db.find_one({"purchase_id": procurement_id}))
+    else:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Purchase not found",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+
+@put_router.put("/update_procurement_status/{procurement_id}")
+def update_procurement_status(purchase: NewProcurement, procurement_id: str, token: str = Depends(oauth_scheme)):
+    old_purchase = procurement_db.find_one({"purchase_id": procurement_id})
+    if old_purchase:
+        if purchase.status == "Completed" and old_purchase['status'] == "Delivering":
+            if purchase.item_type == "Product":
+                product = product_db.find_one({"product_id": purchase.item_id})
+                product['quantity'] += purchase.quantity
+                if product['quantity'] >= 0:
+                    if product['quantity'] > 0 and product['quantity'] >= product['critical_level']:
+                        new_status = 'In Stock'
+                    elif product['quantity'] > 0 and product['quantity'] < product['critical_level']:
+                        new_status = 'Low Stock'
+                    else:
+                        new_status = 'Out of Stock'
+                    
+                    product['status'] = new_status
+                    product_db.update_one({"product_id": purchase.item_id}, {"$set": product})
+                else:
+                    raise HTTPException(
+                    status_code = status.HTTP_403_FORBIDDEN,
+                    detail = "Product ran out of stock",
+                    )
+            elif purchase.item_type == "Inventory":
+                item = inventory_db.find_one({"item_id": purchase.item_id})
+                item["quantity"] += purchase.quantity
+                if item["quantity"] >= 0:
                     if item['quantity'] > 0 and item['quantity'] >= item['critical_level']:
                         new_status = 'In Stock'
                     elif item['quantity'] > 0 and item['quantity'] < item['critical_level']:

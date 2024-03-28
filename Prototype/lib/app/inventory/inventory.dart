@@ -189,9 +189,11 @@ class _InventoryScreenState extends State<InventoryScreen> {
 
   Key futureBuilderKey = UniqueKey();
   void updateData() async {
+    if (mounted) {
     setState(() {
       futureBuilderKey = UniqueKey();
     });
+  }
   }
   Color _getQuantityColor(int quantity, int safetyQuantity) {
     return quantity < safetyQuantity ? Theme.of(context).colorScheme.error : Theme.of(context).colorScheme.onSurface;
