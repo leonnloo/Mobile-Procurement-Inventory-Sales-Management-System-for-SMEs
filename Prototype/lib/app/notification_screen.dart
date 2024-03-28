@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:prototype/app/authenticate/screens/login_content.dart';
 import 'package:prototype/models/procurement_model.dart';
 import 'package:prototype/util/request_util.dart';
+import 'package:prototype/widgets/appbar/common_appbar.dart';
 
 class NotificationScreen extends StatefulWidget {
   const NotificationScreen({super.key});
@@ -15,17 +16,9 @@ class _NotificationScreenState extends State<NotificationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.white, // 设置Appbar背景颜色为白色
-          title: const Text(
-            'Notifications',
-            style: TextStyle(
-              color: Colors.black, // 设置标题文字颜色为黑色
-              fontSize: 20.0, // 设置标题文字大小
-            ),
-          ),
-        ),
-        body: Notifications(category: 'Present'));
+      appBar: const CommonAppBar(currentTitle: 'Notifications'),
+      body: Notifications(category: 'Present')
+    );
   }
 }
 

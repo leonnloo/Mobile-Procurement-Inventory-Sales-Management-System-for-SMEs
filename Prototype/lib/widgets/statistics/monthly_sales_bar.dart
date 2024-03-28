@@ -15,119 +15,126 @@ class MonthlySalesBarChart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     monthlySaleController.clearMonthlySales();
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Container(
-          height: 50,
-          alignment: Alignment.center,
-          child: const Text(
-            'Monthly Sales',
-            style: TextStyle(
-              fontSize: 28,
-              fontWeight: FontWeight.bold,
+    return Card(
+      color: Theme.of(context).colorScheme.onSecondary,
+      elevation: 4.0,
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Container(
+              height: 50,
+              alignment: Alignment.center,
+              child: const Text(
+                'Monthly Sales',
+                style: TextStyle(
+                  fontSize: 28,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ),
-          ),
-        ),
-        SizedBox(
-          height: 230,
-          child: FutureBuilder(
-            future: monthlySaleController.getMonthlySales(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return SizedBox(
-                  width: double.infinity,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      const SizedBox(height: 26.0),
-                      CircularProgressIndicator(
-                        backgroundColor: Colors.transparent,
-                        color: Theme.of(context).colorScheme.onPrimaryContainer,
+            SizedBox(
+              height: 230,
+              child: FutureBuilder(
+                future: monthlySaleController.getMonthlySales(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return SizedBox(
+                      width: double.infinity,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          const SizedBox(height: 26.0),
+                          CircularProgressIndicator(
+                            backgroundColor: Colors.transparent,
+                            color: Theme.of(context).colorScheme.onPrimaryContainer,
+                          ),
+                          const SizedBox(height: 16.0),
+                          Text(
+                            'Loading...',
+                            style: TextStyle(fontSize: 16.0, color: Theme.of(context).colorScheme.onSurface),
+                          ),
+                        ],
                       ),
-                      const SizedBox(height: 16.0),
-                      Text(
-                        'Loading...',
-                        style: TextStyle(fontSize: 16.0, color: Theme.of(context).colorScheme.onSurface),
+                    );
+                  } else if (snapshot.hasError) {
+                    return Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.only(top: 20.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Unable to load monthly sales",
+                            style: TextStyle(color: Theme.of(context).colorScheme.onSurface, fontSize: 20),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                );
-              } else if (snapshot.hasError) {
-                return Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.only(top: 20.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "Unable to load monthly sales",
-                        style: TextStyle(color: Theme.of(context).colorScheme.onSurface, fontSize: 20),
+                    );
+                  } else if (!snapshot.hasData) {
+                    return Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.only(top: 20.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "No monthly sales available",
+                            style: TextStyle(color: Theme.of(context).colorScheme.onSurface, fontSize: 20),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                );
-              } else if (!snapshot.hasData) {
-                return Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.only(top: 20.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "No monthly sales available",
-                        style: TextStyle(color: Theme.of(context).colorScheme.onSurface, fontSize: 20),
+                    );
+                  } else if (snapshot.hasData) {
+                    final monthlyList = snapshot.data!;
+                    monthlyList.sort((a, b) {
+                      // First, compare by year
+                      int compareYear = a.year.compareTo(b.year);
+                      if (compareYear != 0) {
+                        // If the years are not equal, the comparison is decided by the year difference.
+                        return compareYear;
+                      } else {
+                        // If the years are equal, compare by month
+                        return a.month.compareTo(b.month);
+                      }
+                    });
+        
+                    return BarChart(
+                      BarChartData(
+                        barTouchData: barTouchData,
+                        titlesData: _getTitlesData(monthlyList),
+                        borderData: borderData,
+                        barGroups: _getBarGroups(monthlyList),
+                        gridData: const FlGridData(show: false),
+                        alignment: BarChartAlignment.spaceEvenly,
+                        maxY: _calculateMaxY(monthlyList),
                       ),
-                    ],
-                  ),
-                );
-              } else if (snapshot.hasData) {
-                final monthlyList = snapshot.data!;
-                monthlyList.sort((a, b) {
-                  // First, compare by year
-                  int compareYear = a.year.compareTo(b.year);
-                  if (compareYear != 0) {
-                    // If the years are not equal, the comparison is decided by the year difference.
-                    return compareYear;
-                  } else {
-                    // If the years are equal, compare by month
-                    return a.month.compareTo(b.month);
+                    );
                   }
-                });
-
-                return BarChart(
-                  BarChartData(
-                    barTouchData: barTouchData,
-                    titlesData: _getTitlesData(monthlyList),
-                    borderData: borderData,
-                    barGroups: _getBarGroups(monthlyList),
-                    gridData: const FlGridData(show: false),
-                    alignment: BarChartAlignment.spaceEvenly,
-                    maxY: _calculateMaxY(monthlyList),
-                  ),
-                );
-              }
-              else {
-                return Container(
-                  color: Colors.red[400],
-                  width: double.infinity,
-                  padding: const EdgeInsets.only(top: 20.0),
-                  child: const Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "Unable to load Monthly Sales",
-                        style: TextStyle(color: Colors.white, fontSize: 20),
+                  else {
+                    return Container(
+                      color: Colors.red[400],
+                      width: double.infinity,
+                      padding: const EdgeInsets.only(top: 20.0),
+                      child: const Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Unable to load Monthly Sales",
+                            style: TextStyle(color: Colors.white, fontSize: 20),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                );
-              }
-            }
-          ),
+                    );
+                  }
+                }
+              ),
+            ),
+          ],
         ),
-      ],
+      ),
     );
   }
 

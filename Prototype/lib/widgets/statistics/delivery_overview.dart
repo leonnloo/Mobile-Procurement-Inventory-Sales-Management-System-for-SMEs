@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:prototype/models/order_model.dart';
 import 'package:prototype/models/procurement_model.dart';
+import 'package:intl/intl.dart';
 import 'package:prototype/util/get_controllers/order_controller.dart';
 import 'package:prototype/util/get_controllers/procurement_controller.dart';
 
@@ -14,6 +15,7 @@ class DeliveryOverview extends StatelessWidget {
   int outgoing = 0;
   @override
   Widget build(BuildContext context) {
+    String currentDate = DateFormat('MMMM d').format(DateTime.now());
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Column(
@@ -22,13 +24,22 @@ class DeliveryOverview extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(left: 8.0),
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  'Delivery',
-                  style: TextStyle(fontSize: 30.0, fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.onSurface),
+                Row(
+                  children: [
+                    Text(
+                      'Delivery',
+                      style: TextStyle(fontSize: 30.0, fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.onSurface),
+                    ),
+                    const SizedBox(width: 14.0,),
+                    Icon(Icons.local_shipping, color: Theme.of(context).colorScheme.onSurface, size: 30,),
+                  ],
                 ),
-                const SizedBox(width: 14.0,),
-                Icon(Icons.local_shipping, color: Theme.of(context).colorScheme.onSurface, size: 30,),
+                Text(
+                  currentDate,
+                  style: TextStyle(fontSize: 20.0, color: Theme.of(context).colorScheme.onSurface),
+                ),
               ],
             ),
           ),
