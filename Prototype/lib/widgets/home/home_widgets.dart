@@ -36,9 +36,9 @@ class HomeWidgets extends StatelessWidget {
                         onTap: () {
                           Scaffold.of(context).openDrawer();
                         },
-                        child: const Icon(
+                        child: Icon(
                           Icons.notes,
-                          color: Colors.white,
+                          color: Theme.of(context).colorScheme.surface,
                           size: 40,
                         ),
                       ),
@@ -46,9 +46,9 @@ class HomeWidgets extends StatelessWidget {
                         onTap: () {
                           Get.to(() => const NotificationScreen());
                         },
-                        child: const Icon(
+                        child: Icon(
                           Icons.notifications,
-                          color: Colors.white,
+                          color: Theme.of(context).colorScheme.surface,
                           size: 40,
                         ),
                       )

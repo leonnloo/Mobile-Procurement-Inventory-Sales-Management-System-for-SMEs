@@ -24,6 +24,8 @@ class ForgetPasswordMailScreen extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                Icon(Icons.mail, color: Theme.of(context).colorScheme.onSurface, size: 70,),
+                const SizedBox(height: 20,),
                 const Text(
                   'Reset Password by Mail',
                   style: TextStyle(
@@ -60,26 +62,26 @@ class ForgetPasswordMailScreen extends StatelessWidget {
                             Get.to(() => OTPScreen(email: email,));
                           } else {
                             ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text('Error sending verification email.'),
-                                backgroundColor: Colors.red,
+                              SnackBar(
+                                content: const Text('Error sending verification email.'),
+                                backgroundColor: Theme.of(context).colorScheme.error,
                               )
                             );
                           }
                         } else {
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Email not registered.'),
-                              backgroundColor: Colors.red,
+                            SnackBar(
+                              content: const Text('Email not registered.'),
+                              backgroundColor: Theme.of(context).colorScheme.error,
                             )
                           );
                         }
                       }
                       else {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Please enter your email address'),
-                            backgroundColor: Colors.red,
+                          SnackBar(
+                            content: const Text('Please enter your email address'),
+                            backgroundColor: Theme.of(context).colorScheme.error,
                           )
                         );
                       }
