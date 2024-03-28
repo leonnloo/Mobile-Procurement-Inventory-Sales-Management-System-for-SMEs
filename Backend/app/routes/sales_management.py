@@ -5,6 +5,7 @@ from config.database import *
 from routes.func import *
 from models.sales_management_model import *
 from models.sales_order_model import *
+from pymongo import DESCENDING
 
 sales_management_router = APIRouter()
 oauth_scheme = OAuth2PasswordBearer(tokenUrl="token")

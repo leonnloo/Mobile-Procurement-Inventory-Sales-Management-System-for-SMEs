@@ -3,6 +3,7 @@ from models.users_model import *
 from config.database import users_db
 from schema.schemas import user_dict_serial, user_serial
 from fastapi.security import OAuth2PasswordBearer
+from pymongo import DESCENDING
 
 user_router = APIRouter()
 oauth_scheme = OAuth2PasswordBearer(tokenUrl="token")
