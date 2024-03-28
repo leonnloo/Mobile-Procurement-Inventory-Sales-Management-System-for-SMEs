@@ -1,6 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
-
 import 'package:get/get.dart';
 import 'package:prototype/models/product_model.dart';
 import 'package:prototype/resources/app_resources.dart';

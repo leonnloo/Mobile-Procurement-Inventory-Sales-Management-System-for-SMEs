@@ -162,7 +162,7 @@ class ProductManagementScreenState extends State<ProductManagementScreen> {
           columnSpacing: 16.0,
           horizontalMargin: 16.0,
           columns: [
-            DataColumn(label: Text('ID', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),)),
+            DataColumn(label: Text('ID', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),),
             DataColumn(label: Text('Product', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),)),
             DataColumn(label: Text('Unit Price', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),)),
             DataColumn(label: Text('Selling Price', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),)),

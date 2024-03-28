@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:prototype/resources/color_schemes.g.dart';
 import 'authenticate/screens/start_screen.dart';
 
@@ -11,12 +12,13 @@ class MainView extends StatelessWidget {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'GRP-Team 14',
-      // TO DO: change theme here
       theme: ThemeData(
+        fontFamily: GoogleFonts.josefinSans().fontFamily,
         colorScheme: lightColorScheme,
         useMaterial3: true
       ),
       darkTheme: ThemeData(
+        fontFamily: GoogleFonts.josefinSans().fontFamily,
         colorScheme: darkColorScheme,
         useMaterial3: true
       ),
