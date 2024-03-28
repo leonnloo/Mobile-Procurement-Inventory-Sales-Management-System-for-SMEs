@@ -32,9 +32,9 @@ Widget drawerList(BuildContext context) {
               controller.currentPage.value == DrawerSections.supplier ? true : false, context),
           menuItem(8, "Customer", Icons.people,
               controller.currentPage.value == DrawerSections.customer ? true : false, context),
-          const Divider(),
-          menuItem(9, "Settings", Icons.settings,
-              controller.currentPage.value == DrawerSections.settings ? true : false, context),
+          // const Divider(),
+          // menuItem(9, "Settings", Icons.settings,
+          //     controller.currentPage.value == DrawerSections.settings ? true : false, context),
         ],
       );
       }

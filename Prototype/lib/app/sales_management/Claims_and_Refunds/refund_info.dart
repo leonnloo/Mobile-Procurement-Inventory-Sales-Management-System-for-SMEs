@@ -106,7 +106,7 @@ class RefundDetailScreen extends StatelessWidget {
                   // Display an error message to the user
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      content: Text('Delete refund failed'),
+                      content: const Text('Delete refund failed'),
                       backgroundColor: Theme.of(context).colorScheme.error,
                     ),
                   );

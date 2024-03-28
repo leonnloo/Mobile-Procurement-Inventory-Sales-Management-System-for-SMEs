@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:prototype/app/inventory/inventory_filter_system.dart';
 import 'package:prototype/app/inventory/speed_dial_inventory.dart';
 import 'package:prototype/models/inventory_model.dart';
 import 'package:prototype/app/inventory/inventory_info.dart';
@@ -18,6 +17,14 @@ class _InventoryScreenState extends State<InventoryScreen> {
   final RequestUtil requestUtil = RequestUtil();
   final inventoryController = Get.put(InventoryController());
   Map<String, List<InventoryItem>> groupedData = {};
+  // Future<List<InventoryItem>>? inventoryFuture;
+
+  @override
+  void initState() {
+    // inventoryFuture = inventoryController.getInventories();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     inventoryController.updateData.value = updateData;  
@@ -37,7 +44,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
                 child: Card(
                   child: GestureDetector(
                     onTap: () {
-                      Get.to(() => const FilterSystem());
+                      showSearch(context: context, delegate: ItemSearch(groupedData));
                     },
                     child: const TextField(
                       decoration: InputDecoration(
@@ -110,7 +117,58 @@ class _InventoryScreenState extends State<InventoryScreen> {
     );
   }
 
+  int? sortColumnIndex;
+  bool sortAscending = true;
+
   Widget buildInventorySection(BuildContext context, List<InventoryItem> inventoryItems) {
+    // dynamic getColumnValue(InventoryItem item, int columnIndex) {
+    //   switch (columnIndex) {
+    //     case 0:
+    //       return item.itemID;
+    //     case 1:
+    //       return item.itemName;
+    //     case 2:
+    //       return item.category;
+    //     case 3:
+    //       return item.quantity;
+    //     case 4:
+    //       return item.unitPrice;
+    //     case 5:
+    //       return item.totalPrice;
+    //     case 6:
+    //       return item.status;
+    //     default:
+    //       return '';
+    //   }
+    // }
+
+    // // Generic comparison function for dynamic types
+    // int compareValues(bool ascending, dynamic value1, dynamic value2) {
+    //   if (value1 is String && value2 is String) {
+    //     return ascending ? value1.compareTo(value2) : value2.compareTo(value1);
+    //   } else if (value1 is int && value2 is int) {
+    //     return ascending ? value1.compareTo(value2) : value2.compareTo(value1);
+    //   } else if (value1 is double && value2 is double) {
+    //     return ascending ? value1.compareTo(value2) : value2.compareTo(value1);
+    //   } else {
+    //     // Fallback for other types, if any
+    //     return 0;
+    //   }
+    // }
+    // void onSort(int columnIndex, bool ascending) {
+    //   setState(() {
+    //     sortColumnIndex = columnIndex;
+    //     sortAscending = ascending;
+    //     groupedData.forEach((key, value) {
+    //       groupedData[key] = value..sort((a, b) {
+    //         var aValue = getColumnValue(a, columnIndex);
+    //         var bValue = getColumnValue(b, columnIndex);
+    //         return compareValues(ascending, aValue, bValue);
+    //       });
+    //     });
+    //   });
+    // }
+
     return SingleChildScrollView(
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
@@ -118,13 +176,28 @@ class _InventoryScreenState extends State<InventoryScreen> {
           columnSpacing: 16.0,
           horizontalMargin: 16.0,
           columns: [
-            DataColumn(label: Text('Item ID', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),)),
-            DataColumn(label: Text('Item', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),)),
-            DataColumn(label: Text('Category', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),)),
-            DataColumn(label: Text('Quantity', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),)),
-            DataColumn(label: Text('Unit Price', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),)),
-            DataColumn(label: Text('Total Price', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),)),
-            DataColumn(label: Text('Status', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),)),
+            DataColumn(
+              label: Text('Item ID', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
+              // onSort: (columnIndex, ascending) => onSort(columnIndex, ascending),
+            ),
+            DataColumn(label: Text('Item', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
+              // onSort: (columnIndex, ascending) => onSort(columnIndex, ascending),
+            ),
+            DataColumn(label: Text('Category', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
+              // onSort: (columnIndex, ascending) => onSort(columnIndex, ascending),
+            ),
+            DataColumn(label: Text('Quantity', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
+              // onSort: (columnIndex, ascending) => onSort(columnIndex, ascending),
+            ),
+            DataColumn(label: Text('Unit Price', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
+              // onSort: (columnIndex, ascending) => onSort(columnIndex, ascending),
+            ),
+            DataColumn(label: Text('Total Price', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
+              // onSort: (columnIndex, ascending) => onSort(columnIndex, ascending),
+            ),
+            DataColumn(label: Text('Status', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
+              // onSort: (columnIndex, ascending) => onSort(columnIndex, ascending),
+            ),
           ],
           rows: inventoryItems.map((InventoryItem item) {
             return DataRow(
@@ -191,6 +264,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
   void updateData() async {
     if (mounted) {
     setState(() {
+      // inventoryFuture = inventoryController.getInventories();
       futureBuilderKey = UniqueKey();
     });
   }
@@ -202,10 +276,48 @@ class _InventoryScreenState extends State<InventoryScreen> {
 
 
 
-class ItemSearch extends SearchDelegate<InventoryItem> {
-  final List<InventoryItem> items;
+class ItemSearch extends SearchDelegate<String> {
+  ItemSearch(this.groupedData);
 
-  ItemSearch(this.items);
+  final Map<String, List<InventoryItem>> groupedData;
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    // Flatten all InventoryItem lists into a single list
+    final allItems = groupedData.values.expand((list) => list).toList();
+
+    // Filter the flattened list based on the query across all fields
+    final List<InventoryItem> suggestionList = query.isEmpty
+        ? []
+        : allItems.where((item) {
+            // Combine all fields into a single searchable string.
+            // Make sure to call toString() on non-string fields and use toLowerCase() for case-insensitive matching
+            final searchableString = '${item.itemID} ${item.itemName} ${item.category} ${item.quantity} '
+                '${item.unitPrice} ${item.totalPrice} ${item.status}'.toLowerCase();
+            
+            return searchableString.contains(query.toLowerCase());
+          }).toList();
+
+    return ListView.builder(
+      itemCount: suggestionList.length,
+      itemBuilder: (context, index) {
+        final InventoryItem item = suggestionList[index];
+        return ListTile(
+          title: Text(item.itemName),
+          subtitle: Text('Category: ${item.category} - Quantity: ${item.quantity}'),
+          onTap: () {
+            navigateToItemDetail(context, item);
+          },
+        );
+      },
+    );
+  }
+
+
+  @override
+  Widget buildResults(BuildContext context) {
+    return buildSuggestions(context);
+  }
 
   @override
   List<Widget> buildActions(BuildContext context) {
@@ -214,8 +326,9 @@ class ItemSearch extends SearchDelegate<InventoryItem> {
         icon: const Icon(Icons.clear),
         onPressed: () {
           query = '';
+          showSuggestions(context);
         },
-      ),
+      )
     ];
   }
 
@@ -224,35 +337,32 @@ class ItemSearch extends SearchDelegate<InventoryItem> {
     return IconButton(
       icon: const Icon(Icons.arrow_back),
       onPressed: () {
-        // close(context, null);
+        close(context, '');
       },
     );
   }
 
   @override
-  Widget buildResults(BuildContext context) {
-    return buildSearchResults(query);
-  }
+  String get searchFieldLabel => 'Enter Query';
 
   @override
-  Widget buildSuggestions(BuildContext context) {
-    return buildSearchResults(query);
-  }
-
-  Widget buildSearchResults(String query) {
-    final List<InventoryItem> searchResults = items
-        .where(
-            (item) => item.itemName.toLowerCase().contains(query.toLowerCase()))
-        .toList();
-
-    return const SingleChildScrollView(
-      child: Column(
-        children: [
-          // Display search results using the same inventory section widget
-          // You can customize this as needed
-          // InventoryScreen().buildInventorySection(context, 'Search Results', searchResults),
-        ],
+  ThemeData appBarTheme(BuildContext context) {
+    return Theme.of(context).copyWith(
+      appBarTheme: AppBarTheme(
+        iconTheme: IconThemeData(color: Theme.of(context).colorScheme.surface),
+        titleTextStyle: TextStyle(color: Theme.of(context).colorScheme.surface),
+        color: Theme.of(context).colorScheme.onPrimaryContainer, // Change this to the desired color
+        toolbarHeight: 80
       ),
+      inputDecorationTheme: InputDecorationTheme(
+        hintStyle: TextStyle(color: Theme.of(context).colorScheme.surface, fontSize: 23),
+        labelStyle: TextStyle(color: Theme.of(context).colorScheme.surface, fontSize: 23),
+
+      ),
+      textTheme: TextTheme(
+        bodyLarge: TextStyle(color: Theme.of(context).colorScheme.surface, fontSize: 23),
+
+      )
     );
   }
 }
