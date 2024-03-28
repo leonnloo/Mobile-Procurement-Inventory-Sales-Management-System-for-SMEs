@@ -49,60 +49,77 @@ class ProductManagementScreenState extends State<ProductManagementScreen> {
               width: double.infinity,
               child: Padding(
                 padding: const EdgeInsets.all(10.0),
-                child: Row(
-                  children: [
-                    const Text('Filter Products: '),
-                    PopupMenuButton<String>(
-                      onSelected: (value) {
-                        setState(() {
-                          _selectedFilter = value;
-                        });
-                      },
-                      itemBuilder: (BuildContext context) => [
-                        PopupMenuItem(
-                          value: 'ID',
-                          child: Text('ID', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
+                child: Card(
+                  child: GestureDetector(
+                    onTap: () {
+                      showSearch(context: context, delegate: ProductSearch(groupedData));
+                    },
+                    child: const TextField(
+                      decoration: InputDecoration(
+                        enabled: false,
+                        prefixIcon: Icon(Icons.search),
+                        labelText: 'Search',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(12.0)),
                         ),
-                        PopupMenuItem(
-                          value: 'Product',
-                          child: Text('Product', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
-                        ),
-                        PopupMenuItem(
-                          value: 'Unit Price',
-                          child: Text('Unit Price', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
-                        ),
-                        PopupMenuItem(
-                          value: 'Selling Price',
-                          child: Text('Selling Price', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
-                        ),
-                        PopupMenuItem(
-                          value: 'Quantity',
-                          child: Text('Quantity', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
-                        ),
-                        PopupMenuItem(
-                          value: 'Weight',
-                          child: Text('Weight', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
-                        ),
-                        PopupMenuItem(
-                          value: 'Safety Quantity',
-                          child: Text('Safety Quantity', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
-                        ),
-                        PopupMenuItem(
-                          value: 'Markup',
-                          child: Text('Markup', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
-                        ),
-                        PopupMenuItem(
-                          value: 'Margin',
-                          child: Text('Margin', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
-                        ),
-                        PopupMenuItem(
-                          value: 'Status',
-                          child: Text('Status', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
-                        ),
-                      ],
+                      ),
                     ),
-                  ],
+                  ),
                 ),
+                // child: Row(
+                //   children: [
+                //     const Text('Filter Products: '),
+                //     PopupMenuButton<String>(
+                //       onSelected: (value) {
+                //         setState(() {
+                //           _selectedFilter = value;
+                //         });
+                //       },
+                //       itemBuilder: (BuildContext context) => [
+                //         PopupMenuItem(
+                //           value: 'ID',
+                //           child: Text('ID', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
+                //         ),
+                //         PopupMenuItem(
+                //           value: 'Product',
+                //           child: Text('Product', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
+                //         ),
+                //         PopupMenuItem(
+                //           value: 'Unit Price',
+                //           child: Text('Unit Price', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
+                //         ),
+                //         PopupMenuItem(
+                //           value: 'Selling Price',
+                //           child: Text('Selling Price', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
+                //         ),
+                //         PopupMenuItem(
+                //           value: 'Quantity',
+                //           child: Text('Quantity', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
+                //         ),
+                //         PopupMenuItem(
+                //           value: 'Weight',
+                //           child: Text('Weight', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
+                //         ),
+                //         PopupMenuItem(
+                //           value: 'Safety Quantity',
+                //           child: Text('Safety Quantity', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
+                //         ),
+                //         PopupMenuItem(
+                //           value: 'Markup',
+                //           child: Text('Markup', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
+                //         ),
+                //         PopupMenuItem(
+                //           value: 'Margin',
+                //           child: Text('Margin', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
+                //         ),
+                //         PopupMenuItem(
+                //           value: 'Status',
+                //           child: Text('Status', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
+                //         ),
+                //       ],
+                //     ),
+                //   ],
+                // ),
               ),
             ),
             TabBar(
@@ -274,5 +291,98 @@ class ProductManagementScreenState extends State<ProductManagementScreen> {
         futureBuilderKey = UniqueKey();
       });
     }
+  }
+}
+
+
+class ProductSearch extends SearchDelegate<String> {
+  ProductSearch(this.groupedData);
+
+  final Map<String, List<ProductItem>> groupedData;
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    // Flatten all ProductItem lists into a single list
+    final allItems = groupedData.values.expand((list) => list).toList();
+
+    // Filter the flattened list based on the query across all fields
+    final List<ProductItem> suggestionList = query.isEmpty
+      ? []
+      : allItems.where((item) {
+          // Adjusted to match the ProductItem properties
+          final searchableString = '${item.productID} ${item.productName} ${item.quantity} '
+              '${item.unitPrice} ${item.sellingPrice} ${item.status}'
+              '${item.criticalLvl} ${item.margin} ${item.markup}'.toLowerCase();
+          
+          return searchableString.contains(query.toLowerCase());
+        }).toList();
+
+
+    return ListView.builder(
+      itemCount: suggestionList.length,
+      itemBuilder: (context, index) {
+        final ProductItem item = suggestionList[index];
+        return ListTile(
+          title: Text(item.productName),
+          subtitle: Text('Price: ${item.sellingPrice} - Quantity: ${item.quantity}'),
+          onTap: () {
+            navigateToProductDetail(context, item);
+          },
+        );
+      },
+    );
+  }
+
+
+  @override
+  Widget buildResults(BuildContext context) {
+    return buildSuggestions(context);
+  }
+
+  @override
+  List<Widget> buildActions(BuildContext context) {
+    return [
+      IconButton(
+        icon: const Icon(Icons.clear),
+        onPressed: () {
+          query = '';
+          showSuggestions(context);
+        },
+      )
+    ];
+  }
+
+  @override
+  Widget buildLeading(BuildContext context) {
+    return IconButton(
+      icon: const Icon(Icons.arrow_back),
+      onPressed: () {
+        close(context, '');
+      },
+    );
+  }
+
+  @override
+  String get searchFieldLabel => 'Enter Query';
+
+  @override
+  ThemeData appBarTheme(BuildContext context) {
+    return Theme.of(context).copyWith(
+      appBarTheme: AppBarTheme(
+        iconTheme: IconThemeData(color: Theme.of(context).colorScheme.surface),
+        titleTextStyle: TextStyle(color: Theme.of(context).colorScheme.surface),
+        color: Theme.of(context).colorScheme.onPrimaryContainer, // Change this to the desired color
+        toolbarHeight: 80
+      ),
+      inputDecorationTheme: InputDecorationTheme(
+        hintStyle: TextStyle(color: Theme.of(context).colorScheme.surface, fontSize: 23),
+        labelStyle: TextStyle(color: Theme.of(context).colorScheme.surface, fontSize: 23),
+
+      ),
+      textTheme: TextTheme(
+        bodyLarge: TextStyle(color: Theme.of(context).colorScheme.surface, fontSize: 23),
+
+      )
+    );
   }
 }

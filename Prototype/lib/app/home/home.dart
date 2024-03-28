@@ -108,7 +108,7 @@ class HomeScreenState extends State<HomeScreen> {
         child: Scaffold(
           key: _scaffoldKey,
           appBar: controller.currentPage.value == DrawerSections.dashboard ? null : AppBar(
-            toolbarHeight: 60.0,
+            toolbarHeight: 80.0,
             leading: Builder(
               builder: (context) => IconButton(
                 icon: Icon(
@@ -125,7 +125,7 @@ class HomeScreenState extends State<HomeScreen> {
               IconButton(onPressed: () {Get.to(() => const NotificationScreen());}, icon: Icon(Icons.notifications, size: 30.0, color: Theme.of(context).colorScheme.surface),),
             ],
             backgroundColor: Theme.of(context).colorScheme.onPrimaryContainer,
-            title: Text(controller.currentPage.value == DrawerSections.dashboard ? '' : currentTitle, style: TextStyle(color: Theme.of(context).colorScheme.surface),),
+            title: Text(controller.currentPage.value == DrawerSections.dashboard ? '' : currentTitle, style: TextStyle(color: Theme.of(context).colorScheme.surface, fontSize: 25),),
           ),
           body: container,
           drawer: Drawer(
