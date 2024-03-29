@@ -15,44 +15,47 @@ class InfoAppBar extends StatelessWidget implements PreferredSizeWidget {
   final dynamic currentData;
   final bool isNoti;
   final EditType editType;
-  final Function? updateData;
 
-  const InfoAppBar({super.key, required this.currentTitle, required this.currentData, required this.editType, this.updateData})
+  const InfoAppBar({super.key, required this.currentTitle, required this.currentData, required this.editType})
       : isNoti = currentTitle == 'Notifications';
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      toolbarHeight: 60.0,
+      toolbarHeight: 80.0,
       actions: isNoti
           ? []  // Empty list when isNoti is true, indicating no actions
           : [
               IconButton(
                 onPressed: () {
                   if (editType == EditType.customer) {
-                    Get.to(() => EditCustomer(customerData: currentData, updateData: updateData));
+                    Get.to(() => EditCustomer(customerData: currentData));
                   } else if (editType == EditType.supplier) {
-                    Get.to(() => EditSupplier(supplierData: currentData, updateData: updateData!));
+                    Get.to(() => EditSupplier(supplierData: currentData));
                   } else if (editType == EditType.procurement) {
-                    Get.to(() => EditProcurement(procurementData: currentData, updateData: updateData!));
+                    Get.to(() => EditProcurement(procurementData: currentData!));
                   } else if (editType == EditType.product) {
-                    Get.to(() => EditProduct(productData: currentData, updateData: updateData!));
+                    Get.to(() => EditProduct(productData: currentData!));
                   } else if (editType == EditType.inventory) {
-                    Get.to(() => EditInventory(inventoryData: currentData, updateData: updateData!));
+                    Get.to(() => EditInventory(inventoryData: currentData!));
                   } else if (editType == EditType.salesOrder) {
-                    Get.to(() => EditOrder(orderData: currentData, updateData: updateData));
+                    Get.to(() => EditOrder(orderData: currentData));
                   }
                 },
-                icon: const Icon(
+                icon: Icon(
+                  color: Theme.of(context).colorScheme.surface,
                   Icons.edit_rounded,
                   size: 30.0,
                 ),
               ),
             ],
-      backgroundColor: Colors.red[400],
-      title: Text(currentTitle),
+      backgroundColor: Theme.of(context).colorScheme.onPrimaryContainer,
+      title: Text(currentTitle, style: TextStyle(color: Theme.of(context).colorScheme.surface, fontSize: 25),),
+      iconTheme: IconThemeData(
+        color: Theme.of(context).colorScheme.surface, // Set the color of the back button
+      ),
     );
   }
 
   @override
-  Size get preferredSize => const Size.fromHeight(60.0);
+  Size get preferredSize => const Size.fromHeight(80.0);
 }

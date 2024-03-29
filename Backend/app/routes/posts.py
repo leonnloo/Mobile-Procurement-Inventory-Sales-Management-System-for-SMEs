@@ -9,7 +9,7 @@ from models.sales_management_model import *
 from routes.func import *
 from config.database import *
 from fastapi.security import OAuth2PasswordBearer
-
+from pymongo import DESCENDING
 
 post_router = APIRouter()
 oauth_scheme = OAuth2PasswordBearer(tokenUrl="token")
@@ -26,7 +26,7 @@ def customer_form(customer: NewCustomer, token: str = Depends(oauth_scheme)):
     )
 
     # Find the document with the largest customer_id
-    latest_id_document = customers_db.find_one(sort=[("customer_id", -1)])
+    latest_id_document = customers_db.find_one(sort=[("_id", DESCENDING)])
 
     # Determine the next customer_id
     if latest_id_document:
@@ -61,7 +61,7 @@ def supplier_form(supplier: NewSupplier, token: str = Depends(oauth_scheme)):
     )
 
     # Find the document with the largest supplier_id
-    latest_id_document = suppliers_db.find_one(sort=[("supplier_id", -1)])
+    latest_id_document = suppliers_db.find_one(sort=[("_id", DESCENDING)])
 
     # Determine the next supplier_id
     if latest_id_document:
@@ -90,7 +90,7 @@ def sales_order_form(order: NewSaleOrder, token: str = Depends(oauth_scheme)):
     product = product_db.find_one({"product_id": order.product_id})
     left_product = product["quantity"] - order.quantity
     if (left_product >= 0):
-        latest_id_document = sales_order_db.find_one(sort=[("order_id", -1)])
+        latest_id_document = sales_order_db.find_one(sort=[("_id", DESCENDING)])
         
         if latest_id_document:
             query_id = latest_id_document.get("order_id", "-1")
@@ -237,20 +237,21 @@ def sales_order_form(order: NewSaleOrder, token: str = Depends(oauth_scheme)):
 # ----------------------------------------- Procurement Form ----------------------------------------------
 @post_router.post("/procurement_form")
 def procurement_form(procurement: NewProcurement, token: str = Depends(oauth_scheme)):
-    latest_id_document = procurement_db.find_one(sort=[("purchase_id", -1)])
+    latest_id_document = procurement_db.find_one(sort=[("_id", DESCENDING)])
 
     if latest_id_document:
         query_id = latest_id_document.get("purchase_id", "-1")
+        print(query_id)
         next_purchase_id = processNextID(query_id)
+        print("next " + next_purchase_id)
     else:
         next_purchase_id = "PR1"
 
     if procurement.status == "Completed":
         if procurement.item_type == "Product":
             product = product_db.find_one({"product_id": procurement.item_id})
-            left_product = product["quantity"] - procurement.quantity
-            if left_product >= 0:
-                product['quantity'] = left_product
+            product['quantity'] += procurement.quantity
+            if product['quantity'] >= 0:
                 if product['quantity'] > 0 and product['quantity'] >= product['critical_level']:
                     new_status = 'In Stock'
                 elif product['quantity'] > 0 and product['quantity'] < product['critical_level']:
@@ -267,9 +268,8 @@ def procurement_form(procurement: NewProcurement, token: str = Depends(oauth_sch
                 )
         elif procurement.item_type == "Inventory":
             item = inventory_db.find_one({"item_id": procurement.item_id})
-            left_item = item["quantity"] - procurement.quantity
-            if left_item >= 0:
-                item['quantity'] = left_item
+            item["quantity"] += procurement.quantity
+            if item["quantity"] >= 0:
                 if item['quantity'] > 0 and item['quantity'] >= item['critical_level']:
                     new_status = 'In Stock'
                 elif item['quantity'] > 0 and item['quantity'] < item['critical_level']:
@@ -313,7 +313,7 @@ def product_form(product: NewProduct, token: str = Depends(oauth_scheme)):
             detail = "Product name already registered",
         )
 
-    latest_id_document = product_db.find_one(sort=[("product_id", -1)])
+    latest_id_document = product_db.find_one(sort=[("_id", DESCENDING)])
 
     if latest_id_document:
         query_id = latest_id_document.get("product_id", "-1")
@@ -346,7 +346,7 @@ def inventory_form(inventory: NewInventoryItem, token: str = Depends(oauth_schem
             detail = "Inventory name already registered",
         )
 
-    latest_id_document = inventory_db.find_one(sort=[("item_id", -1)])
+    latest_id_document = inventory_db.find_one(sort=[("_id", DESCENDING)])
 
     if latest_id_document:
         query_id = latest_id_document.get("item_id", "-1")

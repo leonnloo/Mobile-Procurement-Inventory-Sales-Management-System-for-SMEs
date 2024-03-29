@@ -1,57 +1,66 @@
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously, unused_element
 
 import "dart:math";
 
 import "package:flutter/material.dart";
+import 'package:get/get.dart';
 import 'package:prototype/models/edit_type.dart';
 import 'package:prototype/models/supplier_model.dart';
+import 'package:prototype/util/get_controllers/supplier_controller.dart';
 import 'package:prototype/util/request_util.dart';
 import 'package:prototype/widgets/appbar/info_appbar.dart';
 
-void navigateToSupplierDetail(BuildContext context, SupplierData supplier, Function updateData) {
+void navigateToSupplierDetail(BuildContext context, SupplierData supplier) {
   Navigator.of(context).push(
     MaterialPageRoute(
-      builder: (context) => SupplierDetailScreen(supplierData: supplier, updateData: updateData,),
+      builder: (context) => SupplierDetailScreen(supplierData: supplier),
     ),
   );
 }
 
-class SupplierDetailScreen extends StatelessWidget {
-  final SupplierData supplierData;
-  final Function updateData;
-  const SupplierDetailScreen({super.key, required this.supplierData, required this.updateData});
+// ignore: must_be_immutable
+class SupplierDetailScreen extends StatefulWidget {
+  SupplierData supplierData;
+  SupplierDetailScreen({super.key, required this.supplierData});
 
   @override
+  State<SupplierDetailScreen> createState() => _SupplierDetailScreenState();
+}
+
+class _SupplierDetailScreenState extends State<SupplierDetailScreen> {
+  final SupplierController controller = Get.put(SupplierController());
+  @override
   Widget build(BuildContext context) {
+    controller.updateEditData.value = updateData;
     return Scaffold(
-      appBar: InfoAppBar(currentTitle: 'Supplier Details', currentData: supplierData, editType: EditType.supplier, updateData: updateData),
+      appBar: InfoAppBar(currentTitle: 'Supplier Details', currentData: widget.supplierData, editType: EditType.supplier),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildDetailRow('Supplier ID', supplierData.supplierID),
-            _buildDetailRow('Supplier Name', supplierData.businessName),
-            _buildDetailRow('Contact Person', supplierData.contactPerson),
-            _buildDetailRow('Email', supplierData.email),
-            _buildDetailRow('Phone number', supplierData.phoneNo),
-            _buildDetailRow('Address', supplierData.address),
+            _buildDetailRow('Supplier ID', widget.supplierData.supplierID, context),
+            _buildDetailRow('Supplier Name', widget.supplierData.businessName, context),
+            _buildDetailRow('Contact Person', widget.supplierData.contactPerson, context),
+            _buildDetailRow('Email', widget.supplierData.email, context),
+            _buildDetailRow('Phone number', widget.supplierData.phoneNo, context),
+            _buildDetailRow('Address', widget.supplierData.address, context),
                 
             const SizedBox(height: 6.0), // Add some spacing
             _buildNotes(context),
             
-            const SizedBox(height: 6.0),
-            _buildHistory(),
+            // const SizedBox(height: 6.0),
+            // _buildHistory(context),
                 
-            const SizedBox(height: 6.0),
-            _buildPastOrders()
+            // const SizedBox(height: 6.0),
+            // _buildPastOrders(context)
           ],
         ),
       ),
     );
   }
 
-  Widget _buildDetailRow(String label, String value) {
+  Widget _buildDetailRow(String label, String value, BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Row(
@@ -60,22 +69,23 @@ class SupplierDetailScreen extends StatelessWidget {
         children: [
           Text(
             label,
-            style: const TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+            style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.onSurface),
           ),
           const SizedBox(width: 30.0), // Increase the spacing between label and text
           Flexible(
             child: Text(
               value,
-              style: const TextStyle(fontSize: 18.0),
+              style: TextStyle(fontSize: 18.0, color: Theme.of(context).colorScheme.onSurface),
             ),
           ),
         ],
       ),
     );
   }
+
   Widget _buildNotes(BuildContext context){
     final TextEditingController notesController = TextEditingController();
-    notesController.text = supplierData.notes!;
+    notesController.text = widget.supplierData.notes!;
 
     final RequestUtil requestUtil = RequestUtil();
     return Padding(
@@ -98,17 +108,23 @@ class SupplierDetailScreen extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const SizedBox(
+                      SizedBox(
                         child: Text(
                           'Note:',
-                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.onSurface),
                         ),
                       ),
                       SizedBox(
                         child: TextButton(
                           onPressed: () async {
-                            final response = await requestUtil.updateNote(supplierData.supplierID, notesController.text);
+                            final response = await requestUtil.updateNote(widget.supplierData.supplierID, notesController.text);
                             if (response.statusCode == 200) {
+                              controller.clearSuppliers();
+                              controller.getSuppliers();
+                              Function? update = controller.updateData.value;
+                              if (update!= null) {
+                                update();
+                              }
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
                                   content: Text('Note saved!'),
@@ -119,9 +135,9 @@ class SupplierDetailScreen extends StatelessWidget {
                             }
                             else {
                               ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text('Note save failed!'),
-                                  backgroundColor: Colors.red,
+                                SnackBar(
+                                  content: const Text('Note save failed!'),
+                                  backgroundColor: Theme.of(context).colorScheme.error,
                                 ),
                               );
                             }
@@ -147,6 +163,14 @@ class SupplierDetailScreen extends StatelessWidget {
         ),
     );
   }
+
+  void updateData(){
+    if (mounted) {
+      setState(() {
+        widget.supplierData = controller.currentSupplierInfo.value!;
+      });
+    }
+  }
 }
 
 
@@ -164,7 +188,7 @@ List<String> generateRandomHistory() {
   });
 }
 
-Widget _buildHistory() {
+Widget _buildHistory(BuildContext context) {
   List<String> historyEntries = generateRandomHistory();
 
   return Padding(
@@ -174,9 +198,9 @@ Widget _buildHistory() {
       children: historyEntries.map((history) {
         return Row(
           children: [
-            const Icon(Icons.history, color: Colors.blue),
+            Icon(Icons.history, color: Theme.of(context).colorScheme.primary),
             const SizedBox(width: 8.0),
-            Text(history),
+            Text(history, style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
           ],
         );
       }).toList(),
@@ -195,15 +219,15 @@ List<PastOrder> generatePastOrders() {
   });
 }
 
-Widget _buildPastOrders() {
+Widget _buildPastOrders(BuildContext context) {
   List<PastOrder> pastOrders = generatePastOrders();
 
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-      const Text(
+      Text(
         'Past Orders:',
-        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.onSurface),
       ),
       const SizedBox(height: 8.0),
       Column(
@@ -214,7 +238,7 @@ Widget _buildPastOrders() {
               children: [
                 const Icon(Icons.shopping_cart, color: Colors.green),
                 const SizedBox(width: 8.0),
-                Text('Order ${order.orderNumber} - ${order.orderDate} - \$${order.totalAmount.toStringAsFixed(2)}'),
+                Text('Order ${order.orderNumber} - ${order.orderDate} - \$${order.totalAmount.toStringAsFixed(2)}', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
               ],
             ),
           );

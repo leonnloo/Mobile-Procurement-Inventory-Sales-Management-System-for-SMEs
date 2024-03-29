@@ -1,7 +1,11 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:prototype/app/procurement/get_procurement.dart';
+import 'package:prototype/util/get_controllers/inventory_controller.dart';
+import 'package:prototype/util/get_controllers/procurement_controller.dart';
+import 'package:prototype/util/get_controllers/product_controller.dart';
 import 'package:prototype/util/request_util.dart';
 import 'package:prototype/util/validate_text.dart';
 import 'package:prototype/widgets/appbar/common_appbar.dart';
@@ -30,6 +34,9 @@ class AddProcurementScreenState extends State<AddProcurementScreen> {
   late TextEditingController _quantityController;
   late TextEditingController _statusController;
   late String type = 'Product';
+  final procurementController = Get.put(PurchaseController());
+  final productController = Get.put(ProductController());
+  final inventoryController = Get.put(InventoryController());
 
   @override
   void initState() {
@@ -144,8 +151,8 @@ class AddProcurementScreenState extends State<AddProcurementScreen> {
                   width: double.infinity,
                   child: ElevatedButton(
                     style: TextButton.styleFrom(
-                      foregroundColor: Colors.white,
-                      backgroundColor: Colors.black,
+                      foregroundColor: Theme.of(context).colorScheme.onPrimary,
+                      backgroundColor: Theme.of(context).colorScheme.onSecondaryContainer,
                       side: const BorderSide(color: Colors.black),
                       shape: const RoundedRectangleBorder(),
                       padding: const EdgeInsets.symmetric(vertical: 15.0)
@@ -174,9 +181,9 @@ class AddProcurementScreenState extends State<AddProcurementScreen> {
                         // Display validation error messages
                         _formKey.currentState?.validate();
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Please fill in all the required fields.'),
-                            backgroundColor: Colors.red,
+                          SnackBar(
+                            content: const Text('Please fill in all the required fields.'),
+                            backgroundColor: Theme.of(context).colorScheme.error,
                           ),
                         );
                       } else {                
@@ -185,8 +192,25 @@ class AddProcurementScreenState extends State<AddProcurementScreen> {
                         );
                         
                         if (response.statusCode == 200) {
-                          if (widget.updateData != null) {
-                            widget.updateData!();
+                          Function? updatePurchase = procurementController.updateData.value;
+                          procurementController.clearPurchases();
+                          procurementController.getPurchases();
+                          if (updatePurchase != null) {
+                            updatePurchase();
+                          }
+                          if (status == 'Completed') {
+                            Function? updateInventory = inventoryController.updateData.value;
+                            inventoryController.clearInventories();
+                            inventoryController.getInventories();
+                            if (updateInventory!= null){
+                              updateInventory();
+                            }
+                            Function? updateProduct = productController.updateData.value;
+                            productController.clearProducts();
+                            productController.getProducts();
+                            if (updateProduct!= null){
+                              updateProduct();
+                            }
                           }
                           Navigator.pop(context);
                           ScaffoldMessenger.of(context).showSnackBar(
@@ -198,9 +222,9 @@ class AddProcurementScreenState extends State<AddProcurementScreen> {
                         } else {
                           // Display an error message to the user
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Procurement added failed'),
-                              backgroundColor: Colors.red,
+                            SnackBar(
+                              content: const Text('Procurement added failed'),
+                              backgroundColor: Theme.of(context).colorScheme.error,
                             ),
                           );
                         }

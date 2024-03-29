@@ -9,16 +9,24 @@ nn
 spacy
 spacy-llm
 transformers
+
+python-dateutil
+
+
 torch
 torchvision 
 torchaudio
+
 # pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
 
 # install this seperately
 # python -m spacy download en_core_web_lg
+
+
 # after downloading you may need to train the updated_ner_model once again due to the size of the file
 # run python routes/chatbot/spacy_train.py
 # may take some time (few minutes) depending on the cpu or gpu
+
 
 
 # to install torch

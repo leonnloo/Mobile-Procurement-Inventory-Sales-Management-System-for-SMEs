@@ -7,7 +7,7 @@ import 'package:prototype/app/authenticate/screens/register_content.dart';
 import 'package:prototype/app/home/home.dart';
 import 'package:prototype/models/user_model.dart';
 import 'package:prototype/util/request_util.dart';
-import 'package:prototype/util/user_controller.dart';
+import 'package:prototype/util/get_controllers/user_controller.dart';
 import 'package:prototype/util/validate_text.dart';
 import 'package:prototype/widgets/fade_in_animation/animation_design.dart';
 import 'package:prototype/widgets/fade_in_animation/fade_in_animation_model.dart';
@@ -105,8 +105,8 @@ class LoginContent extends StatelessWidget {
             width: double.infinity,
             child: ElevatedButton(
               style: TextButton.styleFrom(
-                foregroundColor: Colors.white,
-                backgroundColor: Colors.black,
+                foregroundColor: Theme.of(context).colorScheme.onPrimary,
+                backgroundColor: Theme.of(context).colorScheme.onSecondaryContainer,
                 side: const BorderSide(color: Colors.black),
                 shape: const RoundedRectangleBorder(),
                 padding: const EdgeInsets.symmetric(vertical: 15.0)

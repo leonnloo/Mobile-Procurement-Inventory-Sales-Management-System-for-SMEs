@@ -1,14 +1,18 @@
+// ignore_for_file: use_build_context_synchronously
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_navigation/get_navigation.dart';
+import 'package:get/get.dart';
 import 'package:prototype/app/procurement/add_procurement.dart';
 import 'package:prototype/models/procurement_model.dart';
 import 'package:prototype/app/procurement/procurement_info.dart';
 import 'package:prototype/app/procurement/procurement_filter_system.dart';
-import 'package:prototype/util/request_util.dart';
+import 'package:prototype/util/get_controllers/inventory_controller.dart';
+import 'package:prototype/util/get_controllers/procurement_controller.dart';
+import 'package:prototype/util/get_controllers/product_controller.dart';
 
+final procurementController = Get.put(PurchaseController());
+final inventoryController = Get.put(InventoryController());
+final productController = Get.put(ProductController());
 class ProcurementScreen extends StatefulWidget {
   const ProcurementScreen({super.key});
 
@@ -17,13 +21,27 @@ class ProcurementScreen extends StatefulWidget {
 }
 
 class _ProcurementScreenState extends State<ProcurementScreen> {
+  String dummy = '';
+  Map<String, List<PurchasingOrder>> groupedData = {};
+  String? _selectedFilter = 'ID';
+
+  Key futureBuilderKey = UniqueKey();
+  void updateData() async {
+    setState(() {
+      futureBuilderKey = UniqueKey();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    String dummy = '';
+    procurementController.updateData.value = updateData;
+    procurementController.updateFilter.value = updateFilter;
+    groupedData['Completed'] = [];
+    groupedData['Delivering'] = [];
     return DefaultTabController(
       length: 2,
       child: Scaffold(
-        body: ListView(
+        body: Column(
           children:  <Widget>[
             //filter system
               SizedBox(
@@ -35,12 +53,13 @@ class _ProcurementScreenState extends State<ProcurementScreen> {
                     onTap: () {
                       Get.to(() => const FilterSystem());
                     },
-                    child: const TextField(
+                    child: TextField(
                       decoration: InputDecoration(
                       enabled: false,
-                      prefixIcon: Icon(Icons.search),
+                      prefixIcon: Icon(Icons.search, color: Theme.of(context).colorScheme.onSurface,),
+                      labelStyle: TextStyle(color: Theme.of(context).colorScheme.onSurface),
                       labelText: 'Search',
-                      border: OutlineInputBorder(
+                      border: const OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(12.0)),
                       ),
                     ),
@@ -67,34 +86,59 @@ class _ProcurementScreenState extends State<ProcurementScreen> {
               ),
             ),*/
             TabBar(
-              labelColor: Colors.black,
-              unselectedLabelColor: Colors.black,
-              indicatorColor: Colors.red[400],
+              labelColor: Theme.of(context).colorScheme.onPrimaryContainer,
+              unselectedLabelColor: Theme.of(context).colorScheme.onPrimaryContainer,
+              indicatorColor: Theme.of(context).colorScheme.primary,
               indicatorSize: TabBarIndicatorSize.label,
               indicatorWeight: 2.0,
               labelPadding: const EdgeInsets.all(10),
               tabs: const [
-                Tab(text: 'Delivered'),
+                Tab(text: 'Completed',),
                 Tab(text: 'Ongoing'),
               ],
             ),
-            SizedBox(
-              height: 400,
-              child: TabBarView(
-                children: [
-                  ProcurementTab(category: 'Past', dummy: dummy,),
-                  ProcurementTab(category: 'Present', dummy: dummy,),
-                ],
-              ),
-            ),
+            FutureBuilder(
+              key: futureBuilderKey,
+              future: procurementController.getPurchases(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const SizedBox();
+                } else if (snapshot.hasError) {
+                  return Text('Error: ${snapshot.error}');
+                } else if (!snapshot.hasData) {
+                  return const SizedBox(
+                    height: 150.0,
+                    child: Center(
+                      child: Text('Unable to load', style: TextStyle(fontSize: 14.0),),
+                    ),
+                  );
+                } else {
+                  List<PurchasingOrder> purchaseList = snapshot.data!;
+                  for (var data in purchaseList) {
+                    groupedData[data.status]?.add(data);
+                  }
+                  return Expanded(
+                    child: TabBarView(
+                      children: [
+                        buildPurchaseSection(context, groupedData['Completed']!),
+                        buildPurchaseSection(context, groupedData['Delivering']!),
+                      ]
+                    ),
+                  );
+                }
+              }
+            ),  
           ],
         ),
         floatingActionButton: FloatingActionButton(
+          backgroundColor: Theme.of(context).colorScheme.primary,
+          foregroundColor: Theme.of(context).colorScheme.onSecondary,
+          shape: const CircleBorder(),
           onPressed: () {
             // Navigate to a screen for adding new customer info
             Navigator.of(context).push(
               MaterialPageRoute(
-                builder: (context) => AddProcurementScreen(updateData: updateData,),
+                builder: (context) => const AddProcurementScreen(),
               ),
             );
           },
@@ -103,211 +147,342 @@ class _ProcurementScreenState extends State<ProcurementScreen> {
       ),
     );
   }
-  void updateData(){
-    setState(() {
-      
-    });
-  }
-}
+  
+  Widget buildPurchaseSection(BuildContext context, List<PurchasingOrder> purchaseList) {
+    bool check = false; // Initialize check variabPurchase
+    purchaseList = _fetchAndFilterPurchase(purchaseList);
+    Function update = procurementController.updateFilter.value!;
 
-class ProcurementTab extends StatefulWidget {
-  final String category;
-  final String dummy;
-  const ProcurementTab({super.key, required this.category, required this.dummy});
-
-  @override
-  State<ProcurementTab> createState() => _ProcurementTabState();
-}
-
-class _ProcurementTabState extends State<ProcurementTab> {
-  final RequestUtil requestUtil = RequestUtil();
-
-  @override
-  Widget build(BuildContext context) {
-    return FutureBuilder(
-      key: futureBuilderKey,
-      future: _fetchProcurementData(widget.category, widget.dummy),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-            return const SizedBox(
-              height: double.infinity,
-              width: double.infinity,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  SizedBox(height: 26.0),
-                  CircularProgressIndicator(
-                    backgroundColor: Colors.white,
-                    color: Colors.red,
-                  ),
-                  SizedBox(height: 16.0),
-                  Text(
-                    'Loading...',
-                    style: TextStyle(fontSize: 16.0, color: Colors.white),
-                  ),
-                ],
-              ),
-            );
-          } else if (snapshot.hasError) {
-            return Container(
-              color: Colors.red[400],
-              width: double.infinity,
-              height: double.infinity,
-              padding: const EdgeInsets.only(top: 20.0),
-              child: const Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    "Unable to load procurement data",
-                    style: TextStyle(color: Colors.white, fontSize: 20),
-                  ),
-                ],
-              ),
-            );
-          } else if (snapshot.hasData) {
-            List<PurchasingOrder> orders =
-                snapshot.data as List<PurchasingOrder>;
-            return SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: SingleChildScrollView(
-                scrollDirection: Axis.vertical,
-                child: 
-                  DataTable(
-                    columnSpacing: 16.0, // Adjust the spacing between columns
-                    horizontalMargin: 16.0, // Adjust the horizontal margin
-                    columns: const [
-                      DataColumn(label: Text('Order ID'),),
-                      DataColumn(label: Text('Item'),),
-                      DataColumn(label: Text('Supplier'),),
-                      DataColumn(label: Text('Order Date'),),
-                      DataColumn(label: Text('Delivery Date'),),
-                      DataColumn(label: Text('Quantity'),),
-                      DataColumn(label: Text('Unit Price'),),
-                      DataColumn(label: Text('Total Price'),),
-                      DataColumn(label: Text('Status'),),
-                    ],
-                    rows: orders.map((order) {
-                      return DataRow(
-                        cells: [
-                          DataCell(
-                            Text(order.purchaseID),
-                            onTap: () {
-                              navigateToOrderDetail(context, order, updateData);
-                            },
-                          ),
-                          DataCell(
-                            Text(order.itemName),
-                            onTap: () {
-                              navigateToOrderDetail(context, order, updateData);
-                            },
-                          ),
-                          DataCell(
-                            Text(order.supplierName),
-                            onTap: () {
-                              navigateToOrderDetail(context, order, updateData);
-                            },
-                          ),
-                          DataCell(
-                            Text(order.orderDate),
-                            onTap: () {
-                              navigateToOrderDetail(context, order, updateData);
-                            },
-                          ),
-                          DataCell(
-                            Text(order.deliveryDate),
-                            onTap: () {
-                              navigateToOrderDetail(context, order, updateData);
-                            },
-                          ),
-                          DataCell(
-                            Text(order.quantity.toString()),
-                            onTap: () {
-                              navigateToOrderDetail(context, order, updateData);
-                            },
-                          ),
-                          DataCell(
-                            Text(order.unitPrice.toStringAsFixed(2).toString()),
-                            onTap: () {
-                              navigateToOrderDetail(context, order, updateData);
-                            },
-                          ),
-                          DataCell(
-                            Text(order.totalPrice.toStringAsFixed(2).toString()),
-                            onTap: () {
-                              navigateToOrderDetail(context, order, updateData);
-                            },
-                          ),
-                          DataCell(
-                            Text(order.status),
-                            onTap: () {
-                              navigateToOrderDetail(context, order, updateData);
-                            },
-                          ),
-                        ],
-                      );
-                    }).toList(),
-                  ),
+    for (var order in purchaseList) {
+      if (order.status == 'Delivering') { 
+        check = true;
+        break;
+      }
+    }
+    return SingleChildScrollView(
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: DataTable(
+          columnSpacing: 16.0,
+          horizontalMargin: 16.0,
+            columns: [
+              if (check) DataColumn(label: Text('', style: TextStyle(color: Theme.of(context).colorScheme.onSurface))),
+              DataColumn(
+                label: Row(
+                  children: [
+                    Text('ID', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
+                    Icon(
+                      trackAscending ? Icons.arrow_drop_up : Icons.arrow_drop_down,
+                      color: Theme.of(context).colorScheme.onSurface,
+                    ),
+                  ],
                 ),
-            );
-          } else {
-            return Container(
-              width: double.infinity,
-              height: double.infinity,
-              padding: const EdgeInsets.only(top: 20.0),
-              child: const Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    "Unable to load procurement data",
-                    style: TextStyle(color: Colors.white, fontSize: 20),
-                  ),
-                ],
+                onSort: (columnIndex, ascending) {
+                  ascending = trackAscending;
+                  trackAscending = !ascending;
+                  update('ID');
+                },
               ),
+              DataColumn(
+                label: Row(
+                  children: [
+                    Text('Item', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
+                    Icon(
+                      trackAscending ? Icons.arrow_drop_up : Icons.arrow_drop_down,
+                      color: Theme.of(context).colorScheme.onSurface,
+                    ),
+                  ],
+                ),
+                onSort: (columnIndex, ascending) {
+                  ascending = trackAscending;
+                  trackAscending = !ascending;
+                  update('Item');
+                },
+              ),
+              DataColumn(
+                label: Row(
+                  children: [
+                    Text('Supplier', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
+                    Icon(
+                      trackAscending ? Icons.arrow_drop_up : Icons.arrow_drop_down,
+                      color: Theme.of(context).colorScheme.onSurface,
+                    ),
+                  ],
+                ),
+                onSort: (columnIndex, ascending) {
+                  ascending = trackAscending;
+                  trackAscending = !ascending;
+                  update('Supplier');
+                },
+              ),
+              DataColumn(
+                label: Row(
+                  children: [
+                    Text('Order Date', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
+                    Icon(
+                      trackAscending ? Icons.arrow_drop_up : Icons.arrow_drop_down,
+                      color: Theme.of(context).colorScheme.onSurface,
+                    ),
+                  ],
+                ),
+                onSort: (columnIndex, ascending) {
+                  ascending = trackAscending;
+                  trackAscending = !ascending;
+                  update('Order Date');
+                },
+              ),
+              DataColumn(
+                label: Row(
+                  children: [
+                    Text('Delivery Date', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
+                    Icon(
+                      trackAscending ? Icons.arrow_drop_up : Icons.arrow_drop_down,
+                      color: Theme.of(context).colorScheme.onSurface,
+                    ),
+                  ],
+                ),
+                onSort: (columnIndex, ascending) {
+                  ascending = trackAscending;
+                  trackAscending = !ascending;
+                  update('Delivery Date');
+                },
+              ),
+              DataColumn(
+                label: Row(
+                  children: [
+                    Text('Quantity', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
+                    Icon(
+                      trackAscending ? Icons.arrow_drop_up : Icons.arrow_drop_down,
+                      color: Theme.of(context).colorScheme.onSurface,
+                    ),
+                  ],
+                ),
+                onSort: (columnIndex, ascending) {
+                  ascending = trackAscending;
+                  trackAscending = !ascending;
+                  update('Quantity');
+                },
+              ),
+              DataColumn(
+                label: Row(
+                  children: [
+                    Text('Unit Price', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
+                    Icon(
+                      trackAscending ? Icons.arrow_drop_up : Icons.arrow_drop_down,
+                      color: Theme.of(context).colorScheme.onSurface,
+                    ),
+                  ],
+                ),
+                onSort: (columnIndex, ascending) {
+                  ascending = trackAscending;
+                  trackAscending = !ascending;
+                  update('Unit Price');
+                },
+              ),
+              DataColumn(
+                label: Row(
+                  children: [
+                    Text('Total Price', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
+                    Icon(
+                      trackAscending ? Icons.arrow_drop_up : Icons.arrow_drop_down,
+                      color: Theme.of(context).colorScheme.onSurface,
+                    ),
+                  ],
+                ),
+                onSort: (columnIndex, ascending) {
+                  ascending = trackAscending;
+                  trackAscending = !ascending;
+                  update('Total Price');
+                },
+              ),
+              DataColumn(
+                label: Row(
+                  children: [
+                    Text('Status', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
+                    Icon(
+                      trackAscending ? Icons.arrow_drop_up : Icons.arrow_drop_down,
+                      color: Theme.of(context).colorScheme.onSurface,
+                    ),
+                  ],
+                ),
+                onSort: (columnIndex, ascending) {
+                  ascending = trackAscending;
+                  trackAscending = !ascending;
+                  update('Status');
+                },
+              ),
+            ],
+          rows: purchaseList.map((PurchasingOrder order) {
+            return DataRow(
+              cells: [
+                if (check) DataCell(
+                  Icon(Icons.check, color: Theme.of(context).colorScheme.onSurface),
+                  onTap: () async {
+                    final response = await requestUtil.updateProcurementStatus(
+                      order.purchaseID, order.itemName, order.itemType, order.itemID, order.supplierName, order.orderDate, order.deliveryDate, order.unitPrice, order.totalPrice, order.quantity, order.status
+                    );
+                    
+                    if (response.statusCode == 200) {
+                      Function? update = procurementController.updateData.value;
+                      procurementController.clearPurchases();
+                      procurementController.getPurchases();
+                      update!();
+                      Function? updateInventory = inventoryController.updateData.value;
+                      inventoryController.clearInventories();
+                      inventoryController.getInventories();
+                      if (updateInventory!= null){
+                        updateInventory();
+                      }
+                      Function? updateProduct = productController.updateData.value;
+                      productController.clearProducts();
+                      productController.getProducts();
+                      if (updateProduct!= null){
+                        updateProduct();
+                      }
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Purchase order completed.'),
+                          backgroundColor: Colors.green,
+                        ),
+                      );
+                      setState(() {
+                        
+                      });
+                    } else {
+                      // Display an error message to the user
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('Purchase complete failed: ${jsonDecode(response.body)['detail']}'),
+                          backgroundColor: Theme.of(context).colorScheme.error,
+                        ),
+                      );
+                    }
+                  },
+                ),
+                DataCell(
+                  Text(order.purchaseID, style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
+                  onTap: () {
+                    navigateToOrderDetail(context, order);
+                  },
+                ),
+                DataCell(
+                  Text(order.itemName, style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
+                  onTap: () {
+                    navigateToOrderDetail(context, order);
+                  },
+                ),
+                DataCell(
+                  Text(order.supplierName, style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
+                  onTap: () {
+                    navigateToOrderDetail(context, order);
+                  },
+                ),
+                DataCell(
+                  Text(order.orderDate, style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
+                  onTap: () {
+                    navigateToOrderDetail(context, order);
+                  },
+                ),
+                DataCell(
+                  Text(order.deliveryDate, style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
+                  onTap: () {
+                    navigateToOrderDetail(context, order);
+                  },
+                ),
+                DataCell(
+                  Text(order.quantity.toString(), style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
+                  onTap: () {
+                    navigateToOrderDetail(context, order);
+                  },
+                ),
+                DataCell(
+                  Text(order.unitPrice.toStringAsFixed(2).toString(), style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
+                  onTap: () {
+                    navigateToOrderDetail(context, order);
+                  },
+                ),
+                DataCell(
+                  Text(order.totalPrice.toStringAsFixed(2).toString(), style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
+                  onTap: () {
+                    navigateToOrderDetail(context, order);
+                  },
+                ),
+                DataCell(
+                  Text(order.status, style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
+                  onTap: () {
+                    navigateToOrderDetail(context, order);
+                  },
+                ),
+              ],
             );
-          }
-        });
+          }).toList(),
+        )
+      ),
+    );
   }
+  bool trackAscending = false;
 
-  Future<List<PurchasingOrder>> _fetchProcurementData(String category, String dummy) async {
-    try {
-      String newCategory;
-      if (category == 'Past') {
-        newCategory = 'Completed';
-      } else {
-        newCategory = 'Delivering';
+  List<PurchasingOrder> _fetchAndFilterPurchase(List<PurchasingOrder> purchase) {
+    if (_selectedFilter == null) {
+      return [];
+    } else {
+      switch (_selectedFilter) {
+        case 'ID':
+          return purchase
+            ..sort((a, b) {
+              int idA = int.parse(a.purchaseID.substring(2)); // Extract numeric part from purchaseID
+              int idB = int.parse(b.purchaseID.substring(2));
+              return trackAscending ? idA.compareTo(idB) : idB.compareTo(idA);
+            });
+        case 'Item':
+          return purchase
+            ..sort((a, b) => trackAscending ? a.itemName.toLowerCase().compareTo(b.itemName.toLowerCase()) : b.itemName.toLowerCase().compareTo(a.itemName.toLowerCase()));
+        case 'Supplier':
+          return purchase
+            ..sort((a, b) => trackAscending ? a.supplierName.toLowerCase().compareTo(b.supplierName.toLowerCase()) : b.supplierName.toLowerCase().compareTo(a.supplierName.toLowerCase()));
+        case 'Order Date':
+          return purchase..sort((a, b) {
+            DateTime dateA = DateTime.parse(a.orderDate);
+            DateTime dateB = DateTime.parse(b.orderDate);
+            return trackAscending ? dateA.compareTo(dateB) : dateB.compareTo(dateA);
+          });
+        case 'Delivery Date':
+          return purchase..sort((a, b) {
+            DateTime dateA = DateTime.parse(a.deliveryDate);
+            DateTime dateB = DateTime.parse(b.deliveryDate);
+            return trackAscending ? dateA.compareTo(dateB) : dateB.compareTo(dateA);
+          });
+        case 'Quantity':
+          return purchase
+            ..sort((a, b) => trackAscending ? a.quantity.compareTo(b.quantity) : b.quantity.compareTo(a.quantity));
+        case 'Unit Price':
+          return purchase
+            ..sort((a, b) => trackAscending ? a.unitPrice.compareTo(b.unitPrice) : b.unitPrice.compareTo(a.unitPrice));
+        case 'Total Price':
+          return purchase
+            ..sort((a, b) => trackAscending ? a.totalPrice.compareTo(b.totalPrice) : b.totalPrice.compareTo(a.totalPrice));
+        case 'Status':
+          return purchase
+            ..sort((a, b) => trackAscending ? a.status.compareTo(b.status) : b.status.compareTo(a.status));
+        default:
+          return purchase;
       }
 
-      final procurement = await requestUtil.getProcurementCategory(newCategory);
-      if (procurement.statusCode == 200) {
-        // Assuming the JSON response is a list of objects
-        List<dynamic> jsonData = jsonDecode(procurement.body);
-
-        // Map each dynamic object to PurchasingOrder
-        List<PurchasingOrder> procurementData =
-            jsonData.map((data) => PurchasingOrder.fromJson(data)).toList();
-        return procurementData;
-      } else {
-        throw Exception('Unable to fetch procurement data.');
-      }
-    } catch (error) {
-      // print('Error in _fetchCustomerData: $error');
-      rethrow; // Rethrow the error to be caught by FutureBuilder
     }
   }
 
-  Key futureBuilderKey = UniqueKey();
-
-  void updateData() async {
-    setState(() {
-      futureBuilderKey = UniqueKey();
-    });
+  void updateFilter(String filter) async {
+    if (mounted) {
+      setState(() {
+        _selectedFilter = filter;
+      });
+    }
   }
 }
 
-void navigateToOrderDetail(BuildContext context, PurchasingOrder order, Function updateData) {
+void navigateToOrderDetail(BuildContext context, PurchasingOrder purchase) {
   Navigator.push(
     context,
-    MaterialPageRoute(builder: (context) => OrderDetailScreen(order: order, updateData: updateData)),
+    MaterialPageRoute(builder: (context) => OrderDetailScreen(purchase: purchase)),
   );
 }

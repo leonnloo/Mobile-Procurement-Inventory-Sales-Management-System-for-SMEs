@@ -2,27 +2,30 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:prototype/app/home/chatbot/chatbot.dart';
 import 'package:prototype/app/notification_screen.dart';
-import 'package:prototype/util/user_controller.dart';
+import 'package:prototype/app/sales_management/Dispatch_and_Delivery/dispatch_delivery.dart';
+import 'package:prototype/util/get_controllers/user_controller.dart';
 import 'package:prototype/widgets/drawer/drawer_controller.dart';
 import 'package:prototype/models/drawer_sections.dart';
+import 'package:prototype/widgets/statistics/inventory_overview.dart';
+import 'package:prototype/widgets/statistics/order_overview.dart';
 import 'package:prototype/widgets/statistics/product_sales_pie.dart';
 import 'package:prototype/widgets/statistics/delivery_overview.dart';
 import 'package:prototype/widgets/statistics/product_overview.dart';
 import 'package:prototype/widgets/statistics/monthly_sales_bar.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 
-
+  final controller = Get.put(CustomDrawerController());
 class HomeWidgets extends StatelessWidget {
   HomeWidgets({super.key});
   final userController = Get.put(UserLoggedInController());
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(CustomDrawerController());
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
-          color: Colors.red[400],
+          color: Theme.of(context).colorScheme.onPrimaryContainer,
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -36,9 +39,9 @@ class HomeWidgets extends StatelessWidget {
                         onTap: () {
                           Scaffold.of(context).openDrawer();
                         },
-                        child: const Icon(
+                        child: Icon(
                           Icons.notes,
-                          color: Colors.white,
+                          color: Theme.of(context).colorScheme.surface,
                           size: 40,
                         ),
                       ),
@@ -46,9 +49,9 @@ class HomeWidgets extends StatelessWidget {
                         onTap: () {
                           Get.to(() => const NotificationScreen());
                         },
-                        child: const Icon(
+                        child: Icon(
                           Icons.notifications,
-                          color: Colors.white,
+                          color: Theme.of(context).colorScheme.surface,
                           size: 40,
                         ),
                       )
@@ -57,18 +60,18 @@ class HomeWidgets extends StatelessWidget {
                 ),
                 Container(
                   decoration: const BoxDecoration(),
-                  height: height * 0.25,
+                  height: height * 0.28,
                   width: width,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Padding(
-                        padding: EdgeInsets.only(right: 15.0, left: 15.0, top: 20.0),
+                      Padding(
+                        padding: const EdgeInsets.only(right: 15.0, left: 15.0, top: 20.0),
                         child: Text(
                           'Dashboard',
                           style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 38.0, 
+                            color: Theme.of(context).colorScheme.onPrimary,
+                            fontSize: 46.0, 
                             fontWeight: FontWeight.bold, 
                             letterSpacing: 2.0
                           ),
@@ -90,7 +93,7 @@ class HomeWidgets extends StatelessWidget {
                       SizedBox(
                         width: double.infinity,
                         child: Padding(
-                          padding: const EdgeInsets.only(left: 15, right: 15, top: 25),
+                          padding: const EdgeInsets.only(left: 15, right: 15, top: 25,),
                           child: Card(
                             child: GestureDetector(
                               onTap: () {
@@ -114,9 +117,9 @@ class HomeWidgets extends StatelessWidget {
                   ),
                 ),
                 Container(
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.only(
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.onSecondary,
+                    borderRadius: const BorderRadius.only(
                       topLeft: Radius.circular(30.0),
                       topRight: Radius.circular(30.0),
                     ),
@@ -128,14 +131,7 @@ class HomeWidgets extends StatelessWidget {
                       /* ---------------SECOND WIDGET------------------*/
                       SizedBox(
                         width: double.infinity,
-                        child: GestureDetector(
-                          onTap: () {
-                            controller.changePage(DrawerSections.inventory);
-                          },
-                          child:
-                            const ProductStatusWidget(),
-                            // Container()
-                        ),
+                        child: buildCarousel(),
                       ),
                   
                       /* ---------------THIRD WIDGET------------------*/
@@ -153,7 +149,7 @@ class HomeWidgets extends StatelessWidget {
                             
                       GestureDetector(
                         onTap: () {
-                          controller.changePage(DrawerSections.salesManagement);
+                          // controller.changePage(DrawerSections.salesManagement);
                         },
                         child: const ProductSalesPieChart(),
                       ),
@@ -162,14 +158,9 @@ class HomeWidgets extends StatelessWidget {
                       GestureDetector(
                         onTap: () {
                         },
-                        child: Card(
-                          
-                          elevation: 4.0,
-                          margin: const EdgeInsets.all(16.0),
-                          child: Padding(
-                            padding: const EdgeInsets.all(16.0),
-                            child: MonthlySalesBarChart(),
-                          ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: MonthlySalesBarChart(),
                         ),
                       ),
                     ],
@@ -182,5 +173,41 @@ class HomeWidgets extends StatelessWidget {
       ),
     );
   }
+
+  Widget buildCarousel() {
+  return CarouselSlider(
+    options: CarouselOptions(
+      autoPlayInterval: const Duration(seconds: 5),
+      autoPlay: true,
+      height: 200, // Adjust the height as needed
+      viewportFraction: 0.95,
+      enlargeCenterPage: true,
+      enableInfiniteScroll: true,
+    ),
+    items: [
+      // Product Section
+      GestureDetector(
+        onTap: () {
+          controller.changePage(DrawerSections.product);
+        },
+        child: const ProductStatusWidget(),
+      ),
+      // Inventory Section
+      GestureDetector(
+        onTap: () {
+          controller.changePage(DrawerSections.inventory);
+        },
+        child: const InventoryStatusWidget(),
+      ),
+      GestureDetector(
+        onTap: () {
+          Get.to(() => const DispatchDeliveryScreen());
+        },
+        child: const OrderStatusWidget(),
+      ),
+    ],
+  );
+}
+
 }
 

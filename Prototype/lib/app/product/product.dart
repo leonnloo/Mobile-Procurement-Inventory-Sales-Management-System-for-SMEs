@@ -1,9 +1,10 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:prototype/app/procurement/procurement.dart';
 import 'package:prototype/app/product/speed_dial_product.dart';
 import 'package:prototype/models/product_model.dart';
 import 'package:prototype/app/product/product_info.dart';
+import 'package:prototype/util/get_controllers/product_controller.dart';
 import 'package:prototype/util/request_util.dart';
 
 class ProductManagementScreen extends StatefulWidget {
@@ -17,8 +18,9 @@ class ProductManagementScreen extends StatefulWidget {
 class ProductManagementScreenState extends State<ProductManagementScreen> {
   String? _selectedFilter = 'ID';
   final RequestUtil requestUtil = RequestUtil();
+  Map<String, List<ProductItem>> groupedData = {};
   Color _getQuantityColor(int quantity, int safetyQuantity) {
-    return quantity < safetyQuantity ? Colors.red : Colors.black;
+    return quantity < safetyQuantity ? Theme.of(context).colorScheme.error : Theme.of(context).colorScheme.onSurface;
   }
 
   double calculateMarkup(double costPrice, double sellingPrice) {
@@ -31,262 +33,440 @@ class ProductManagementScreenState extends State<ProductManagementScreen> {
 
   @override
   Widget build(BuildContext context) {
+    groupedData['In Stock'] = [];
+    groupedData['Low Stock'] = [];
+    groupedData['Out of Stock'] = [];
+    final productController = Get.put(ProductController());
+    // ignore: unused_local_variable
     final size = MediaQuery.of(context).size;
-    return Scaffold(
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: SizedBox(
-              width: 1100,
-              child: Row(
-                children: [
-                  const Text('Filter Products: '),
-                  PopupMenuButton<String>(
-                    onSelected: (value) {
-                      setState(() {
-                        _selectedFilter = value;
-                      });
+    productController.updateData.value = updateData;
+    productController.updateFilter.value = updateFilter;
+    return DefaultTabController(
+      length: groupedData.keys.length,
+      initialIndex: 0,
+      child: Scaffold(
+        body: Column(
+          children: [
+            SizedBox(
+              width: double.infinity,
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Card(
+                  child: GestureDetector(
+                    onTap: () {
+                      showSearch(context: context, delegate: ProductSearch(groupedData));
                     },
-                    itemBuilder: (BuildContext context) => [
-                      const PopupMenuItem(
-                        value: 'ID',
-                        child: Text('ID'),
+                    child: const TextField(
+                      decoration: InputDecoration(
+                        enabled: false,
+                        prefixIcon: Icon(Icons.search),
+                        labelText: 'Search',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(12.0)),
+                        ),
                       ),
-                      const PopupMenuItem(
-                        value: 'Product',
-                        child: Text('Product'),
-                      ),
-                      const PopupMenuItem(
-                        value: 'Unit Price',
-                        child: Text('Unit Price'),
-                      ),
-                      const PopupMenuItem(
-                        value: 'Selling Price',
-                        child: Text('Selling Price'),
-                      ),
-                      const PopupMenuItem(
-                        value: 'Quantity',
-                        child: Text('Quantity'),
-                      ),
-                      const PopupMenuItem(
-                        value: 'Weight',
-                        child: Text('Weight'),
-                      ),
-                      const PopupMenuItem(
-                        value: 'Safety Quantity',
-                        child: Text('Safety Quantity'),
-                      ),
-                      const PopupMenuItem(
-                        value: 'Markup',
-                        child: Text('Markup'),
-                      ),
-                      const PopupMenuItem(
-                        value: 'Margin',
-                        child: Text('Margin'),
-                      ),
-                      const PopupMenuItem(
-                        value: 'Status',
-                        child: Text('Status'),
-                      ),
-                    ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            TabBar(
+              labelColor: Theme.of(context).colorScheme.onPrimaryContainer,
+              unselectedLabelColor: Theme.of(context).colorScheme.onPrimaryContainer,
+              indicatorColor: Theme.of(context).colorScheme.primary,
+              indicatorSize: TabBarIndicatorSize.label,
+              indicatorWeight: 2.0,
+              labelPadding: const EdgeInsets.all(10),
+              tabs: groupedData.keys.map((status) => Tab(text: status)).toList(),
+            ),
+            FutureBuilder(
+              key: futureBuilderKey,
+              future: productController.getProducts(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const SizedBox();
+                } else if (snapshot.hasError) {
+                  return Text('Error: ${snapshot.error}');
+                } else if (!snapshot.hasData) {
+                  return const SizedBox(
+                    height: 150.0,
+                    child: Center(
+                      child: Text('Unable to load', style: TextStyle(fontSize: 14.0),),
+                    ),
+                  );
+                } else {
+                  List<ProductItem> productItem = snapshot.data!;
+                  for (var data in productItem) {
+                    groupedData[data.status]?.add(data);
+                  }
+                  return Expanded(
+                    child: TabBarView(
+                      children: [
+                        buildProductSection(context, groupedData['In Stock']!),
+                        buildProductSection(context, groupedData['Low Stock']!),
+                        buildProductSection(context, groupedData['Out of Stock']!),
+                      ]
+                    ),
+                  );
+                }
+              }
+            ),
+          ],
+        ),
+        floatingActionButton: productSpeedDial(context)
+      ),
+    );
+  }
+  bool trackAscending = false;
+
+  Widget buildProductSection(BuildContext context, List<ProductItem> productList) {
+    productList = _fetchAndFilterProducts(productList);
+    Function update = productController.updateFilter.value!;
+    return SingleChildScrollView(
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: DataTable(
+          columnSpacing: 16.0,
+          horizontalMargin: 16.0,
+          columns: [
+            DataColumn(
+              label: Row(
+                children: [
+                  Text('ID', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
+                  Icon(
+                    trackAscending ? Icons.arrow_drop_up : Icons.arrow_drop_down,
+                    color: Theme.of(context).colorScheme.onSurface,
                   ),
                 ],
               ),
+              onSort: (columnIndex, ascending) {
+                ascending = trackAscending;
+                trackAscending = !ascending;
+                update('ID');
+              },
             ),
-          ),
-          
-          FutureBuilder(
-            key: futureBuilderKey,
-            future: _fetchAndFilterProducts(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return SizedBox(
-                  height: size.height * 0.8,
-                  width: double.infinity,
-                  child: const Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      SizedBox(height: 26.0),
-                      CircularProgressIndicator(
-                        backgroundColor: Colors.white,
-                        color: Colors.red,
-                      ),
-                      SizedBox(height: 16.0),
-                      Text(
-                        'Loading...',
-                        style: TextStyle(fontSize: 16.0, color: Colors.white),
-                      ),
-                    ],
+            DataColumn(
+              label: Row(
+                children: [
+                  Text('Product', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
+                  Icon(
+                    trackAscending ? Icons.arrow_drop_up : Icons.arrow_drop_down,
+                    color: Theme.of(context).colorScheme.onSurface,
                   ),
-                );
-              } else if (snapshot.hasError) {
-                return Container(
-                  height: size.height * 0.8,
-                  width: double.infinity,
-                  padding: const EdgeInsets.only(top: 20.0),
-                  child: const Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "Unable to load products",
-                        style: TextStyle(color: Colors.white, fontSize: 20),
-                      ),
-                    ],
+                ],
+              ),
+              onSort: (columnIndex, ascending) {
+                ascending = trackAscending;
+                trackAscending = !ascending;
+                update('Product');
+              },
+            ),
+            DataColumn(
+              label: Row(
+                children: [
+                  Text('Unit Price', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
+                  Icon(
+                    trackAscending ? Icons.arrow_drop_up : Icons.arrow_drop_down,
+                    color: Theme.of(context).colorScheme.onSurface,
                   ),
-                );
-              } else if (!snapshot.hasData) {
-                return Container(
-                  width: double.infinity,
-                  height: size.height * 0.8,
-                  padding: const EdgeInsets.only(top: 20.0),
-                  child: const Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "No products available",
-                        style: TextStyle(color: Colors.white, fontSize: 20),
-                      ),
-                    ],
+                ],
+              ),
+              onSort: (columnIndex, ascending) {
+                ascending = trackAscending;
+                trackAscending = !ascending;
+                update('Unit Price');
+              },
+            ),
+            DataColumn(
+              label: Row(
+                children: [
+                  Text('Selling Price', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
+                  Icon(
+                    trackAscending ? Icons.arrow_drop_up : Icons.arrow_drop_down,
+                    color: Theme.of(context).colorScheme.onSurface,
                   ),
-                );
-              } else if (snapshot.hasData) {
-                List<ProductItem> products = snapshot.data as List<ProductItem>;
-                return SingleChildScrollView(
-                  scrollDirection: Axis.horizontal, 
-                  child:
-                    SingleChildScrollView(
-                      scrollDirection: Axis.vertical,
-                      child: DataTable(
-                        columns: const [
-                          DataColumn(label: Text('ID')),
-                          DataColumn(label: Text('Product')),
-                          DataColumn(label: Text('Unit Price')),
-                          DataColumn(label: Text('Selling Price')),
-                          DataColumn(label: Text('Quantity')),
-                          DataColumn(label: Text('Margin')),
-                          DataColumn(label: Text('Markup')),
-                          DataColumn(label: Text('Status')),
-                        ],
-                        rows: products.map((product) {
-                          return DataRow(cells: [
-                            DataCell(
-                              Text(product.productID.toString()),
-                              onTap: () {
-                                navigateToProductDetail(context, product, updateData);
-                              }
-                            ),
-                            DataCell(
-                              Text(product.productName),
-                              onTap: () {
-                                navigateToProductDetail(context, product, updateData);
-                              }
-                            ),
-                            DataCell(
-                              Text('\$${product.unitPrice.toStringAsFixed(2).toString()}'),
-                              onTap: () {
-                                navigateToProductDetail(context, product, updateData);
-                              }              
-                            ),
-                            DataCell(
-                              Text('\$${product.sellingPrice.toStringAsFixed(2).toString()}'),
-                              onTap: () {
-                                navigateToProductDetail(context, product, updateData);
-                              }              
-                            ),
-                            DataCell(
-                              Text(
-                                product.quantity.toString(),
-                                style: TextStyle(
-                                color: _getQuantityColor(
-                                  product.quantity,
-                                  product.criticalLvl,
-                                  ),
-                                ),
-                              ),
-                              onTap: () {
-                                navigateToProductDetail(context, product, updateData);
-                              }              
-                            ),
-                            DataCell(
-                              Text(product.margin),
-                              onTap: () {
-                                navigateToProductDetail(context, product, updateData);
-                              }              
-                            ),
-                            DataCell(
-                              Text(product.markup),
-                              onTap: () {
-                                navigateToProductDetail(context, product, updateData);
-                              }              
-                            ),
-                            DataCell(
-                              Text(product.status),
-                              onTap: () {
-                                navigateToProductDetail(context, product, updateData);
-                              }              
-                            ),
-                          ]);
-                        }).toList(),
+                ],
+              ),
+              onSort: (columnIndex, ascending) {
+                ascending = trackAscending;
+                trackAscending = !ascending;
+                update('Selling Price');
+              },
+            ),
+            DataColumn(
+              label: Row(
+                children: [
+                  Text('Quantity', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
+                  Icon(
+                    trackAscending ? Icons.arrow_drop_up : Icons.arrow_drop_down,
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
+                ],
+              ),
+              onSort: (columnIndex, ascending) {
+                ascending = trackAscending;
+                trackAscending = !ascending;
+                update('Quantity');
+              },
+            ),
+            DataColumn(
+              label: Row(
+                children: [
+                  Text('Margin', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
+                  Icon(
+                    trackAscending ? Icons.arrow_drop_up : Icons.arrow_drop_down,
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
+                ],
+              ),
+              onSort: (columnIndex, ascending) {
+                ascending = trackAscending;
+                trackAscending = !ascending;
+                update('Margin');
+              },
+            ),
+            DataColumn(
+              label: Row(
+                children: [
+                  Text('Markup', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
+                  Icon(
+                    trackAscending ? Icons.arrow_drop_up : Icons.arrow_drop_down,
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
+                ],
+              ),
+              onSort: (columnIndex, ascending) {
+                ascending = trackAscending;
+                trackAscending = !ascending;
+                update('Markup');
+              },
+            ),
+            DataColumn(
+              label: Row(
+                children: [
+                  Text('Status', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
+                  Icon(
+                    trackAscending ? Icons.arrow_drop_up : Icons.arrow_drop_down,
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
+                ],
+              ),
+              onSort: (columnIndex, ascending) {
+                ascending = trackAscending;
+                trackAscending = !ascending;
+                update('Status');
+              },
+            ),
+          ],
+          rows: productList.map((ProductItem product) {
+            return DataRow(
+              cells: [
+                DataCell(
+                  Text(product.productID.toString()),
+                  onTap: () {
+                    navigateToProductDetail(context, product);
+                  }
+                ),
+                DataCell(
+                  Text(product.productName),
+                  onTap: () {
+                    navigateToProductDetail(context, product);
+                  }
+                ),
+                DataCell(
+                  Text('\$${product.unitPrice.toStringAsFixed(2)}'),
+                  onTap: () {
+                    navigateToProductDetail(context, product);
+                  }              
+                ),
+                DataCell(
+                  Text('\$${product.sellingPrice.toStringAsFixed(2)}'),
+                  onTap: () {
+                    navigateToProductDetail(context, product);
+                  }              
+                ),
+                DataCell(
+                  Text(
+                    product.quantity.toString(),
+                    style: TextStyle(
+                    color: _getQuantityColor(
+                      product.quantity,
+                      product.criticalLvl,
                       ),
-                    )
-                );
-              }
-              else {
-                return Container();
-              }
-            }
-          ),
-        ],
+                    ),
+                  ),
+                  onTap: () {
+                    navigateToProductDetail(context, product);
+                  }              
+                ),
+                DataCell(
+                  Text(product.margin),
+                  onTap: () {
+                    navigateToProductDetail(context, product);
+                  }              
+                ),
+                DataCell(
+                  Text(product.markup),
+                  onTap: () {
+                    navigateToProductDetail(context, product);
+                  }              
+                ),
+                DataCell(
+                  Text(product.status),
+                  onTap: () {
+                    navigateToProductDetail(context, product);
+                  }              
+                ),
+              ],
+            );
+          }).toList(),
+        )
       ),
-      floatingActionButton: productSpeedDial(context, updateData)
     );
   }
 
-
-  Future<List<ProductItem>> _fetchAndFilterProducts() async {
+  List<ProductItem> _fetchAndFilterProducts(List<ProductItem> products) {
     if (_selectedFilter == null) {
       return [];
     } else {
-      final response = await requestUtil.getProducts();
-      if (response.statusCode == 200) {
-        List<dynamic> jsonData = jsonDecode(response.body);
-        
-        List<ProductItem> products = jsonData.map((data) => ProductItem.fromJson(data)).toList();
-        switch (_selectedFilter) {
-          case 'ID':
-            return products..sort((a, b) => a.productID.compareTo(b.productID));
-          case 'Product':
-            return products..sort((a, b) => a.productName.compareTo(b.productName));
-          case 'Unit Price':
-            return products..sort((a, b) => a.unitPrice.compareTo(b.unitPrice));
-          case 'Selling Price':
-            return products..sort((a, b) => a.sellingPrice.compareTo(b.sellingPrice));
-          case 'Quantity':
-            return products..sort((a, b) => a.quantity.compareTo(b.quantity));
-          case 'Critical Level':
-            return products..sort((a, b) => a.criticalLvl.compareTo(b.criticalLvl));
-          case 'Markup':
-            return products..sort((a, b) => calculateMarkup(a.unitPrice.toDouble(), a.sellingPrice).compareTo(calculateMarkup(b.unitPrice.toDouble(), b.sellingPrice)));
-          case 'Margin':
-            return products..sort((a, b) => calculateMargin(a.unitPrice.toDouble(), a.sellingPrice).compareTo(calculateMargin(b.unitPrice.toDouble(), b.sellingPrice)));
-          case 'Status':
-            return products..sort((a, b) => a.status.compareTo(b.status));
-          default:
-            return products;
-        }
-      }
-      else{
-        return [];
+      switch (_selectedFilter) {
+        case 'ID':
+          return products
+            ..sort((a, b) {
+              int idA = int.parse(a.productID.substring(2)); // Extract numeric part from productID
+              int idB = int.parse(b.productID.substring(2));
+              return trackAscending ? idA.compareTo(idB) : idB.compareTo(idA);
+            });
+        case 'Product':
+          return products..sort((a, b) => trackAscending ? a.productName.toLowerCase().compareTo(b.productName.toLowerCase()) : b.productName.toLowerCase().compareTo(a.productName.toLowerCase()));
+        case 'Unit Price':
+          return products..sort((a, b) => trackAscending ? a.unitPrice.compareTo(b.unitPrice) : b.unitPrice.compareTo(a.unitPrice));
+        case 'Selling Price':
+          return products..sort((a, b) => trackAscending ? a.sellingPrice.compareTo(b.sellingPrice) : b.sellingPrice.compareTo(a.sellingPrice));
+        case 'Quantity':
+          return products..sort((a, b) => trackAscending ? a.quantity.compareTo(b.quantity) : b.quantity.compareTo(a.quantity));
+        case 'Critical Level':
+          return products..sort((a, b) => trackAscending ? a.criticalLvl.compareTo(b.criticalLvl) : b.criticalLvl.compareTo(a.criticalLvl));
+        case 'Markup':
+          return products..sort((a, b) => trackAscending ? calculateMarkup(a.unitPrice.toDouble(), a.sellingPrice).compareTo(calculateMarkup(b.unitPrice.toDouble(), b.sellingPrice)) : calculateMarkup(b.unitPrice.toDouble(), b.sellingPrice).compareTo(calculateMarkup(a.unitPrice.toDouble(), a.sellingPrice)));
+        case 'Margin':
+          return products..sort((a, b) => trackAscending ? calculateMargin(a.unitPrice.toDouble(), a.sellingPrice).compareTo(calculateMargin(b.unitPrice.toDouble(), b.sellingPrice)) : calculateMargin(b.unitPrice.toDouble(), b.sellingPrice).compareTo(calculateMargin(a.unitPrice.toDouble(), a.sellingPrice)));
+        case 'Status':
+          return products..sort((a, b) => trackAscending ? a.status.compareTo(b.status) : b.status.compareTo(a.status));
+        default:
+          return products;
       }
     }
   }
 
+
   Key futureBuilderKey = UniqueKey();
   void updateData() async {
-    setState(() {
-      futureBuilderKey = UniqueKey();
-    });
+    if (mounted) {
+      setState(() {
+        futureBuilderKey = UniqueKey();
+      });
+    }
+  }
+
+  void updateFilter(String filter) async {
+    if (mounted) {
+      setState(() {
+        _selectedFilter = filter;
+      });
+    }
+  }
+}
+
+
+class ProductSearch extends SearchDelegate<String> {
+  ProductSearch(this.groupedData);
+
+  final Map<String, List<ProductItem>> groupedData;
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    // Flatten all ProductItem lists into a single list
+    final allItems = groupedData.values.expand((list) => list).toList();
+
+    // Filter the flattened list based on the query across all fields
+    final List<ProductItem> suggestionList = query.isEmpty
+      ? []
+      : allItems.where((item) {
+          // Adjusted to match the ProductItem properties
+          final searchableString = '${item.productID} ${item.productName} ${item.quantity} '
+              '${item.unitPrice} ${item.sellingPrice} ${item.status}'
+              '${item.criticalLvl} ${item.margin} ${item.markup}'.toLowerCase();
+          
+          return searchableString.contains(query.toLowerCase());
+        }).toList();
+
+
+    return ListView.builder(
+      itemCount: suggestionList.length,
+      itemBuilder: (context, index) {
+        final ProductItem item = suggestionList[index];
+        return ListTile(
+          title: Text(item.productName),
+          subtitle: Text('Price: ${item.sellingPrice} - Quantity: ${item.quantity}'),
+          onTap: () {
+            navigateToProductDetail(context, item);
+          },
+        );
+      },
+    );
+  }
+
+
+  @override
+  Widget buildResults(BuildContext context) {
+    return buildSuggestions(context);
+  }
+
+  @override
+  List<Widget> buildActions(BuildContext context) {
+    return [
+      IconButton(
+        icon: const Icon(Icons.clear),
+        onPressed: () {
+          query = '';
+          showSuggestions(context);
+        },
+      )
+    ];
+  }
+
+  @override
+  Widget buildLeading(BuildContext context) {
+    return IconButton(
+      icon: const Icon(Icons.arrow_back),
+      onPressed: () {
+        close(context, '');
+      },
+    );
+  }
+
+  @override
+  String get searchFieldLabel => 'Enter Query';
+
+  @override
+  ThemeData appBarTheme(BuildContext context) {
+    return Theme.of(context).copyWith(
+      appBarTheme: AppBarTheme(
+        iconTheme: IconThemeData(color: Theme.of(context).colorScheme.surface),
+        titleTextStyle: TextStyle(color: Theme.of(context).colorScheme.surface),
+        color: Theme.of(context).colorScheme.onPrimaryContainer, // Change this to the desired color
+        toolbarHeight: 80
+      ),
+      inputDecorationTheme: InputDecorationTheme(
+        hintStyle: TextStyle(color: Theme.of(context).colorScheme.surface, fontSize: 23),
+        labelStyle: TextStyle(color: Theme.of(context).colorScheme.surface, fontSize: 23),
+
+      ),
+      textTheme: TextTheme(
+        bodyLarge: TextStyle(color: Theme.of(context).colorScheme.surface, fontSize: 23),
+
+      )
+    );
   }
 }

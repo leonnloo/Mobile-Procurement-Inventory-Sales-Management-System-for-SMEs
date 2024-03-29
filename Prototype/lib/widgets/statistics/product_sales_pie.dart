@@ -1,10 +1,10 @@
 import 'dart:async';
-import 'dart:convert';
-
+import 'package:get/get.dart';
 import 'package:prototype/models/product_model.dart';
 import 'package:prototype/resources/app_resources.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:prototype/util/get_controllers/product_controller.dart';
 import 'package:prototype/util/request_util.dart';
 import 'package:prototype/widgets/statistics/indicator.dart';
 
@@ -31,6 +31,7 @@ class PieChart2State extends State {
   double allSales = 0.0;
   final StreamController<String> _totalProfitsController = StreamController<String>.broadcast();
   final StreamController<Map<String, double>> _percentagesController = StreamController<Map<String, double>>.broadcast();
+  final productController = Get.put(ProductController());
 
 
   @override
@@ -53,6 +54,7 @@ class PieChart2State extends State {
   @override
   Widget build(BuildContext context) {
     return Card(
+      color: Theme.of(context).colorScheme.onSecondary,
       elevation: 4.0,
       margin: const EdgeInsets.all(16.0),
       child: Padding(
@@ -63,9 +65,9 @@ class PieChart2State extends State {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text(
+                Text(
                   'Product Sales',
-                  style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.onSurface),
                 ),
                 DropdownButton<String>(
                   value: _selectedYear,
@@ -80,7 +82,7 @@ class PieChart2State extends State {
                       if (_selectedYear == 'YTD') {
                         _selectedMonth = 0;
                       }
-                      fetchProducts().then((_) {
+                      productController.getProducts().then((_) {
                         _totalProfitsController.add(totalProfits.toString()); // Push the new totalProfits to the stream
                       });
                     });
@@ -88,7 +90,7 @@ class PieChart2State extends State {
                   items: years.map<DropdownMenuItem<String>>((String year) {
                     return DropdownMenuItem<String>(
                       value: year,
-                      child: Text(year),
+                      child: Text(year, style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
                     );
                   }).toList(),
                 ),
@@ -118,23 +120,21 @@ class PieChart2State extends State {
                   elevation: 16,
                   underline: Container(
                     height: 1,
-                    color: Colors.black,
+                    color: Theme.of(context).colorScheme.onSurface,
                   ),
-                  onChanged: (int? newValue) {
+                  onChanged: _selectedYear == 'YTD' ? null : (int? newValue) { // Disable if 'YTD' is selected
                     setState(() {
-                      if (_selectedYear == 'YTD'){
-                        _selectedMonth = 0;
-                      } else {
-                        _selectedMonth = newValue!;
-                      }
+                      _selectedMonth = newValue!;
                     });
                   },
                   items: List.generate(monthNames.length, (index) {
                     return DropdownMenuItem<int>(
                       value: index,
-                      child: Text(monthNames[index]),
+                      child: Text(monthNames[index], style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
                     );
                   }),
+                  // Optionally, you can provide a different style or indication that the dropdown is disabled when 'YTD' is selected
+                  disabledHint: Text(monthNames[_selectedMonth], style: TextStyle(color: Colors.grey)), // Show current month but in grey
                 ),
               ],
             ),
@@ -161,45 +161,61 @@ class PieChart2State extends State {
       child: AspectRatio(
         aspectRatio: 1,
         child: FutureBuilder(
-          future: fetchProducts(),
+          future: productController.getProducts(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const SizedBox();
             } else if (snapshot.hasError) {
               return Text('Error: ${snapshot.error}');
             } else if (!snapshot.hasData) {
-              return const SizedBox(
+              return SizedBox(
                 height: 150.0,
                 child: Center(
-                  child: Text('Unable to load', style: TextStyle(fontSize: 14.0),),
+                  child: Text('Unable to load', style: TextStyle(fontSize: 14.0, color: Theme.of(context).colorScheme.onSurface),),
                 ),
               );
             } else {
               List<ProductItem> productItems = snapshot.data!;
-              return PieChart(
-                PieChartData(
-                  // pieTouchData: PieTouchData(
-                  //   touchCallback: (FlTouchEvent event, pieTouchResponse) {
-                  //     setState(() {
-                  //       if (!event.isInterestedForInteractions ||
-                  //           pieTouchResponse == null ||
-                  //           pieTouchResponse.touchedSection == null) {
-                  //         touchedIndex = -1;
-                  //         return;
-                  //       }
-                  //       touchedIndex = pieTouchResponse
-                  //           .touchedSection!.touchedSectionIndex;
-                  //     });
-                  //   },
-                  // ),
-                  borderData: FlBorderData(
-                    show: false,
+              if (productItems.isNotEmpty){
+                return PieChart(
+                  PieChartData(
+                    // pieTouchData: PieTouchData(
+                    //   touchCallback: (FlTouchEvent event, pieTouchResponse) {
+                    //     setState(() {
+                    //       if (!event.isInterestedForInteractions ||
+                    //           pieTouchResponse == null ||
+                    //           pieTouchResponse.touchedSection == null) {
+                    //         touchedIndex = -1;
+                    //         return;
+                    //       }
+                    //       touchedIndex = pieTouchResponse
+                    //           .touchedSection!.touchedSectionIndex;
+                    //     });
+                    //   },
+                    // ),
+                    borderData: FlBorderData(
+                      show: false,
+                    ),
+                    sectionsSpace: 0,
+                    centerSpaceRadius: 34,
+                    sections: showingSections(productItems),
                   ),
-                  sectionsSpace: 0,
-                  centerSpaceRadius: 40,
-                  sections: showingSections(productItems),
-                ),
-              );
+                );
+              }
+              else {
+                return SizedBox(
+                  width: double.infinity,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "No product sales available",
+                        style: TextStyle(color: Theme.of(context).colorScheme.onSurface, fontSize: 20),
+                      ),
+                    ],
+                  ),
+                );
+              }
             }
           }
         ),
@@ -242,9 +258,18 @@ class PieChart2State extends State {
 
 
   Color getColorForIndex(int index) {
-    List<Color> colors = [AppColors.contentColorBlue, AppColors.contentColorYellow, AppColors.contentColorPurple, AppColors.contentColorGreen];
-    return colors[index % colors.length];
-  }
+  // Enhanced color palette for visual appeal and readability
+  List<Color> colors = [
+    const Color.fromARGB(255, 165, 77, 247), // Light Blue for contrast with dark navy & white
+    const Color.fromARGB(255, 174, 209, 255), // Softer Blue for a lighter touch
+    const Color.fromARGB(255, 102, 208, 235), // Slightly deeper Blue for variation
+    const Color.fromARGB(255, 123, 125, 250), // Another shade of Blue to maintain harmony
+    const Color(0xFFB2CCFF), // Very light Blue for subtle differentiation
+    // You can add or replace with any other colors as per your design needs
+  ];
+  return colors[index % colors.length];
+}
+
   
   Map<String, double> calculatePercentage(List<ProductItem> products) {
     allSales = 0.0;
@@ -257,17 +282,20 @@ class PieChart2State extends State {
         int saleYear = product.monthlySales[i].year;
         int saleMonth = product.monthlySales[i].month;
         double salePrice = product.monthlySales[i].totalPrice;
-        if (_selectedYear == 'YTD' && saleYear == DateTime.now().year){
+        if (_selectedYear == 'YTD' && saleYear == DateTime.now().year) {
+          // Your existing logic for YTD
           productTotalSales += salePrice;
           allSales += salePrice;
-        }
-        else if (saleYear == int.parse(_selectedYear) && saleMonth == _selectedMonth) {
-          productTotalSales += salePrice;
-          allSales += salePrice;
-        }
-        else if (saleYear == int.parse(_selectedYear) && 0 == _selectedMonth) {
-          productTotalSales += salePrice;
-          allSales += salePrice;
+        } else if (_selectedYear != 'YTD') { // Ensure _selectedYear is not 'YTD' before parsing
+          int selectedYearInt = int.tryParse(_selectedYear) ?? DateTime.now().year; // Use current year as fallback
+          if (saleYear == selectedYearInt && saleMonth == _selectedMonth) {
+            productTotalSales += salePrice;
+            allSales += salePrice;
+          }
+          else if (saleYear == selectedYearInt && _selectedMonth == 0) {
+            productTotalSales += salePrice;
+            allSales += salePrice;
+          }
         }
       }
       if (productTotalSales > 0) {
@@ -303,51 +331,55 @@ class PieChart2State extends State {
     _percentagesController.sink.add(finalProductSales);
     return finalProductSales;
   }
-
-  Future<List<ProductItem>> fetchProducts() async {
-    final response = await requestUtil.getProducts();
-    if (response.statusCode == 200){
-      List<dynamic> data = jsonDecode(response.body);
-      List<ProductItem> productItems = data.map((e) => ProductItem.fromJson(e)).toList();
-      return productItems;
-    }
-    else {
-      throw Exception('Failed to load products');
-    }
-
-  }
   
-  Widget _buildIndicators() {
+Widget _buildIndicators() {
   return StreamBuilder<Map<String, double>>(
-      stream: percentagesStream,
-      builder: (context, snapshot) {
-        if (!snapshot.hasData) {
-          return Container(); // Or a placeholder/loading indicator
-        }
-        
-        final percentages = snapshot.data!;
-        List<Widget> indicators = [];
-        int index = 0;
-        
-        percentages.forEach((productName, percentage) {
-          final color = getColorForIndex(index);
-          indicators.add(Indicator(
-            color: color,
-            text: productName,
-            isSquare: true,
-          ));
-          indicators.add(const SizedBox(height: 4,));
-          index++;
-        });
+    stream: percentagesStream,
+    builder: (context, snapshot) {
+      if (!snapshot.hasData) {
+        return Container(); // Placeholder/loading indicator
+      }
 
-        return Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: indicators,
+      final percentages = snapshot.data!;
+      List<Widget> indicators = [];
+      int index = 0;
+
+      percentages.forEach((productName, percentage) {
+        final color = getColorForIndex(index);
+        // Wrap Indicator with constraints to encourage text wrapping
+        indicators.add(
+          ConstrainedBox(
+            constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.25), // Example constraint
+            child: Indicator(
+              color: color,
+              text: productName,
+              isSquare: true,
+              textColor: Theme.of(context).colorScheme.onSurface,
+            ),
+          ),
         );
-      },
-    );
-  }
+        indicators.add(const SizedBox(height: 4,));
+        index++;
+      });
+
+      return SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: indicators,
+          ),
+        ),
+      );
+    },
+  );
+}
+
+
+
+
 
 
 

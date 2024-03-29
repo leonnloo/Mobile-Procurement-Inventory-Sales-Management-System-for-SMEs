@@ -1,27 +1,46 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:prototype/app/sales_management/Claims_and_Refunds/get_refunds.dart';
+import 'package:get/get.dart';
 import 'package:prototype/models/order_model.dart';
 import 'package:prototype/models/procurement_model.dart';
+import 'package:intl/intl.dart';
+import 'package:prototype/util/get_controllers/order_controller.dart';
+import 'package:prototype/util/get_controllers/procurement_controller.dart';
 
+// ignore: must_be_immutable
 class DeliveryOverview extends StatelessWidget {
   DeliveryOverview({super.key,});
-
+  final orderController = Get.put(OrderController());
+  final purchaseController = Get.put(PurchaseController());
   int ingoing = 0;
   int outgoing = 0;
   @override
   Widget build(BuildContext context) {
+    String currentDate = DateFormat('MMMM d').format(DateTime.now());
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Padding(
-            padding: EdgeInsets.only(left: 8.0),
-            child: Text(
-              'Delivery',
-              style: TextStyle(fontSize: 30.0, fontWeight: FontWeight.bold),
+          Padding(
+            padding: const EdgeInsets.only(left: 8.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    Text(
+                      'Delivery',
+                      style: TextStyle(fontSize: 30.0, fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.onSurface),
+                    ),
+                    const SizedBox(width: 14.0,),
+                    Icon(Icons.local_shipping, color: Theme.of(context).colorScheme.onSurface, size: 30,),
+                  ],
+                ),
+                Text(
+                  currentDate,
+                  style: TextStyle(fontSize: 20.0, color: Theme.of(context).colorScheme.onSurface),
+                ),
+              ],
             ),
           ),
           Row(
@@ -29,17 +48,20 @@ class DeliveryOverview extends StatelessWidget {
             children: [
               Expanded(
                 child: Card(
+                  shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20.0))),
+                  color: Theme.of(context).colorScheme.onPrimary,
                   elevation: 4.0,
                   child: Padding(
                     padding: const EdgeInsets.all(20.0),
                     child: Column(
                       children: [
-                        const Row(
+                        Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
                               'Incoming',
                               style: TextStyle(
+                                color: Theme.of(context).colorScheme.onSurface,
                                 fontSize: 20.0,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -47,7 +69,7 @@ class DeliveryOverview extends StatelessWidget {
                           ],
                         ),
                         FutureBuilder(
-                          future: _fetchProcurementList(),
+                          future: purchaseController.getPurchases(),
                           builder: (context, snapshot) {
                             if (snapshot.connectionState == ConnectionState.waiting) {
                               return SizedBox(
@@ -55,18 +77,18 @@ class DeliveryOverview extends StatelessWidget {
                                   child: CircularProgressIndicator(
                                     value: null, // null indicates an indeterminate progress which spins
                                     strokeWidth: 4.0, // Thickness of the circle line
-                                    backgroundColor: Colors.grey[200], // Color of the background circle
-                                    color: Colors.red[400], // Color of the progress indicator
+                                    backgroundColor: Colors.transparent, // Color of the background circle
+                                    color: Theme.of(context).colorScheme.onSurface, // Color of the progress indicator
                                   ),
                                 ),
                               );
                             } else if (snapshot.hasError) {
                               return Text('Error: ${snapshot.error}');
                             } else if (!snapshot.hasData) {
-                              return const SizedBox(
+                              return SizedBox(
                                 height: 150.0,
                                 child: Center(
-                                  child: Text('Unable to load', style: TextStyle(fontSize: 14.0),),
+                                  child: Text('Unable to load', style: TextStyle(fontSize: 14.0, color: Theme.of(context).colorScheme.onSurface),),
                                 ),
                               );
                             } else {
@@ -75,7 +97,7 @@ class DeliveryOverview extends StatelessWidget {
                               return Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Text(ingoing.toString(), style: const TextStyle(fontSize: 20.0),),
+                                  Text(ingoing.toString(), style: TextStyle(fontSize: 20.0, color: Theme.of(context).colorScheme.onSurface),),
                                 ],
                               );
                             }
@@ -89,18 +111,21 @@ class DeliveryOverview extends StatelessWidget {
               const SizedBox(width: 12.0,),
               Expanded(
                 child: Card(
+                  color: Theme.of(context).colorScheme.onPrimary,
+                  shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20.0))),
                   elevation: 4.0,
                   child: Padding(
                     padding: const EdgeInsets.all(20.0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Row(
+                        Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
                               'Outgoing',
                               style: TextStyle(
+                                color: Theme.of(context).colorScheme.onSurface,
                                 fontSize: 20.0,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -108,7 +133,7 @@ class DeliveryOverview extends StatelessWidget {
                           ],
                         ),
                         FutureBuilder(
-                          future: getOrderList(),
+                          future: orderController.getOrders(),
                           builder: (context, snapshot) {
                             if (snapshot.connectionState == ConnectionState.waiting) {
                               return SizedBox(
@@ -116,18 +141,18 @@ class DeliveryOverview extends StatelessWidget {
                                   child: CircularProgressIndicator(
                                     value: null, // null indicates an indeterminate progress which spins
                                     strokeWidth: 4.0, // Thickness of the circle line
-                                    backgroundColor: Colors.grey[200], // Color of the background circle
-                                    color: Colors.red[400], // Color of the progress indicator
+                                    backgroundColor: Colors.transparent, // Color of the background circle
+                                    color: Theme.of(context).colorScheme.onSurface, // Color of the progress indicator
                                   ),
                                 ),
                               );
                             } else if (snapshot.hasError) {
                               return Text('Error: ${snapshot.error}');
                             } else if (!snapshot.hasData) {
-                              return const SizedBox(
+                              return SizedBox(
                                 height: 150.0,
                                 child: Center(
-                                  child: Text('Unable to load', style: TextStyle(fontSize: 14.0),),
+                                  child: Text('Unable to load', style: TextStyle(fontSize: 14.0, color: Theme.of(context).colorScheme.onSurface),),
                                 ),
                               );
                             } else {
@@ -136,7 +161,7 @@ class DeliveryOverview extends StatelessWidget {
                               return Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Text(outgoing.toString(), style: const TextStyle(fontSize: 20.0),),
+                                  Text(outgoing.toString(), style: TextStyle(fontSize: 20.0, color: Theme.of(context).colorScheme.onSurface),),
                                 ],
                               );
                             }
@@ -152,17 +177,6 @@ class DeliveryOverview extends StatelessWidget {
         ],
       ),
     );
-  }
-
-  Future<List<PurchasingOrder>> _fetchProcurementList() async {
-    final procurement = await requestUtil.getProcurement();
-    if (procurement.statusCode == 200) {
-      List<dynamic> jsonData = jsonDecode(procurement.body);
-      List<PurchasingOrder> procurementList = jsonData.map((data) => PurchasingOrder.fromJson(data)).toList();
-      return procurementList;
-    } else {
-      throw Exception('Unable to fetch procurement data.');
-    }
   }
   
   void calculateOutgoing(List<SalesOrder> sales) {

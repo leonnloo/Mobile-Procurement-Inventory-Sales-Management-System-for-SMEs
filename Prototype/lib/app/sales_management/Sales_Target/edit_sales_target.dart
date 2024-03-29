@@ -3,7 +3,9 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:prototype/models/monthly_sales_model.dart';
+import 'package:prototype/util/get_controllers/monthly_sale_controller.dart';
 import 'package:prototype/util/management_util.dart';
 import 'package:prototype/util/validate_text.dart';
 import 'package:prototype/widgets/appbar/common_appbar.dart';
@@ -25,6 +27,7 @@ class EditSalesTargetState extends State<EditSalesTarget> {
   final TextEditingController _actualSalesController = TextEditingController();
   final TextEditingController _targetSalesController = TextEditingController();
   final ManagementUtil managementUtil = ManagementUtil();
+  final monthlySaleController = Get.put(MonthlySaleController());
 
   @override
   void initState() {
@@ -70,8 +73,8 @@ class EditSalesTargetState extends State<EditSalesTarget> {
                     width: double.infinity,
                     child: ElevatedButton(
                       style: TextButton.styleFrom(
-                        foregroundColor: Colors.white,
-                        backgroundColor: Colors.black,
+                        foregroundColor: Theme.of(context).colorScheme.onPrimary,
+                        backgroundColor: Theme.of(context).colorScheme.onSecondaryContainer,
                         side: const BorderSide(color: Colors.black),
                         shape: const RoundedRectangleBorder(),
                         padding: const EdgeInsets.symmetric(vertical: 15.0)
@@ -87,9 +90,9 @@ class EditSalesTargetState extends State<EditSalesTarget> {
                           || targetSales == null) {
                           // Display validation error messages
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Please enter new target.'),
-                              backgroundColor: Colors.red,
+                            SnackBar(
+                              content: const Text('Please enter new target.'),
+                              backgroundColor: Theme.of(context).colorScheme.error,
                             ),
                           );
                         } else {                
@@ -98,7 +101,9 @@ class EditSalesTargetState extends State<EditSalesTarget> {
                           );
                           
                           if (response.statusCode == 200) {
-                            widget.updateData();
+                            monthlySaleController.clearMonthlySales();
+                            monthlySaleController.getMonthlySales();
+                            monthlySaleController.updateData.value!();
                             Navigator.pop(context);
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
@@ -111,7 +116,7 @@ class EditSalesTargetState extends State<EditSalesTarget> {
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
                                 content: Text('Target failed: ${jsonDecode(response.body)['detail']}'),
-                                backgroundColor: Colors.red,
+                                backgroundColor: Theme.of(context).colorScheme.error,
                               ),
                             );
                           }

@@ -108,10 +108,11 @@ class HomeScreenState extends State<HomeScreen> {
         child: Scaffold(
           key: _scaffoldKey,
           appBar: controller.currentPage.value == DrawerSections.dashboard ? null : AppBar(
-            toolbarHeight: 60.0,
+            toolbarHeight: 80.0,
             leading: Builder(
               builder: (context) => IconButton(
-                icon: const Icon(
+                icon: Icon(
+                  color: Theme.of(context).colorScheme.surface,
                   Icons.notes, // Replace with the desired icon
                   size: 30.0,
                 ),
@@ -121,13 +122,14 @@ class HomeScreenState extends State<HomeScreen> {
               ),
             ),
             actions: [
-              IconButton(onPressed: () {Get.to(() => const NotificationScreen());}, icon: const Icon(Icons.notifications, size: 30.0,),),
+              IconButton(onPressed: () {Get.to(() => const NotificationScreen());}, icon: Icon(Icons.notifications, size: 30.0, color: Theme.of(context).colorScheme.surface),),
             ],
-            backgroundColor: Colors.red[400],
-            title: Text(controller.currentPage.value == DrawerSections.dashboard ? '' : currentTitle),
+            backgroundColor: Theme.of(context).colorScheme.onPrimaryContainer,
+            title: Text(controller.currentPage.value == DrawerSections.dashboard ? '' : currentTitle, style: TextStyle(color: Theme.of(context).colorScheme.surface, fontSize: 25),),
           ),
           body: container,
           drawer: Drawer(
+            backgroundColor: Theme.of(context).colorScheme.onPrimary,
             child: SingleChildScrollView(
               child: Column(
                   children: [
@@ -149,16 +151,17 @@ class HomeScreenState extends State<HomeScreen> {
       child: SpeedDial(
         icon: Icons.add_outlined,
         activeIcon: Icons.close_outlined,
-        backgroundColor: Colors.black,
-        foregroundColor: Colors.white,
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        foregroundColor: Theme.of(context).colorScheme.onSecondary,
         spaceBetweenChildren: 10,
         overlayOpacity: 0.5,
         openCloseDial: isDialOpen,
         children: [
           SpeedDialChild(
             child: const Icon(Icons.people),
-            backgroundColor: Colors.black,
-            foregroundColor: Colors.white,
+            backgroundColor: Theme.of(context).colorScheme.primary,
+            foregroundColor: Theme.of(context).colorScheme.onSecondary,
+            labelStyle: TextStyle(color: Theme.of(context).colorScheme.onSurface),
             shape: const CircleBorder(),
             label: 'Add Customer',
             onTap: () {
@@ -167,8 +170,9 @@ class HomeScreenState extends State<HomeScreen> {
           ),
           SpeedDialChild(
             child: const Icon(Icons.supervised_user_circle),
-            backgroundColor: Colors.black,
-            foregroundColor: Colors.white,
+            backgroundColor: Theme.of(context).colorScheme.primary,
+            foregroundColor: Theme.of(context).colorScheme.onSecondary,
+            labelStyle: TextStyle(color: Theme.of(context).colorScheme.onSurface),
             shape: const CircleBorder(),
             label: 'Add Supplier',
             onTap: () {
@@ -177,8 +181,9 @@ class HomeScreenState extends State<HomeScreen> {
           ),
           SpeedDialChild(
             child: const Icon(Icons.shopping_bag),
-            backgroundColor: Colors.black,
-            foregroundColor: Colors.white,
+            backgroundColor: Theme.of(context).colorScheme.primary,
+            foregroundColor: Theme.of(context).colorScheme.onSecondary,
+            labelStyle: TextStyle(color: Theme.of(context).colorScheme.onSurface),
             shape: const CircleBorder(),
             label: 'Add Orders',
             onTap: () {
@@ -187,8 +192,9 @@ class HomeScreenState extends State<HomeScreen> {
           ),
           SpeedDialChild(
             child: const Icon(Icons.shopping_cart),
-            backgroundColor: Colors.black,
-            foregroundColor: Colors.white,
+            backgroundColor: Theme.of(context).colorScheme.primary,
+            foregroundColor: Theme.of(context).colorScheme.onSecondary,
+            labelStyle: TextStyle(color: Theme.of(context).colorScheme.onSurface),
             shape: const CircleBorder(),
             label: 'Add Purchase',
             onTap: () {
@@ -197,8 +203,9 @@ class HomeScreenState extends State<HomeScreen> {
           ),
           SpeedDialChild(
             child: const Icon(Icons.category),
-            backgroundColor: Colors.black,
-            foregroundColor: Colors.white,
+            backgroundColor: Theme.of(context).colorScheme.primary,
+            foregroundColor: Theme.of(context).colorScheme.onSecondary,
+            labelStyle: TextStyle(color: Theme.of(context).colorScheme.onSurface),
             shape: const CircleBorder(),
             label: 'Stock In/Out Product',
             onTap: () {
@@ -207,8 +214,9 @@ class HomeScreenState extends State<HomeScreen> {
           ),
           SpeedDialChild(
             child: const Icon(Icons.inventory),
-            backgroundColor: Colors.black,
-            foregroundColor: Colors.white,
+            backgroundColor: Theme.of(context).colorScheme.primary,
+            foregroundColor: Theme.of(context).colorScheme.onSecondary,
+            labelStyle: TextStyle(color: Theme.of(context).colorScheme.onSurface),
             shape: const CircleBorder(),
             label: 'Stock In/Out Inventory',
             onTap: () {

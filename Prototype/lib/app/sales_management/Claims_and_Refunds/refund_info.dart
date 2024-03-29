@@ -23,8 +23,8 @@ class RefundDetailScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 60.0,
-        backgroundColor: Colors.red[400],
-        title: const Text('Refund Details'),
+        backgroundColor: Theme.of(context).colorScheme.onPrimaryContainer,
+        title: Text('Refund Details', style: TextStyle(color: Theme.of(context).colorScheme.surface),),
         actions: [
           IconButton(
             onPressed: () => _showDeleteConfirmationDialog(context),
@@ -34,6 +34,9 @@ class RefundDetailScreen extends StatelessWidget {
             ),
           ),
         ],
+        iconTheme: IconThemeData(
+          color: Theme.of(context).colorScheme.surface,
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -41,18 +44,18 @@ class RefundDetailScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildDetailRow('Refund ID', item.refundID),
-              _buildDetailRow('Refund Date', item.refundDate),
-              _buildDetailRow('Order ID', item.orderID),
-              _buildDetailRow('Customer', item.customerName),
-              _buildDetailRow('Customer ID', item.customerID.toString()),
-              _buildDetailRow('Product', item.productName),
-              _buildDetailRow('Product ID', item.productID.toString()),
-              _buildDetailRow('Refunded Quantity', item.refundQuantity.toString()),
-              _buildDetailRow('Order Price', '\$${item.orderPrice.toStringAsFixed(2)}'),
-              _buildDetailRow('Refunded Amount', '\$${item.refundAmount.toStringAsFixed(2)}'),
-              _buildDetailRow('Reason', item.reason),
-              _buildDetailRow('Status', 'Refunded'),
+              _buildDetailRow('Refund ID', item.refundID, context),
+              _buildDetailRow('Refund Date', item.refundDate, context),
+              _buildDetailRow('Order ID', item.orderID, context),
+              _buildDetailRow('Customer', item.customerName, context),
+              _buildDetailRow('Customer ID', item.customerID.toString(), context),
+              _buildDetailRow('Product', item.productName, context),
+              _buildDetailRow('Product ID', item.productID.toString(), context),
+              _buildDetailRow('Refunded Quantity', item.refundQuantity.toString(), context),
+              _buildDetailRow('Order Price', '\$${item.orderPrice.toStringAsFixed(2)}', context),
+              _buildDetailRow('Refunded Amount', '\$${item.refundAmount.toStringAsFixed(2)}', context),
+              _buildDetailRow('Reason', item.reason, context),
+              _buildDetailRow('Status', 'Refunded', context),
             ],
           ),
         ),
@@ -60,14 +63,14 @@ class RefundDetailScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildDetailRow(String label, String value) {
+  Widget _buildDetailRow(String label, String value, BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(label, style: const TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold)),
-          Text(value, style: const TextStyle(fontSize: 18.0)),
+          Text(label, style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.onSurface)),
+          Text(value, style: TextStyle(fontSize: 18.0, color: Theme.of(context).colorScheme.onSurface)),
         ],
       ),
     );
@@ -102,9 +105,9 @@ class RefundDetailScreen extends StatelessWidget {
                 } else {
                   // Display an error message to the user
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Delete refund failed'),
-                      backgroundColor: Colors.red,
+                    SnackBar(
+                      content: const Text('Delete refund failed'),
+                      backgroundColor: Theme.of(context).colorScheme.error,
                     ),
                   );
                 }

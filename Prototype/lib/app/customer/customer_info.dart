@@ -1,56 +1,76 @@
+// ignore_for_file: use_build_context_synchronously
+
 import "package:flutter/material.dart";
+import 'package:get/get.dart';
 import 'package:prototype/models/customer_model.dart';
 import 'package:prototype/models/edit_type.dart';
 import 'package:prototype/models/order_model.dart';
+import 'package:prototype/util/get_controllers/customer_controller.dart';
 import 'package:prototype/util/request_util.dart';
 import 'dart:math';
 import 'package:prototype/widgets/appbar/info_appbar.dart';
 
-void navigateToCustomerDetail(BuildContext context, CustomerData customer, Function updateData) {
+void navigateToCustomerDetail(BuildContext context, CustomerData customer) {
   Navigator.of(context).push(
     MaterialPageRoute(
-      builder: (context) => CustomerDetailScreen(customer: customer, updateData: updateData),
+      builder: (context) => CustomerDetailScreen(customer: customer),
     ),
   );
 }
 
-class CustomerDetailScreen extends StatelessWidget {
-  final CustomerData customer;
-  final Function updateData;
-  const CustomerDetailScreen({super.key, required this.customer, required this.updateData});
+// ignore: must_be_immutable
+class CustomerDetailScreen extends StatefulWidget {
+  CustomerData customer;
+  CustomerDetailScreen({super.key, required this.customer});
+
+  @override
+  State<CustomerDetailScreen> createState() => _CustomerDetailScreenState();
+}
+
+class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
+  final customerController = Get.put(CustomerController());
+
+  void updateEditData(){
+    if (mounted) {
+      setState(() {
+        widget.customer = customerController.currentCustomerInfo.value!;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    customerController.updateEditData.value = updateEditData;
     return Scaffold(
-      appBar: InfoAppBar(currentTitle: 'Customer Details', currentData: customer, editType: EditType.customer, updateData: updateData,),
+      appBar: InfoAppBar(currentTitle: 'Customer Details', currentData: widget.customer, editType: EditType.customer),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildDetailRow('Customer ID', customer.customerID),
-            _buildDetailRow('Business Name', customer.businessName),
-            _buildDetailRow('Contact Person', customer.contactPerson),
-            _buildDetailRow('Email', customer.email),
-            _buildDetailRow('Phone Number', customer.phoneNo),
-            _buildDetailRow('Billing Address', customer.billingAddress),
-            _buildDetailRow('Shipping Address', customer.shippingAddress),
+            _buildDetailRow('Customer ID', widget.customer.customerID, context),
+            _buildDetailRow('Business Name', widget.customer.businessName, context),
+            _buildDetailRow('Contact Person', widget.customer.contactPerson, context),
+            _buildDetailRow('Email', widget.customer.email, context),
+            _buildDetailRow('Phone Number', widget.customer.phoneNo, context),
+            _buildDetailRow('Billing Address', widget.customer.billingAddress, context),
+            _buildDetailRow('Shipping Address', widget.customer.shippingAddress, context),
 
             const SizedBox(height: 6.0), // Add some spacing
             _buildNotes(context),
             
-            const SizedBox(height: 6.0),
-            _buildHistory(),
+            // const SizedBox(height: 6.0),
+            // _buildHistory(context),
 
-            const SizedBox(height: 6.0),
-            _buildPastOrders()
+            // const SizedBox(height: 6.0),
+            // _buildPastOrders(context)
           ],
         ),
       ),
     );
   }
 
-  Widget _buildDetailRow(String label, String value) {
+  Widget _buildDetailRow(String label, String value, BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Row(
@@ -59,13 +79,13 @@ class CustomerDetailScreen extends StatelessWidget {
         children: [
           Text(
             label,
-            style: const TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+            style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.onSurface),
           ),
           const SizedBox(width: 30.0), // Increase the spacing between label and text
           Flexible(
             child: Text(
               value,
-              style: const TextStyle(fontSize: 18.0),
+              style: TextStyle(fontSize: 18.0, color: Theme.of(context).colorScheme.onSurface),
             ),
           ),
         ],
@@ -73,10 +93,9 @@ class CustomerDetailScreen extends StatelessWidget {
     );
   }
 
-
   Widget _buildNotes(BuildContext context){
     final TextEditingController notesController = TextEditingController();
-    notesController.text = customer.notes!;
+    notesController.text = widget.customer.notes!;
 
     final RequestUtil requestUtil = RequestUtil();
     return Padding(
@@ -99,17 +118,23 @@ class CustomerDetailScreen extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const SizedBox(
+                      SizedBox(
                         child: Text(
                           'Note:',
-                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.onSurface),
                         ),
                       ),
                       SizedBox(
                         child: TextButton(
                           onPressed: () async {
-                            final response = await requestUtil.updateNote(customer.customerID, notesController.text);
+                            final response = await requestUtil.updateNote(widget.customer.customerID, notesController.text);
                             if (response.statusCode == 200) {
+                              customerController.clearCustomers();
+                              customerController.getCustomers();
+                              Function? update = customerController.updateData.value;
+                              if (update!= null) {
+                                update();
+                              }
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
                                   content: Text('Note saved!'),
@@ -120,9 +145,9 @@ class CustomerDetailScreen extends StatelessWidget {
                             }
                             else {
                               ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text('Note save failed!'),
-                                  backgroundColor: Colors.red,
+                                SnackBar(
+                                  content: const Text('Note save failed!'),
+                                  backgroundColor: Theme.of(context).colorScheme.error,
                                 ),
                               );
                             }
@@ -148,7 +173,6 @@ class CustomerDetailScreen extends StatelessWidget {
         ),
     );
   }
-  
 
 List<String> generateRandomHistory() {
   final Random random = Random();
@@ -164,27 +188,26 @@ List<String> generateRandomHistory() {
   });
 }
 
-Widget _buildHistory() {
-  List<SalesOrder>? pastOrders = customer.pastOrder;
+// Widget _buildHistory(BuildContext context) {
+  // List<SalesOrder>? pastOrders = widget.customer.pastOrder;
 
-  return Padding(
-    padding: const EdgeInsets.all(16.0),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: pastOrders?.map((order) {
-        return Row(
-          children: [
-            const Icon(Icons.history, color: Colors.blue),
-            const SizedBox(width: 8.0),
-            Text('Placed an order on ${order.orderDate} - ${order.orderStatus}'),
-          ],
-        );
-        // ! do empty history after completing adding orders
-      }).toList() ?? [],
-    ),
-  );
-}
-
+  // return Padding(
+  //   padding: const EdgeInsets.all(16.0),
+  //   child: Column(
+  //     crossAxisAlignment: CrossAxisAlignment.start,
+  //     children: pastOrders?.map((order) {
+  //       return Row(
+  //         children: [
+  //           Icon(Icons.history, color: Theme.of(context).colorScheme.primary),
+  //           const SizedBox(width: 8.0),
+  //           Text('Placed an order on ${order.orderDate} - ${order.orderStatus}', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
+  //         ],
+  //       );
+  //       // ! do empty history after completing adding orders
+  //     }).toList() ?? [],
+  //   ),
+  // );
+// }
 
 List<PastOrder> generatePastOrders() {
 
@@ -197,15 +220,15 @@ List<PastOrder> generatePastOrders() {
     });
   }
 
-  Widget _buildPastOrders() {
+  Widget _buildPastOrders(BuildContext context) {
     List<PastOrder> pastOrders = generatePastOrders();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
+        Text(
           'Past Orders:',
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.onSurface),
         ),
         const SizedBox(height: 8.0),
         Column(
@@ -216,7 +239,7 @@ List<PastOrder> generatePastOrders() {
                 children: [
                   const Icon(Icons.shopping_cart, color: Colors.green),
                   const SizedBox(width: 8.0),
-                  Text('Order ${order.orderNumber} - ${order.orderDate} - \$${order.totalAmount.toStringAsFixed(2)}'),
+                  Text('Order ${order.orderNumber} - ${order.orderDate} - \$${order.totalAmount.toStringAsFixed(2)}', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
                 ],
               ),
             );

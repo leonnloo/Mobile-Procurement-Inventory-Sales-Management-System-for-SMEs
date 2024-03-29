@@ -11,6 +11,7 @@ class BuildTextField extends StatelessWidget {
     return TextFormField(
       controller: controller,
       decoration: InputDecoration(
+        labelStyle: TextStyle(color: Theme.of(context).colorScheme.onSurface),
         labelText: labelText,
         hintText: labelText,
         border: const OutlineInputBorder(),

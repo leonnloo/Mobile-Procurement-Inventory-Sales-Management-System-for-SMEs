@@ -3,8 +3,12 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:prototype/app/procurement/get_procurement.dart';
 import 'package:prototype/models/procurement_model.dart';
+import 'package:prototype/util/get_controllers/inventory_controller.dart';
+import 'package:prototype/util/get_controllers/procurement_controller.dart';
+import 'package:prototype/util/get_controllers/product_controller.dart';
 import 'package:prototype/util/request_util.dart';
 import 'package:prototype/util/validate_text.dart';
 import 'package:prototype/widgets/forms/dropdown_field.dart';
@@ -13,8 +17,7 @@ import 'package:prototype/widgets/forms/text_field.dart';
 
 class EditProcurement extends StatefulWidget {
   final PurchasingOrder procurementData;
-  final Function updateData;
-  const EditProcurement({super.key, required this.procurementData, required this.updateData});
+  const EditProcurement({super.key, required this.procurementData});
 
   @override
   EditProcurementState createState() => EditProcurementState();
@@ -32,6 +35,9 @@ class EditProcurementState extends State<EditProcurement> {
   final TextEditingController _quantityController = TextEditingController();
   final TextEditingController _statusController = TextEditingController();
   final RequestUtil requestUtil = RequestUtil();
+  final procurementController = Get.put(PurchaseController());
+  final productController = Get.put(ProductController());
+  final inventoryController = Get.put(InventoryController());
   late String type = 'Product';
   bool changeType = true;
   @override
@@ -68,17 +74,20 @@ class EditProcurementState extends State<EditProcurement> {
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 60.0,
-        backgroundColor: Colors.red[400],
-        title: const Text('Edit Purchase'),
+        backgroundColor: Theme.of(context).colorScheme.onPrimaryContainer,
+        title: Text('Edit Purchase', style: TextStyle(color: Theme.of(context).colorScheme.surface),),
         actions: [
           IconButton(
-            onPressed: () => _showDeleteConfirmationDialog(context),
+            onPressed: () => _showDeleteConfirmationDialog(context, widget.procurementData.status),
             icon: const Icon(
               Icons.delete,
               size: 30.0,
             ),
           ),
         ],
+        iconTheme: IconThemeData(
+          color: Theme.of(context).colorScheme.surface,
+        ),
       ),
       body: SingleChildScrollView(
         child: Container(
@@ -158,12 +167,12 @@ class EditProcurementState extends State<EditProcurement> {
                     width: double.infinity,
                     child: ElevatedButton(
                       style: TextButton.styleFrom(
-                        foregroundColor: Colors.white,
-                        backgroundColor: Colors.black,
-                        side: const BorderSide(color: Colors.black),
-                        shape: const RoundedRectangleBorder(),
-                        padding: const EdgeInsets.symmetric(vertical: 15.0)
-                      ),
+                      foregroundColor: Theme.of(context).colorScheme.onPrimary,
+                      backgroundColor: Theme.of(context).colorScheme.onSecondaryContainer,
+                      side: const BorderSide(color: Colors.black),
+                      shape: const RoundedRectangleBorder(),
+                      padding: const EdgeInsets.symmetric(vertical: 15.0)
+                    ),
                       onPressed: () async {
                       String? itemName = validateTextField(_itemNameController.text);
                       String? itemType = validateTextField(_itemTypeController.text);
@@ -187,9 +196,9 @@ class EditProcurementState extends State<EditProcurement> {
                         || status == null) {
                           // Display validation error messages
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Please fill in all the required fields.'),
-                              backgroundColor: Colors.red,
+                            SnackBar(
+                              content: const Text('Please fill in all the required fields.'),
+                              backgroundColor: Theme.of(context).colorScheme.error,
                             ),
                           );
                         } else {                
@@ -198,8 +207,27 @@ class EditProcurementState extends State<EditProcurement> {
                           );
                           
                           if (response.statusCode == 200) {
-                            widget.updateData();
-                            Navigator.pop(context);
+                            Function? update = procurementController.updateData.value;
+                            Function? updateEdit = procurementController.updateEditData.value;
+                            procurementController.clearPurchases();
+                            procurementController.getPurchases();
+                            procurementController.updatePurchaseInfo(PurchasingOrder(purchaseID: widget.procurementData.purchaseID, itemType: itemType, itemID: itemID, itemName: itemName, supplierName: supplierName, orderDate: orderDate, deliveryDate: deliveryDate, quantity: int.parse(quantity), unitPrice: double.parse(unitPrice), totalPrice: double.parse(totalPrice), status: status));
+                            update!();
+                            updateEdit!();
+                            if (status == 'Completed') {
+                              Function? updateInventory = inventoryController.updateData.value;
+                              inventoryController.clearInventories();
+                              inventoryController.getInventories();
+                              if (updateInventory!= null){
+                                updateInventory();
+                              }
+                              Function? updateProduct = productController.updateData.value;
+                              productController.clearProducts();
+                              productController.getProducts();
+                              if (updateProduct!= null){
+                                updateProduct();
+                              }
+                            }
                             Navigator.pop(context);
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
@@ -212,7 +240,7 @@ class EditProcurementState extends State<EditProcurement> {
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
                                 content: Text('Purchase edit failed: ${jsonDecode(response.body)['detail']}'),
-                                backgroundColor: Colors.red,
+                                backgroundColor: Theme.of(context).colorScheme.error,
                               ),
                             );
                           }
@@ -230,7 +258,7 @@ class EditProcurementState extends State<EditProcurement> {
     );
   }
 
-  Future<void> _showDeleteConfirmationDialog(BuildContext context) async {
+  Future<void> _showDeleteConfirmationDialog(BuildContext context, String status) async {
     return showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -248,7 +276,24 @@ class EditProcurementState extends State<EditProcurement> {
               onPressed: () async {
                 final response = await requestUtil.deleteProcurement(widget.procurementData.purchaseID);
                 if (response.statusCode == 200) {
-                  widget.updateData();
+                  Function? update = procurementController.updateData.value;
+                  procurementController.clearPurchases();
+                  procurementController.getPurchases();
+                  update!();
+                  if (status == 'Completed') {
+                    Function? updateInventory = inventoryController.updateData.value;
+                    inventoryController.clearInventories();
+                    inventoryController.getInventories();
+                    if (updateInventory!= null){
+                      updateInventory();
+                    }
+                    Function? updateProduct = productController.updateData.value;
+                    productController.clearProducts();
+                    productController.getProducts();
+                    if (updateProduct!= null){
+                      updateProduct();
+                    }
+                  }
                   Navigator.pop(context);
                   Navigator.pop(context);
                   ScaffoldMessenger.of(context).showSnackBar(
@@ -260,9 +305,9 @@ class EditProcurementState extends State<EditProcurement> {
                 } else {
                   // Display an error message to the user
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Delete purchase order failed'),
-                      backgroundColor: Colors.red,
+                    SnackBar(
+                      content: const Text('Delete purchase order failed'),
+                      backgroundColor: Theme.of(context).colorScheme.error,
                     ),
                   );
                 }

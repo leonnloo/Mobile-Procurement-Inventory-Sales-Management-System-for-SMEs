@@ -39,8 +39,8 @@ class ResetPassword extends StatelessWidget {
                       width: double.infinity,
                       child: ElevatedButton(
                         style: TextButton.styleFrom(
-                          foregroundColor: Colors.white,
-                          backgroundColor: Colors.black,
+                          foregroundColor: Theme.of(context).colorScheme.onPrimary,
+                          backgroundColor: Theme.of(context).colorScheme.onSecondaryContainer,
                           side: const BorderSide(color: Colors.black),
                           shape: const RoundedRectangleBorder(),
                           padding: const EdgeInsets.symmetric(vertical: 15.0)
@@ -50,9 +50,9 @@ class ResetPassword extends StatelessWidget {
                           if (password == null) {
                             formKey.currentState?.validate();
                             ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text('Please enter a new password.'),
-                                backgroundColor: Colors.red,
+                              SnackBar(
+                                content: const Text('Please enter a new password.'),
+                                backgroundColor: Theme.of(context).colorScheme.error,
                               ),
                             );
                           } else {                
@@ -73,7 +73,7 @@ class ResetPassword extends StatelessWidget {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
                                   content: Text(jsonDecode(response.body)['detail']),
-                                  backgroundColor: Colors.red,
+                                  backgroundColor: Theme.of(context).colorScheme.error,
                                 ),
                               );
                             }

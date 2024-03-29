@@ -16,10 +16,10 @@ class IntegerTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return floatData ? floatTextEditingController() : integerTextField();
+    return floatData ? floatTextEditingController(context) : integerTextField(context);
   }
 
-  Widget floatTextEditingController() {
+  Widget floatTextEditingController(BuildContext context) {
     return TextField(
       controller: controller,
       keyboardType: TextInputType.number,
@@ -29,6 +29,7 @@ class IntegerTextField extends StatelessWidget {
         ),
       ],
       decoration: InputDecoration(
+        labelStyle: TextStyle(color: Theme.of(context).colorScheme.onSurface),
         labelText: labelText,
         border: const OutlineInputBorder(),
       ),
@@ -41,7 +42,7 @@ class IntegerTextField extends StatelessWidget {
       },
     );
   }
-  Widget integerTextField() {
+  Widget integerTextField(BuildContext context) {
     return TextField(
       controller: controller,
       keyboardType: TextInputType.number,
@@ -49,6 +50,7 @@ class IntegerTextField extends StatelessWidget {
         FilteringTextInputFormatter.digitsOnly
       ],
       decoration: InputDecoration(
+        labelStyle: TextStyle(color: Theme.of(context).colorScheme.onSurface),
         labelText: labelText,
         border: const OutlineInputBorder(),
       ),

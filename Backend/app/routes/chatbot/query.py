@@ -28,10 +28,10 @@ def words_to_number(words):
             return None
 
 # Example usage:
-words_list = ["twenty-five", "one hundred", "three hundred and forty-two", "two thousand twenty"]
+# words_list = ["twenty-five", "one hundred", "three hundred and forty-two", "two thousand twenty"]
 
-for words in words_list:
-    print(f"'{words}' -> {words_to_number(words)}")
+# for words in words_list:
+#     print(f"'{words}' -> {words_to_number(words)}")
 
 
 def construct_query(intent_tag, entities):

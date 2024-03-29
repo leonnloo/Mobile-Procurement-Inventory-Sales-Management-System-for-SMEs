@@ -3,8 +3,10 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:prototype/app/product/get_product.dart';
 import 'package:prototype/models/product_model.dart';
+import 'package:prototype/util/get_controllers/product_controller.dart';
 import 'package:prototype/util/request_util.dart';
 import 'package:prototype/util/validate_text.dart';
 import 'package:prototype/widgets/forms/number_field.dart';
@@ -12,8 +14,7 @@ import 'package:prototype/widgets/forms/text_field.dart';
 
 class EditProduct extends StatefulWidget {
   final ProductItem productData;
-  final Function updateData;
-  const EditProduct({super.key, required this.productData, required this.updateData});
+  const EditProduct({super.key, required this.productData});
 
   @override
   EditProductState createState() => EditProductState();
@@ -28,7 +29,7 @@ class EditProductState extends State<EditProduct> {
   final TextEditingController _markupController = TextEditingController();
   final TextEditingController _criticalLevelController= TextEditingController();
   final RequestUtil requestUtil = RequestUtil();
-
+  final productController = Get.put(ProductController());
   @override
   void initState() {
     super.initState();
@@ -55,12 +56,13 @@ class EditProductState extends State<EditProduct> {
 
   @override
   Widget build(BuildContext context) {
+    // ignore: unused_local_variable
     final size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 60.0,
-        backgroundColor: Colors.red[400],
-        title: const Text('Edit Purchase'),
+        backgroundColor: Theme.of(context).colorScheme.onPrimaryContainer,
+        title: Text('Edit Purchase', style: TextStyle(color: Theme.of(context).colorScheme.surface),),
         actions: [
           IconButton(
             onPressed: () => _showDeleteConfirmationDialog(context),
@@ -70,6 +72,9 @@ class EditProductState extends State<EditProduct> {
             ),
           ),
         ],
+        iconTheme: IconThemeData(
+          color: Theme.of(context).colorScheme.surface,
+        ),
       ),
       body: SingleChildScrollView(
         child: Container(
@@ -139,8 +144,8 @@ class EditProductState extends State<EditProduct> {
                     width: double.infinity,
                     child: ElevatedButton(
                       style: TextButton.styleFrom(
-                        foregroundColor: Colors.white,
-                        backgroundColor: Colors.black,
+                        foregroundColor: Theme.of(context).colorScheme.onPrimary,
+                        backgroundColor: Theme.of(context).colorScheme.onSecondaryContainer,
                         side: const BorderSide(color: Colors.black),
                         shape: const RoundedRectangleBorder(),
                         padding: const EdgeInsets.symmetric(vertical: 15.0)
@@ -162,9 +167,9 @@ class EditProductState extends State<EditProduct> {
                         || criticalLevel == null) {
                           // Display validation error messages
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Please fill in all the required fields.'),
-                              backgroundColor: Colors.red,
+                            SnackBar(
+                              content: const Text('Please fill in all the required fields.'),
+                              backgroundColor: Theme.of(context).colorScheme.error,
                             ),
                           );
                         } else {                
@@ -173,7 +178,13 @@ class EditProductState extends State<EditProduct> {
                           );
                           
                           if (response.statusCode == 200) {
-                            widget.updateData();
+                            Function? update = productController.updateData.value;
+                            Function? updateEdit = productController.updateEditData.value;
+                            productController.updateProductInfo(ProductItem(productID: widget.productData.productID, productName: productName, unitPrice: double.parse(unitPrice), sellingPrice: double.parse(sellingPrice), quantity: int.parse(quantity), markup: markup, margin: margin, criticalLvl: int.parse(criticalLevel), status: widget.productData.status, monthlySales: widget.productData.monthlySales));
+                            productController.clearProducts();
+                            productController.getProducts();
+                            update!();
+                            updateEdit!();
                             Navigator.pop(context);
                             Navigator.pop(context);
                             ScaffoldMessenger.of(context).showSnackBar(
@@ -187,7 +198,7 @@ class EditProductState extends State<EditProduct> {
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
                                 content: Text('Product edit failed: ${jsonDecode(response.body)['detail']}'),
-                                backgroundColor: Colors.red,
+                                backgroundColor: Theme.of(context).colorScheme.error,
                               ),
                             );
                           }
@@ -227,8 +238,10 @@ class EditProductState extends State<EditProduct> {
                 final response = await requestUtil.deleteProduct(widget.productData.productID);
                 
                 if (response.statusCode == 200) {
-                  widget.updateData();
-                  Navigator.pop(context);
+                  Function? update = productController.updateData.value;
+                  productController.clearProducts();
+                  productController.getProducts();
+                  update!();
                   Navigator.pop(context);
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
@@ -239,9 +252,9 @@ class EditProductState extends State<EditProduct> {
                 } else {
                   // Display an error message to the user
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Delete product item failed'),
-                      backgroundColor: Colors.red,
+                    SnackBar(
+                      content: const Text('Delete product item failed'),
+                      backgroundColor: Theme.of(context).colorScheme.error,
                     ),
                   );
                 }

@@ -15,12 +15,13 @@ class _ClaimRefundHistoryScreenState extends State<ClaimRefundHistoryScreen> {
   List<Refunds> refunds = [];
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        toolbarHeight: 60.0,
-        backgroundColor: Colors.red[400],
+        toolbarHeight: 80.0,
+        backgroundColor: Theme.of(context).colorScheme.onPrimaryContainer,
         centerTitle: true,
-        title: const Text('Orders'),
+        title: Text('Orders', style: TextStyle(color: Theme.of(context).colorScheme.surface),),
         actions: [
           IconButton(
             icon: const Icon(Icons.search),
@@ -29,27 +30,28 @@ class _ClaimRefundHistoryScreenState extends State<ClaimRefundHistoryScreen> {
             },
           )
         ],
+        iconTheme: IconThemeData(color: Theme.of(context).colorScheme.surface),
       ),
       body: FutureBuilder(
         future: fetchRefundData(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-              return const SizedBox(
-                height: double.infinity,
+              return SizedBox(
                 width: double.infinity,
+                height: size.height * 0.8,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    SizedBox(height: 26.0),
+                    const SizedBox(height: 26.0),
                     CircularProgressIndicator(
-                      backgroundColor: Colors.white,
-                      color: Colors.red,
+                      backgroundColor: Colors.transparent,
+                      color: Theme.of(context).colorScheme.error,
                     ),
-                    SizedBox(height: 16.0),
+                    const SizedBox(height: 16.0),
                     Text(
                       'Loading...',
-                      style: TextStyle(fontSize: 16.0, color: Colors.black),
+                      style: TextStyle(fontSize: 16.0, color: Theme.of(context).colorScheme.onSurface),
                     ),
                   ],
                 ),
@@ -57,7 +59,7 @@ class _ClaimRefundHistoryScreenState extends State<ClaimRefundHistoryScreen> {
             } else if (snapshot.hasError) {
               return Container(
                 width: double.infinity,
-                height: double.infinity,
+                height: size.height * 0.8,
                 padding: const EdgeInsets.only(top: 20.0),
                 child: const Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -72,7 +74,7 @@ class _ClaimRefundHistoryScreenState extends State<ClaimRefundHistoryScreen> {
             } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
               return Container(
                 width: double.infinity,
-                height: double.infinity,
+                height: size.height * 0.8,
                 padding: const EdgeInsets.only(top: 20.0),
                 child: const Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -194,5 +196,26 @@ class _RefundsSearch extends SearchDelegate<String> {
 
   @override
   String get searchFieldLabel => 'Enter Query';
+
+  @override
+  ThemeData appBarTheme(BuildContext context) {
+    return Theme.of(context).copyWith(
+      appBarTheme: AppBarTheme(
+        iconTheme: IconThemeData(color: Theme.of(context).colorScheme.surface),
+        titleTextStyle: TextStyle(color: Theme.of(context).colorScheme.surface),
+        color: Theme.of(context).colorScheme.onPrimaryContainer, // Change this to the desired color
+        toolbarHeight: 80
+      ),
+      inputDecorationTheme: InputDecorationTheme(
+        hintStyle: TextStyle(color: Theme.of(context).colorScheme.surface, fontSize: 23),
+        labelStyle: TextStyle(color: Theme.of(context).colorScheme.surface, fontSize: 23),
+
+      ),
+      textTheme: TextTheme(
+        bodyLarge: TextStyle(color: Theme.of(context).colorScheme.surface, fontSize: 23),
+
+      )
+    );
+  }
 }
 

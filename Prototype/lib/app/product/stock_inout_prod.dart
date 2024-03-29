@@ -1,7 +1,11 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:prototype/app/sale_orders/get_order.dart';
+import 'package:prototype/util/get_controllers/product_controller.dart';
 import 'package:prototype/util/request_util.dart';
 import 'package:prototype/util/validate_text.dart';
 import 'package:prototype/widgets/appbar/common_appbar.dart';
@@ -9,8 +13,7 @@ import 'package:prototype/widgets/forms/dropdown_field.dart';
 import 'package:prototype/widgets/forms/number_field.dart';
 
 class StockInOutProduct extends StatefulWidget {
-  const StockInOutProduct({super.key, this.updateData});
-  final Function? updateData;
+  const StockInOutProduct({super.key});
   @override
   StockInOutProductState createState() => StockInOutProductState();
 }
@@ -18,6 +21,7 @@ class StockInOutProduct extends StatefulWidget {
 class StockInOutProductState extends State<StockInOutProduct> {
   final _formKey = GlobalKey<FormState>();
   final RequestUtil requestUtil = RequestUtil();
+  final productController = Get.put(ProductController());
 
   late TextEditingController _productItemNameController;
   late TextEditingController _quantityController;
@@ -50,14 +54,14 @@ class StockInOutProductState extends State<StockInOutProduct> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 const SizedBox(height: 30.0),
-                const Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: Text('Stock In', style: TextStyle(fontSize: 24.0),),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text('Stock In', style: TextStyle(fontSize: 24.0, color: Theme.of(context).colorScheme.onSurface),),
                 ),
                 const SizedBox(height: 16.0),
                 DropdownTextField(
                   labelText: 'Item',  
-                  options: getProductList(), 
+                  options: getProductNameList(), 
                   onChanged: (value){_productItemNameController.text = value!;},
                   defaultSelected: false,
                 ),
@@ -73,8 +77,8 @@ class StockInOutProductState extends State<StockInOutProduct> {
                   width: double.infinity,
                   child: ElevatedButton(
                     style: TextButton.styleFrom(
-                      foregroundColor: Colors.white,
-                      backgroundColor: Colors.black,
+                      foregroundColor: Theme.of(context).colorScheme.onPrimary,
+                      backgroundColor: Theme.of(context).colorScheme.onSecondaryContainer,
                       side: const BorderSide(color: Colors.black),
                       shape: const RoundedRectangleBorder(),
                       padding: const EdgeInsets.symmetric(vertical: 15.0)
@@ -87,9 +91,9 @@ class StockInOutProductState extends State<StockInOutProduct> {
                         // Display validation error messages
                         _formKey.currentState?.validate();
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Please fill in all the required fields.'),
-                            backgroundColor: Colors.red,
+                          SnackBar(
+                            content: const Text('Please fill in all the required fields.'),
+                            backgroundColor: Theme.of(context).colorScheme.error,
                           ),
                         );
                       } else {                
@@ -98,8 +102,11 @@ class StockInOutProductState extends State<StockInOutProduct> {
                         );
                         
                         if (response.statusCode == 200) {
-                          if (widget.updateData != null) {
-                            widget.updateData!();
+                          Function? update = productController.updateData.value;
+                          productController.clearProducts();
+                          productController.getProducts();
+                          if (update != null){
+                            update();
                           }
                           Navigator.pop(context);
                           ScaffoldMessenger.of(context).showSnackBar(
@@ -111,9 +118,9 @@ class StockInOutProductState extends State<StockInOutProduct> {
                         } else {
                           // Display an error message to the user
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Stock In failed'),
-                              backgroundColor: Colors.red,
+                            SnackBar(
+                              content: const Text('Stock In failed'),
+                              backgroundColor: Theme.of(context).colorScheme.error,
                             ),
                           );
                         }
@@ -124,14 +131,14 @@ class StockInOutProductState extends State<StockInOutProduct> {
                 ),
                 // -----------------------------------------------------------------
                 const SizedBox(height: 30.0),
-                const Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: Text('Stock Out', style: TextStyle(fontSize: 24.0),),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text('Stock Out', style: TextStyle(fontSize: 24.0, color: Theme.of(context).colorScheme.onSurface),),
                 ),
                 const SizedBox(height: 16.0),
                 DropdownTextField(
                   labelText: 'Item',  
-                  options: getProductList(), 
+                  options: getProductNameList(), 
                   onChanged: (value){_productItemNameController.text = value!;},
                   defaultSelected: false,
                 ),
@@ -147,8 +154,8 @@ class StockInOutProductState extends State<StockInOutProduct> {
                   width: double.infinity,
                   child: ElevatedButton(
                     style: TextButton.styleFrom(
-                      foregroundColor: Colors.white,
-                      backgroundColor: Colors.black,
+                      foregroundColor: Theme.of(context).colorScheme.onPrimary,
+                      backgroundColor: Theme.of(context).colorScheme.onSecondaryContainer,
                       side: const BorderSide(color: Colors.black),
                       shape: const RoundedRectangleBorder(),
                       padding: const EdgeInsets.symmetric(vertical: 15.0)
@@ -161,9 +168,9 @@ class StockInOutProductState extends State<StockInOutProduct> {
                         // Display validation error messages
                         _formKey.currentState?.validate();
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Please fill in all the required fields.'),
-                            backgroundColor: Colors.red,
+                          SnackBar(
+                            content: const Text('Please fill in all the required fields.'),
+                            backgroundColor: Theme.of(context).colorScheme.error,
                           ),
                         );
                       } else {                
@@ -172,8 +179,11 @@ class StockInOutProductState extends State<StockInOutProduct> {
                         );
                         
                         if (response.statusCode == 200) {
-                          if (widget.updateData != null) {
-                            widget.updateData!();
+                          Function? update = productController.updateData.value;
+                          productController.clearProducts();
+                          productController.getProducts();
+                          if (update != null){
+                            update();
                           }
                           Navigator.pop(context);
                           ScaffoldMessenger.of(context).showSnackBar(
@@ -185,9 +195,9 @@ class StockInOutProductState extends State<StockInOutProduct> {
                         } else {
                           // Display an error message to the user
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Stock Out failed'),
-                              backgroundColor: Colors.red,
+                            SnackBar(
+                              content: Text('Stock Out Failed: ${jsonDecode(response.body)['detail']}'),
+                              backgroundColor: Theme.of(context).colorScheme.error,
                             ),
                           );
                         }

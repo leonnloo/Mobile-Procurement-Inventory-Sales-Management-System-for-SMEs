@@ -64,8 +64,8 @@ async def verify_user(email: str, code: str):
 
     if code != stored_code:
         raise HTTPException(status_code=400, detail="Incorrect verification code")
-    
-    return {"message": "User verified successfully"}
+    del verification_codes[email]
+    return {"message": "User verified successfully"} 
 
 
 

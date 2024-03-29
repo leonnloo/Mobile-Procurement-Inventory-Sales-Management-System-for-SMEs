@@ -2,14 +2,15 @@
 
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:prototype/util/get_controllers/supplier_controller.dart';
 import 'package:prototype/util/request_util.dart';
 import 'package:prototype/util/validate_text.dart';
 import 'package:prototype/widgets/appbar/common_appbar.dart';
 import 'package:prototype/widgets/forms/text_field.dart';
 
 class AddSupplierScreen extends StatefulWidget {
-  const AddSupplierScreen({super.key, this.updateData});
-  final Function? updateData;
+  const AddSupplierScreen({super.key});
   @override
   AddSupplierScreenState createState() => AddSupplierScreenState();
 }
@@ -17,7 +18,7 @@ class AddSupplierScreen extends StatefulWidget {
 class AddSupplierScreenState extends State<AddSupplierScreen> {
   final _formKey = GlobalKey<FormState>();
   final RequestUtil requestUtil = RequestUtil();
-
+  final SupplierController controller = Get.put(SupplierController());
   late TextEditingController _businessNameController;
   late TextEditingController _contactPersonController;
   late TextEditingController _emailController;
@@ -71,8 +72,8 @@ class AddSupplierScreenState extends State<AddSupplierScreen> {
                 width: double.infinity,
                 child: ElevatedButton(
                   style: TextButton.styleFrom(
-                    foregroundColor: Colors.white,
-                    backgroundColor: Colors.black,
+                    foregroundColor: Theme.of(context).colorScheme.onPrimary,
+                    backgroundColor: Theme.of(context).colorScheme.onSecondaryContainer,
                     side: const BorderSide(color: Colors.black),
                     shape: const RoundedRectangleBorder(),
                     padding: const EdgeInsets.symmetric(vertical: 15.0)
@@ -90,9 +91,9 @@ class AddSupplierScreenState extends State<AddSupplierScreen> {
                         address == null) {
                       // Display validation error messages
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Please fill in all the required fields.'),
-                          backgroundColor: Colors.red,
+                        SnackBar(
+                          content: const Text('Please fill in all the required fields.'),
+                          backgroundColor: Theme.of(context).colorScheme.error,
                         ),
                       );
                     } else {                
@@ -101,8 +102,10 @@ class AddSupplierScreenState extends State<AddSupplierScreen> {
                       );
                       
                       if (response.statusCode == 200) {
-                        if (widget.updateData != null) {
-                          widget.updateData!();
+                        controller.clearSuppliers();
+                        Function? update = controller.updateData.value;
+                        if (update != null){
+                          update();
                         }
                         Navigator.pop(context);
                         ScaffoldMessenger.of(context).showSnackBar(
@@ -116,7 +119,7 @@ class AddSupplierScreenState extends State<AddSupplierScreen> {
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
                             content: Text(jsonDecode(response.body)['detail']),
-                            backgroundColor: Colors.red,
+                            backgroundColor: Theme.of(context).colorScheme.error,
                           ),
                         );
                       }

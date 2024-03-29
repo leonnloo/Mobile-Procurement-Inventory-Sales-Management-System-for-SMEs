@@ -3,9 +3,11 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:prototype/app/procurement/get_procurement.dart';
 import 'package:prototype/app/sale_orders/get_order.dart';
 import 'package:prototype/models/order_model.dart';
+import 'package:prototype/util/get_controllers/order_controller.dart';
 import 'package:prototype/util/request_util.dart';
 import 'package:prototype/util/validate_text.dart';
 import 'package:prototype/widgets/forms/date_field.dart';
@@ -35,6 +37,7 @@ class EditOrderState extends State<EditOrder> {
   final TextEditingController _employeeNameController = TextEditingController();
   final TextEditingController _employeeIDController = TextEditingController();
   final RequestUtil requestUtil = RequestUtil();
+  final orderController = Get.put(OrderController());
 
   @override
   void initState() {
@@ -73,18 +76,22 @@ class EditOrderState extends State<EditOrder> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        toolbarHeight: 60.0,
-        backgroundColor: Colors.red[400],
-        title: const Text('Edit Order'),
+        toolbarHeight: 80.0,
+        backgroundColor: Theme.of(context).colorScheme.onPrimaryContainer,
+        title: Text('Edit Order', style: TextStyle(color: Theme.of(context).colorScheme.surface),),
         actions: [
           IconButton(
             onPressed: () => _showDeleteConfirmationDialog(context),
-            icon: const Icon(
+            icon: Icon(
+              color: Theme.of(context).colorScheme.surface,
               Icons.delete,
               size: 30.0,
             ),
           ),
         ],
+        iconTheme: IconThemeData(
+          color: Theme.of(context).colorScheme.surface, // Set the color of the back button
+        ),
       ),
       body: SingleChildScrollView(
         child: Container(
@@ -108,7 +115,7 @@ class EditOrderState extends State<EditOrder> {
                 const SizedBox(height: 16.0),
                 DropdownTextField(
                   labelText: 'Product', 
-                  options: getProductList(), 
+                  options: getProductNameList(), 
                   onChanged: (value){
                     _productNameController.text = value!;
                     updateProductID(value, _productIDController);
@@ -176,8 +183,8 @@ class EditOrderState extends State<EditOrder> {
                     width: double.infinity,
                     child: ElevatedButton(
                       style: TextButton.styleFrom(
-                        foregroundColor: Colors.white,
-                        backgroundColor: Colors.black,
+                        foregroundColor: Theme.of(context).colorScheme.onPrimary,
+                        backgroundColor: Theme.of(context).colorScheme.onSecondaryContainer,
                         side: const BorderSide(color: Colors.black),
                         shape: const RoundedRectangleBorder(),
                         padding: const EdgeInsets.symmetric(vertical: 15.0)
@@ -209,9 +216,9 @@ class EditOrderState extends State<EditOrder> {
                           || employeeID == null) {
                           // Display validation error messages
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Please fill in all the required fields.'),
-                              backgroundColor: Colors.red,
+                            SnackBar(
+                              content: const Text('Please fill in all the required fields.'),
+                              backgroundColor: Theme.of(context).colorScheme.error,
                             ),
                           );
                         } else {                
@@ -220,11 +227,19 @@ class EditOrderState extends State<EditOrder> {
                           );
                           
                           if (response.statusCode == 200) {
-                            if (widget.updateData!= null){
-                              widget.updateData!();
-  
+                            Function? update = orderController.updateData.value;
+                            Function? updateEdit = orderController.updateEditData.value;
+                            Function? updateDispatchDetailData = orderController.updateDispatchDetailData.value;
+                            orderController.updateOrderInfo(SalesOrder(orderID: widget.orderData.orderID, orderDate: orderDate, customerID: customerID, customerName: customerName, productID: productID, productName: productName, quantity: int.parse(quantity), unitPrice: double.parse(unitPrice), totalPrice: double.parse(totalPrice), completionStatus: completionStatus, orderStatus: orderStatus, employee: employee, employeeID: employeeID));
+                            orderController.clearOrders();
+                            orderController.getOrders();
+                            if (update != null){
+                              update();
                             }
-                            Navigator.pop(context);
+                            if (updateDispatchDetailData != null){
+                              updateDispatchDetailData();
+                            }
+                            updateEdit!();
                             Navigator.pop(context);
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
@@ -237,7 +252,7 @@ class EditOrderState extends State<EditOrder> {
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
                                 content: Text('Order added failed: ${jsonDecode(response.body)['detail']}'),
-                                backgroundColor: Colors.red,
+                                backgroundColor: Theme.of(context).colorScheme.error,
                               ),
                             );
                           }
@@ -277,8 +292,11 @@ class EditOrderState extends State<EditOrder> {
                 final response = await requestUtil.deleteOrder(widget.orderData.orderID);
                 
                 if (response.statusCode == 200) {
-                  if (widget.updateData!= null){
-                    widget.updateData!();
+                  Function? update = orderController.updateData.value;
+                  orderController.clearOrders();
+                  orderController.getOrders();
+                  if (update != null){
+                    update();
                   }
                   Navigator.pop(context);
                   Navigator.pop(context);
@@ -291,9 +309,9 @@ class EditOrderState extends State<EditOrder> {
                 } else {
                   // Display an error message to the user
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Delete order failed'),
-                      backgroundColor: Colors.red,
+                    SnackBar(
+                      content: const Text('Delete order failed'),
+                      backgroundColor: Theme.of(context).colorScheme.error,
                     ),
                   );
                 }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:prototype/app/user_profile/user_profile.dart';
-import 'package:prototype/util/user_controller.dart';
+import 'package:prototype/util/get_controllers/user_controller.dart';
 
 class HeaderDrawer extends StatefulWidget {
   const HeaderDrawer({super.key});
@@ -20,7 +20,7 @@ class HeaderDrawerState extends State<HeaderDrawer> {
         Get.to(() => const UserProfileScreen());
       },
       child: Container(
-        color: Colors.red[400],
+        color: Theme.of(context).colorScheme.onPrimaryContainer,
         width: double.infinity,
         height: 220,
         padding: const EdgeInsets.only(top: 20.0),
@@ -40,12 +40,12 @@ class HeaderDrawerState extends State<HeaderDrawer> {
             // TO DO: user information
             Text(           
               userController.currentUserInfo.value!.employeeName,
-              style: const TextStyle(color: Colors.white, fontSize: 20),
+              style: TextStyle(color: Theme.of(context).colorScheme.surface, fontSize: 20),
             ),
             Text(
               userController.currentUserInfo.value!.email,
               style: TextStyle(
-                color: Colors.grey[200],
+                color: Theme.of(context).colorScheme.surface,
                 fontSize: 14,
               ),
             ),

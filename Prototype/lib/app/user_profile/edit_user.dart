@@ -8,7 +8,7 @@ import 'package:prototype/app/authenticate/screens/start_screen.dart';
 import 'package:prototype/app/user_profile/get_user.dart';
 import 'package:prototype/models/user_model.dart';
 import 'package:prototype/util/request_util.dart';
-import 'package:prototype/util/user_controller.dart';
+import 'package:prototype/util/get_controllers/user_controller.dart';
 import 'package:prototype/util/validate_text.dart';
 import 'package:prototype/widgets/forms/dropdown_field.dart';
 import 'package:prototype/widgets/forms/password_field.dart';
@@ -59,8 +59,8 @@ class EditUserState extends State<EditUser> {
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 60.0,
-        backgroundColor: Colors.red[400],
-        title: const Text('Edit Profile'),
+        backgroundColor: Theme.of(context).colorScheme.onPrimaryContainer,
+        title: Text('Edit Profile', style: TextStyle(color: Theme.of(context).colorScheme.surface),),
         actions: [
           IconButton(
             onPressed: () => _showDeleteConfirmationDialog(context),
@@ -70,6 +70,9 @@ class EditUserState extends State<EditUser> {
             ),
           ),
         ],
+        iconTheme: IconThemeData(
+          color: Theme.of(context).colorScheme.surface,
+        ),
       ),
       body: Container(
         padding: const EdgeInsets.all(30.0),
@@ -104,8 +107,8 @@ class EditUserState extends State<EditUser> {
                       width: double.infinity,
                       child: ElevatedButton(
                         style: TextButton.styleFrom(
-                          foregroundColor: Colors.white,
-                          backgroundColor: Colors.black,
+                          foregroundColor: Theme.of(context).colorScheme.onPrimary,
+                          backgroundColor: Theme.of(context).colorScheme.onSecondaryContainer,
                           side: const BorderSide(color: Colors.black),
                           shape: const RoundedRectangleBorder(),
                           padding: const EdgeInsets.symmetric(vertical: 15.0)

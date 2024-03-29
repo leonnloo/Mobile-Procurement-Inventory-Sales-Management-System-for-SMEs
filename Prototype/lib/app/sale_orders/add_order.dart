@@ -3,8 +3,11 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:prototype/app/procurement/get_procurement.dart';
 import 'package:prototype/app/sale_orders/get_order.dart';
+import 'package:prototype/util/get_controllers/order_controller.dart';
+import 'package:prototype/util/get_controllers/product_controller.dart';
 import 'package:prototype/util/request_util.dart';
 import 'package:prototype/util/validate_text.dart';
 import 'package:prototype/widgets/appbar/common_appbar.dart';
@@ -31,6 +34,8 @@ class AddOrderScreenState extends State<AddOrderScreen> {
   late TextEditingController _totalPriceController;
   late TextEditingController _quantityController;
   late TextEditingController _statusController;
+  final orderController = Get.put(OrderController());
+  final productController = Get.put(ProductController());
 
   @override
   void initState() {
@@ -85,7 +90,7 @@ class AddOrderScreenState extends State<AddOrderScreen> {
                 const SizedBox(height: 16.0),
                 DropdownTextField(
                   labelText: 'Product', 
-                  options: getProductList(), 
+                  options: getProductQuantityList(), 
                   onChanged: (value){
                     _productNameController.text = value!;
                     updateProductID(value, _productIDController);
@@ -132,8 +137,8 @@ class AddOrderScreenState extends State<AddOrderScreen> {
                   width: double.infinity,
                   child: ElevatedButton(
                     style: TextButton.styleFrom(
-                      foregroundColor: Colors.white,
-                      backgroundColor: Colors.black,
+                      foregroundColor: Theme.of(context).colorScheme.onPrimary,
+                      backgroundColor: Theme.of(context).colorScheme.onSecondaryContainer,
                       side: const BorderSide(color: Colors.black),
                       shape: const RoundedRectangleBorder(),
                       padding: const EdgeInsets.symmetric(vertical: 15.0)
@@ -160,9 +165,9 @@ class AddOrderScreenState extends State<AddOrderScreen> {
                         // Display validation error messages
                         _formKey.currentState?.validate();
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Please fill in all the required fields.'),
-                            backgroundColor: Colors.red,
+                          SnackBar(
+                            content: const Text('Please fill in all the required fields.'),
+                            backgroundColor: Theme.of(context).colorScheme.error,
                           ),
                         );
                       } else {                
@@ -171,8 +176,19 @@ class AddOrderScreenState extends State<AddOrderScreen> {
                         );
                         
                         if (response.statusCode == 200) {
-                          if (widget.updateData != null) {
-                            widget.updateData!();
+                          Function? update = orderController.updateData.value;
+                          orderController.clearOrders();
+                          orderController.getOrders();
+                          if (update != null) {
+                            update();
+                          }
+                          if (status == 'Completed') {
+                            Function? updateProduct = productController.updateData.value;
+                            productController.clearProducts();
+                            productController.getProducts();
+                            if (updateProduct!= null){
+                              updateProduct();
+                            }
                           }
                           Navigator.pop(context);
                           ScaffoldMessenger.of(context).showSnackBar(
@@ -186,7 +202,7 @@ class AddOrderScreenState extends State<AddOrderScreen> {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               content: Text('Order added failed: ${jsonDecode(response.body)['detail']}'),
-                              backgroundColor: Colors.red,
+                              backgroundColor: Theme.of(context).colorScheme.error,
                             ),
                           );
                         }

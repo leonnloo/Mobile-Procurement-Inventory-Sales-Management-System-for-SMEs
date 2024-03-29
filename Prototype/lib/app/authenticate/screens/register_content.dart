@@ -1,9 +1,7 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:prototype/app/authenticate/screens/forget_password/register/otp_register.dart';
 import 'package:prototype/app/authenticate/screens/login_content.dart';
-import 'package:prototype/util/request_util.dart';
 import 'package:prototype/util/validate_text.dart';
 import 'package:prototype/widgets/fade_in_animation/animation_design.dart';
 import 'package:prototype/widgets/fade_in_animation/fade_in_animation_model.dart';
@@ -77,7 +75,6 @@ class _RegisterContentState extends State<RegisterContent> {
   }
 
   Form _registerForm(context) {
-    final RequestUtil requestUtil = RequestUtil();
     final controller = Get.put(FadeInController());
     return Form(
       key: _formKey,
@@ -159,8 +156,8 @@ class _RegisterContentState extends State<RegisterContent> {
             width: double.infinity,
             child: ElevatedButton(
               style: TextButton.styleFrom(
-                foregroundColor: Colors.white,
-                backgroundColor: Colors.black,
+                foregroundColor: Theme.of(context).colorScheme.onPrimary,
+                backgroundColor: Theme.of(context).colorScheme.onSecondaryContainer,
                 side: const BorderSide(color: Colors.black),
                 shape: const RoundedRectangleBorder(),
                 padding: const EdgeInsets.symmetric(vertical: 15.0)
@@ -179,9 +176,9 @@ class _RegisterContentState extends State<RegisterContent> {
                     confirmPasswordError == null) {
                   _formKey.currentState?.validate();
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Please fill in all the required fields.'),
-                      backgroundColor: Colors.red,
+                    SnackBar(
+                      content: const Text('Please fill in all the required fields.'),
+                      backgroundColor: Theme.of(context).colorScheme.error,
                     ),
                   );
                 } else {
@@ -193,36 +190,22 @@ class _RegisterContentState extends State<RegisterContent> {
                   String confirmPassword = _confirmPasswordController.text;
             
                   if (password == confirmPassword){
-                    final response = await requestUtil.createUser(
-                      username, email, phoneNumber, password
-                    );
-                    if (response.statusCode == 200) {
-                      // Successful login
-                      // print("Register successful!");
-                      // Navigate to the home screen or perform other actions
-                      controller.resetAnimation();
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(builder: (context) => LoginContent()),
-                      );
+                    final response = await requestUtil.sendVerificationEmail(email);
+                    if (response.statusCode == 200){
+                      Get.to(OTPRegisterScreen(email: email, password: password, username: username, phoneNumber: phoneNumber));
                     } else {
-                      // Failed login
-                      // print("Register failed");
-                      // print("Error: ${response.body}");
-                      
-                      // Display an error message to the user
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
-                          content: Text(jsonDecode(response.body)['detail']),
-                          backgroundColor: Colors.red,
-                        ),
+                          content: const Text('Error sending verification email.'),
+                          backgroundColor: Theme.of(context).colorScheme.error,
+                        )
                       );
                     }
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Password does not match.'),
-                        backgroundColor: Colors.red,
+                      SnackBar(
+                        content: const Text('Password does not match.'),
+                        backgroundColor: Theme.of(context).colorScheme.error,
                       )
                     );
                   }

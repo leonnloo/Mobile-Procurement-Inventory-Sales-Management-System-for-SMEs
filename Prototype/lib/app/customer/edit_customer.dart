@@ -3,15 +3,16 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:prototype/models/customer_model.dart';
+import 'package:prototype/util/get_controllers/customer_controller.dart';
 import 'package:prototype/util/request_util.dart';
 import 'package:prototype/util/validate_text.dart';
 import 'package:prototype/widgets/forms/text_field.dart';
 
 class EditCustomer extends StatefulWidget {
   final CustomerData customerData;
-  final Function? updateData;
-  const EditCustomer({super.key, required this.customerData, this.updateData});
+  const EditCustomer({super.key, required this.customerData});
 
   @override
   EditCustomerState createState() => EditCustomerState();
@@ -25,6 +26,7 @@ class EditCustomerState extends State<EditCustomer> {
   final TextEditingController _billingAddressController = TextEditingController();
   final TextEditingController _shippingAddressController = TextEditingController();
   final RequestUtil requestUtil = RequestUtil();
+  final customerController = Get.put(CustomerController());
   @override
   void initState() {
     super.initState();
@@ -53,8 +55,8 @@ class EditCustomerState extends State<EditCustomer> {
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 60.0,
-        backgroundColor: Colors.red[400],
-        title: const Text('Edit Customer'),
+        backgroundColor: Theme.of(context).colorScheme.onPrimaryContainer,
+        title: Text('Edit Customer', style: TextStyle(color: Theme.of(context).colorScheme.surface),),
         actions: [
           IconButton(
             onPressed: () => _showDeleteConfirmationDialog(context),
@@ -64,6 +66,9 @@ class EditCustomerState extends State<EditCustomer> {
             ),
           ),
         ],
+        iconTheme: IconThemeData(
+          color: Theme.of(context).colorScheme.surface,
+        ),
       ),
       body: Container(
         padding: const EdgeInsets.all(30.0),
@@ -90,8 +95,8 @@ class EditCustomerState extends State<EditCustomer> {
                     width: double.infinity,
                     child: ElevatedButton(
                       style: TextButton.styleFrom(
-                        foregroundColor: Colors.white,
-                        backgroundColor: Colors.black,
+                        foregroundColor: Theme.of(context).colorScheme.onPrimary,
+                        backgroundColor: Theme.of(context).colorScheme.onSecondaryContainer,
                         side: const BorderSide(color: Colors.black),
                         shape: const RoundedRectangleBorder(),
                         padding: const EdgeInsets.symmetric(vertical: 15.0)
@@ -111,9 +116,9 @@ class EditCustomerState extends State<EditCustomer> {
                             shippingAddress == null) {
                           // Display validation error messages
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Please fill in all the required fields.'),
-                              backgroundColor: Colors.red,
+                            SnackBar(
+                              content: const Text('Please fill in all the required fields.'),
+                              backgroundColor: Theme.of(context).colorScheme.error,
                             ),
                           );
                         } else {                
@@ -122,9 +127,13 @@ class EditCustomerState extends State<EditCustomer> {
                           );
                           
                           if (response.statusCode == 200) {
-                            if (widget.updateData != null) {
-                              widget.updateData!();
-                            }
+                            Function? update = customerController.updateData.value;
+                            Function? updateEdit = customerController.updateEditData.value;
+                            customerController.updateCustomerInfo(CustomerData(customerID: widget.customerData.customerID, businessName: businessName, contactPerson: contactPerson, email: email, phoneNo: phoneNumber, billingAddress: billingAddress, shippingAddress: shippingAddress, notes: widget.customerData.notes));
+                            customerController.clearCustomers();
+                            customerController.getCustomers();
+                            update!();
+                            updateEdit!();
                             Navigator.pop(context);
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
@@ -137,7 +146,7 @@ class EditCustomerState extends State<EditCustomer> {
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
                                 content: Text(jsonDecode(response.body)['detail']),
-                                backgroundColor: Colors.red,
+                                backgroundColor: Theme.of(context).colorScheme.error,
                               ),
                             );
                           }
@@ -177,9 +186,12 @@ class EditCustomerState extends State<EditCustomer> {
                 final response = await requestUtil.deleteCustomer(widget.customerData.customerID);
                 
                 if (response.statusCode == 200) {
-                  if (widget.updateData != null) {
-                    widget.updateData!();
-                  }
+                  Function? update = customerController.updateData.value;
+                  Function? updateEdit = customerController.updateEditData.value;
+                  customerController.clearCustomers();
+                  customerController.getCustomers();
+                  update!();
+                  updateEdit!();
                   Navigator.pop(context);
                   Navigator.of(context).pop();
                   ScaffoldMessenger.of(context).showSnackBar(
@@ -193,7 +205,7 @@ class EditCustomerState extends State<EditCustomer> {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: Text(jsonDecode(response.body)['detail']),
-                      backgroundColor: Colors.red,
+                      backgroundColor: Theme.of(context).colorScheme.error,
                     ),
                   );
                 }

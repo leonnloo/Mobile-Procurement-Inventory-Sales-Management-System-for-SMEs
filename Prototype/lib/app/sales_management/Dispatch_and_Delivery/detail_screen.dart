@@ -1,8 +1,10 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:prototype/app/sale_orders/order_info.dart';
 import 'package:prototype/models/order_model.dart';
+import 'package:prototype/util/get_controllers/order_controller.dart';
 import 'package:prototype/util/management_util.dart';
 import 'package:prototype/util/request_util.dart';
 
@@ -10,8 +12,7 @@ import 'package:prototype/util/request_util.dart';
 class DetailScreen extends StatefulWidget {
   List<SalesOrder> dispatchData;
   final String selectedStatus;
-  final Function updateData;
-  DetailScreen({super.key, required this.dispatchData, required this.selectedStatus, required this.updateData});
+  DetailScreen({super.key, required this.dispatchData, required this.selectedStatus});
 
   @override
   State<DetailScreen> createState() => _DetailScreenState();
@@ -19,9 +20,12 @@ class DetailScreen extends StatefulWidget {
 
 class _DetailScreenState extends State<DetailScreen> {
   final RequestUtil requestUtil = RequestUtil();
+  final orderController = Get.put(OrderController());
+
   final ManagementUtil managementUtil = ManagementUtil();
   @override
   Widget build(BuildContext context) {
+    orderController.updateDispatchDetailData.value = updateData;
     // 根据订单状态分类
     Map<String, List<SalesOrder>> groupedData = {};
     groupedData['To be Packaged'] = [];
@@ -38,14 +42,15 @@ class _DetailScreenState extends State<DetailScreen> {
       child: Scaffold(
         appBar: AppBar(
             toolbarHeight: 60.0,
-            backgroundColor: Colors.red[400],
+            backgroundColor: Theme.of(context).colorScheme.onPrimaryContainer,
             centerTitle: true,
             automaticallyImplyLeading: false,
-            title: const Text('Orders'),
+            title: Text('Orders', style: TextStyle(color: Theme.of(context).colorScheme.surface),),
             leading: IconButton(
               icon: const Icon(Icons.arrow_back),
               onPressed: () {
-                widget.updateData();
+                Function update = orderController.updateDispatchMenuData.value!;
+                update();
                 Navigator.of(context).pop(); // This will pop the current screen off the navigation stack.
               },
             ),
@@ -57,15 +62,16 @@ class _DetailScreenState extends State<DetailScreen> {
                 },
               )
             ],
+            iconTheme: IconThemeData(color: Theme.of(context).colorScheme.surface),
           ),
         body: Column(
           children: <Widget>[
             // Style this Container to match your AppBar if needed
             TabBar(
               isScrollable: true, // This needs to be true for long labels
-              labelColor: Colors.black,
-              unselectedLabelColor: Colors.black,
-              indicatorColor: Colors.red[400],
+              labelColor: Theme.of(context).colorScheme.onSurface,
+              unselectedLabelColor: Theme.of(context).colorScheme.onSurface,
+              indicatorColor: Theme.of(context).colorScheme.primary,
               indicatorSize: TabBarIndicatorSize.label,
               indicatorWeight: 2.0,
               labelPadding: const EdgeInsets.all(10),
@@ -109,8 +115,8 @@ class _DetailScreenState extends State<DetailScreen> {
         margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0), // Adjusted horizontal margin
         child: Container(
           decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [const Color.fromARGB(199, 248, 177, 177), Colors.red.shade300], // Gradient colors
+            gradient: const LinearGradient(
+              colors: [Color.fromARGB(255, 100, 163, 235), Color.fromARGB(255, 92, 100, 216)], // Gradient colors
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
@@ -121,15 +127,15 @@ class _DetailScreenState extends State<DetailScreen> {
             child: ListTile(
               title: Text(
                 'Order ID: ${order.orderID}',
-                style: const TextStyle(color: Colors.black), // Text color contrasting with the card's gradient
+                style: TextStyle(color: Theme.of(context).colorScheme.surface), // Text color contrasting with the card's gradient
               ),
               subtitle: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Order Date: ${order.orderDate}', style: TextStyle(color: Colors.black.withOpacity(0.9))),
-                  Text('Customer ID: ${order.customerID}', style: TextStyle(color: Colors.black.withOpacity(0.9))),
-                  Text('Product ID: ${order.productID}', style: TextStyle(color: Colors.black.withOpacity(0.9))),
-                  Text('Status: ${order.completionStatus}', style: TextStyle(color: Colors.black.withOpacity(0.9))),
+                  Text('Order Date: ${order.orderDate}', style: TextStyle(color: Theme.of(context).colorScheme.surface)),
+                  Text('Customer ID: ${order.customerID}', style: TextStyle(color: Theme.of(context).colorScheme.surface)),
+                  Text('Product ID: ${order.productID}', style: TextStyle(color: Theme.of(context).colorScheme.surface)),
+                  Text('Status: ${order.completionStatus}', style: TextStyle(color: Theme.of(context).colorScheme.surface)),
                 ],
               ),
               onTap: () {
@@ -140,7 +146,7 @@ class _DetailScreenState extends State<DetailScreen> {
                 width: size.width * 0.25,
                 height: 50.0,
                 child: deliveredButton ? IconButton(
-                  icon: const Icon(Icons.check_circle_outline, color: Colors.black, size: 30,), // Icon color
+                  icon: Icon(Icons.check_circle_outline, color: Theme.of(context).colorScheme.surface, size: 30,), // Icon color
                   onPressed: () async {
                     String completionStatus = '';
                     if (order.completionStatus == 'To be Packaged') {
@@ -152,6 +158,10 @@ class _DetailScreenState extends State<DetailScreen> {
                     }
                     final response = await managementUtil.updateDispatch(order.orderID, completionStatus);
                     if (response.statusCode == 200) {
+                      Function update = orderController.updateDispatchMenuData.value!;
+                      orderController.clearOrders();
+                      orderController.getOrders;
+                      update();
                       final List<SalesOrder> updatedDispatchData = await _fetchSalesOrderData();
                       setState(() {
                         widget.dispatchData = updatedDispatchData;
@@ -191,9 +201,10 @@ class _DetailScreenState extends State<DetailScreen> {
   }
 
   void updateData(){
-    setState(() {
-      
-    });
+    if (mounted) {
+      setState(() {
+      });
+    }
   }
 }
 // Filter system
@@ -265,14 +276,35 @@ class _DataSearch extends SearchDelegate<String> {
 
   @override
   String get searchFieldLabel => 'Enter Query';
+
+  @override
+  ThemeData appBarTheme(BuildContext context) {
+    return Theme.of(context).copyWith(
+      appBarTheme: AppBarTheme(
+        iconTheme: IconThemeData(color: Theme.of(context).colorScheme.surface),
+        titleTextStyle: TextStyle(color: Theme.of(context).colorScheme.surface),
+        color: Theme.of(context).colorScheme.onPrimaryContainer, // Change this to the desired color
+        toolbarHeight: 80
+      ),
+      inputDecorationTheme: InputDecorationTheme(
+        hintStyle: TextStyle(color: Theme.of(context).colorScheme.surface, fontSize: 23),
+        labelStyle: TextStyle(color: Theme.of(context).colorScheme.surface, fontSize: 23),
+
+      ),
+      textTheme: TextTheme(
+        bodyLarge: TextStyle(color: Theme.of(context).colorScheme.surface, fontSize: 23),
+
+      )
+    );
+  }
 }
 
 
 
-void navigateToOrderDetail(BuildContext context, SalesOrder item) {
+void navigateToOrderDetail(BuildContext context, SalesOrder order) {
   Navigator.of(context).push(
     MaterialPageRoute(
-      builder: (context) => ItemDetailScreen(item: item),
+      builder: (context) => OrderDetailScreen(order: order),
     ),
   );
 }

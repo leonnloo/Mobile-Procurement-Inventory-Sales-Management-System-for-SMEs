@@ -1,12 +1,9 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_navigation/get_navigation.dart';
-import 'package:prototype/app/inventory/inventory_filter_system.dart';
+import 'package:get/get.dart';
 import 'package:prototype/app/inventory/speed_dial_inventory.dart';
 import 'package:prototype/models/inventory_model.dart';
 import 'package:prototype/app/inventory/inventory_info.dart';
+import 'package:prototype/util/get_controllers/inventory_controller.dart';
 import 'package:prototype/util/request_util.dart';
 
 class InventoryScreen extends StatefulWidget {
@@ -18,13 +15,22 @@ class InventoryScreen extends StatefulWidget {
 
 class _InventoryScreenState extends State<InventoryScreen> {
   final RequestUtil requestUtil = RequestUtil();
-
+  final inventoryController = Get.put(InventoryController());
   Map<String, List<InventoryItem>> groupedData = {};
+  String? _selectedFilter = 'Order ID';
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-  groupedData['In Stock'] = [];
-  groupedData['Low Stock'] = [];
-  groupedData['Out of Stock'] = [];
+    inventoryController.updateData.value = updateData;  
+    inventoryController.updateFilter.value = updateFilter;  
+    groupedData['In Stock'] = [];
+    groupedData['Low Stock'] = [];
+    groupedData['Out of Stock'] = [];
     return DefaultTabController(
       length: groupedData.keys.length,
       initialIndex: 0,
@@ -38,7 +44,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
                 child: Card(
                   child: GestureDetector(
                     onTap: () {
-                      Get.to(() => const FilterSystem());
+                      showSearch(context: context, delegate: ItemSearch(groupedData));
                     },
                     child: const TextField(
                       decoration: InputDecoration(
@@ -64,9 +70,9 @@ class _InventoryScreenState extends State<InventoryScreen> {
             //   ),
             // ),
             TabBar(
-              labelColor: Colors.black,
-              unselectedLabelColor: Colors.black,
-              indicatorColor: Colors.red[400],
+              labelColor: Theme.of(context).colorScheme.onPrimaryContainer,
+              unselectedLabelColor: Theme.of(context).colorScheme.onPrimaryContainer,
+              indicatorColor: Theme.of(context).colorScheme.primary,
               indicatorSize: TabBarIndicatorSize.label,
               indicatorWeight: 2.0,
               labelPadding: const EdgeInsets.all(10),
@@ -74,7 +80,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
             ),
             FutureBuilder(
               key: futureBuilderKey,
-              future: _fetchInventoryData(),
+              future: inventoryController.getInventories(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const SizedBox();
@@ -106,46 +112,157 @@ class _InventoryScreenState extends State<InventoryScreen> {
             ),
           ],
         ),
-        floatingActionButton: inventorySpeedDial(context, updateData),
+        floatingActionButton: inventorySpeedDial(context),
       ),
     );
   }
 
+  int? sortColumnIndex;
+  bool sortAscending = true;
+
   Widget buildInventorySection(BuildContext context, List<InventoryItem> inventoryItems) {
+    inventoryItems = _fetchAndFilterInventory(inventoryItems);
+    Function update = inventoryController.updateFilter.value!;
     return SingleChildScrollView(
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: DataTable(
           columnSpacing: 16.0,
           horizontalMargin: 16.0,
-          columns: const [
-            DataColumn(label: Text('Item ID')),
-            DataColumn(label: Text('Item')),
-            DataColumn(label: Text('Category')),
-            DataColumn(label: Text('Quantity')),
-            DataColumn(label: Text('Unit Price')),
-            DataColumn(label: Text('Total Price')),
-            DataColumn(label: Text('Status')),
+          columns: [
+            DataColumn(
+              label: Row(
+                children: [
+                  Text('ID', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
+                  Icon(
+                    trackAscending ? Icons.arrow_drop_up : Icons.arrow_drop_down,
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
+                ],
+              ),
+              onSort: (columnIndex, ascending) {
+                ascending = trackAscending;
+                trackAscending = !ascending;
+                update('ID');
+              },
+            ),
+            DataColumn(
+              label: Row(
+                children: [
+                  Text('Item', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
+                  Icon(
+                    trackAscending ? Icons.arrow_drop_up : Icons.arrow_drop_down,
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
+                ],
+              ),
+              onSort: (columnIndex, ascending) {
+                ascending = trackAscending;
+                trackAscending = !ascending;
+                update('Item');
+              },
+            ),
+            DataColumn(
+              label: Row(
+                children: [
+                  Text('Category', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
+                  Icon(
+                    trackAscending ? Icons.arrow_drop_up : Icons.arrow_drop_down,
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
+                ],
+              ),
+              onSort: (columnIndex, ascending) {
+                ascending = trackAscending;
+                trackAscending = !ascending;
+                update('Category');
+              },
+            ),
+            DataColumn(
+              label: Row(
+                children: [
+                  Text('Quantity', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
+                  Icon(
+                    trackAscending ? Icons.arrow_drop_up : Icons.arrow_drop_down,
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
+                ],
+              ),
+              onSort: (columnIndex, ascending) {
+                ascending = trackAscending;
+                trackAscending = !ascending;
+                update('Quantity');
+              },
+            ),
+            DataColumn(
+              label: Row(
+                children: [
+                  Text('Unit Price', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
+                  Icon(
+                    trackAscending ? Icons.arrow_drop_up : Icons.arrow_drop_down,
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
+                ],
+              ),
+              onSort: (columnIndex, ascending) {
+                ascending = trackAscending;
+                trackAscending = !ascending;
+                update('Unit Price');
+              },
+            ),
+            DataColumn(
+              label: Row(
+                children: [
+                  Text('Total Price', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
+                  Icon(
+                    trackAscending ? Icons.arrow_drop_up : Icons.arrow_drop_down,
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
+                ],
+              ),
+              onSort: (columnIndex, ascending) {
+                ascending = trackAscending;
+                trackAscending = !ascending;
+                update('Total Price');
+              },
+            ),
+            DataColumn(
+              label: Row(
+                children: [
+                  Text('Status', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
+                  Icon(
+                    trackAscending ? Icons.arrow_drop_up : Icons.arrow_drop_down,
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
+                ],
+              ),
+              onSort: (columnIndex, ascending) {
+                ascending = trackAscending;
+                trackAscending = !ascending;
+                update('Status');
+              },
+            ),
           ],
           rows: inventoryItems.map((InventoryItem item) {
+              
             return DataRow(
               cells: [
                 DataCell(
-                  Text(item.itemID),
+                  Text(item.itemID, style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
                   onTap: () {
-                    navigateToItemDetail(context, item, updateData);
+                    navigateToItemDetail(context, item);
                   },
                 ),
                 DataCell(
-                  Text(item.itemName),
+                  Text(item.itemName, style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
                   onTap: () {
-                    navigateToItemDetail(context, item, updateData);
+                    navigateToItemDetail(context, item);
                   },
                 ),
                 DataCell(
-                  Text(item.category),
+                  Text(item.category, style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
                   onTap: () {
-                    navigateToItemDetail(context, item, updateData);
+                    navigateToItemDetail(context, item);
                   },
                 ),
                 DataCell(
@@ -159,25 +276,25 @@ class _InventoryScreenState extends State<InventoryScreen> {
                     ),
                   ),
                   onTap: () {
-                    navigateToItemDetail(context, item, updateData);
+                    navigateToItemDetail(context, item);
                   },
                 ),
                 DataCell(
-                  Text('\$${item.unitPrice.toStringAsFixed(2)}'),
+                  Text('\$${item.unitPrice.toStringAsFixed(2)}', style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
                   onTap: () {
-                    navigateToItemDetail(context, item, updateData);
+                    navigateToItemDetail(context, item);
                   },
                 ),
                 DataCell(
-                  Text('\$${item.totalPrice.toStringAsFixed(2)}'),
+                  Text('\$${item.totalPrice.toStringAsFixed(2)}', style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
                   onTap: () {
-                    navigateToItemDetail(context, item, updateData);
+                    navigateToItemDetail(context, item);
                   },
                 ),
                 DataCell(
-                  Text(item.status),
+                  Text(item.status, style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
                   onTap: () {
-                    navigateToItemDetail(context, item, updateData);
+                    navigateToItemDetail(context, item);
                   },
                 ),
               ],
@@ -187,39 +304,113 @@ class _InventoryScreenState extends State<InventoryScreen> {
       ),
     );
   }
+  bool trackAscending = false;
 
-  Future<List<InventoryItem>> _fetchInventoryData() async {
-    try {
-      final item = await requestUtil.getInventories();
-      if (item.statusCode == 200) {
-        List<dynamic> jsonData = jsonDecode(item.body);
-        List<InventoryItem> itemData = jsonData.map((data) => InventoryItem.fromJson(data)).toList();
-        return itemData;
-      } else {
-        throw Exception('Unable to fetch item data.');
+  List<InventoryItem> _fetchAndFilterInventory(List<InventoryItem> inventory) {
+    if (_selectedFilter == null) {
+      return [];
+    } else {
+      switch (_selectedFilter) {
+        case 'ID':
+          return inventory
+            ..sort((a, b) {
+              int idA = int.parse(a.itemID.substring(2)); // Extract numeric part from itemID
+              int idB = int.parse(b.itemID.substring(2));
+              return trackAscending ? idA.compareTo(idB) : idB.compareTo(idA);
+            });
+        case 'Item Name':
+          return inventory
+            ..sort((a, b) => trackAscending ? a.itemName.toLowerCase().compareTo(b.itemName.toLowerCase()) : b.itemName.toLowerCase().compareTo(a.itemName.toLowerCase()));
+        case 'Category':
+          return inventory
+            ..sort((a, b) => trackAscending ? a.category.compareTo(b.category) : b.category.compareTo(a.category));
+        case 'Quantity':
+          return inventory
+            ..sort((a, b) => trackAscending ? a.quantity.compareTo(b.quantity) : b.quantity.compareTo(a.quantity));
+        case 'Unit Price':
+          return inventory
+            ..sort((a, b) => trackAscending ? a.unitPrice.compareTo(b.unitPrice) : b.unitPrice.compareTo(a.unitPrice));
+        case 'Total Price':
+          return inventory
+            ..sort((a, b) => trackAscending ? a.totalPrice.compareTo(b.totalPrice) : b.totalPrice.compareTo(a.totalPrice));
+        case 'Critical Level':
+          return inventory
+            ..sort((a, b) => trackAscending ? a.criticalLvl.compareTo(b.criticalLvl) : b.criticalLvl.compareTo(a.criticalLvl));
+        case 'Status':
+          return inventory
+            ..sort((a, b) => trackAscending ? a.status.compareTo(b.status) : b.status.compareTo(a.status));
+        default:
+          return inventory;
       }
-    } catch (error) {
-      rethrow; // Rethrow the error to be caught by FutureBuilder
     }
   }
 
   Key futureBuilderKey = UniqueKey();
   void updateData() async {
-    setState(() {
-      futureBuilderKey = UniqueKey();
-    });
+    if (mounted) {
+      setState(() {
+        // inventoryFuture = inventoryController.getInventories();
+        futureBuilderKey = UniqueKey();
+      });
+    }
+  }
+
+  void updateFilter(String filter) async {
+    if (mounted) {
+      setState(() {
+        _selectedFilter = filter;
+      });
+    }
   }
   Color _getQuantityColor(int quantity, int safetyQuantity) {
-    return quantity < safetyQuantity ? Colors.red : Colors.black;
+    return quantity < safetyQuantity ? Theme.of(context).colorScheme.error : Theme.of(context).colorScheme.onSurface;
   }
 }
 
 
 
-class ItemSearch extends SearchDelegate<InventoryItem> {
-  final List<InventoryItem> items;
+class ItemSearch extends SearchDelegate<String> {
+  ItemSearch(this.groupedData);
 
-  ItemSearch(this.items);
+  final Map<String, List<InventoryItem>> groupedData;
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    // Flatten all InventoryItem lists into a single list
+    final allItems = groupedData.values.expand((list) => list).toList();
+
+    // Filter the flattened list based on the query across all fields
+    final List<InventoryItem> suggestionList = query.isEmpty
+        ? []
+        : allItems.where((item) {
+            // Combine all fields into a single searchable string.
+            // Make sure to call toString() on non-string fields and use toLowerCase() for case-insensitive matching
+            final searchableString = '${item.itemID} ${item.itemName} ${item.category} ${item.quantity} '
+                '${item.unitPrice} ${item.totalPrice} ${item.status}'.toLowerCase();
+            
+            return searchableString.contains(query.toLowerCase());
+          }).toList();
+
+    return ListView.builder(
+      itemCount: suggestionList.length,
+      itemBuilder: (context, index) {
+        final InventoryItem item = suggestionList[index];
+        return ListTile(
+          title: Text(item.itemName),
+          subtitle: Text('Category: ${item.category} - Quantity: ${item.quantity}'),
+          onTap: () {
+            navigateToItemDetail(context, item);
+          },
+        );
+      },
+    );
+  }
+
+
+  @override
+  Widget buildResults(BuildContext context) {
+    return buildSuggestions(context);
+  }
 
   @override
   List<Widget> buildActions(BuildContext context) {
@@ -228,8 +419,9 @@ class ItemSearch extends SearchDelegate<InventoryItem> {
         icon: const Icon(Icons.clear),
         onPressed: () {
           query = '';
+          showSuggestions(context);
         },
-      ),
+      )
     ];
   }
 
@@ -238,35 +430,32 @@ class ItemSearch extends SearchDelegate<InventoryItem> {
     return IconButton(
       icon: const Icon(Icons.arrow_back),
       onPressed: () {
-        // close(context, null);
+        close(context, '');
       },
     );
   }
 
   @override
-  Widget buildResults(BuildContext context) {
-    return buildSearchResults(query);
-  }
+  String get searchFieldLabel => 'Enter Query';
 
   @override
-  Widget buildSuggestions(BuildContext context) {
-    return buildSearchResults(query);
-  }
-
-  Widget buildSearchResults(String query) {
-    final List<InventoryItem> searchResults = items
-        .where(
-            (item) => item.itemName.toLowerCase().contains(query.toLowerCase()))
-        .toList();
-
-    return const SingleChildScrollView(
-      child: Column(
-        children: [
-          // Display search results using the same inventory section widget
-          // You can customize this as needed
-          // InventoryScreen().buildInventorySection(context, 'Search Results', searchResults),
-        ],
+  ThemeData appBarTheme(BuildContext context) {
+    return Theme.of(context).copyWith(
+      appBarTheme: AppBarTheme(
+        iconTheme: IconThemeData(color: Theme.of(context).colorScheme.surface),
+        titleTextStyle: TextStyle(color: Theme.of(context).colorScheme.surface),
+        color: Theme.of(context).colorScheme.onPrimaryContainer, // Change this to the desired color
+        toolbarHeight: 80
       ),
+      inputDecorationTheme: InputDecorationTheme(
+        hintStyle: TextStyle(color: Theme.of(context).colorScheme.surface, fontSize: 23),
+        labelStyle: TextStyle(color: Theme.of(context).colorScheme.surface, fontSize: 23),
+
+      ),
+      textTheme: TextTheme(
+        bodyLarge: TextStyle(color: Theme.of(context).colorScheme.surface, fontSize: 23),
+
+      )
     );
   }
 }
