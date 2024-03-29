@@ -49,7 +49,7 @@ class DeliveryOverview extends StatelessWidget {
               Expanded(
                 child: Card(
                   shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20.0))),
-                  color: Theme.of(context).colorScheme.secondaryContainer,
+                  color: Theme.of(context).colorScheme.onPrimary,
                   elevation: 4.0,
                   child: Padding(
                     padding: const EdgeInsets.all(20.0),
@@ -111,7 +111,7 @@ class DeliveryOverview extends StatelessWidget {
               const SizedBox(width: 12.0,),
               Expanded(
                 child: Card(
-                  color: Theme.of(context).colorScheme.secondaryContainer,
+                  color: Theme.of(context).colorScheme.onPrimary,
                   shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20.0))),
                   elevation: 4.0,
                   child: Padding(

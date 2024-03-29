@@ -1,18 +1,18 @@
 // ignore_for_file: must_be_immutable
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:prototype/models/inventory_model.dart';
-import 'package:prototype/util/get_controllers/inventory_controller.dart';
+import 'package:prototype/models/order_model.dart';
+import 'package:prototype/util/get_controllers/order_controller.dart';
 
-class InventoryStatusWidget extends StatelessWidget {
-  const InventoryStatusWidget({super.key});
+class OrderStatusWidget extends StatelessWidget {
+  const OrderStatusWidget({super.key});
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Card(
-        color: const Color.fromARGB(255, 252, 215, 252),
+        // color: const Color.fromARGB(255, 252, 215, 252),
         shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20.0))),
-        // color: Theme.of(context).colorScheme.background,
+        color: Theme.of(context).colorScheme.onPrimary,
         elevation: 4.0,
         // color: const Color.fromARGB(255, 11, 238, 181),
         margin: const EdgeInsets.all(16.0),
@@ -27,7 +27,7 @@ class InventoryStatusWidget extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        'Inventory Overview',
+                        'Order Overview',
                         style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.onSurface),
                       ),
                     ],
@@ -38,7 +38,7 @@ class InventoryStatusWidget extends StatelessWidget {
                   color: Theme.of(context).colorScheme.onSurface,
                 ),
                 const SizedBox(height: 5,),
-                InventoryCount(),
+                OrderCount(),
               ],
             ),
           ),
@@ -47,18 +47,18 @@ class InventoryStatusWidget extends StatelessWidget {
   }
 }
 
-class InventoryCount extends StatelessWidget {
-  InventoryCount({super.key,});
+class OrderCount extends StatelessWidget {
+  OrderCount({super.key,});
 
-  int inStockCount = 0;
-  int outOfStockCount = 0;
-  int lowStockCount = 0;
-  final inventoryController = Get.put(InventoryController());
+  int tbp = 0;
+  int tbd = 0;
+  int tbs = 0;
+  final orderController = Get.put(OrderController());
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: inventoryController.getInventories(),
+      future: orderController.getOrders(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return SizedBox(
@@ -81,15 +81,15 @@ class InventoryCount extends StatelessWidget {
             ),
           );
         } else {
-          List<InventoryItem> inventorys = snapshot.data!;
-          calculateStock(inventorys);
+          List<SalesOrder> orders = snapshot.data!;
+          calculateStock(orders);
           return Row(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              _buildCol('$inStockCount', 'In Stock', context),
-              _buildCol('$lowStockCount', 'Low Stock', context),
-              _buildCol('$outOfStockCount', 'Out of Stock', context),
+              _buildCol('$tbp', 'To be Packaged', context),
+              _buildCol('$tbs', 'To be Shipped', context),
+              _buildCol('$tbd', 'To be Delivered', context),
             ],
           );
         }
@@ -120,14 +120,14 @@ class InventoryCount extends StatelessWidget {
     );
   }
   
-  void calculateStock(List<InventoryItem> inventorys) {
-    for (var inventory in inventorys) {
-      if (inventory.status == 'In Stock') {
-        inStockCount++;
-      } else if (inventory.status == 'Low Stock') {
-        lowStockCount++;
+  void calculateStock(List<SalesOrder> orders) {
+    for (var order in orders) {
+      if (order.completionStatus == 'To be Packaged') {
+        tbp++;
+      } else if (order.completionStatus == 'To be Shipped') {
+        tbs++;
       } else {
-        outOfStockCount++;
+        tbd++;
       }
     }
   }
