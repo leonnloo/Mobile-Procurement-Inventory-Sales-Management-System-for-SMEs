@@ -11,6 +11,7 @@ class CustomerController extends GetxController {
   Rx<CustomerData?> currentCustomerInfo = Rx<CustomerData?>(null);
   Rx<Function?> updateData = Rx<Function?>(null);
   Rx<Function?> updateEditData = Rx<Function?>(null);
+  Rx<Function?> updateFilter = Rx<Function?>(null);
 
   Future<void> updateCustomerList() async {
     try {

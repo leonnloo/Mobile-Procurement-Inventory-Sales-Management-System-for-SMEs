@@ -161,9 +161,11 @@ class _SupplierDetailScreenState extends State<SupplierDetailScreen> {
   }
 
   void updateData(){
-    setState(() {
-      widget.supplierData = controller.currentSupplierInfo.value!;
-    });
+    if (mounted) {
+      setState(() {
+        widget.supplierData = controller.currentSupplierInfo.value!;
+      });
+    }
   }
 }
 

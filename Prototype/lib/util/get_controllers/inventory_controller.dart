@@ -11,6 +11,7 @@ class InventoryController extends GetxController {
   Rx<InventoryItem?> currentInventoryInfo = Rx<InventoryItem?>(null);
   Rx<Function?> updateData = Rx<Function?>(null);
   Rx<Function?> updateEditData = Rx<Function?>(null);
+  Rx<Function?> updateFilter = Rx<Function?>(null);
 
   Future<void> updateInventoryList() async {
     try {

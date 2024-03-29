@@ -11,6 +11,7 @@ class ProductController extends GetxController {
   Rx<ProductItem?> currentProductInfo = Rx<ProductItem?>(null);
   Rx<Function?> updateData = Rx<Function?>(null);
   Rx<Function?> updateEditData = Rx<Function?>(null);
+  Rx<Function?> updateFilter = Rx<Function?>(null);
 
   Future<void> updateProductList() async {
     try {

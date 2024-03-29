@@ -159,9 +159,11 @@ class DispatchDeliveryScreenState extends State<DispatchDeliveryScreen> {
   }
 
   void updateData() async {
-    setState(() {
-      futureBuilderKey = UniqueKey();
-    });
+    if (mounted) {
+      setState(() {
+        futureBuilderKey = UniqueKey();
+      });
+    }
   }
 
   Widget _buildItem(BuildContext context, List<SalesOrder> orderList, String title, IconData iconData, String status, int count) {

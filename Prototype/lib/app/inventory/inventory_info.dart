@@ -26,9 +26,11 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
   final inventoryController = Get.put(InventoryController());
 
   void updateData(){
-    setState(() {
-      widget.item = inventoryController.currentInventoryInfo.value!;
-    });
+    if (mounted) {
+      setState(() {
+        widget.item = inventoryController.currentInventoryInfo.value!;
+      });
+    }
   }
   @override
   Widget build(BuildContext context) {
