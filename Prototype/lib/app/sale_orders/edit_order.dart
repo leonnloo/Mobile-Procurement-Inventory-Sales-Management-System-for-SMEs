@@ -115,7 +115,7 @@ class EditOrderState extends State<EditOrder> {
                 const SizedBox(height: 16.0),
                 DropdownTextField(
                   labelText: 'Product', 
-                  options: getProductList(), 
+                  options: getProductNameList(), 
                   onChanged: (value){
                     _productNameController.text = value!;
                     updateProductID(value, _productIDController);

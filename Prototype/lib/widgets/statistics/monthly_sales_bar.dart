@@ -132,7 +132,6 @@ class MonthlySalesBarChart extends StatelessWidget {
                   }
                   else {
                     return Container(
-                      color: Colors.red[400],
                       width: double.infinity,
                       padding: const EdgeInsets.only(top: 20.0),
                       child: const Column(
@@ -193,7 +192,7 @@ class MonthlySalesBarChart extends StatelessWidget {
         int rodIndex,
       ) {
         return BarTooltipItem(
-          rod.toY.round().toString(),
+          '\$${rod.toY.toStringAsFixed(2)}',
           const TextStyle(
             color: Colors.black,
             fontWeight: FontWeight.bold,
@@ -238,7 +237,7 @@ class MonthlySalesBarChart extends StatelessWidget {
 
   LinearGradient get _barsGradient => const LinearGradient(
     colors: [
-      Colors.red,
+      Color.fromARGB(255, 228, 54, 244),
       Colors.amber,
     ],
     begin: Alignment.bottomCenter,

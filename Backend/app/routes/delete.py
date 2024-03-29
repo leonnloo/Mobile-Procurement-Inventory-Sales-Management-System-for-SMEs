@@ -90,8 +90,49 @@ def delete_sale_order(id: str, token: str = Depends(oauth_scheme)):
 # ! UPDATE BOUGHT PURCHASE ITEMS
 @delete_router.delete("/delete_procurement/{id}")
 def delete_procurement(id: str, token: str = Depends(oauth_scheme)):
-    result = procurement_db.delete_one({'purchase_no': id})
 
+    old_purchase = procurement_db.find_one({"purchase_id": id})
+    if old_purchase:
+        # add stocks if old_purchase is delivered
+        if old_purchase['status'] == "Completed":
+            if old_purchase['item_type'] == "Product":
+                product = product_db.find_one({"product_id": old_purchase['item_id']})
+                product['quantity'] -= old_purchase['quantity']
+                if product['quantity'] >= 0:
+                    if product['quantity'] > 0 and product['quantity'] >= product['critical_level']:
+                        new_status = 'In Stock'
+                    elif product['quantity'] > 0 and product['quantity'] < product['critical_level']:
+                        new_status = 'Low Stock'
+                    else:
+                        new_status = 'Out of Stock'
+                    
+                    product['status'] = new_status
+                    product_db.update_one({"product_id": old_purchase['item_id']}, {"$set": product})
+                else:
+                    raise HTTPException(
+                    status_code = status.HTTP_403_FORBIDDEN,
+                    detail = "Cannot delete purchase as product ran out of stock",
+                    )
+            elif old_purchase['item_type'] == "Inventory":
+                item = inventory_db.find_one({"item_id": old_purchase['item_id']})
+                item["quantity"] -= old_purchase['quantity']
+                if item["quantity"] >= 0:
+                    if item['quantity'] > 0 and item['quantity'] >= item['critical_level']:
+                        new_status = 'In Stock'
+                    elif item['quantity'] > 0 and item['quantity'] < item['critical_level']:
+                        new_status = 'Low Stock'
+                    else:
+                        new_status = 'Out of Stock'
+                    
+                    item['status'] = new_status
+                    inventory_db.update_one({"item_id": old_purchase['item_id']}, {"$set": item})
+                else:
+                    raise HTTPException(
+                    status_code = status.HTTP_403_FORBIDDEN,
+                    detail = "Cannot delete purchase as inventory item ran out of stock",
+                    )
+
+    result = procurement_db.delete_one({'purchase_id': id})
     if result.deleted_count > 0:
         return {"message": f"Procurement with id {id} deleted successfully"}
     else:

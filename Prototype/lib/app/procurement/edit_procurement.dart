@@ -78,7 +78,7 @@ class EditProcurementState extends State<EditProcurement> {
         title: Text('Edit Purchase', style: TextStyle(color: Theme.of(context).colorScheme.surface),),
         actions: [
           IconButton(
-            onPressed: () => _showDeleteConfirmationDialog(context),
+            onPressed: () => _showDeleteConfirmationDialog(context, widget.procurementData.status),
             icon: const Icon(
               Icons.delete,
               size: 30.0,
@@ -258,7 +258,7 @@ class EditProcurementState extends State<EditProcurement> {
     );
   }
 
-  Future<void> _showDeleteConfirmationDialog(BuildContext context) async {
+  Future<void> _showDeleteConfirmationDialog(BuildContext context, String status) async {
     return showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -280,6 +280,20 @@ class EditProcurementState extends State<EditProcurement> {
                   procurementController.clearPurchases();
                   procurementController.getPurchases();
                   update!();
+                  if (status == 'Completed') {
+                    Function? updateInventory = inventoryController.updateData.value;
+                    inventoryController.clearInventories();
+                    inventoryController.getInventories();
+                    if (updateInventory!= null){
+                      updateInventory();
+                    }
+                    Function? updateProduct = productController.updateData.value;
+                    productController.clearProducts();
+                    productController.getProducts();
+                    if (updateProduct!= null){
+                      updateProduct();
+                    }
+                  }
                   Navigator.pop(context);
                   Navigator.pop(context);
                   ScaffoldMessenger.of(context).showSnackBar(

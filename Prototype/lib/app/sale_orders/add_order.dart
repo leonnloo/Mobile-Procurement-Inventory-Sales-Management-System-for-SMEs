@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:prototype/app/procurement/get_procurement.dart';
 import 'package:prototype/app/sale_orders/get_order.dart';
 import 'package:prototype/util/get_controllers/order_controller.dart';
+import 'package:prototype/util/get_controllers/product_controller.dart';
 import 'package:prototype/util/request_util.dart';
 import 'package:prototype/util/validate_text.dart';
 import 'package:prototype/widgets/appbar/common_appbar.dart';
@@ -34,6 +35,7 @@ class AddOrderScreenState extends State<AddOrderScreen> {
   late TextEditingController _quantityController;
   late TextEditingController _statusController;
   final orderController = Get.put(OrderController());
+  final productController = Get.put(ProductController());
 
   @override
   void initState() {
@@ -88,7 +90,7 @@ class AddOrderScreenState extends State<AddOrderScreen> {
                 const SizedBox(height: 16.0),
                 DropdownTextField(
                   labelText: 'Product', 
-                  options: getProductList(), 
+                  options: getProductQuantityList(), 
                   onChanged: (value){
                     _productNameController.text = value!;
                     updateProductID(value, _productIDController);
@@ -179,6 +181,14 @@ class AddOrderScreenState extends State<AddOrderScreen> {
                           orderController.getOrders();
                           if (update != null) {
                             update();
+                          }
+                          if (status == 'Completed') {
+                            Function? updateProduct = productController.updateData.value;
+                            productController.clearProducts();
+                            productController.getProducts();
+                            if (updateProduct!= null){
+                              updateProduct();
+                            }
                           }
                           Navigator.pop(context);
                           ScaffoldMessenger.of(context).showSnackBar(

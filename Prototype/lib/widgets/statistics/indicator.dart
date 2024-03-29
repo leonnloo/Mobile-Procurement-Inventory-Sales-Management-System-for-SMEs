@@ -9,6 +9,7 @@ class Indicator extends StatelessWidget {
     this.size = 16,
     this.textColor,
   });
+
   final Color color;
   final String text;
   final bool isSquare;
@@ -18,6 +19,7 @@ class Indicator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
+      mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         Container(
           width: size,
@@ -27,15 +29,17 @@ class Indicator extends StatelessWidget {
             color: color,
           ),
         ),
-        const SizedBox(
-          width: 4,
-        ),
-        Text(
-          text,
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-            color: textColor,
+        const SizedBox(width: 4),
+        Flexible( // Making the text flexible to allow it to wrap
+          child: Text(
+            text,
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: textColor ?? Theme.of(context).colorScheme.onSurface, // Using provided text color or theme color if not provided
+            ),
+            overflow: TextOverflow.ellipsis,
+            maxLines: 2, // Allow text to span up to two lines
           ),
         )
       ],
