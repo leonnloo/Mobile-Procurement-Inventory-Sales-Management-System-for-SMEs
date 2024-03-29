@@ -122,13 +122,9 @@ class PieChart2State extends State {
                     height: 1,
                     color: Theme.of(context).colorScheme.onSurface,
                   ),
-                  onChanged: (int? newValue) {
+                  onChanged: _selectedYear == 'YTD' ? null : (int? newValue) { // Disable if 'YTD' is selected
                     setState(() {
-                      if (_selectedYear == 'YTD'){
-                        _selectedMonth = 0;
-                      } else {
-                        _selectedMonth = newValue!;
-                      }
+                      _selectedMonth = newValue!;
                     });
                   },
                   items: List.generate(monthNames.length, (index) {
@@ -137,6 +133,8 @@ class PieChart2State extends State {
                       child: Text(monthNames[index], style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
                     );
                   }),
+                  // Optionally, you can provide a different style or indication that the dropdown is disabled when 'YTD' is selected
+                  disabledHint: Text(monthNames[_selectedMonth], style: TextStyle(color: Colors.grey)), // Show current month but in grey
                 ),
               ],
             ),
@@ -199,7 +197,7 @@ class PieChart2State extends State {
                       show: false,
                     ),
                     sectionsSpace: 0,
-                    centerSpaceRadius: 40,
+                    centerSpaceRadius: 34,
                     sections: showingSections(productItems),
                   ),
                 );
@@ -284,17 +282,20 @@ class PieChart2State extends State {
         int saleYear = product.monthlySales[i].year;
         int saleMonth = product.monthlySales[i].month;
         double salePrice = product.monthlySales[i].totalPrice;
-        if (_selectedYear == 'YTD' && saleYear == DateTime.now().year){
+        if (_selectedYear == 'YTD' && saleYear == DateTime.now().year) {
+          // Your existing logic for YTD
           productTotalSales += salePrice;
           allSales += salePrice;
-        }
-        else if (saleYear == int.parse(_selectedYear) && saleMonth == _selectedMonth) {
-          productTotalSales += salePrice;
-          allSales += salePrice;
-        }
-        else if (saleYear == int.parse(_selectedYear) && 0 == _selectedMonth) {
-          productTotalSales += salePrice;
-          allSales += salePrice;
+        } else if (_selectedYear != 'YTD') { // Ensure _selectedYear is not 'YTD' before parsing
+          int selectedYearInt = int.tryParse(_selectedYear) ?? DateTime.now().year; // Use current year as fallback
+          if (saleYear == selectedYearInt && saleMonth == _selectedMonth) {
+            productTotalSales += salePrice;
+            allSales += salePrice;
+          }
+          else if (saleYear == selectedYearInt && _selectedMonth == 0) {
+            productTotalSales += salePrice;
+            allSales += salePrice;
+          }
         }
       }
       if (productTotalSales > 0) {
