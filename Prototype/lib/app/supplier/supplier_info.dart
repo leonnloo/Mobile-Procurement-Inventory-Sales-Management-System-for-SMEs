@@ -1,4 +1,4 @@
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously, unused_element
 
 import "dart:math";
 
@@ -121,6 +121,10 @@ class _SupplierDetailScreenState extends State<SupplierDetailScreen> {
                             if (response.statusCode == 200) {
                               controller.clearSuppliers();
                               controller.getSuppliers();
+                              Function? update = controller.updateData.value;
+                              if (update!= null) {
+                                update();
+                              }
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
                                   content: Text('Note saved!'),

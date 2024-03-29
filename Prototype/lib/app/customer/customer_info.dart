@@ -131,6 +131,10 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
                             if (response.statusCode == 200) {
                               customerController.clearCustomers();
                               customerController.getCustomers();
+                              Function? update = customerController.updateData.value;
+                              if (update!= null) {
+                                update();
+                              }
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
                                   content: Text('Note saved!'),
