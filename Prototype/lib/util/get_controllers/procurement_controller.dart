@@ -14,6 +14,7 @@ class PurchaseController extends GetxController {
   Rx<Function?> updateData = Rx<Function?>(null);
   Rx<Function?> updateEditData = Rx<Function?>(null);
   Rx<Function?> updateCategoryData= Rx<Function?>(null);
+  Rx<Function?> updateFilter= Rx<Function?>(null);
 
 
   Future<List<PurchasingOrder>> getPurchases() async {

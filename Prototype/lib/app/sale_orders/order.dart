@@ -17,10 +17,12 @@ class SalesOrderScreen extends StatefulWidget {
 class _SalesOrderScreenState extends State<SalesOrderScreen> {
   final RequestUtil requestUtil = RequestUtil();
   final orderController = Get.put(OrderController());
+  String? _selectedFilter = 'Order ID';
 
   @override
   Widget build(BuildContext context) {
     orderController.updateData.value = updateData;
+    orderController.updateFilter.value = updateFilter;
     final size = MediaQuery.of(context).size;
     return Scaffold(
       body: SingleChildScrollView(
@@ -88,6 +90,8 @@ class _SalesOrderScreenState extends State<SalesOrderScreen> {
                     );
                   } else if (snapshot.hasData) {
                     List<SalesOrder> orders = snapshot.data as List<SalesOrder>;
+                    orders = _fetchAndFilterOrders(orders);
+                    Function update = orderController.updateFilter.value!;
                     return SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
                       child: SingleChildScrollView(
@@ -97,17 +101,182 @@ class _SalesOrderScreenState extends State<SalesOrderScreen> {
                             columnSpacing: 16.0, // Adjust the spacing between columns
                             horizontalMargin: 16.0, // Adjust the horizontal margin
                             columns: [
-                              DataColumn(label: Text('Order ID', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),),
-                              DataColumn(label: Text('Customer', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),),
-                              DataColumn(label: Text('Customer ID', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),),
-                              DataColumn(label: Text('Product', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),),
-                              DataColumn(label: Text('Product ID', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),),
-                              DataColumn(label: Text('Order Date', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),),
-                              DataColumn(label: Text('Quantity', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),),
-                              DataColumn(label: Text('Unit Price', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),),
-                              DataColumn(label: Text('Total Price', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),),
-                              DataColumn(label: Text('Status', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),),
-                              DataColumn(label: Text('Order by', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),),
+                              DataColumn(
+                                label: Row(
+                                  children: [
+                                    Text('Order ID', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
+                                    Icon(
+                                      trackAscending ? Icons.arrow_drop_up : Icons.arrow_drop_down,
+                                      color: Theme.of(context).colorScheme.onSurface,
+                                    ),
+                                  ],
+                                ),
+                                onSort: (columnIndex, ascending) {
+                                  ascending = trackAscending;
+                                  trackAscending = !ascending;
+                                  update('Order ID');
+                                },
+                              ),
+                              DataColumn(
+                                label: Row(
+                                  children: [
+                                    Text('Customer', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
+                                    Icon(
+                                      trackAscending ? Icons.arrow_drop_up : Icons.arrow_drop_down,
+                                      color: Theme.of(context).colorScheme.onSurface,
+                                    ),
+                                  ],
+                                ),
+                                onSort: (columnIndex, ascending) {
+                                  ascending = trackAscending;
+                                  trackAscending = !ascending;
+                                  update('Customer');
+                                },
+                              ),
+                              DataColumn(
+                                label: Row(
+                                  children: [
+                                    Text('Customer ID', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
+                                    Icon(
+                                      trackAscending ? Icons.arrow_drop_up : Icons.arrow_drop_down,
+                                      color: Theme.of(context).colorScheme.onSurface,
+                                    ),
+                                  ],
+                                ),
+                                onSort: (columnIndex, ascending) {
+                                  ascending = trackAscending;
+                                  trackAscending = !ascending;
+                                  update('Customer ID');
+                                },
+                              ),
+                              DataColumn(
+                                label: Row(
+                                  children: [
+                                    Text('Product', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
+                                    Icon(
+                                      trackAscending ? Icons.arrow_drop_up : Icons.arrow_drop_down,
+                                      color: Theme.of(context).colorScheme.onSurface,
+                                    ),
+                                  ],
+                                ),
+                                onSort: (columnIndex, ascending) {
+                                  ascending = trackAscending;
+                                  trackAscending = !ascending;
+                                  update('Product');
+                                },
+                              ),
+                              DataColumn(
+                                label: Row(
+                                  children: [
+                                    Text('Product ID', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
+                                    Icon(
+                                      trackAscending ? Icons.arrow_drop_up : Icons.arrow_drop_down,
+                                      color: Theme.of(context).colorScheme.onSurface,
+                                    ),
+                                  ],
+                                ),
+                                onSort: (columnIndex, ascending) {
+                                  ascending = trackAscending;
+                                  trackAscending = !ascending;
+                                  update('Product ID');
+                                },
+                              ),
+                              DataColumn(
+                                label: Row(
+                                  children: [
+                                    Text('Order Date', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
+                                    Icon(
+                                      trackAscending ? Icons.arrow_drop_up : Icons.arrow_drop_down,
+                                      color: Theme.of(context).colorScheme.onSurface,
+                                    ),
+                                  ],
+                                ),
+                                onSort: (columnIndex, ascending) {
+                                  ascending = trackAscending;
+                                  trackAscending = !ascending;
+                                  update('Order Date');
+                                },
+                              ),
+                              DataColumn(
+                                label: Row(
+                                  children: [
+                                    Text('Quantity', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
+                                    Icon(
+                                      trackAscending ? Icons.arrow_drop_up : Icons.arrow_drop_down,
+                                      color: Theme.of(context).colorScheme.onSurface,
+                                    ),
+                                  ],
+                                ),
+                                onSort: (columnIndex, ascending) {
+                                  ascending = trackAscending;
+                                  trackAscending = !ascending;
+                                  update('Quantity');
+                                },
+                              ),
+                              DataColumn(
+                                label: Row(
+                                  children: [
+                                    Text('Unit Price', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
+                                    Icon(
+                                      trackAscending ? Icons.arrow_drop_up : Icons.arrow_drop_down,
+                                      color: Theme.of(context).colorScheme.onSurface,
+                                    ),
+                                  ],
+                                ),
+                                onSort: (columnIndex, ascending) {
+                                  ascending = trackAscending;
+                                  trackAscending = !ascending;
+                                  update('Unit Price');
+                                },
+                              ),
+                              DataColumn(
+                                label: Row(
+                                  children: [
+                                    Text('Total Price', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
+                                    Icon(
+                                      trackAscending ? Icons.arrow_drop_up : Icons.arrow_drop_down,
+                                      color: Theme.of(context).colorScheme.onSurface,
+                                    ),
+                                  ],
+                                ),
+                                onSort: (columnIndex, ascending) {
+                                  ascending = trackAscending;
+                                  trackAscending = !ascending;
+                                  update('Total Price');
+                                },
+                              ),
+                              DataColumn(
+                                label: Row(
+                                  children: [
+                                    Text('Status', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
+                                    Icon(
+                                      trackAscending ? Icons.arrow_drop_up : Icons.arrow_drop_down,
+                                      color: Theme.of(context).colorScheme.onSurface,
+                                    ),
+                                  ],
+                                ),
+                                onSort: (columnIndex, ascending) {
+                                  ascending = trackAscending;
+                                  trackAscending = !ascending;
+                                  update('Status');
+                                },
+                              ),
+                              DataColumn(
+                                label: Row(
+                                  children: [
+                                    Text('Order by', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
+                                    Icon(
+                                      trackAscending ? Icons.arrow_drop_up : Icons.arrow_drop_down,
+                                      color: Theme.of(context).colorScheme.onSurface,
+                                    ),
+                                  ],
+                                ),
+                                onSort: (columnIndex, ascending) {
+                                  ascending = trackAscending;
+                                  trackAscending = !ascending;
+                                  update('Employee');
+                                },
+                              ),
                             ],
                             rows: orders.map((order) {
                               return DataRow(
@@ -222,13 +391,76 @@ class _SalesOrderScreenState extends State<SalesOrderScreen> {
       ),
     );
   }
+  bool trackAscending = false;
+
+  List<SalesOrder> _fetchAndFilterOrders(List<SalesOrder> orders) {
+    if (_selectedFilter == null) {
+      return [];
+    } else {
+      switch (_selectedFilter) {
+        case 'Order ID':
+          return orders
+            ..sort((a, b) {
+              int idA = int.parse(a.orderID.substring(2)); // Extract numeric part from orderID
+              int idB = int.parse(b.orderID.substring(2));
+              return trackAscending ? idA.compareTo(idB) : idB.compareTo(idA);
+            });
+        case 'Order Date':
+        return orders..sort((a, b) {
+            DateTime dateA = DateTime.parse(a.orderDate);
+            DateTime dateB = DateTime.parse(b.orderDate);
+            return trackAscending ? dateA.compareTo(dateB) : dateB.compareTo(dateA);
+          });
+        case 'Customer ID':
+          return orders
+            ..sort((a, b) {
+              int idA = int.parse(a.customerID.substring(2)); // Extract numeric part from customerID
+              int idB = int.parse(b.customerID.substring(2));
+              return trackAscending ? idA.compareTo(idB) : idB.compareTo(idA);
+            });          
+        case 'Customer Name':
+          return orders..sort((a, b) => trackAscending ? a.customerName.toLowerCase().compareTo(b.customerName.toLowerCase()) : b.customerName.toLowerCase().compareTo(a.customerName.toLowerCase()));
+        case 'Product ID':
+          return orders
+            ..sort((a, b) {
+              int idA = int.parse(a.productID.substring(2)); // Extract numeric part from productID
+              int idB = int.parse(b.productID.substring(2));
+              return trackAscending ? idA.compareTo(idB) : idB.compareTo(idA);
+            });          
+        case 'Product':
+          return orders..sort((a, b) => trackAscending ? a.productName.toLowerCase().compareTo(b.productName.toLowerCase()) : b.productName.toLowerCase().compareTo(a.productName.toLowerCase()));
+        case 'Quantity':
+          return orders..sort((a, b) => trackAscending ? a.quantity.compareTo(b.quantity) : b.quantity.compareTo(a.quantity));
+        case 'Unit Price':
+          return orders..sort((a, b) => trackAscending ? a.unitPrice.compareTo(b.unitPrice) : b.unitPrice.compareTo(a.unitPrice));
+        case 'Total Price':
+          return orders..sort((a, b) => trackAscending ? a.totalPrice.compareTo(b.totalPrice) : b.totalPrice.compareTo(a.totalPrice));
+        case 'Status':
+          return orders..sort((a, b) => trackAscending ? a.orderStatus.compareTo(b.orderStatus) : b.orderStatus.compareTo(a.orderStatus));
+        case 'Employee':
+          return orders..sort((a, b) => trackAscending ? a.employee.toLowerCase().compareTo(b.employee.toLowerCase()) : b.employee.toLowerCase().compareTo(a.employee.toLowerCase()));
+        default:
+          return orders;
+      }
+    }
+  }
 
   Key futureBuilderKey = UniqueKey();
 
   void updateData() async {
-    setState(() {
-      futureBuilderKey = UniqueKey();
-    });
+    if (mounted) {
+      setState(() {
+        futureBuilderKey = UniqueKey();
+      });
+    }
+  }
+
+  void updateFilter(String filter) async {
+    if (mounted) {
+      setState(() {
+        _selectedFilter = filter;
+      });
+    }
   }
 }
 class OrderSearch extends SearchDelegate<String> {

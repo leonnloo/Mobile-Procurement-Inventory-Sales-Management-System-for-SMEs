@@ -178,30 +178,46 @@ class PieChart2State extends State {
               );
             } else {
               List<ProductItem> productItems = snapshot.data!;
-              return PieChart(
-                PieChartData(
-                  // pieTouchData: PieTouchData(
-                  //   touchCallback: (FlTouchEvent event, pieTouchResponse) {
-                  //     setState(() {
-                  //       if (!event.isInterestedForInteractions ||
-                  //           pieTouchResponse == null ||
-                  //           pieTouchResponse.touchedSection == null) {
-                  //         touchedIndex = -1;
-                  //         return;
-                  //       }
-                  //       touchedIndex = pieTouchResponse
-                  //           .touchedSection!.touchedSectionIndex;
-                  //     });
-                  //   },
-                  // ),
-                  borderData: FlBorderData(
-                    show: false,
+              if (productItems.isNotEmpty){
+                return PieChart(
+                  PieChartData(
+                    // pieTouchData: PieTouchData(
+                    //   touchCallback: (FlTouchEvent event, pieTouchResponse) {
+                    //     setState(() {
+                    //       if (!event.isInterestedForInteractions ||
+                    //           pieTouchResponse == null ||
+                    //           pieTouchResponse.touchedSection == null) {
+                    //         touchedIndex = -1;
+                    //         return;
+                    //       }
+                    //       touchedIndex = pieTouchResponse
+                    //           .touchedSection!.touchedSectionIndex;
+                    //     });
+                    //   },
+                    // ),
+                    borderData: FlBorderData(
+                      show: false,
+                    ),
+                    sectionsSpace: 0,
+                    centerSpaceRadius: 40,
+                    sections: showingSections(productItems),
                   ),
-                  sectionsSpace: 0,
-                  centerSpaceRadius: 40,
-                  sections: showingSections(productItems),
-                ),
-              );
+                );
+              }
+              else {
+                return SizedBox(
+                  width: double.infinity,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "No product sales available",
+                        style: TextStyle(color: Theme.of(context).colorScheme.onSurface, fontSize: 20),
+                      ),
+                    ],
+                  ),
+                );
+              }
             }
           }
         ),

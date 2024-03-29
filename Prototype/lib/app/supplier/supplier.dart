@@ -16,12 +16,14 @@ class SupplierManagementScreen extends StatefulWidget {
 
 class _SupplierManagementScreenState extends State<SupplierManagementScreen> {
   final RequestUtil requestUtil = RequestUtil();
+  String? _selectedFilter = 'ID';
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final SupplierController controller = Get.put(SupplierController());
     controller.updateData.value = updateData;
+    controller.updateFilter.value = updateFilter;
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
@@ -89,6 +91,8 @@ class _SupplierManagementScreenState extends State<SupplierManagementScreen> {
                 } else if (snapshot.hasData) {
                   // Assuming snapshot.data is a List<SupplierData>
                   List<SupplierData> supplierData = snapshot.data as List<SupplierData>;
+                  supplierData = _fetchAndFilterSuppliers(supplierData);
+                  Function update = controller.updateFilter.value!;
                   return SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: SingleChildScrollView(
@@ -97,12 +101,102 @@ class _SupplierManagementScreenState extends State<SupplierManagementScreen> {
                         columnSpacing: 16.0,
                         horizontalMargin: 16.0,
                         columns: [
-                          DataColumn(label: Text('ID', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),)),
-                          DataColumn(label: Text('Name', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),)),
-                          DataColumn(label: Text('Contact Person', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),)),
-                          DataColumn(label: Text('Email', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),)),
-                          DataColumn(label: Text('Phone No', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),)),
-                          DataColumn(label: Text('Address', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),)),
+                          DataColumn(
+                            label: Row(
+                              children: [
+                                Text('ID', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
+                                Icon(
+                                  trackAscending ? Icons.arrow_drop_up : Icons.arrow_drop_down,
+                                  color: Theme.of(context).colorScheme.onSurface,
+                                ),
+                              ],
+                            ),
+                            onSort: (columnIndex, ascending) {
+                              ascending = trackAscending;
+                              trackAscending = !ascending;
+                              update('ID');
+                            },
+                          ),
+                          DataColumn(
+                            label: Row(
+                              children: [
+                                Text('Business Name', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
+                                Icon(
+                                  trackAscending ? Icons.arrow_drop_up : Icons.arrow_drop_down,
+                                  color: Theme.of(context).colorScheme.onSurface,
+                                ),
+                              ],
+                            ),
+                            onSort: (columnIndex, ascending) {
+                              ascending = trackAscending;
+                              trackAscending = !ascending;
+                              update('Business Name');
+                            },
+                          ),
+                          DataColumn(
+                            label: Row(
+                              children: [
+                                Text('Contact Person', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
+                                Icon(
+                                  trackAscending ? Icons.arrow_drop_up : Icons.arrow_drop_down,
+                                  color: Theme.of(context).colorScheme.onSurface,
+                                ),
+                              ],
+                            ),
+                            onSort: (columnIndex, ascending) {
+                              ascending = trackAscending;
+                              trackAscending = !ascending;
+                              update('Contact Person');
+                            },
+                          ),
+                          DataColumn(
+                            label: Row(
+                              children: [
+                                Text('Email', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
+                                Icon(
+                                  trackAscending ? Icons.arrow_drop_up : Icons.arrow_drop_down,
+                                  color: Theme.of(context).colorScheme.onSurface,
+                                ),
+                              ],
+                            ),
+                            onSort: (columnIndex, ascending) {
+                              ascending = trackAscending;
+                              trackAscending = !ascending;
+                              update('Email');
+                            },
+                          ),
+                          DataColumn(
+                            label: Row(
+                              children: [
+                                Text('Phone Number', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
+                                Icon(
+                                  trackAscending ? Icons.arrow_drop_up : Icons.arrow_drop_down,
+                                  color: Theme.of(context).colorScheme.onSurface,
+                                ),
+                              ],
+                            ),
+                            onSort: (columnIndex, ascending) {
+                              ascending = trackAscending;
+                              trackAscending = !ascending;
+                              update('Phone Number');
+                            },
+                          ),
+                          DataColumn(
+                            label: Row(
+                              children: [
+                                Text('Address', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
+                                Icon(
+                                  trackAscending ? Icons.arrow_drop_up : Icons.arrow_drop_down,
+                                  color: Theme.of(context).colorScheme.onSurface,
+                                ),
+                              ],
+                            ),
+                            onSort: (columnIndex, ascending) {
+                              ascending = trackAscending;
+                              trackAscending = !ascending;
+                              update('Address');
+                            },
+                          ),
                         ],
                         rows: supplierData.map((SupplierData supplier) {
                           return DataRow(
@@ -175,11 +269,49 @@ class _SupplierManagementScreenState extends State<SupplierManagementScreen> {
     );
   }
   Key futureBuilderKey = UniqueKey();
+  bool trackAscending = false;
 
+  List<SupplierData> _fetchAndFilterSuppliers(List<SupplierData> supplier) {
+    if (_selectedFilter == null) {
+      return [];
+    } else {
+      switch (_selectedFilter) {
+        case 'ID':
+          return supplier
+            ..sort((a, b) {
+              int idA = int.parse(a.supplierID.substring(2)); // Extract numeric part from supplierID
+              int idB = int.parse(b.supplierID.substring(2));
+              return trackAscending ? idA.compareTo(idB) : idB.compareTo(idA);
+            });
+        case 'Business Name':
+          return supplier..sort((a, b) => trackAscending ? a.businessName.toLowerCase().compareTo(b.businessName.toLowerCase()) : b.businessName.toLowerCase().compareTo(a.businessName.toLowerCase()));        
+        case 'Contact Person':
+          return supplier..sort((a, b) => trackAscending ? a.contactPerson.toLowerCase().compareTo(b.contactPerson.toLowerCase()) : b.contactPerson.toLowerCase().compareTo(a.contactPerson.toLowerCase()));        
+        case 'Address':
+          return supplier..sort((a, b) => trackAscending ? a.address.toLowerCase().compareTo(b.address.toLowerCase()) : b.address.toLowerCase().compareTo(a.address.toLowerCase()));
+        case 'Email':
+          return supplier..sort((a, b) => trackAscending ? a.email.toLowerCase().compareTo(b.email.toLowerCase()) : b.email.toLowerCase().compareTo(a.email.toLowerCase()));
+        case 'Phone Number':
+          return supplier..sort((a, b) => trackAscending ? a.phoneNo.toLowerCase().compareTo(b.phoneNo.toLowerCase()) : b.phoneNo.toLowerCase().compareTo(a.phoneNo.toLowerCase()));
+        default:
+          return supplier;
+      }
+    }
+  }
   void updateData() async {
-    setState(() {
-      futureBuilderKey = UniqueKey();
-    });
+    if (mounted) {
+      setState(() {
+        futureBuilderKey = UniqueKey();
+      });
+    }
+  }
+
+  void updateFilter(String filter) async {
+    if (mounted) {
+      setState(() {
+        _selectedFilter = filter;
+      });
+    }
   }
 }
 class SupplierSearch extends SearchDelegate<String> {

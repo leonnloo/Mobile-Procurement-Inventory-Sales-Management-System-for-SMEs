@@ -47,7 +47,6 @@ def customer_dict_serial(customer) -> dict:
         "phone_number": customer["phone_number"],
         "billing_address": customer["billing_address"],
         "shipping_address": customer["shipping_address"],
-        "past_order": customer["past_order"],
         "notes": customer["notes"]
     }
 

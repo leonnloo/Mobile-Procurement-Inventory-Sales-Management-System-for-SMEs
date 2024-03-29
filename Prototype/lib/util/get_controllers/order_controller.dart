@@ -13,6 +13,7 @@ class OrderController extends GetxController {
   Rx<Function?> updateEditData = Rx<Function?>(null);
   Rx<Function?> updateDispatchMenuData = Rx<Function?>(null);
   Rx<Function?> updateDispatchDetailData = Rx<Function?>(null);
+  Rx<Function?> updateFilter = Rx<Function?>(null);
 
 
   Future<void> updateOrderList() async {

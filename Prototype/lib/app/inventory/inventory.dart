@@ -17,17 +17,17 @@ class _InventoryScreenState extends State<InventoryScreen> {
   final RequestUtil requestUtil = RequestUtil();
   final inventoryController = Get.put(InventoryController());
   Map<String, List<InventoryItem>> groupedData = {};
-  // Future<List<InventoryItem>>? inventoryFuture;
+  String? _selectedFilter = 'Order ID';
 
   @override
   void initState() {
-    // inventoryFuture = inventoryController.getInventories();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     inventoryController.updateData.value = updateData;  
+    inventoryController.updateFilter.value = updateFilter;  
     groupedData['In Stock'] = [];
     groupedData['Low Stock'] = [];
     groupedData['Out of Stock'] = [];
@@ -121,54 +121,8 @@ class _InventoryScreenState extends State<InventoryScreen> {
   bool sortAscending = true;
 
   Widget buildInventorySection(BuildContext context, List<InventoryItem> inventoryItems) {
-    // dynamic getColumnValue(InventoryItem item, int columnIndex) {
-    //   switch (columnIndex) {
-    //     case 0:
-    //       return item.itemID;
-    //     case 1:
-    //       return item.itemName;
-    //     case 2:
-    //       return item.category;
-    //     case 3:
-    //       return item.quantity;
-    //     case 4:
-    //       return item.unitPrice;
-    //     case 5:
-    //       return item.totalPrice;
-    //     case 6:
-    //       return item.status;
-    //     default:
-    //       return '';
-    //   }
-    // }
-
-    // // Generic comparison function for dynamic types
-    // int compareValues(bool ascending, dynamic value1, dynamic value2) {
-    //   if (value1 is String && value2 is String) {
-    //     return ascending ? value1.compareTo(value2) : value2.compareTo(value1);
-    //   } else if (value1 is int && value2 is int) {
-    //     return ascending ? value1.compareTo(value2) : value2.compareTo(value1);
-    //   } else if (value1 is double && value2 is double) {
-    //     return ascending ? value1.compareTo(value2) : value2.compareTo(value1);
-    //   } else {
-    //     // Fallback for other types, if any
-    //     return 0;
-    //   }
-    // }
-    // void onSort(int columnIndex, bool ascending) {
-    //   setState(() {
-    //     sortColumnIndex = columnIndex;
-    //     sortAscending = ascending;
-    //     groupedData.forEach((key, value) {
-    //       groupedData[key] = value..sort((a, b) {
-    //         var aValue = getColumnValue(a, columnIndex);
-    //         var bValue = getColumnValue(b, columnIndex);
-    //         return compareValues(ascending, aValue, bValue);
-    //       });
-    //     });
-    //   });
-    // }
-
+    inventoryItems = _fetchAndFilterInventory(inventoryItems);
+    Function update = inventoryController.updateFilter.value!;
     return SingleChildScrollView(
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
@@ -177,29 +131,120 @@ class _InventoryScreenState extends State<InventoryScreen> {
           horizontalMargin: 16.0,
           columns: [
             DataColumn(
-              label: Text('Item ID', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
-              // onSort: (columnIndex, ascending) => onSort(columnIndex, ascending),
+              label: Row(
+                children: [
+                  Text('ID', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
+                  Icon(
+                    trackAscending ? Icons.arrow_drop_up : Icons.arrow_drop_down,
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
+                ],
+              ),
+              onSort: (columnIndex, ascending) {
+                ascending = trackAscending;
+                trackAscending = !ascending;
+                update('ID');
+              },
             ),
-            DataColumn(label: Text('Item', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
-              // onSort: (columnIndex, ascending) => onSort(columnIndex, ascending),
+            DataColumn(
+              label: Row(
+                children: [
+                  Text('Item', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
+                  Icon(
+                    trackAscending ? Icons.arrow_drop_up : Icons.arrow_drop_down,
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
+                ],
+              ),
+              onSort: (columnIndex, ascending) {
+                ascending = trackAscending;
+                trackAscending = !ascending;
+                update('Item');
+              },
             ),
-            DataColumn(label: Text('Category', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
-              // onSort: (columnIndex, ascending) => onSort(columnIndex, ascending),
+            DataColumn(
+              label: Row(
+                children: [
+                  Text('Category', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
+                  Icon(
+                    trackAscending ? Icons.arrow_drop_up : Icons.arrow_drop_down,
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
+                ],
+              ),
+              onSort: (columnIndex, ascending) {
+                ascending = trackAscending;
+                trackAscending = !ascending;
+                update('Category');
+              },
             ),
-            DataColumn(label: Text('Quantity', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
-              // onSort: (columnIndex, ascending) => onSort(columnIndex, ascending),
+            DataColumn(
+              label: Row(
+                children: [
+                  Text('Quantity', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
+                  Icon(
+                    trackAscending ? Icons.arrow_drop_up : Icons.arrow_drop_down,
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
+                ],
+              ),
+              onSort: (columnIndex, ascending) {
+                ascending = trackAscending;
+                trackAscending = !ascending;
+                update('Quantity');
+              },
             ),
-            DataColumn(label: Text('Unit Price', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
-              // onSort: (columnIndex, ascending) => onSort(columnIndex, ascending),
+            DataColumn(
+              label: Row(
+                children: [
+                  Text('Unit Price', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
+                  Icon(
+                    trackAscending ? Icons.arrow_drop_up : Icons.arrow_drop_down,
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
+                ],
+              ),
+              onSort: (columnIndex, ascending) {
+                ascending = trackAscending;
+                trackAscending = !ascending;
+                update('Unit Price');
+              },
             ),
-            DataColumn(label: Text('Total Price', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
-              // onSort: (columnIndex, ascending) => onSort(columnIndex, ascending),
+            DataColumn(
+              label: Row(
+                children: [
+                  Text('Total Price', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
+                  Icon(
+                    trackAscending ? Icons.arrow_drop_up : Icons.arrow_drop_down,
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
+                ],
+              ),
+              onSort: (columnIndex, ascending) {
+                ascending = trackAscending;
+                trackAscending = !ascending;
+                update('Total Price');
+              },
             ),
-            DataColumn(label: Text('Status', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
-              // onSort: (columnIndex, ascending) => onSort(columnIndex, ascending),
+            DataColumn(
+              label: Row(
+                children: [
+                  Text('Status', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
+                  Icon(
+                    trackAscending ? Icons.arrow_drop_up : Icons.arrow_drop_down,
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
+                ],
+              ),
+              onSort: (columnIndex, ascending) {
+                ascending = trackAscending;
+                trackAscending = !ascending;
+                update('Status');
+              },
             ),
           ],
           rows: inventoryItems.map((InventoryItem item) {
+              
             return DataRow(
               cells: [
                 DataCell(
@@ -259,15 +304,63 @@ class _InventoryScreenState extends State<InventoryScreen> {
       ),
     );
   }
+  bool trackAscending = false;
+
+  List<InventoryItem> _fetchAndFilterInventory(List<InventoryItem> inventory) {
+    if (_selectedFilter == null) {
+      return [];
+    } else {
+      switch (_selectedFilter) {
+        case 'ID':
+          return inventory
+            ..sort((a, b) {
+              int idA = int.parse(a.itemID.substring(2)); // Extract numeric part from itemID
+              int idB = int.parse(b.itemID.substring(2));
+              return trackAscending ? idA.compareTo(idB) : idB.compareTo(idA);
+            });
+        case 'Item Name':
+          return inventory
+            ..sort((a, b) => trackAscending ? a.itemName.toLowerCase().compareTo(b.itemName.toLowerCase()) : b.itemName.toLowerCase().compareTo(a.itemName.toLowerCase()));
+        case 'Category':
+          return inventory
+            ..sort((a, b) => trackAscending ? a.category.compareTo(b.category) : b.category.compareTo(a.category));
+        case 'Quantity':
+          return inventory
+            ..sort((a, b) => trackAscending ? a.quantity.compareTo(b.quantity) : b.quantity.compareTo(a.quantity));
+        case 'Unit Price':
+          return inventory
+            ..sort((a, b) => trackAscending ? a.unitPrice.compareTo(b.unitPrice) : b.unitPrice.compareTo(a.unitPrice));
+        case 'Total Price':
+          return inventory
+            ..sort((a, b) => trackAscending ? a.totalPrice.compareTo(b.totalPrice) : b.totalPrice.compareTo(a.totalPrice));
+        case 'Critical Level':
+          return inventory
+            ..sort((a, b) => trackAscending ? a.criticalLvl.compareTo(b.criticalLvl) : b.criticalLvl.compareTo(a.criticalLvl));
+        case 'Status':
+          return inventory
+            ..sort((a, b) => trackAscending ? a.status.compareTo(b.status) : b.status.compareTo(a.status));
+        default:
+          return inventory;
+      }
+    }
+  }
 
   Key futureBuilderKey = UniqueKey();
   void updateData() async {
     if (mounted) {
-    setState(() {
-      // inventoryFuture = inventoryController.getInventories();
-      futureBuilderKey = UniqueKey();
-    });
+      setState(() {
+        // inventoryFuture = inventoryController.getInventories();
+        futureBuilderKey = UniqueKey();
+      });
+    }
   }
+
+  void updateFilter(String filter) async {
+    if (mounted) {
+      setState(() {
+        _selectedFilter = filter;
+      });
+    }
   }
   Color _getQuantityColor(int quantity, int safetyQuantity) {
     return quantity < safetyQuantity ? Theme.of(context).colorScheme.error : Theme.of(context).colorScheme.onSurface;

@@ -47,9 +47,11 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
     );
   }
   void updateData(){
-    setState(() {
-      widget.purchase = procurementController.currentPurchaseInfo.value!;
-    });
+    if (mounted) {
+      setState(() {
+        widget.purchase = procurementController.currentPurchaseInfo.value!;
+      });
+    }
   }
 }
 

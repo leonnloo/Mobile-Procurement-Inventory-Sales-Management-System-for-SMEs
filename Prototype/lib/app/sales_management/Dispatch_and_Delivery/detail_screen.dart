@@ -201,8 +201,10 @@ class _DetailScreenState extends State<DetailScreen> {
   }
 
   void updateData(){
-    setState(() {
-    });
+    if (mounted) {
+      setState(() {
+      });
+    }
   }
 }
 // Filter system

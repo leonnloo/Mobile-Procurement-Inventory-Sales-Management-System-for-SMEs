@@ -25,9 +25,11 @@ class ProductDetailScreen extends StatefulWidget {
 class _ProductDetailScreenState extends State<ProductDetailScreen> {
   final productController = Get.put(ProductController());
   void updateData(){
-    setState(() {
-      widget.product = productController.currentProductInfo.value!;
-    });
+    if (mounted) {
+      setState(() {
+        widget.product = productController.currentProductInfo.value!;
+      });
+    }
   }
   @override
   Widget build(BuildContext context) {

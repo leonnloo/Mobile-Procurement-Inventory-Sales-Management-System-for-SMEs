@@ -25,9 +25,11 @@ class OrderDetailScreen extends StatefulWidget {
 class _OrderDetailScreenState extends State<OrderDetailScreen> {
   final orderController = Get.put(OrderController());
   void updateData(){
-    setState(() {
-      widget.order = orderController.currentOrderInfo.value!;
-    });
+    if (mounted) {
+      setState(() {
+        widget.order = orderController.currentOrderInfo.value!;
+      });
+    }
   }
 
   @override

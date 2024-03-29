@@ -11,6 +11,7 @@ class SupplierController extends GetxController {
   Rx<SupplierData?> currentSupplierInfo = Rx<SupplierData?>(null);
   Rx<Function?> updateData = Rx<Function?>(null);
   Rx<Function?> updateEditData = Rx<Function?>(null);
+  Rx<Function?> updateFilter= Rx<Function?>(null);
 
   Future<void> updateSupplierList() async {
     try {

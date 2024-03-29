@@ -31,9 +31,11 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
   final customerController = Get.put(CustomerController());
 
   void updateEditData(){
-    setState(() {
-      widget.customer = customerController.currentCustomerInfo.value!;
-    });
+    if (mounted) {
+      setState(() {
+        widget.customer = customerController.currentCustomerInfo.value!;
+      });
+    }
   }
 
   @override
@@ -182,26 +184,26 @@ List<String> generateRandomHistory() {
   });
 }
 
-Widget _buildHistory(BuildContext context) {
-  List<SalesOrder>? pastOrders = widget.customer.pastOrder;
+// Widget _buildHistory(BuildContext context) {
+  // List<SalesOrder>? pastOrders = widget.customer.pastOrder;
 
-  return Padding(
-    padding: const EdgeInsets.all(16.0),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: pastOrders?.map((order) {
-        return Row(
-          children: [
-            Icon(Icons.history, color: Theme.of(context).colorScheme.primary),
-            const SizedBox(width: 8.0),
-            Text('Placed an order on ${order.orderDate} - ${order.orderStatus}', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
-          ],
-        );
-        // ! do empty history after completing adding orders
-      }).toList() ?? [],
-    ),
-  );
-}
+  // return Padding(
+  //   padding: const EdgeInsets.all(16.0),
+  //   child: Column(
+  //     crossAxisAlignment: CrossAxisAlignment.start,
+  //     children: pastOrders?.map((order) {
+  //       return Row(
+  //         children: [
+  //           Icon(Icons.history, color: Theme.of(context).colorScheme.primary),
+  //           const SizedBox(width: 8.0),
+  //           Text('Placed an order on ${order.orderDate} - ${order.orderStatus}', style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
+  //         ],
+  //       );
+  //       // ! do empty history after completing adding orders
+  //     }).toList() ?? [],
+  //   ),
+  // );
+// }
 
 List<PastOrder> generatePastOrders() {
 
