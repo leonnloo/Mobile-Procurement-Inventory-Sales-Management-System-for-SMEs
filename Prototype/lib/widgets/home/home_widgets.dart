@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:prototype/app/home/chatbot/chatbot.dart';
 import 'package:prototype/app/notification_screen.dart';
+import 'package:prototype/app/sales_management/Dispatch_and_Delivery/dispatch_delivery.dart';
 import 'package:prototype/util/get_controllers/user_controller.dart';
 import 'package:prototype/widgets/drawer/drawer_controller.dart';
 import 'package:prototype/models/drawer_sections.dart';
 import 'package:prototype/widgets/statistics/inventory_overview.dart';
+import 'package:prototype/widgets/statistics/order_overview.dart';
 import 'package:prototype/widgets/statistics/product_sales_pie.dart';
 import 'package:prototype/widgets/statistics/delivery_overview.dart';
 import 'package:prototype/widgets/statistics/product_overview.dart';
@@ -196,6 +198,12 @@ class HomeWidgets extends StatelessWidget {
           controller.changePage(DrawerSections.inventory);
         },
         child: const InventoryStatusWidget(),
+      ),
+      GestureDetector(
+        onTap: () {
+          Get.to(() => const DispatchDeliveryScreen());
+        },
+        child: const OrderStatusWidget(),
       ),
     ],
   );
