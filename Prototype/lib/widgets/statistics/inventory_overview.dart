@@ -10,7 +10,7 @@ class InventoryStatusWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Card(
-        color: const Color(0xFFD8BFD8),
+        color: Color.fromARGB(255, 252, 215, 252),
         shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20.0))),
         // color: Theme.of(context).colorScheme.background,
         elevation: 4.0,
