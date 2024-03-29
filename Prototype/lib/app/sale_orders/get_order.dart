@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:prototype/app/procurement/get_procurement.dart';
+import 'package:prototype/models/product_model.dart';
 import 'package:prototype/util/request_util.dart';
 final RequestUtil requestUtil = RequestUtil();
 
@@ -23,11 +24,26 @@ Future<List<String>> getCompletionStatusList() async {
   return ['To be Packaged', 'To be Shipped', 'To be Delivered', 'Delivered'];
 }
 
-Future<List<String>> getProductList() async {
+Future<List<String>> getProductNameList() async {
   final response = await requestUtil.getProductsName();
   if (response.statusCode == 200){
     final List<dynamic> products = jsonDecode(response.body);
     final List<String> productsList = products.cast<String>();
+    return productsList;
+  }
+  return [];
+}
+
+Future<List<String>> getProductQuantityList() async {
+  final response = await requestUtil.getProducts();
+  if (response.statusCode == 200){
+    final List<dynamic> product = jsonDecode(response.body);
+    final List<dynamic> products = product.map((e) => ProductItem.fromJson(e)).toList();
+    final List<String> productsList = products.where((product) => 
+      product.quantity > 0 // Filtering products with quantity greater than 0
+    ).map((product) => 
+      product.productName as String // Extracting the name of the product
+    ).toList();
     return productsList;
   }
   return [];

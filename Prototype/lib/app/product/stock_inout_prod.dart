@@ -61,7 +61,7 @@ class StockInOutProductState extends State<StockInOutProduct> {
                 const SizedBox(height: 16.0),
                 DropdownTextField(
                   labelText: 'Item',  
-                  options: getProductList(), 
+                  options: getProductNameList(), 
                   onChanged: (value){_productItemNameController.text = value!;},
                   defaultSelected: false,
                 ),
@@ -138,7 +138,7 @@ class StockInOutProductState extends State<StockInOutProduct> {
                 const SizedBox(height: 16.0),
                 DropdownTextField(
                   labelText: 'Item',  
-                  options: getProductList(), 
+                  options: getProductNameList(), 
                   onChanged: (value){_productItemNameController.text = value!;},
                   defaultSelected: false,
                 ),

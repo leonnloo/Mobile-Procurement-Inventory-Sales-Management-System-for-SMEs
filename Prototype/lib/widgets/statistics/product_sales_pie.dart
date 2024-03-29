@@ -260,9 +260,18 @@ class PieChart2State extends State {
 
 
   Color getColorForIndex(int index) {
-    List<Color> colors = [AppColors.contentColorBlue, AppColors.contentColorYellow, AppColors.contentColorPurple, AppColors.contentColorGreen];
-    return colors[index % colors.length];
-  }
+  // Enhanced color palette for visual appeal and readability
+  List<Color> colors = [
+    const Color.fromARGB(255, 165, 77, 247), // Light Blue for contrast with dark navy & white
+    const Color.fromARGB(255, 174, 209, 255), // Softer Blue for a lighter touch
+    const Color.fromARGB(255, 102, 208, 235), // Slightly deeper Blue for variation
+    const Color.fromARGB(255, 123, 125, 250), // Another shade of Blue to maintain harmony
+    const Color(0xFFB2CCFF), // Very light Blue for subtle differentiation
+    // You can add or replace with any other colors as per your design needs
+  ];
+  return colors[index % colors.length];
+}
+
   
   Map<String, double> calculatePercentage(List<ProductItem> products) {
     allSales = 0.0;
@@ -322,37 +331,54 @@ class PieChart2State extends State {
     return finalProductSales;
   }
   
-  Widget _buildIndicators() {
+Widget _buildIndicators() {
   return StreamBuilder<Map<String, double>>(
-      stream: percentagesStream,
-      builder: (context, snapshot) {
-        if (!snapshot.hasData) {
-          return Container(); // Or a placeholder/loading indicator
-        }
-        
-        final percentages = snapshot.data!;
-        List<Widget> indicators = [];
-        int index = 0;
-        
-        percentages.forEach((productName, percentage) {
-          final color = getColorForIndex(index);
-          indicators.add(Indicator(
-            color: color,
-            text: productName,
-            isSquare: true,
-          ));
-          indicators.add(const SizedBox(height: 4,));
-          index++;
-        });
+    stream: percentagesStream,
+    builder: (context, snapshot) {
+      if (!snapshot.hasData) {
+        return Container(); // Placeholder/loading indicator
+      }
 
-        return Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: indicators,
+      final percentages = snapshot.data!;
+      List<Widget> indicators = [];
+      int index = 0;
+
+      percentages.forEach((productName, percentage) {
+        final color = getColorForIndex(index);
+        // Wrap Indicator with constraints to encourage text wrapping
+        indicators.add(
+          ConstrainedBox(
+            constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.25), // Example constraint
+            child: Indicator(
+              color: color,
+              text: productName,
+              isSquare: true,
+              textColor: Theme.of(context).colorScheme.onSurface,
+            ),
+          ),
         );
-      },
-    );
-  }
+        indicators.add(const SizedBox(height: 4,));
+        index++;
+      });
+
+      return SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: indicators,
+          ),
+        ),
+      );
+    },
+  );
+}
+
+
+
+
 
 
 
