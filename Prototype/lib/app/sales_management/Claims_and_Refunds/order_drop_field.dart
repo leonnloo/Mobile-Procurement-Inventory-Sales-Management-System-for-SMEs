@@ -1,3 +1,4 @@
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:prototype/app/sales_management/Claims_and_Refunds/get_refunds.dart';
 import 'package:prototype/models/order_model.dart';
@@ -54,25 +55,38 @@ class OrderDropdownTextFieldState extends State<OrderDropdownTextField> {
             ),
           );
         } else {
-          return DropdownButtonFormField<SalesOrder?>(
+          return DropdownSearch<SalesOrder?>(
+            popupProps: const PopupProps.menu(
+              fit: FlexFit.loose,
+              showSearchBox: true,
+              searchFieldProps: TextFieldProps(
+                decoration: InputDecoration(
+                  labelText: 'Search',
+                ),
+              ),
+            ),
             items: snapshot.data!
-                .where((SalesOrder order) => order.orderStatus != "Refunded") // Filtering condition
-                .map<DropdownMenuItem<SalesOrder>>((SalesOrder order) {
-              return DropdownMenuItem<SalesOrder>(
-                value: order,
-                child: Text(order.orderID),
-              );
-            }).toList(),
+                .where((SalesOrder order) => order.orderStatus != "Refunded") // Apply filtering
+                .toList(), // Use List<SalesOrder> directly
             onChanged: (SalesOrder? newValue) {
+              // Directly use the selected SalesOrder object
               if (newValue != null) {
-                selectedOrder = newValue;
-                widget.onChanged(newValue);
+                selectedOrder = newValue; // Assuming selectedOrder is of type SalesOrder?
+                widget.onChanged(newValue); // Pass the SalesOrder directly
               }
             },
-            decoration: InputDecoration(
-              labelText: widget.labelText,
-              border: const OutlineInputBorder(),
+            selectedItem: selectedOrder, // selectedItem is of type SalesOrder?
+            dropdownDecoratorProps: DropDownDecoratorProps(
+              dropdownSearchDecoration: InputDecoration(
+                labelText: widget.labelText,
+                border: const OutlineInputBorder(),
+              ),
             ),
+            // The itemAsString function correctly defined
+            itemAsString: (SalesOrder? order) {
+              // Return a string representation of the item
+              return '${order?.orderID} - ${order?.customerName} - ${order?.orderDate}' ?? '';
+            },
           );
         }
       },
