@@ -17,6 +17,7 @@ import 'package:prototype/app/sale_orders/order.dart';
 import 'package:prototype/app/settings/settings.dart';
 import 'package:prototype/app/supplier/add_supplier.dart';
 import 'package:prototype/app/supplier/supplier.dart';
+import 'package:prototype/widgets/drawer/custom_drawer.dart';
 import 'package:prototype/widgets/drawer/drawer_controller.dart';
 import 'package:prototype/widgets/drawer/drawer_header.dart';
 import 'package:prototype/widgets/drawer/drawer_list.dart';
@@ -128,17 +129,7 @@ class HomeScreenState extends State<HomeScreen> {
             title: Text(controller.currentPage.value == DrawerSections.dashboard ? '' : currentTitle, style: TextStyle(color: Theme.of(context).colorScheme.surface, fontSize: 25),),
           ),
           body: container,
-          drawer: Drawer(
-            backgroundColor: Theme.of(context).colorScheme.onPrimary,
-            child: SingleChildScrollView(
-              child: Column(
-                  children: [
-                    const HeaderDrawer(),
-                    drawerList(context),
-                  ],
-              ),
-            ),
-          ),
+          drawer: customDrawer(context),
           floatingActionButton: homeSpeedDial(context),
         ),
       );
