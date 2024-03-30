@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -14,21 +16,31 @@ import 'package:prototype/widgets/fade_in_animation/animation_design.dart';
 import 'package:prototype/widgets/fade_in_animation/fade_in_animation_model.dart';
 import 'package:prototype/widgets/fade_in_animation/fade_in_controller.dart';
 import 'package:prototype/widgets/forms/password_field.dart';
+import 'package:prototype/widgets/loading_overlay.dart';
 
 final RequestUtil requestUtil = RequestUtil();
-class LoginContent extends StatelessWidget {
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
+class LoginContent extends StatefulWidget {
 
-  LoginContent({super.key});
+  const LoginContent({super.key});
+
+  @override
+  State<LoginContent> createState() => _LoginContentState();
+}
+
+class _LoginContentState extends State<LoginContent> {
+  final TextEditingController _emailController = TextEditingController();
+
+  final TextEditingController _passwordController = TextEditingController();
+  bool _isLoading = false;
+  final controller = Get.put(FadeInController());
+  final userController = Get.put(UserLoggedInController());
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    final controller = Get.put(FadeInController());
     controller.startAnimation();
-
-    return SafeArea(
+    return LoadingOverlay(
+      isLoading: _isLoading,
       child: Scaffold(
         body: Stack(
           children: [
@@ -75,7 +87,6 @@ class LoginContent extends StatelessWidget {
 
   Form _loginForm(context) {
     final fadeInController = Get.put(FadeInController());
-    final userController = Get.put(UserLoggedInController());
     return Form(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -112,52 +123,8 @@ class LoginContent extends StatelessWidget {
                 shape: const RoundedRectangleBorder(),
                 padding: const EdgeInsets.symmetric(vertical: 15.0)
               ),
-              onPressed: () async {
-                // Add your authentication logic here
-                String? emailError = validateTextField(_emailController.text);
-                String? passwordError = validateTextField(_passwordController.text);
-                // Add logic for logging in
-                if (emailError == null || passwordError == null) {
-                    // Display validation error messages
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: const Text('Please fill in all the required fields.'),
-                        backgroundColor: Theme.of(context).colorScheme.error,
-                      ),
-                    );
-                  } else {
-                    final response = await requestUtil.login(
-                      _emailController.text,
-                      _passwordController.text,
-                    );
-                    if (response.statusCode == 200) {
-                      userController.updateUser(_emailController.text);
-                      final idResponse = await requestUtil.getUserID(_emailController.text);
-                      if (idResponse.statusCode == 200) {
-                        final dynamic userID = jsonDecode(idResponse.body);
-                        userController.updateUserID(userID);
-
-                        final userResponse = await requestUtil.getUser(userID);
-                        final dynamic user = jsonDecode(userResponse.body);
-                        final User userModel = User.fromJson(user);
-                        await UserSession.saveUserSession(userID, _emailController.text);
-                        userController.updateUserInfo(userModel);
-                      }
-                      // Navigate to the home screen or perform other actions
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(builder: (context) => const HomeScreen()),
-                      );
-                    } else {
-                      // Display an error message to the user
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: const Text('Email or password is incorrect.'),
-                          backgroundColor: Theme.of(context).colorScheme.error,
-                        ),
-                      );
-                    }
-                  }
+              onPressed: () {
+                _login();
               },
               child: const Text('LOGIN'),
             ),
@@ -179,5 +146,72 @@ class LoginContent extends StatelessWidget {
         ],
       )
     );
+  }
+
+  void _login() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      String? emailError = validateTextField(_emailController.text);
+      String? passwordError = validateTextField(_passwordController.text);
+      // Add logic for logging in
+      if (emailError == null || passwordError == null) {
+          // Display validation error messages
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: const Text('Please fill in all the required fields.'),
+              backgroundColor: Theme.of(context).colorScheme.error,
+            ),
+          );
+        } else {
+          final response = await requestUtil.login(
+            _emailController.text,
+            _passwordController.text,
+          );
+          if (response.statusCode == 200) {
+            userController.updateUser(_emailController.text);
+            final idResponse = await requestUtil.getUserID(_emailController.text);
+            if (idResponse.statusCode == 200) {
+              final dynamic userID = jsonDecode(idResponse.body);
+              userController.updateUserID(userID);
+
+              final userResponse = await requestUtil.getUser(userID);
+              final dynamic user = jsonDecode(userResponse.body);
+              final User userModel = User.fromJson(user);
+              await UserSession.saveUserSession(userID, _emailController.text);
+              userController.updateUserInfo(userModel);
+            }
+            // Navigate to the home screen or perform other actions
+            await Future.delayed(const Duration(seconds: 1));
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => const HomeScreen()),
+            );
+          } else {
+            // Display an error message to the user
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: const Text('Email or password is incorrect.'),
+                backgroundColor: Theme.of(context).colorScheme.error,
+              ),
+            );
+          }
+        }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: const Text('Unable to log in.'),
+          backgroundColor: Theme.of(context).colorScheme.error,
+        ),
+      );
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    }
   }
 }

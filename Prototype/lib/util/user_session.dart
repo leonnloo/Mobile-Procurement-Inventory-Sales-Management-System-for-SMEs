@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:get/get.dart';
 import 'package:prototype/models/user_model.dart';
 import 'package:prototype/util/get_controllers/user_controller.dart';
 import 'package:prototype/util/request_util.dart';
@@ -8,7 +9,7 @@ import 'package:prototype/util/request_util.dart';
 class UserSession {
   static const _storage = FlutterSecureStorage();
   static final RequestUtil requestUtil = RequestUtil();
-  static final UserLoggedInController userLoggedInController = UserLoggedInController();
+  static final userLoggedInController = Get.put(UserLoggedInController());
   static Future<void> saveUserSession(String userId, String token) async {
     await _storage.write(key: 'userId', value: userId);
     await _storage.write(key: 'token', value: token);
@@ -22,7 +23,7 @@ class UserSession {
       if (response.statusCode == 200) {
         dynamic user = jsonDecode(response.body);
         userLoggedInController.currentUserInfo.value = User.fromJson(user);
-        userLoggedInController.currentUser.value = token;
+        userLoggedInController.currentUser.value = token; 
         userLoggedInController.currentUserID.value = id;
       } else {
         // if user is deleted or internet connection unavailable

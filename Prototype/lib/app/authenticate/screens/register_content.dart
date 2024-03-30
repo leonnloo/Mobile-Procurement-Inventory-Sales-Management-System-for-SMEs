@@ -30,46 +30,44 @@ class _RegisterContentState extends State<RegisterContent> {
     final controller = Get.put(FadeInController());
     controller.startAnimation();
 
-    return SafeArea(
-      child: Scaffold(
-        body: Stack(
-          children: [
-            FadeInAnimation(
-              durantionInMs: 1000,
-              animate: AnimatePosition(
-                bottomAfter: 0,
-                bottomBefore: 0,
-                topAfter: 0,
-                topBefore: 0,
-                leftAfter: 0,
-                leftBefore: 0,
-                rightAfter: 0,
-                rightBefore: 0
-              ),
-              child: Container(
-                padding: const EdgeInsets.all(30.0),
-                child: SingleChildScrollView(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SizedBox(height: size.height * 0.03,),
-                      /*------ LABEL ------*/
-                      Image(
-                        image: const AssetImage('assets/images/register.jpg'),
-                        height: size.height * 0.2,
-                      ),
-                      Text('Your ultimate inventory management solution. ', style: Theme.of(context).textTheme.headlineSmall),
-                      // Text('We\'re delighted to have you on board! Get ready to streamline your business operations effortlessly.', style: Theme.of(context).textTheme.bodyLarge),
-                      const SizedBox(height: 25.0,),
-                      /*------ FORM ------*/
-                      _registerForm(context),
-                    ],
-                  ),
+    return Scaffold(
+      body: Stack(
+        children: [
+          FadeInAnimation(
+            durantionInMs: 1000,
+            animate: AnimatePosition(
+              bottomAfter: 0,
+              bottomBefore: 0,
+              topAfter: 0,
+              topBefore: 0,
+              leftAfter: 0,
+              leftBefore: 0,
+              rightAfter: 0,
+              rightBefore: 0
+            ),
+            child: Container(
+              padding: const EdgeInsets.all(30.0),
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(height: size.height * 0.03,),
+                    /*------ LABEL ------*/
+                    Image(
+                      image: const AssetImage('assets/images/register.jpg'),
+                      height: size.height * 0.2,
+                    ),
+                    Text('Your ultimate inventory management solution. ', style: Theme.of(context).textTheme.headlineSmall),
+                    // Text('We\'re delighted to have you on board! Get ready to streamline your business operations effortlessly.', style: Theme.of(context).textTheme.bodyLarge),
+                    const SizedBox(height: 25.0,),
+                    /*------ FORM ------*/
+                    _registerForm(context),
+                  ],
                 ),
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
