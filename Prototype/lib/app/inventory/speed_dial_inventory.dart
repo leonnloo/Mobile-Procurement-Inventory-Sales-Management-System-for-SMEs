@@ -32,7 +32,7 @@ Widget inventorySpeedDial(BuildContext context) {
           shape: const CircleBorder(),
           label: 'Stock In/Out',
           onTap: () {
-            Get.to(() => const StockInOutInventory());;
+            Get.to(() => const StockInOutInventory());
           }
         ),
       ],

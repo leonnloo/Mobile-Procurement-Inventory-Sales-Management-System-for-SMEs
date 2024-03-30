@@ -4,7 +4,6 @@ import "package:flutter/material.dart";
 import 'package:get/get.dart';
 import 'package:prototype/models/customer_model.dart';
 import 'package:prototype/models/edit_type.dart';
-import 'package:prototype/models/order_model.dart';
 import 'package:prototype/util/get_controllers/customer_controller.dart';
 import 'package:prototype/util/request_util.dart';
 import 'dart:math';
@@ -220,6 +219,7 @@ List<PastOrder> generatePastOrders() {
     });
   }
 
+  // ignore: unused_element
   Widget _buildPastOrders(BuildContext context) {
     List<PastOrder> pastOrders = generatePastOrders();
 

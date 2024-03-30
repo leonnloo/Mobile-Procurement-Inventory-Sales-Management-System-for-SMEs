@@ -1,6 +1,5 @@
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
-import 'package:prototype/app/sales_management/Claims_and_Refunds/get_refunds.dart';
 import 'package:prototype/models/order_model.dart';
 
 // ignore: must_be_immutable
@@ -85,7 +84,7 @@ class OrderDropdownTextFieldState extends State<OrderDropdownTextField> {
             // The itemAsString function correctly defined
             itemAsString: (SalesOrder? order) {
               // Return a string representation of the item
-              return '${order?.orderID} - ${order?.customerName} - ${order?.orderDate}' ?? '';
+              return '${order?.orderID} - ${order?.customerName} - ${order?.orderDate}';
             },
           );
         }

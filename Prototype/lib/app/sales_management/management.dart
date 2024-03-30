@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:prototype/app/sales_management/product_sales.dart';
-import 'package:prototype/widgets/statistics/monthly_sales_bar.dart';
-import 'package:prototype/widgets/statistics/product_sales_pie.dart';
 import 'package:prototype/widgets/icon_button.dart';
 import 'Claims_and_Refunds/customer_claims_refunds.dart';
 import 'Dispatch_and_Delivery/dispatch_delivery.dart';

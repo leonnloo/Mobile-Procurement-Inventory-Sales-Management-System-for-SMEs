@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:get/get.dart';
 import 'package:prototype/models/product_model.dart';
-import 'package:prototype/resources/app_resources.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:prototype/util/get_controllers/product_controller.dart';
@@ -134,7 +133,7 @@ class PieChart2State extends State {
                     );
                   }),
                   // Optionally, you can provide a different style or indication that the dropdown is disabled when 'YTD' is selected
-                  disabledHint: Text(monthNames[_selectedMonth], style: TextStyle(color: Colors.grey)), // Show current month but in grey
+                  disabledHint: Text(monthNames[_selectedMonth], style: const TextStyle(color: Colors.grey)), // Show current month but in grey
                 ),
               ],
             ),

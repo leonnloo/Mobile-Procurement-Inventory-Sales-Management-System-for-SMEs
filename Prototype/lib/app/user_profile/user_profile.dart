@@ -1,10 +1,7 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:prototype/app/authenticate/screens/start_screen.dart';
 import 'package:prototype/app/user_profile/edit_user.dart';
-import 'package:prototype/models/user_model.dart';
 import 'package:prototype/util/request_util.dart';
 import 'package:prototype/util/get_controllers/user_controller.dart';
 import 'package:prototype/widgets/fade_in_animation/fade_in_controller.dart';

@@ -169,7 +169,7 @@ class LoginContent extends StatelessWidget {
                 fadeInController.resetAnimation();
                 Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(builder: (context) => RegisterContent()),
+                  MaterialPageRoute(builder: (context) => const RegisterContent()),
                 );
               },
               child: const Text('Don\'t have an account? SIGN UP'),
