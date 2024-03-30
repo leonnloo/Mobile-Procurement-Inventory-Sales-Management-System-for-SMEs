@@ -418,7 +418,7 @@ class _SalesOrderScreenState extends State<SalesOrderScreen> {
               int idB = int.parse(b.customerID.substring(2));
               return trackAscending ? idA.compareTo(idB) : idB.compareTo(idA);
             });          
-        case 'Customer Name':
+        case 'Customer':
           return orders..sort((a, b) => trackAscending ? a.customerName.toLowerCase().compareTo(b.customerName.toLowerCase()) : b.customerName.toLowerCase().compareTo(a.customerName.toLowerCase()));
         case 'Product ID':
           return orders
