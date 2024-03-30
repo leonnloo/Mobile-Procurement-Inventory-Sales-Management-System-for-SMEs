@@ -97,27 +97,26 @@ class ProductCount extends StatelessWidget {
   }
 
   Widget _buildCol(String count, String label, BuildContext context) {
-    return Expanded(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(count, style: TextStyle(fontSize: 24.0, color: Theme.of(context).colorScheme.onSurface),),
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(label, style: TextStyle(fontSize: 15.0, color: Theme.of(context).colorScheme.onSurface),),
-            ],
-          )
-        ],
-      ),
-    );
-  }
+  return Expanded(
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          count, 
+          style: TextStyle(fontSize: 24.0, color: Theme.of(context).colorScheme.onSurface),
+          textAlign: TextAlign.center, // Center align text
+        ),
+        const SizedBox(height: 4), // Optional: add some spacing between the number and label
+        Text(
+          label, 
+          style: TextStyle(fontSize: 15.0, color: Theme.of(context).colorScheme.onSurface),
+          textAlign: TextAlign.center, // Center align text
+        ),
+      ],
+    ),
+  );
+}
   
   void calculateStock(List<ProductItem> products) {
     for (var product in products) {

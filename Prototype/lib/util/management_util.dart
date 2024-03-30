@@ -11,7 +11,8 @@ class ManagementUtil {
   final userLoggedInController = Get.put(UserLoggedInController());
   ManagementUtil() {
     // ipAddress = InternetAddress.loopbackIPv4.address;
-    ipAddress = "10.0.2.2";
+    // ipAddress = "10.0.2.2";
+    ipAddress = "20.2.87.52";
     endpoint = "http://$ipAddress:$port/";
     token = userLoggedInController.currentUser.value;
   }

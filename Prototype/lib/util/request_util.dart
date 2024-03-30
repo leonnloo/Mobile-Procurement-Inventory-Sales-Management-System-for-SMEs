@@ -13,7 +13,8 @@ class RequestUtil {
   final userLoggedInController = Get.put(UserLoggedInController());
   RequestUtil() {
     // ipAddress = InternetAddress.loopbackIPv4.address;
-    ipAddress = "10.0.2.2";
+    // ipAddress = "10.0.2.2";
+    ipAddress = "20.2.87.52";
     endpoint = "http://$ipAddress:$port/";
     token = userLoggedInController.currentUser.value;
     currentUser = userLoggedInController.currentUser.value;
