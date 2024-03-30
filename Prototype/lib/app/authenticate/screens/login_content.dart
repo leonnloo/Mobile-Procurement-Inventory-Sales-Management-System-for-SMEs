@@ -8,6 +8,7 @@ import 'package:prototype/app/home/home.dart';
 import 'package:prototype/models/user_model.dart';
 import 'package:prototype/util/request_util.dart';
 import 'package:prototype/util/get_controllers/user_controller.dart';
+import 'package:prototype/util/user_session.dart';
 import 'package:prototype/util/validate_text.dart';
 import 'package:prototype/widgets/fade_in_animation/animation_design.dart';
 import 'package:prototype/widgets/fade_in_animation/fade_in_animation_model.dart';
@@ -119,9 +120,9 @@ class LoginContent extends StatelessWidget {
                 if (emailError == null || passwordError == null) {
                     // Display validation error messages
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Please fill in all the required fields.'),
-                        backgroundColor: Colors.red,
+                      SnackBar(
+                        content: const Text('Please fill in all the required fields.'),
+                        backgroundColor: Theme.of(context).colorScheme.error,
                       ),
                     );
                   } else {
@@ -136,10 +137,10 @@ class LoginContent extends StatelessWidget {
                         final dynamic userID = jsonDecode(idResponse.body);
                         userController.updateUserID(userID);
 
-                        
                         final userResponse = await requestUtil.getUser(userID);
                         final dynamic user = jsonDecode(userResponse.body);
                         final User userModel = User.fromJson(user);
+                        await UserSession.saveUserSession(userID, _emailController.text);
                         userController.updateUserInfo(userModel);
                       }
                       // Navigate to the home screen or perform other actions
@@ -150,9 +151,9 @@ class LoginContent extends StatelessWidget {
                     } else {
                       // Display an error message to the user
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Email or password is incorrect.'),
-                          backgroundColor: Colors.red,
+                        SnackBar(
+                          content: const Text('Email or password is incorrect.'),
+                          backgroundColor: Theme.of(context).colorScheme.error,
                         ),
                       );
                     }

@@ -1,9 +1,12 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:prototype/app/authenticate/screens/start_screen.dart';
 import 'package:prototype/app/user_profile/edit_user.dart';
 import 'package:prototype/util/request_util.dart';
 import 'package:prototype/util/get_controllers/user_controller.dart';
+import 'package:prototype/util/user_session.dart';
 import 'package:prototype/widgets/fade_in_animation/fade_in_controller.dart';
 
 final RequestUtil requestUtil = RequestUtil();
@@ -31,10 +34,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             icon: const Icon(Icons.logout),
             onPressed: () {
               controller.resetAnimation();
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) => const StartScreen()),
-              );
+              logout(context);
             },
           ),
         ],
@@ -104,4 +104,13 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     setState(() {
     });
   }
+
+  Future<void> logout(BuildContext context) async {
+    await UserSession.clearUserSession();
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => const StartScreen()),
+    );
+  }
+
 }
