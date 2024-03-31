@@ -107,9 +107,10 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
 
   Future<void> logout(BuildContext context) async {
     await UserSession.clearUserSession();
-    Navigator.pushReplacement(
+    Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(builder: (context) => const StartScreen()),
+      (Route<dynamic> route) => false
     );
   }
 

@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -45,11 +47,10 @@ class OTPScreen extends StatelessWidget {
                   if (response.statusCode == 200){
                     Get.to(() => ResetPassword(email: email,));
                   } else {
-                    // ignore: use_build_context_synchronously
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         content: Text(jsonDecode(response.body)['detail']),
-                        backgroundColor: Colors.red,
+                        backgroundColor: Theme.of(context).colorScheme.error,
                       )
                     );
                   }

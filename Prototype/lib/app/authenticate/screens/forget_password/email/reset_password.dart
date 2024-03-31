@@ -15,10 +15,10 @@ class ResetPassword extends StatelessWidget {
   final TextEditingController _passwordController = TextEditingController();
   final RequestUtil requestUtil = RequestUtil();
   final String email;
+  final formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    final formKey = GlobalKey<FormState>();
     return Scaffold(
       appBar: const CommonAppBar(currentTitle: 'Change Password'),
       body: Container(
@@ -61,7 +61,7 @@ class ResetPassword extends StatelessWidget {
                             );
                             
                             if (response.statusCode == 200) {
-                              Get.to(() => LoginContent());
+                              Get.to(() => const LoginContent());
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
                                   content: Text('Password updated successfully.'),

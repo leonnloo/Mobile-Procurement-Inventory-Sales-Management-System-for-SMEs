@@ -190,7 +190,7 @@ class _RegisterContentState extends State<RegisterContent> {
                   if (password == confirmPassword){
                     final response = await requestUtil.sendVerificationEmail(email);
                     if (response.statusCode == 200){
-                      Get.to(OTPRegisterScreen(email: email, password: password, username: username, phoneNumber: phoneNumber));
+                      Get.to(() => OTPRegisterScreen(email: email, password: password, username: username, phoneNumber: phoneNumber));
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
@@ -220,7 +220,7 @@ class _RegisterContentState extends State<RegisterContent> {
                 controller.resetAnimation();
                 Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(builder: (context) => LoginContent()),
+                  MaterialPageRoute(builder: (context) => const LoginContent()),
                 );
               },
               child: const Text('Already have an account? LOGIN'),

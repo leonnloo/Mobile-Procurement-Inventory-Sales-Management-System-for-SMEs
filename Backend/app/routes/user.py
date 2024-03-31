@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from models.users_model import *
+from routes.func import *
 from config.database import users_db
 from schema.schemas import user_dict_serial, user_serial
 from fastapi.security import OAuth2PasswordBearer
@@ -7,23 +8,6 @@ from pymongo import DESCENDING
 
 user_router = APIRouter()
 oauth_scheme = OAuth2PasswordBearer(tokenUrl="token")
-
-def processNextID(query: str) -> str:
-    # Extract integers from the string
-    extracted_numbers = ''.join(char for char in query if char.isdigit())
-
-    # Convert the extracted numbers to an integer
-    result = int(extracted_numbers) if extracted_numbers else None
-    if result:
-        result += 1
-        # Extract the first two characters from the original query
-        first_two_characters = query[:2]
-        # Append them to the result
-        result_with_prefix = f"{first_two_characters}{result}"
-        return result_with_prefix
-    else:
-        return None
-
 
 @user_router.get("/get_user/{id}")
 def get_user(id: str):

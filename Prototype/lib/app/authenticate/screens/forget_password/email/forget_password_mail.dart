@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:prototype/app/authenticate/screens/forget_password/email/otp.dart';
+import 'package:prototype/app/authenticate/screens/forget_password/email/reset_password.dart';
 import 'package:prototype/util/request_util.dart';
 import 'package:prototype/util/validate_text.dart';
 import 'package:prototype/widgets/forms/text_field.dart';
@@ -56,6 +57,7 @@ class ForgetPasswordMailScreen extends StatelessWidget {
                       String? email = validateTextField(_forgetEmailController.text);
                       if (email != null){
                         final verifyResponse = await requestUtil.verifyEmail(_forgetEmailController.text);
+                            Get.to(() => ResetPassword(email: email,));
                         if (verifyResponse.statusCode == 200) {
                           final response = await requestUtil.sendVerificationEmail(email);
                           if (response.statusCode == 200){
