@@ -265,10 +265,97 @@ train_data = [
     ("Include flyers and samples in the promotional packages.", {"entities": [(8, 14, "ITEM-NAME"), (19, 26, "ITEM-NAME")]}),
     ("I would like to obtain the inventory cup.", {"entities": [(37, 40, "ITEM-NAME")]}),
     ("I would like to obtain the inventory screwdriver with PR92834725123.", {"entities": [(37, 48, "ITEM-NAME"), (54, 67, "customID")]}),
+
+
+    # ------------------------------ New Entries ------------------------------
+    # CustomID
+    ("The return request for product ID PD102 was initiated by customer ID CO897.", {"entities": [(34, 39, "customID"), (69, 74, "customID")]}),
+    ("Check the delivery status for order ID SO456 in our system.", {"entities": [(39, 44, "customID")]}),
+    ("Has procurement ID PR789 been cleared for the next stage?", {"entities": [(19, 24, "customID")]}),
+
+    # EMAIL
+    ("All correspondence should be forwarded to contact@widgetcorp.net.", {"entities": [(42, 64, "EMAIL")]}),
+    ("The warranty claim has been processed; please check updates at service@homestuff.com.", {"entities": [(63, 84, "EMAIL")]}),
+
+    # BUSINESS-NAME
+    ("Innovation Works LLC has been a reliable partner for years.", {"entities": [(0, 20, "BUSINESS-NAME")]}),
+    ("Please prepare the shipment for QuickFix Solutions ASAP.", {"entities": [(32, 50, "BUSINESS-NAME")]}),
+
+    # PHONE-NUMBER
+    ("To discuss your account, please call our team at +1-555-678-9101.", {"entities": [(49, 64, "PHONE-NUMBER")]}),
+    ("For after-sales support, reach us at (123) 456-7890.", {"entities": [(37, 51, "PHONE-NUMBER")]}),
+
+    # ITEM-QUANTITY
+    ("We require an additional 250 units of the high-capacity batteries.", {"entities": [(25, 28, "ITEM-QUANTITY")]}),
+    ("The order must include at least 30 packages of LED lights.", {"entities": [(32, 34, "ITEM-QUANTITY")]}),
+
+    # PRICE
+    ("The quoted price for bulk orders is $20.99 per unit.", {"entities": [(37, 42, "PRICE")]}),
+    ("A discount of $5 is applied to orders over $200.", {"entities": [(15, 16, "PRICE"), (44, 47, "PRICE")]}),
+
+    # STATUS
+    ("The payment status for invoice PR123 has been updated to 'Completed'.", {"entities": [(31, 36, "customID"), (58, 67, "STATUS")]}),
+    ("All items on backorder are now 'In Stock'.", {"entities": [(32, 40, "STATUS")]}),
+
+    # ADDRESS
+    ("Ship the next batch to the warehouse located at 200 Industrial Rd, Suite B, Las Vegas, NV 89030.", {"entities": [(48, 95, "ADDRESS")]}),
+    ("Our return address is 12345 North Stream Blvd, Miami, FL 33101.", {"entities": [(22, 62, "ADDRESS")]}),
+
+    # ITEM-NAME
+    ("The new version of the EcoSmart light bulb is now available.", {"entities": [(23, 42, "ITEM-NAME")]}),
+    ("Please include two sets of the Kingston DataTraveler USB drives in the order.", {"entities": [(31, 63, "ITEM-NAME")]}),
+
+    # Complex Sentences with Multiple Entities
+    ("Email john.doe@techinnovations.com with the serial numbers for the UltraHD Monitors by TechView Corp that we received on 123 Tech Park Ave, Silicon Valley, CA.", {"entities": [(6, 34, "EMAIL"), (67, 83, "ITEM-NAME"), (87, 100, "BUSINESS-NAME"), (121, 158, "ADDRESS")]}),
+    ("Can you check if we have received the 50 units of MultiSync LCDs priced at $199.99 each from BrightScreen Technologies, contact number +1-800-555-0199?", {"entities": [(38, 40, "ITEM-QUANTITY"), (50, 64, "ITEM-NAME"), (76, 82, "PRICE"), (93, 118, "BUSINESS-NAME"), (135, 150, "PHONE-NUMBER")]}),
+    ("I need the tracking details for the shipment addressed to Gadgets Plus at 4567 Pine St, Boston, MA, which includes 100 units of the Graphene Battery Packs.", {"entities": [(58, 70, "BUSINESS-NAME"), (74, 98, "ADDRESS"), (115, 118, "ITEM-QUANTITY"), (132, 154, "ITEM-NAME")]}),
+    ("Please forward the invoice for $15,000 to finance@buildrighttools.com for the purchase order PO456123, which includes 500 hammers and 300 screwdriver sets.", {"entities": [(32, 38, "PRICE"), (42, 69, "EMAIL"), (93, 101, "customID"), (118, 121, "ITEM-QUANTITY"), (122, 129, "ITEM-NAME"), (134, 137, "ITEM-QUANTITY"), (138, 149, "ITEM-NAME")]}),
+
+    # CustomID in Queries
+    ("Can you tell me the status of order ID SO789?", {"entities": [(39, 44, "customID")]}),
+    ("What's the delivery date for procurement ID PR5671?", {"entities": [(44, 50, "customID")]}),
+    ("Do we have any updates on product item PD21?", {"entities": [(39, 43, "customID")]}),
+    
+    # EMAIL in Queries
+    ("What is the contact email for the account associated with customer ID CO4234156?", {"entities": [(70, 79, "customID")]}),
+    ("Who should I reach out to at Tech Innovations Inc. for billing questions?", {"entities": [(29, 50, "BUSINESS-NAME")]}),
+    
+    # BUSINESS-NAME in Queries
+    ("Which supplier delivered the Bamboo Cutting Boards?", {"entities": [(29, 50, "ITEM-NAME")]}),
+    ("Can you confirm if QuickFix Solutions processed our last order?", {"entities": [(19, 37, "BUSINESS-NAME")]}),
+    
+    # PHONE-NUMBER in Queries
+    ("What's the contact number for our supplier, GreenTech Solutions?", {"entities": [(44, 63, "BUSINESS-NAME")]}),
+    ("How can I get in touch with Solar Dynamics customer service?", {"entities": [(28, 42, "BUSINESS-NAME")]}),
+    
+    # ITEM-QUANTITY in Queries
+    ("How many units of the EcoSmart light bulbs do we have in stock?", {"entities": [(22, 42, "ITEM-NAME")]}),
+    ("Can you check the available quantity of Kingston DataTraveler USB drives?", {"entities": [(40, 72, "ITEM-NAME")]}),
+    
+    # PRICE in Queries
+    ("What was the unit price for the Graphene Battery Packs in our last purchase?", {"entities": [(32, 54, "ITEM-NAME")]}),
+    ("Can you find the total price for order ID SO456?", {"entities": [(42, 47, "customID")]}),
+    
+    # STATUS in Queries
+    ("Is the shipment with order ID SO234 on track for delivery?", {"entities": [(30, 35, "customID")]}),
+    ("What is the current status of customer ID CO345's order?", {"entities": [(42, 47, "customID")]}),
+    
+    # ADDRESS in Queries
+    ("What is the shipping address for customer ID CO678526?", {"entities": [(45, 53, "customID")]}),
+    ("Can you update the billing address for our office located at 500 Tesla Court, Fremont, CA?", {"entities": [(61, 89, "ADDRESS")]}),
+    
+    # ITEM-NAME in Queries
+    ("Do we need to reorder the Philips Hue smart light bulbs soon?", {"entities": [(26, 55, "ITEM-NAME")]}),
+    ("What's the latest inventory count for Adidas Yeezy Boost 350 sneakers?", {"entities": [(38, 69, "ITEM-NAME")]}),
+    
+    # Complex Queries
+    ("Could you provide the contact details for the person handling our account at BrightScreen Technologies?", {"entities": [(77, 102, "BUSINESS-NAME")]}),
+    ("I'm looking for the delivery date and total cost for the order containing 50 units of MultiSync LCDs. Can you help?", {"entities": [(86, 100, "ITEM-NAME"), (74, 76, "ITEM-QUANTITY")]}),
+    ("What are the warranty terms for the product ID PD012, and whom should I contact for service?", {"entities": [(47, 52, "customID")]}),
 ]
+
+
 # nlp.initialize()
-
-
 
 
 # Function to check and print misaligned entities
@@ -281,7 +368,7 @@ def check_alignment(text, annotations):
 
 # Fine-tune the NER model
 optimizer = nlp.resume_training()
-for iteration in range(50):  # Adjust the number of iterations
+for iteration in range(100):  # Adjust the number of iterations
     random.shuffle(train_data)
     losses = {}
     for text, annotations in train_data:

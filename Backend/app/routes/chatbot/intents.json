@@ -21,7 +21,13 @@
         "Can you tell me the billing address for customer?",
         "What is the shipping address for customer?",
         "Do you have any past orders for customer?",
-        "Are there any notes for customer?"
+        "Are there any notes for customer?",
+        "Show me everything about customer ID CO123",
+        "Need all info on customer CO456",
+        "Fetch customer details for CO789",
+        "Who's listed as the customer for order ID SO123?",
+        "Customer CO1010's full profile, please",
+        "Details on the customer with email john.doe@example.com"
       ]
     },    
     {
@@ -44,7 +50,11 @@
         "Can you provide the email address for supplier?",
         "What's the phone number for supplier?",
         "Can you tell me the address for supplier?",
-        "Do you have any additional notes about supplier?"
+        "Do you have any additional notes about supplier?",
+        "Information on supplier ID SP123 needed",
+        "All about supplier SP456",
+        "Supplier SP789's contact details?",
+        "Supplier associated with order ID PO123?"
       ]
     },    
     {
@@ -67,7 +77,10 @@
         "What was the unit price of the ordered item?",
         "What was the total price of the order?",
         "How many items were ordered?",
-        "Do you have any additional notes about the purchase?"
+        "Do you have any additional notes about the purchase?",
+        "Procurement details for order ID PO123?",
+        "What items were bought in PO789?",
+        "Purchase order PO1010 status?"
       ]
     },
     {
@@ -82,7 +95,12 @@
         "What's the total price of the item?",
         "What's the critical level of the item?",
         "What's the status of the item?",
-        "Do you have any additional notes about the item?"
+        "Do you have any additional notes about the item?",
+        "Stock status for item ID IV123",
+        "When was item IV789 last restocked?",
+        "How fast is item IV1010 moving?",
+        "Current stock for IV1112?",
+        "Show me low stock items"
       ]
     },
     {
@@ -98,7 +116,13 @@
         "What's the margin percentage of the product?",
         "What's the critical level of the product?",
         "What's the status of the product?",
-        "Do you have any additional notes about the product?"
+        "Do you have any additional notes about the product?",
+        "Details on product PD123?",
+        "Features of product PD456",
+        "Price range for PD789",
+        "Best selling points of PD1010?",
+        "Product PD1112 warranty information",
+        "Feedback on product PD1314?"
       ]
     },    
     {
@@ -126,7 +150,13 @@
         "Total invoice amount for SO232425?",
         "Current fulfillment status of SO262728?",
         "Who managed the execution of SO293031?",
-        "Employee responsible for dispatching SO323334?"
+        "Employee responsible for dispatching SO323334?",
+        "Breakdown for sale order SO123?",
+        "Items in the last order SO456",
+        "Who made order SO789?",
+        "Date when order SO1010 was delivered",
+        "Status update on order SO1112",
+        "Amount due for order SO1314"
       ]
     },   
     {
@@ -145,7 +175,13 @@
         "What's the status of the refund?",
         "Who processed the refund?",
         "What's the employee ID who processed the refund?",
-        "What's the reason for the refund?"
+        "What's the reason for the refund?",
+        "Refund status for order SO123?",
+        "Why was a refund issued for SO456?",
+        "Amount refunded for order SO789",
+        "Who approved refund for SO1010?",
+        "Refund process details for SO1112",
+        "Timeline for refund of SO1314?"
       ]
     },    
     {
@@ -183,7 +219,13 @@
         "What's the percentage increase in sales for November?",
         "Display sales growth for each month in 2023.",
         "Summarize our sales performance for the second half of 2022.",
-        "What was the highest selling month in the previous fiscal year?"
+        "What was the highest selling month in the previous fiscal year?",
+        "Sales performance in January 2023?",
+        "Revenue breakdown for February 2023",
+        "Comparison of March sales YoY",
+        "April 2023 sales vs. budget",
+        "May 2023 total sales figures",
+        "Sales forecast accuracy for June 2023"
       ]
     },        
     {
@@ -197,20 +239,28 @@
         "Good day"
       ],
       "responses": [
-        "Hey :-)",
-        "Hi there, what can I do for you?",
-        "Hi there, how can I help?",
-        "Greetings!",
-        "Nice to see you!",
-        "Hey, what's up?",
-        "Hello! How's your day going?",
-        "Hey, good to have you here!",
-        "Hi! What brings you here today?"
+        "Hello! You can ask me about customer, supplier, product, or order details. Just use the ID or name to get started.",
+        "Hi there, how can I assist you today? You can inquire about sales, inventory, refunds, or specific orders by providing relevant IDs or names.",
+        "Greetings! I'm here to help. You can query for information on customers, products, orders, or suppliers. For example, you can say 'Tell me about customer ID CO123'.",
+        "Hi! Need information? You can ask about anything from procurement details to monthly sales figures. Try asking, 'What do you know about the product with ID PD456'?",
+        "Good day! I can provide details on a variety of topics such as inventory, sales orders, and supplier info. Just mention what you're interested in and provide any specific IDs or names if possible."
       ]
     },    
     {
       "tag": "goodbye",
-      "patterns": ["Bye", "See you later", "Goodbye"],
+      "patterns": [
+        "Bye", 
+        "See you later", 
+        "Goodbye", 
+        "Farewell",
+        "I'm off",
+        "Signing off",
+        "Exit",
+        "Leaving now",
+        "I have to go",
+        "Catch you later",
+        "Until next time"
+      ],
       "responses": [
         "See you later",
         "Have a nice day",
@@ -219,8 +269,24 @@
     },
     {
       "tag": "thanks",
-      "patterns": ["Thanks", "Thank you", "That's helpful", "Thank's a lot!"],
-      "responses": ["Happy to help!", "Any time!", "My pleasure"]
+      "patterns": [
+        "Thanks", "Thank you", "That's helpful", "Thank's a lot!",
+        "Appreciate your help",
+        "Grateful for the assistance",
+        "Thanks for the support",
+        "Much appreciated",
+        "Cheers for that",
+        "Thanks a million",
+        "Kudos to you"
+      ],
+      "responses": [
+        "Happy to help!", 
+        "Any time!", 
+        "My pleasure",
+        "You're welcome! If you have more queries or need assistance with another request, feel free to ask.",
+        "Glad to help! Remember, I can provide updates on procurement, inventory, and more whenever you need.",
+        "Any time! If you need further information or have more questions, I'm here to help."
+      ]
     },
     {
       "tag": "compliment",
@@ -228,13 +294,23 @@
         "You're doing a great job!",
         "I'm impressed with your service",
         "Your website is very user-friendly",
-        "Your team is very helpful"
+        "Your team is very helpful",
+        "Keep up the good work",
+        "Well done",
+        "Exceptional service",
+        "Outstanding support",
+        "Great help",
+        "You're a lifesaver",
+        "Impressive, thank you"
       ],
       "responses": [
         "Thank you so much!",
         "That's very kind of you to say!",
         "We strive to provide the best service!",
-        "We appreciate your positive feedback!"
+        "We appreciate your positive feedback!",
+        "Thank you for the compliment! Should you need more assistance or have questions about specific data, I'm here.",
+        "Much appreciated! If there's anything more you'd like to know about our services or products, just ask.",
+        "Thanks! I strive to provide the best user experience. If there's more information you require, feel free to inquire."
       ]
     },
     {
@@ -243,13 +319,23 @@
         "I'm having trouble with your website",
         "My order hasn't arrived yet",
         "I received the wrong item",
-        "Your customer service is slow to respond"
+        "Your customer service is slow to respond",
+        "Not happy with the service",
+        "This isn't right",
+        "There's a problem with this",
+        "Unsatisfied with the response",
+        "Disappointed",
+        "Expecting better",
+        "Something went wrong"
       ],
       "responses": [
         "We apologize for the inconvenience. Please let us know how we can assist you.",
         "We're sorry to hear that. We'll do our best to resolve the issue promptly.",
         "Thank you for bringing this to our attention. We'll investigate and get back to you.",
-        "We understand your frustration. We'll work to address the issue and improve our service."
+        "We understand your frustration. We'll work to address the issue and improve our service.",
+        "We apologize for the inconvenience. If there's specific information you're seeking, I can assist right away.",
+        "I'm sorry to hear about your experience. While I look into this, is there any other information you need in the meantime?",
+        "Your feedback is important. As we resolve this issue, you might find it useful to query for order status or inventory details directly here."
       ]
     },
     {
@@ -260,15 +346,24 @@
         "How can I provide feedback?",
         "I had a great experience",
         "I had a problem with my order",
-        "Can I speak to a manager?"
+        "Can I speak to a manager?",
+        "Here's my thought",
+        "Suggestion to improve",
+        "I've got some feedback",
+        "Here's an idea",
+        "Feedback on the process",
+        "Improvement idea",
+        "Constructive criticism"
       ],
       "responses": [
         "We appreciate your feedback! Please feel free to share your suggestion with us.",
-        "Thank you for wanting to leave feedback! You can provide your feedback through our website/contact form.",
         "Providing feedback is easy! You can do it through our website or by contacting our customer support.",
         "We're glad you had a great experience! We love hearing positive feedback from our customers.",
         "We're sorry to hear about the problem with your order. Please let us know the details so we can assist you.",
-        "Certainly, you can speak to a manager. Please hold on for a moment while we connect you."
+        "Certainly, you can speak to a manager. Please hold on for a moment while we connect you.",
+        "We value your feedback and suggestions! After sharing, if there's more you'd like to know about our products or services, just ask.",
+        "Thank you for wanting to share your experience. Your insights help us improve. Additionally, if you have any questions or need information, I'm here to help.",
+        "Feedback is crucial for us. Please share your thoughts, and remember, I can provide quick answers to many of your questions about orders, products, and more."
       ]
     }
   ]
