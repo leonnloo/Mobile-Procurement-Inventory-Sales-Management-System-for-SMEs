@@ -18,7 +18,7 @@ class SalesComparisonScreen extends StatelessWidget {
             const Text(
               'Sales Comparison Table',
               style: TextStyle(
-                fontSize: 20,
+                fontSize: 17,
                 fontWeight: FontWeight.bold,
               ),
             ),

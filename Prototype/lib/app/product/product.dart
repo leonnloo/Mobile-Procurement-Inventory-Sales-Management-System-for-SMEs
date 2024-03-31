@@ -41,61 +41,60 @@ class ProductManagementScreenState extends State<ProductManagementScreen> {
               width: 1100,
               child: Row(
                 children: [
-                  const Text('Filter Products: '),
-                  PopupMenuButton<String>(
-                    onSelected: (value) {
+                  SizedBox(width: 0), // 添加间距
+                  TextButton(
+                    onPressed: () {
                       setState(() {
-                        _selectedFilter = value;
+                        _selectedFilter = 'ID';
                       });
                     },
-                    itemBuilder: (BuildContext context) => [
-                      const PopupMenuItem(
-                        value: 'ID',
-                        child: Text('ID'),
-                      ),
-                      const PopupMenuItem(
-                        value: 'Product',
-                        child: Text('Product'),
-                      ),
-                      const PopupMenuItem(
-                        value: 'Unit Price',
-                        child: Text('Unit Price'),
-                      ),
-                      const PopupMenuItem(
-                        value: 'Selling Price',
-                        child: Text('Selling Price'),
-                      ),
-                      const PopupMenuItem(
-                        value: 'Quantity',
-                        child: Text('Quantity'),
-                      ),
-                      const PopupMenuItem(
-                        value: 'Weight',
-                        child: Text('Weight'),
-                      ),
-                      const PopupMenuItem(
-                        value: 'Safety Quantity',
-                        child: Text('Safety Quantity'),
-                      ),
-                      const PopupMenuItem(
-                        value: 'Markup',
-                        child: Text('Markup'),
-                      ),
-                      const PopupMenuItem(
-                        value: 'Margin',
-                        child: Text('Margin'),
-                      ),
-                      const PopupMenuItem(
-                        value: 'Status',
-                        child: Text('Status'),
-                      ),
-                    ],
+                    child: Text(
+                      'ID',
+                      style: TextStyle(fontSize: 16), // 设置字体大小为16
+                    ),
+                  ),
+
+                  SizedBox(width: 0), // 添加间距
+                  TextButton(
+                    onPressed: () {
+                      setState(() {
+                        _selectedFilter = 'Unit Price';
+                      });
+                    },
+                    child: Text(
+                      'Unit Price',
+                      style: TextStyle(fontSize: 16), // 设置字体大小为16
+                    ),
+                  ),
+                  SizedBox(width: 0), // 添加间距
+                  TextButton(
+                    onPressed: () {
+                      setState(() {
+                        _selectedFilter = 'Selling Price';
+                      });
+                    },
+                    child: Text(
+                      'Selling Price',
+                      style: TextStyle(fontSize: 16), // 设置字体大小为16
+                    ),
+                  ),
+                  SizedBox(width: 0), // 添加间距
+                  TextButton(
+                    onPressed: () {
+                      setState(() {
+                        _selectedFilter = 'Quantity';
+                      });
+                    },
+                    child: Text(
+                      'Quantity',
+                      style: TextStyle(fontSize: 16), // 设置字体大小为16
+                    ),
                   ),
                 ],
               ),
             ),
           ),
-          
+
           FutureBuilder(
             future: _fetchAndFilterProducts(),
             builder: (context, snapshot) {
@@ -159,7 +158,7 @@ class ProductManagementScreenState extends State<ProductManagementScreen> {
                       scrollDirection: Axis.vertical,
                       child: DataTable(
                         columns: const [
-                          DataColumn(label: Text('ID')),
+                          DataColumn(label: Text('ID'), ),
                           DataColumn(label: Text('Product')),
                           DataColumn(label: Text('Unit Price')),
                           DataColumn(label: Text('Selling Price')),
@@ -251,7 +250,7 @@ class ProductManagementScreenState extends State<ProductManagementScreen> {
       final response = await requestUtil.getProducts();
       if (response.statusCode == 200) {
         List<dynamic> jsonData = jsonDecode(response.body);
-        
+
         List<ProductItem> products = jsonData.map((data) => ProductItem.fromJson(data)).toList();
         switch (_selectedFilter) {
           case 'ID':
@@ -281,4 +280,12 @@ class ProductManagementScreenState extends State<ProductManagementScreen> {
       }
     }
   }
+
+  void _selectFilter(String filter) {
+    setState(() {
+      _selectedFilter = filter;
+    });
+    _fetchAndFilterProducts(); // 调用重新加载数据的函数
+  }
+
 }
