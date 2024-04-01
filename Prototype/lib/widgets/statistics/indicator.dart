@@ -34,12 +34,12 @@ class Indicator extends StatelessWidget {
           child: Text(
             text,
             style: TextStyle(
-              fontSize: 16,
+              fontSize: 14,
               fontWeight: FontWeight.bold,
               color: textColor ?? Theme.of(context).colorScheme.onSurface, // Using provided text color or theme color if not provided
             ),
             overflow: TextOverflow.ellipsis,
-            maxLines: 2, // Allow text to span up to two lines
+            maxLines: 3, // Allow text to span up to two lines
           ),
         )
       ],

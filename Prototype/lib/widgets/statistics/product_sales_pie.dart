@@ -139,13 +139,12 @@ class PieChart2State extends State {
             ),
             const SizedBox(height: 25),
             AspectRatio(
-              aspectRatio: 1.9,
+              aspectRatio: 1.3,
               child: Row(
                 children: <Widget>[
-                  const SizedBox(height: 18,),
                   _buildPieChart(),
+                  const SizedBox(width: 5),
                   _buildIndicators(),
-                  const SizedBox(width: 28,),
                 ],
               ),
             ),
@@ -157,8 +156,9 @@ class PieChart2State extends State {
 
   Widget _buildPieChart() {
     return Expanded(
+      flex: 3,
       child: AspectRatio(
-        aspectRatio: 1,
+        aspectRatio: 2,
         child: FutureBuilder(
           future: productController.getProducts(),
           builder: (context, snapshot) {
@@ -332,47 +332,50 @@ class PieChart2State extends State {
   }
   
 Widget _buildIndicators() {
-  return StreamBuilder<Map<String, double>>(
-    stream: percentagesStream,
-    builder: (context, snapshot) {
-      if (!snapshot.hasData) {
-        return Container(); // Placeholder/loading indicator
-      }
-
-      final percentages = snapshot.data!;
-      List<Widget> indicators = [];
-      int index = 0;
-
-      percentages.forEach((productName, percentage) {
-        final color = getColorForIndex(index);
-        // Wrap Indicator with constraints to encourage text wrapping
-        indicators.add(
-          ConstrainedBox(
-            constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.25), // Example constraint
-            child: Indicator(
-              color: color,
-              text: productName,
-              isSquare: true,
-              textColor: Theme.of(context).colorScheme.onSurface,
+  return Expanded(
+    flex: 2,
+    child: StreamBuilder<Map<String, double>>(
+      stream: percentagesStream,
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return Container(); // Placeholder/loading indicator
+        }
+    
+        final percentages = snapshot.data!;
+        List<Widget> indicators = [];
+        int index = 0;
+    
+        percentages.forEach((productName, percentage) {
+          final color = getColorForIndex(index);
+          // Wrap Indicator with constraints to encourage text wrapping
+          indicators.add(
+            ConstrainedBox(
+              constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.25), // Example constraint
+              child: Indicator(
+                color: color,
+                text: productName,
+                isSquare: true,
+                textColor: Theme.of(context).colorScheme.onSurface,
+              ),
+            ),
+          );
+          indicators.add(const SizedBox(height: 4,));
+          index++;
+        });
+    
+        return SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: indicators,
             ),
           ),
         );
-        indicators.add(const SizedBox(height: 4,));
-        index++;
-      });
-
-      return SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: indicators,
-          ),
-        ),
-      );
-    },
+      },
+    ),
   );
 }
 

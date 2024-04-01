@@ -51,7 +51,7 @@ class DropdownTextFieldState extends State<DropdownTextField> {
               }
             },
             decoration: const InputDecoration(
-              labelText: '',
+              labelText: 'Loading...',
               border: OutlineInputBorder(),
             ),
           );

@@ -240,9 +240,7 @@ def procurement_form(procurement: NewProcurement, token: str = Depends(oauth_sch
 
     if latest_id_document:
         query_id = latest_id_document.get("purchase_id", "-1")
-        print(query_id)
         next_purchase_id = processNextID(query_id)
-        print("next " + next_purchase_id)
     else:
         next_purchase_id = "PR1"
 

@@ -27,9 +27,11 @@ class _ProcurementScreenState extends State<ProcurementScreen> {
 
   Key futureBuilderKey = UniqueKey();
   void updateData() async {
-    setState(() {
-      futureBuilderKey = UniqueKey();
-    });
+    if (mounted){
+      setState(() {
+        futureBuilderKey = UniqueKey();
+      });
+    }
   }
 
   @override
