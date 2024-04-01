@@ -3,9 +3,11 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:prototype/app/sales_management/Claims_and_Refunds/get_refunds.dart';
 import 'package:prototype/app/sales_management/Claims_and_Refunds/order_drop_field.dart';
 import 'package:prototype/models/order_model.dart';
+import 'package:prototype/util/get_controllers/order_controller.dart';
 import 'package:prototype/util/management_util.dart';
 import 'package:prototype/util/validate_text.dart';
 import 'package:prototype/widgets/appbar/common_appbar.dart';
@@ -38,6 +40,7 @@ class AddClaimRefundFormState extends State<AddClaimRefundForm> {
   SalesOrder? selectedOrder;
   double? unitPrice;
   int? orderQuantity;
+  final orderController = Get.put(OrderController());
   @override
   void initState() {
     super.initState();
@@ -249,6 +252,14 @@ class AddClaimRefundFormState extends State<AddClaimRefundForm> {
                       );
                       
                       if (response.statusCode == 200) {
+                        Function? update = orderController.updateData.value;
+                        Function? updateDispatch = orderController.updateDispatchMenuData.value;
+                        if (update != null) {
+                          update();
+                        }
+                        if (updateDispatch != null) {
+                          updateDispatch();
+                        }
                         Navigator.pop(context);
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
