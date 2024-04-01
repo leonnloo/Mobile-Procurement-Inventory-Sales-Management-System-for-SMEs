@@ -318,7 +318,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
               int idB = int.parse(b.itemID.substring(2));
               return trackAscending ? idA.compareTo(idB) : idB.compareTo(idA);
             });
-        case 'Item Name':
+        case 'Item':
           return inventory
             ..sort((a, b) => trackAscending ? a.itemName.toLowerCase().compareTo(b.itemName.toLowerCase()) : b.itemName.toLowerCase().compareTo(a.itemName.toLowerCase()));
         case 'Category':
@@ -445,15 +445,15 @@ class ItemSearch extends SearchDelegate<String> {
         iconTheme: IconThemeData(color: Theme.of(context).colorScheme.surface),
         titleTextStyle: TextStyle(color: Theme.of(context).colorScheme.surface),
         color: Theme.of(context).colorScheme.onPrimaryContainer, // Change this to the desired color
-        toolbarHeight: 80
+        toolbarHeight: 60
       ),
       inputDecorationTheme: InputDecorationTheme(
-        hintStyle: TextStyle(color: Theme.of(context).colorScheme.surface, fontSize: 23),
-        labelStyle: TextStyle(color: Theme.of(context).colorScheme.surface, fontSize: 23),
+        hintStyle: TextStyle(color: Theme.of(context).colorScheme.surface, fontSize: 22),
+        labelStyle: TextStyle(color: Theme.of(context).colorScheme.surface, fontSize: 22),
 
       ),
       textTheme: TextTheme(
-        bodyLarge: TextStyle(color: Theme.of(context).colorScheme.surface, fontSize: 23),
+        bodyLarge: TextStyle(color: Theme.of(context).colorScheme.surface, fontSize: 22),
 
       )
     );

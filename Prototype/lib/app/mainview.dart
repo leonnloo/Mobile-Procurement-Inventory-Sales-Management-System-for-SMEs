@@ -19,6 +19,13 @@ class MainView extends StatelessWidget {
         fontFamily: GoogleFonts.lato().fontFamily,
         colorScheme: lightColorScheme,
         useMaterial3: true,
+        textTheme: const TextTheme(
+          bodyLarge: TextStyle(fontSize: 16),
+          bodyMedium: TextStyle(fontSize: 14),
+          bodySmall: TextStyle(fontSize: 12),
+          titleLarge: TextStyle(fontSize: 18),
+          titleMedium: TextStyle(fontSize: 14),
+        )
       ),
       transitionDuration: const Duration(milliseconds: 500),
       home: FutureBuilder<bool>(
@@ -54,7 +61,6 @@ class MainView extends StatelessWidget {
                 ),
               ),
             );
-
           }
         },
       ),

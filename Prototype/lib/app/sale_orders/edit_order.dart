@@ -76,7 +76,7 @@ class EditOrderState extends State<EditOrder> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        toolbarHeight: 80.0,
+        toolbarHeight: 60.0,
         backgroundColor: Theme.of(context).colorScheme.onPrimaryContainer,
         title: Text('Edit Order', style: TextStyle(color: Theme.of(context).colorScheme.surface),),
         actions: [
@@ -85,7 +85,7 @@ class EditOrderState extends State<EditOrder> {
             icon: Icon(
               color: Theme.of(context).colorScheme.surface,
               Icons.delete,
-              size: 30.0,
+              size: 24.0,
             ),
           ),
         ],

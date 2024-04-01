@@ -3,6 +3,7 @@
 import "package:flutter/material.dart";
 import 'package:prototype/models/refund_model.dart';
 import 'package:prototype/util/management_util.dart';
+import 'package:prototype/widgets/info_details.dart';
 
 void navigateToRefundDetail(BuildContext context, Refunds item, Function updateData) {
   Navigator.of(context).push(
@@ -30,7 +31,7 @@ class RefundDetailScreen extends StatelessWidget {
             onPressed: () => _showDeleteConfirmationDialog(context),
             icon: const Icon(
               Icons.delete,
-              size: 30.0,
+              size: 24.0,
             ),
           ),
         ],
@@ -44,34 +45,21 @@ class RefundDetailScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildDetailRow('Refund ID', item.refundID, context),
-              _buildDetailRow('Refund Date', item.refundDate, context),
-              _buildDetailRow('Order ID', item.orderID, context),
-              _buildDetailRow('Customer', item.customerName, context),
-              _buildDetailRow('Customer ID', item.customerID.toString(), context),
-              _buildDetailRow('Product', item.productName, context),
-              _buildDetailRow('Product ID', item.productID.toString(), context),
-              _buildDetailRow('Refunded Quantity', item.refundQuantity.toString(), context),
-              _buildDetailRow('Order Price', '\$${item.orderPrice.toStringAsFixed(2)}', context),
-              _buildDetailRow('Refunded Amount', '\$${item.refundAmount.toStringAsFixed(2)}', context),
-              _buildDetailRow('Reason', item.reason, context),
-              _buildDetailRow('Status', 'Refunded', context),
+              buildDetailRow('Refund ID', item.refundID, context),
+              buildDetailRow('Refund Date', item.refundDate, context),
+              buildDetailRow('Order ID', item.orderID, context),
+              buildDetailRow('Customer', item.customerName, context),
+              buildDetailRow('Customer ID', item.customerID.toString(), context),
+              buildDetailRow('Product', item.productName, context),
+              buildDetailRow('Product ID', item.productID.toString(), context),
+              buildDetailRow('Refunded Quantity', item.refundQuantity.toString(), context),
+              buildDetailRow('Order Price', '\$${item.orderPrice.toStringAsFixed(2)}', context),
+              buildDetailRow('Refunded Amount', '\$${item.refundAmount.toStringAsFixed(2)}', context),
+              buildDetailRow('Reason', item.reason, context),
+              buildDetailRow('Status', 'Refunded', context),
             ],
           ),
         ),
-      ),
-    );
-  }
-
-  Widget _buildDetailRow(String label, String value, BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(label, style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.onSurface)),
-          Text(value, style: TextStyle(fontSize: 18.0, color: Theme.of(context).colorScheme.onSurface)),
-        ],
       ),
     );
   }

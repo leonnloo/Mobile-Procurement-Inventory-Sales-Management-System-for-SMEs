@@ -7,10 +7,10 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      toolbarHeight: 80.0,
+      toolbarHeight: 60.0,
       backgroundColor: Theme.of(context).colorScheme.onPrimaryContainer,
       centerTitle: true,
-      title: Text(currentTitle, style: TextStyle(color: Theme.of(context).colorScheme.surface, fontSize: 25),),
+      title: Text(currentTitle, style: TextStyle(color: Theme.of(context).colorScheme.surface, fontSize: 22),),
       iconTheme: IconThemeData(
         color: Theme.of(context).colorScheme.surface,
       )
@@ -18,5 +18,5 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize => const Size.fromHeight(80.0);
+  Size get preferredSize => const Size.fromHeight(60.0);
 }

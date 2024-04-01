@@ -18,10 +18,10 @@ class _ClaimRefundHistoryScreenState extends State<ClaimRefundHistoryScreen> {
     final size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        toolbarHeight: 80.0,
+        toolbarHeight: 60.0,
         backgroundColor: Theme.of(context).colorScheme.onPrimaryContainer,
         centerTitle: true,
-        title: Text('Orders', style: TextStyle(color: Theme.of(context).colorScheme.surface),),
+        title: Text('Refunds', style: TextStyle(color: Theme.of(context).colorScheme.surface),),
         actions: [
           IconButton(
             icon: const Icon(Icons.search),
@@ -204,15 +204,15 @@ class _RefundsSearch extends SearchDelegate<String> {
         iconTheme: IconThemeData(color: Theme.of(context).colorScheme.surface),
         titleTextStyle: TextStyle(color: Theme.of(context).colorScheme.surface),
         color: Theme.of(context).colorScheme.onPrimaryContainer, // Change this to the desired color
-        toolbarHeight: 80
+        toolbarHeight: 60
       ),
       inputDecorationTheme: InputDecorationTheme(
-        hintStyle: TextStyle(color: Theme.of(context).colorScheme.surface, fontSize: 23),
-        labelStyle: TextStyle(color: Theme.of(context).colorScheme.surface, fontSize: 23),
+        hintStyle: TextStyle(color: Theme.of(context).colorScheme.surface, fontSize: 22),
+        labelStyle: TextStyle(color: Theme.of(context).colorScheme.surface, fontSize: 22),
 
       ),
       textTheme: TextTheme(
-        bodyLarge: TextStyle(color: Theme.of(context).colorScheme.surface, fontSize: 23),
+        bodyLarge: TextStyle(color: Theme.of(context).colorScheme.surface, fontSize: 22),
 
       )
     );

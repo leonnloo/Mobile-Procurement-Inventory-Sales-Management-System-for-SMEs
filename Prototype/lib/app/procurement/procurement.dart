@@ -51,7 +51,7 @@ class _ProcurementScreenState extends State<ProcurementScreen> {
                 child: Card(
                   child: GestureDetector(
                     onTap: () {
-                      Get.to(() => const FilterSystem());
+                      showSearch(context: context, delegate: PurchaseSearch(groupedData));
                     },
                     child: TextField(
                       decoration: InputDecoration(
@@ -362,55 +362,55 @@ class _ProcurementScreenState extends State<ProcurementScreen> {
                 DataCell(
                   Text(order.purchaseID, style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
                   onTap: () {
-                    navigateToOrderDetail(context, order);
+                    navigateToPurchaseDetail(context, order);
                   },
                 ),
                 DataCell(
                   Text(order.itemName, style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
                   onTap: () {
-                    navigateToOrderDetail(context, order);
+                    navigateToPurchaseDetail(context, order);
                   },
                 ),
                 DataCell(
                   Text(order.supplierName, style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
                   onTap: () {
-                    navigateToOrderDetail(context, order);
+                    navigateToPurchaseDetail(context, order);
                   },
                 ),
                 DataCell(
                   Text(order.orderDate, style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
                   onTap: () {
-                    navigateToOrderDetail(context, order);
+                    navigateToPurchaseDetail(context, order);
                   },
                 ),
                 DataCell(
                   Text(order.deliveryDate, style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
                   onTap: () {
-                    navigateToOrderDetail(context, order);
+                    navigateToPurchaseDetail(context, order);
                   },
                 ),
                 DataCell(
                   Text(order.quantity.toString(), style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
                   onTap: () {
-                    navigateToOrderDetail(context, order);
+                    navigateToPurchaseDetail(context, order);
                   },
                 ),
                 DataCell(
                   Text(order.unitPrice.toStringAsFixed(2).toString(), style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
                   onTap: () {
-                    navigateToOrderDetail(context, order);
+                    navigateToPurchaseDetail(context, order);
                   },
                 ),
                 DataCell(
                   Text(order.totalPrice.toStringAsFixed(2).toString(), style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
                   onTap: () {
-                    navigateToOrderDetail(context, order);
+                    navigateToPurchaseDetail(context, order);
                   },
                 ),
                 DataCell(
                   Text(order.status, style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
                   onTap: () {
-                    navigateToOrderDetail(context, order);
+                    navigateToPurchaseDetail(context, order);
                   },
                 ),
               ],
@@ -480,9 +480,101 @@ class _ProcurementScreenState extends State<ProcurementScreen> {
   }
 }
 
-void navigateToOrderDetail(BuildContext context, PurchasingOrder purchase) {
+void navigateToPurchaseDetail(BuildContext context, PurchasingOrder purchase) {
   Navigator.push(
     context,
     MaterialPageRoute(builder: (context) => OrderDetailScreen(purchase: purchase)),
   );
+}
+
+class PurchaseSearch extends SearchDelegate<String> {
+  PurchaseSearch(this.groupedData);
+
+  final Map<String, List<PurchasingOrder>> groupedData;
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    // Flatten all PurchasingOrder lists into a single list
+    final allItems = groupedData.values.expand((list) => list).toList();
+
+    // Filter the flattened list based on the query across all fields
+    final List<PurchasingOrder> suggestionList = query.isEmpty
+  ? []
+  : allItems.where((item) {
+      // Adjusted to match the Product properties
+      final searchableString = '${item.purchaseID} ${item.itemName} ${item.quantity} '
+          '${item.unitPrice} ${item.totalPrice} ${item.status}'
+          '${item.itemType} ${item.itemID} ${item.supplierName}'
+          '${item.orderDate} ${item.deliveryDate}'.toLowerCase();
+
+      return searchableString.contains(query.toLowerCase());
+    }).toList();
+
+    return ListView.builder(
+      itemCount: suggestionList.length,
+      itemBuilder: (context, index) {
+        final PurchasingOrder item = suggestionList[index];
+        return ListTile(
+          title: Text(item.itemName),
+          subtitle: Text('Price: ${item.totalPrice} - Quantity: ${item.quantity}'),
+          onTap: () {
+            navigateToPurchaseDetail(context, item);
+          },
+        );
+      },
+    );
+  }
+
+
+  @override
+  Widget buildResults(BuildContext context) {
+    return buildSuggestions(context);
+  }
+
+  @override
+  List<Widget> buildActions(BuildContext context) {
+    return [
+      IconButton(
+        icon: const Icon(Icons.clear),
+        onPressed: () {
+          query = '';
+          showSuggestions(context);
+        },
+      )
+    ];
+  }
+
+  @override
+  Widget buildLeading(BuildContext context) {
+    return IconButton(
+      icon: const Icon(Icons.arrow_back),
+      onPressed: () {
+        close(context, '');
+      },
+    );
+  }
+
+  @override
+  String get searchFieldLabel => 'Enter Query';
+
+  @override
+  ThemeData appBarTheme(BuildContext context) {
+    return Theme.of(context).copyWith(
+      appBarTheme: AppBarTheme(
+        iconTheme: IconThemeData(color: Theme.of(context).colorScheme.surface),
+        titleTextStyle: TextStyle(color: Theme.of(context).colorScheme.surface),
+        color: Theme.of(context).colorScheme.onPrimaryContainer, // Change this to the desired color
+        toolbarHeight: 60
+      ),
+      inputDecorationTheme: InputDecorationTheme(
+        hintStyle: TextStyle(color: Theme.of(context).colorScheme.surface, fontSize: 22),
+        labelStyle: TextStyle(color: Theme.of(context).colorScheme.surface, fontSize: 22),
+
+      ),
+      textTheme: TextTheme(
+        bodyLarge: TextStyle(color: Theme.of(context).colorScheme.surface, fontSize: 22),
+
+      )
+    );
+  }
 }

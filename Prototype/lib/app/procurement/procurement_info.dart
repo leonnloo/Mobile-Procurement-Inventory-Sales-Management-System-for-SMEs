@@ -184,11 +184,11 @@ class OrderInformation extends StatelessWidget {
         ),
         ListTile(
           leading: Icon(Icons.attach_money, color: Theme.of(context).colorScheme.onSurface,),
-          title: Text('Unit Price: \$${purchase.unitPrice.toStringAsFixed(2).toString()}', style: TextStyle(color: Theme.of(context).colorScheme.onSurface)), // Corrected to totalPrice
+          title: Text('Unit Price: \$${purchase.unitPrice.toStringAsFixed(2)}', style: TextStyle(color: Theme.of(context).colorScheme.onSurface)), // Corrected to totalPrice
         ),
         ListTile(
           leading: Icon(Icons.attach_money, color: Theme.of(context).colorScheme.onSurface,),
-          title: Text('Total Amount: \$${purchase.totalPrice.toStringAsFixed(2).toString()}', style: TextStyle(color: Theme.of(context).colorScheme.onSurface)), // Corrected to totalPrice
+          title: Text('Total Amount: \$${purchase.totalPrice.toStringAsFixed(2)}', style: TextStyle(color: Theme.of(context).colorScheme.onSurface)), // Corrected to totalPrice
         ),
 
         ListTile(

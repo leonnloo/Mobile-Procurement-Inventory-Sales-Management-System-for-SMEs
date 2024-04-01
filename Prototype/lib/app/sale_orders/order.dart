@@ -535,15 +535,15 @@ class OrderSearch extends SearchDelegate<String> {
         iconTheme: IconThemeData(color: Theme.of(context).colorScheme.surface),
         titleTextStyle: TextStyle(color: Theme.of(context).colorScheme.surface),
         color: Theme.of(context).colorScheme.onPrimaryContainer, // Change this to the desired color
-        toolbarHeight: 80
+        toolbarHeight: 60
       ),
       inputDecorationTheme: InputDecorationTheme(
-        hintStyle: TextStyle(color: Theme.of(context).colorScheme.surface, fontSize: 23),
-        labelStyle: TextStyle(color: Theme.of(context).colorScheme.surface, fontSize: 23),
+        hintStyle: TextStyle(color: Theme.of(context).colorScheme.surface, fontSize: 22),
+        labelStyle: TextStyle(color: Theme.of(context).colorScheme.surface, fontSize: 22),
 
       ),
       textTheme: TextTheme(
-        bodyLarge: TextStyle(color: Theme.of(context).colorScheme.surface, fontSize: 23),
+        bodyLarge: TextStyle(color: Theme.of(context).colorScheme.surface, fontSize: 22),
 
       )
     );

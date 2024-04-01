@@ -61,13 +61,13 @@ dev_dependencies:
 flutter_native_splash:
   color: "#F7F6F1"
   color_dark: "#272727"
-  image: assets/images/inventory1.jpg
-  image_dark: assets/images/inventory1.jpg
+  image: assets/images/nottingham.jpg
+  image_dark: assets/images/nottingham.jpg
 
   android_12:
-    image: assets/images/inventory1.jpg
+    image: assets/images/nottingham.jpg
     icon_background_color: "#F7F6F1"
-    image_dark: assets/images/inventory1.jpg
+    image_dark: assets/images/nottingham.jpg
     icon_background_color_dark: "#272727"
 
 # For information on the generic Dart part of this file, see the

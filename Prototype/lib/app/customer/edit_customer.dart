@@ -62,7 +62,7 @@ class EditCustomerState extends State<EditCustomer> {
             onPressed: () => _showDeleteConfirmationDialog(context),
             icon: const Icon(
               Icons.delete,
-              size: 30.0,
+              size: 24.0,
             ),
           ),
         ],

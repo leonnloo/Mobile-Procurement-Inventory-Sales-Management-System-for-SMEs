@@ -8,6 +8,7 @@ import 'package:prototype/util/get_controllers/customer_controller.dart';
 import 'package:prototype/util/request_util.dart';
 import 'dart:math';
 import 'package:prototype/widgets/appbar/info_appbar.dart';
+import 'package:prototype/widgets/info_details.dart';
 
 void navigateToCustomerDetail(BuildContext context, CustomerData customer) {
   Navigator.of(context).push(
@@ -47,13 +48,13 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildDetailRow('Customer ID', widget.customer.customerID, context),
-            _buildDetailRow('Business Name', widget.customer.businessName, context),
-            _buildDetailRow('Contact Person', widget.customer.contactPerson, context),
-            _buildDetailRow('Email', widget.customer.email, context),
-            _buildDetailRow('Phone Number', widget.customer.phoneNo, context),
-            _buildDetailRow('Billing Address', widget.customer.billingAddress, context),
-            _buildDetailRow('Shipping Address', widget.customer.shippingAddress, context),
+            buildDetailRow('Customer ID', widget.customer.customerID, context),
+            buildDetailRow('Business Name', widget.customer.businessName, context),
+            buildDetailRow('Contact Person', widget.customer.contactPerson, context),
+            buildDetailRow('Email', widget.customer.email, context),
+            buildDetailRow('Phone Number', widget.customer.phoneNo, context),
+            buildDetailRow('Billing Address', widget.customer.billingAddress, context),
+            buildDetailRow('Shipping Address', widget.customer.shippingAddress, context),
 
             const SizedBox(height: 6.0), // Add some spacing
             _buildNotes(context),
@@ -65,29 +66,6 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
             // _buildPastOrders(context)
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _buildDetailRow(String label, String value, BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            label,
-            style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.onSurface),
-          ),
-          const SizedBox(width: 30.0), // Increase the spacing between label and text
-          Flexible(
-            child: Text(
-              value,
-              style: TextStyle(fontSize: 18.0, color: Theme.of(context).colorScheme.onSurface),
-            ),
-          ),
-        ],
       ),
     );
   }

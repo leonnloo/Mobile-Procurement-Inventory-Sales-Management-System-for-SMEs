@@ -4,6 +4,7 @@ import 'package:prototype/models/edit_type.dart';
 import 'package:prototype/models/order_model.dart';
 import 'package:prototype/util/get_controllers/order_controller.dart';
 import 'package:prototype/widgets/appbar/info_appbar.dart';
+import 'package:prototype/widgets/info_details.dart';
 
 void navigateToOrderDetail(BuildContext context, SalesOrder order) {
   Navigator.of(context).push(
@@ -43,34 +44,21 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildDetailRow('Order ID', widget.order.orderID.toString()),
-              _buildDetailRow('Customer', widget.order.customerName),
-              _buildDetailRow('Customer ID', widget.order.customerID.toString()),
-              _buildDetailRow('Product', widget.order.productName),
-              _buildDetailRow('Product ID', widget.order.productID.toString()),
-              _buildDetailRow('Order Date', widget.order.orderDate),
-              _buildDetailRow('Quantity', widget.order.quantity.toString()),
-              _buildDetailRow('Unit Price', '\$${widget.order.unitPrice.toStringAsFixed(2)}'),
-              _buildDetailRow('Total Price', '\$${widget.order.totalPrice.toStringAsFixed(2)}'),
-              _buildDetailRow('Status', widget.order.orderStatus),
-              _buildDetailRow('Employee', widget.order.employee),
-              _buildDetailRow('Employee ID', widget.order.employeeID),
+              buildDetailRow('Order ID', widget.order.orderID.toString(), context),
+              buildDetailRow('Customer', widget.order.customerName, context),
+              buildDetailRow('Customer ID', widget.order.customerID.toString(), context),
+              buildDetailRow('Product', widget.order.productName, context),
+              buildDetailRow('Product ID', widget.order.productID.toString(), context),
+              buildDetailRow('Order Date', widget.order.orderDate, context),
+              buildDetailRow('Quantity', widget.order.quantity.toString(), context),
+              buildDetailRow('Unit Price', '\$${widget.order.unitPrice.toStringAsFixed(2)}', context),
+              buildDetailRow('Total Price', '\$${widget.order.totalPrice.toStringAsFixed(2)}', context),
+              buildDetailRow('Status', widget.order.orderStatus, context),
+              buildDetailRow('Employee', widget.order.employee, context),
+              buildDetailRow('Employee ID', widget.order.employeeID, context),
             ],
           ),
         ),
-      ),
-    );
-  }
-
-  Widget _buildDetailRow(String label, String value) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(label, style: const TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold)),
-          Text(value, style: const TextStyle(fontSize: 18.0)),
-        ],
       ),
     );
   }

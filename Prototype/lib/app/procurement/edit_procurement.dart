@@ -81,7 +81,7 @@ class EditProcurementState extends State<EditProcurement> {
             onPressed: () => _showDeleteConfirmationDialog(context, widget.procurementData.status),
             icon: const Icon(
               Icons.delete,
-              size: 30.0,
+              size: 24.0,
             ),
           ),
         ],

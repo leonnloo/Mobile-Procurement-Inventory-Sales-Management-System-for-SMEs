@@ -21,7 +21,7 @@ class InfoAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      toolbarHeight: 80.0,
+      toolbarHeight: 60.0,
       actions: isNoti
           ? []  // Empty list when isNoti is true, indicating no actions
           : [
@@ -44,12 +44,12 @@ class InfoAppBar extends StatelessWidget implements PreferredSizeWidget {
                 icon: Icon(
                   color: Theme.of(context).colorScheme.surface,
                   Icons.edit_rounded,
-                  size: 30.0,
+                  size: 26.0,
                 ),
               ),
             ],
       backgroundColor: Theme.of(context).colorScheme.onPrimaryContainer,
-      title: Text(currentTitle, style: TextStyle(color: Theme.of(context).colorScheme.surface, fontSize: 25),),
+      title: Text(currentTitle, style: TextStyle(color: Theme.of(context).colorScheme.surface, fontSize: 20),),
       iconTheme: IconThemeData(
         color: Theme.of(context).colorScheme.surface, // Set the color of the back button
       ),
@@ -57,5 +57,5 @@ class InfoAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize => const Size.fromHeight(80.0);
+  Size get preferredSize => const Size.fromHeight(60.0);
 }

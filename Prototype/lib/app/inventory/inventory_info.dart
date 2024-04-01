@@ -4,6 +4,7 @@ import 'package:prototype/models/edit_type.dart';
 import 'package:prototype/models/inventory_model.dart';
 import 'package:prototype/util/get_controllers/inventory_controller.dart';
 import 'package:prototype/widgets/appbar/info_appbar.dart';
+import 'package:prototype/widgets/info_details.dart';
 
 void navigateToItemDetail(BuildContext context, InventoryItem item) {
   Navigator.of(context).push(
@@ -42,29 +43,16 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildDetailRow('Item ID', widget.item.itemID.toString(), context),
-            _buildDetailRow('Item Name', widget.item.itemName, context),
-            _buildDetailRow('Category', widget.item.category, context),
-            _buildDetailRow('Quantity', widget.item.quantity.toString(), context),
-            _buildDetailRow('Unit Price', '\$${widget.item.unitPrice.toStringAsFixed(2).toString()}', context),
-            _buildDetailRow('Total Price', '\$${widget.item.totalPrice.toStringAsFixed(2).toString()}', context),
-            _buildDetailRow('Status', widget.item.status, context),
-            _buildDetailRow('Critical Level', widget.item.criticalLvl.toString(), context),
+            buildDetailRow('Item ID', widget.item.itemID.toString(), context),
+            buildDetailRow('Item Name', widget.item.itemName, context),
+            buildDetailRow('Category', widget.item.category, context),
+            buildDetailRow('Quantity', widget.item.quantity.toString(), context),
+            buildDetailRow('Unit Price', '\$${widget.item.unitPrice.toStringAsFixed(2).toString()}', context),
+            buildDetailRow('Total Price', '\$${widget.item.totalPrice.toStringAsFixed(2).toString()}', context),
+            buildDetailRow('Status', widget.item.status, context),
+            buildDetailRow('Critical Level', widget.item.criticalLvl.toString(), context),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _buildDetailRow(String label, String value, BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(label, style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.onSurface)),
-          Text(value, style: TextStyle(fontSize: 18.0, color: Theme.of(context).colorScheme.onSurface)),
-        ],
       ),
     );
   }

@@ -9,6 +9,7 @@ import 'package:prototype/models/supplier_model.dart';
 import 'package:prototype/util/get_controllers/supplier_controller.dart';
 import 'package:prototype/util/request_util.dart';
 import 'package:prototype/widgets/appbar/info_appbar.dart';
+import 'package:prototype/widgets/info_details.dart';
 
 void navigateToSupplierDetail(BuildContext context, SupplierData supplier) {
   Navigator.of(context).push(
@@ -39,12 +40,12 @@ class _SupplierDetailScreenState extends State<SupplierDetailScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildDetailRow('Supplier ID', widget.supplierData.supplierID, context),
-            _buildDetailRow('Supplier Name', widget.supplierData.businessName, context),
-            _buildDetailRow('Contact Person', widget.supplierData.contactPerson, context),
-            _buildDetailRow('Email', widget.supplierData.email, context),
-            _buildDetailRow('Phone number', widget.supplierData.phoneNo, context),
-            _buildDetailRow('Address', widget.supplierData.address, context),
+            buildDetailRow('Supplier ID', widget.supplierData.supplierID, context),
+            buildDetailRow('Supplier Name', widget.supplierData.businessName, context),
+            buildDetailRow('Contact Person', widget.supplierData.contactPerson, context),
+            buildDetailRow('Email', widget.supplierData.email, context),
+            buildDetailRow('Phone number', widget.supplierData.phoneNo, context),
+            buildDetailRow('Address', widget.supplierData.address, context),
                 
             const SizedBox(height: 6.0), // Add some spacing
             _buildNotes(context),
@@ -60,28 +61,6 @@ class _SupplierDetailScreenState extends State<SupplierDetailScreen> {
     );
   }
 
-  Widget _buildDetailRow(String label, String value, BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            label,
-            style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.onSurface),
-          ),
-          const SizedBox(width: 30.0), // Increase the spacing between label and text
-          Flexible(
-            child: Text(
-              value,
-              style: TextStyle(fontSize: 18.0, color: Theme.of(context).colorScheme.onSurface),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 
   Widget _buildNotes(BuildContext context){
     final TextEditingController notesController = TextEditingController();

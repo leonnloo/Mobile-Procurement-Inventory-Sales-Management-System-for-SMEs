@@ -4,6 +4,7 @@ import 'package:prototype/models/edit_type.dart';
 import 'package:prototype/models/product_model.dart';
 import 'package:prototype/util/get_controllers/product_controller.dart';
 import 'package:prototype/widgets/appbar/info_appbar.dart';
+import 'package:prototype/widgets/info_details.dart';
 
 void navigateToProductDetail(BuildContext context, ProductItem product) {
   Navigator.of(context).push(
@@ -41,31 +42,18 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildDetailRow('Product ID', widget.product.productID.toString(), context),
-            _buildDetailRow('Product Name', widget.product.productName, context),
-            _buildDetailRow('Unit Price', '\$${widget.product.unitPrice.toStringAsFixed(2)}', context),
-            _buildDetailRow('Selling Price', '\$${widget.product.sellingPrice.toStringAsFixed(2)}', context),
-            _buildDetailRow('Quantity', widget.product.quantity.toString(), context),
-            _buildDetailRow('Safety Quantity', widget.product.criticalLvl.toString(), context),
-            _buildDetailRow('Markup', widget.product.markup.toString(), context),
-            _buildDetailRow('Margin', widget.product.margin.toString(), context),
-            _buildDetailRow('Status', widget.product.status, context),
+            buildDetailRow('Product ID', widget.product.productID.toString(), context),
+            buildDetailRow('Product Name', widget.product.productName, context),
+            buildDetailRow('Unit Price', '\$${widget.product.unitPrice.toStringAsFixed(2)}', context),
+            buildDetailRow('Selling Price', '\$${widget.product.sellingPrice.toStringAsFixed(2)}', context),
+            buildDetailRow('Quantity', widget.product.quantity.toString(), context),
+            buildDetailRow('Safety Quantity', widget.product.criticalLvl.toString(), context),
+            buildDetailRow('Markup', widget.product.markup.toString(), context),
+            buildDetailRow('Margin', widget.product.margin.toString(), context),
+            buildDetailRow('Status', widget.product.status, context),
             // Add more details based on your product data model
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _buildDetailRow(String label, String value, BuildContext context){
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(label, style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.onSurface)),
-          Text(value, style: TextStyle(fontSize: 18.0, color: Theme.of(context).colorScheme.onSurface)),
-        ],
       ),
     );
   }

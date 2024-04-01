@@ -68,7 +68,7 @@ class EditProductState extends State<EditProduct> {
             onPressed: () => _showDeleteConfirmationDialog(context),
             icon: const Icon(
               Icons.delete,
-              size: 30.0,
+              size: 24.0,
             ),
           ),
         ],
@@ -185,7 +185,6 @@ class EditProductState extends State<EditProduct> {
                             productController.getProducts();
                             update!();
                             updateEdit!();
-                            Navigator.pop(context);
                             Navigator.pop(context);
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
