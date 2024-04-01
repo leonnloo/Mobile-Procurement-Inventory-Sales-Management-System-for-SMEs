@@ -81,7 +81,3 @@ https://m3.material.io/
 This repo is a guide to flutter widgets with sample codes and pictures 
 - https://github.com/material-components/material-components-flutter
 
-INVENTORY:
-- add inventory statistics
-- filter system
-- safety quantity (critical level)
