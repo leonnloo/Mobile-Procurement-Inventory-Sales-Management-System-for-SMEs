@@ -104,94 +104,96 @@ class SalesComparisonScreenState extends State<SalesComparisonScreen> {
                     );
                   } else if (snapshot.hasData) {
                     List<MonthlySales> data = snapshot.data as List<MonthlySales>;
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        Text(
-                          'Monthly Sales',
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: Theme.of(context).colorScheme.onSurface
+                    return SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Column(
+                        children: [
+                          Text(
+                            'Monthly Sales',
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: Theme.of(context).colorScheme.onSurface
+                            ),
                           ),
-                        ),
-                        const SizedBox(height: 10),
-                        DataTable(
-                          columnSpacing: 20.0, // 调整列之间的间距
-                          dataTextStyle: TextStyle(color: Theme.of(context).colorScheme.onSurface),
-                          columns: const [
-                            DataColumn(
-                              label: Text(
-                                'Month',
-                                style: TextStyle(fontSize: 14), // 调整字体大小
+                          const SizedBox(height: 10),
+                          DataTable(
+                            columnSpacing: 20.0, // 调整列之间的间距
+                            dataTextStyle: TextStyle(color: Theme.of(context).colorScheme.onSurface),
+                            columns: const [
+                              DataColumn(
+                                label: Text(
+                                  'Month',
+                                  style: TextStyle(fontSize: 14), // 调整字体大小
+                                ),
                               ),
-                            ),
-                            DataColumn(
-                              label: Text(
-                                'Actual \nSales',
-                                style: TextStyle(fontSize: 14), // 调整字体大小
+                              DataColumn(
+                                label: Text(
+                                  'Actual \nSales',
+                                  style: TextStyle(fontSize: 14), // 调整字体大小
+                                ),
                               ),
-                            ),
-                            DataColumn(
-                              label: Text(
-                                'Target \nSales ',
-                                style: TextStyle(fontSize: 14), // 调整字体大小
+                              DataColumn(
+                                label: Text(
+                                  'Target \nSales ',
+                                  style: TextStyle(fontSize: 14), // 调整字体大小
+                                ),
                               ),
-                            ),
-                            DataColumn(
-                              label: Text(
-                                'Difference',
-                                style: TextStyle(fontSize: 14), // 调整字体大小
-                              ),
-                            ), // 添加差值列
-                          ],
-                          rows: data.map((data) {
-                            final difference = data.actualSales - data.targetSales;
-                            final differenceText = difference.toStringAsFixed(2);
-                            final differenceColor = difference < 0 ? Theme.of(context).colorScheme.error : null; // 若差值为负数则设置颜色为红色
-                            if (data.year == _selectedYear){
-                              return DataRow(cells: [
-                                DataCell(
-                                  Text(
-                                    _getMonthName(data.month), // Convert month number to month name
-                                    style: TextStyle(
-                                      fontSize: 14, // Adjust font size
-                                      color: differenceColor, // Set color to red if necessary
+                              DataColumn(
+                                label: Text(
+                                  'Difference',
+                                  style: TextStyle(fontSize: 14), // 调整字体大小
+                                ),
+                              ), // 添加差值列
+                            ],
+                            rows: data.map((data) {
+                              final difference = data.actualSales - data.targetSales;
+                              final differenceText = difference.toStringAsFixed(2);
+                              final differenceColor = difference < 0 ? Theme.of(context).colorScheme.error : null; // 若差值为负数则设置颜色为红色
+                              if (data.year == _selectedYear){
+                                return DataRow(cells: [
+                                  DataCell(
+                                    Text(
+                                      _getMonthName(data.month), // Convert month number to month name
+                                      style: TextStyle(
+                                        fontSize: 14, // Adjust font size
+                                        color: differenceColor, // Set color to red if necessary
+                                      ),
                                     ),
                                   ),
-                                ),
-                                DataCell(Text(data.actualSales.toStringAsFixed(2)), onTap: () => Get.to(() => EditSalesTarget(targetMonth: data, updateData: updateData,)),),
-                                DataCell(Text(data.targetSales.toStringAsFixed(2)), onTap: () => Get.to(() => EditSalesTarget(targetMonth: data, updateData: updateData,)),),
-                                DataCell(
-                                  Text(
-                                    differenceText,
-                                    style: TextStyle(fontSize: 14, color: differenceColor), // Adjust font size and color
+                                  DataCell(Text(data.actualSales.toStringAsFixed(2)), onTap: () => Get.to(() => EditSalesTarget(targetMonth: data, updateData: updateData,)),),
+                                  DataCell(Text(data.targetSales.toStringAsFixed(2)), onTap: () => Get.to(() => EditSalesTarget(targetMonth: data, updateData: updateData,)),),
+                                  DataCell(
+                                    Text(
+                                      differenceText,
+                                      style: TextStyle(fontSize: 14, color: differenceColor), // Adjust font size and color
+                                    ),
+                                    onTap: () => Get.to(() => EditSalesTarget(targetMonth: data, updateData: updateData,)),
+                                  ), // Display difference
+                                ]);
+                              }
+                              else {
+                                return DataRow(cells: [
+                                  DataCell(
+                                    Text(
+                                      _getMonthName(data.month), // Convert month number to month name
+                                      style: const TextStyle(fontSize: 14),
+                                    ),
                                   ),
-                                  onTap: () => Get.to(() => EditSalesTarget(targetMonth: data, updateData: updateData,)),
-                                ), // Display difference
-                              ]);
-                            }
-                            else {
-                              return DataRow(cells: [
-                                DataCell(
-                                  Text(
-                                    _getMonthName(data.month), // Convert month number to month name
-                                    style: const TextStyle(fontSize: 14),
-                                  ),
-                                ),
-                                const DataCell(Text('-')),
-                                const DataCell(Text('-')),
-                                const DataCell(
-                                  Text(
-                                    '-',
-                                    style: TextStyle(fontSize: 14), // Adjust font size and color
-                                  ),
-                                ), // Display difference
-                              ]);
-                            }
-                          }).toList(),
-                        ),
-                      ],
+                                  const DataCell(Text('-')),
+                                  const DataCell(Text('-')),
+                                  const DataCell(
+                                    Text(
+                                      '-',
+                                      style: TextStyle(fontSize: 14), // Adjust font size and color
+                                    ),
+                                  ), // Display difference
+                                ]);
+                              }
+                            }).toList(),
+                          ),
+                        ],
+                      ),
                     );
                   }
                   else {

@@ -18,9 +18,13 @@ class _ChatBotState extends State<ChatBot> {
   final TextEditingController _controller = TextEditingController();
   final ChatbotUtil chatbotUtil = ChatbotUtil();
   List<Map<String, dynamic>> messages = [];
-
+  bool first = true;
   @override
   Widget build(BuildContext context) {
+    if (first){
+      addMessage('Hi there, how can I assist you today? You can inquire about sales, inventory, refunds, or specific orders by providing relevant IDs or names.');
+      first = false;
+    }
     return Scaffold(
       appBar: const CommonAppBar(currentTitle: 'ChatBot'),
       body: Column(

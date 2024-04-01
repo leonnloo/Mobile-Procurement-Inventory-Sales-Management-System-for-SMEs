@@ -28,7 +28,7 @@ class InventoryStatusWidget extends StatelessWidget {
                     children: [
                       Text(
                         'Inventory Overview',
-                        style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.onSurface),
+                        style: TextStyle(fontSize: 23.0, fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.onSurface),
                       ),
                     ],
                   ),
@@ -105,7 +105,7 @@ class InventoryCount extends StatelessWidget {
       children: [
         Text(
           count, 
-          style: TextStyle(fontSize: 24.0, color: Theme.of(context).colorScheme.onSurface),
+          style: TextStyle(fontSize: 20.0, color: Theme.of(context).colorScheme.onSurface),
           textAlign: TextAlign.center, // Center align text
         ),
         const SizedBox(height: 4), // Optional: add some spacing between the number and label

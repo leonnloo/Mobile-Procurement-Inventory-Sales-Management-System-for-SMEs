@@ -29,11 +29,12 @@ class MonthlySalesBarChart extends StatelessWidget {
               child: const Text(
                 'Monthly Sales',
                 style: TextStyle(
-                  fontSize: 28,
+                  fontSize: 25,
                   fontWeight: FontWeight.bold,
                 ),
               ),
             ),
+            const SizedBox(height: 10,),
             SizedBox(
               height: 230,
               child: FutureBuilder(

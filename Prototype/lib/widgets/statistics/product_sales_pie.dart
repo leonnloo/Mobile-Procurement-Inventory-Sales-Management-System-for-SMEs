@@ -66,7 +66,7 @@ class PieChart2State extends State {
               children: [
                 Text(
                   'Product Sales',
-                  style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.onSurface),
+                  style: TextStyle(fontSize: 23, fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.onSurface),
                 ),
                 DropdownButton<String>(
                   value: _selectedYear,

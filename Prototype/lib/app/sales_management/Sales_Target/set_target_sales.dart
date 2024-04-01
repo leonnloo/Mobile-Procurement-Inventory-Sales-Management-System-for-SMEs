@@ -138,7 +138,7 @@ class SetSalesTargetScreenState extends State<SetSalesTargetScreen> {
                     builder: (BuildContext context) {
                       return AlertDialog(
                         title: const Text('Success'),
-                        content: Text('Sales target set successfully for $_selectedMonth.'),
+                        content: Text('Sales target set successfully for ${monthNames[_selectedMonth - 1]}.'),
                         actions: [
                           TextButton(
                             onPressed: () {

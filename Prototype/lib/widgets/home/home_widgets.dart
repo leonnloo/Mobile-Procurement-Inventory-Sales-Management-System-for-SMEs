@@ -42,7 +42,7 @@ class HomeWidgets extends StatelessWidget {
                       child: Icon(
                         Icons.notes,
                         color: Theme.of(context).colorScheme.surface,
-                        size: 36,
+                        size: 32,
                       ),
                     ),
                     InkWell(
@@ -52,7 +52,7 @@ class HomeWidgets extends StatelessWidget {
                       child: Icon(
                         Icons.notifications,
                         color: Theme.of(context).colorScheme.surface,
-                        size: 36,
+                        size: 32,
                       ),
                     )
                   ],

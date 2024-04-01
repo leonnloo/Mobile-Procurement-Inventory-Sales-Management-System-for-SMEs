@@ -30,7 +30,7 @@ class DeliveryOverview extends StatelessWidget {
                   children: [
                     Text(
                       'Delivery',
-                      style: TextStyle(fontSize: 30.0, fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.onSurface),
+                      style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.onSurface),
                     ),
                     const SizedBox(width: 14.0,),
                     Icon(Icons.local_shipping, color: Theme.of(context).colorScheme.onSurface, size: 30,),
@@ -62,7 +62,7 @@ class DeliveryOverview extends StatelessWidget {
                               'Incoming',
                               style: TextStyle(
                                 color: Theme.of(context).colorScheme.onSurface,
-                                fontSize: 20.0,
+                                fontSize: 18.0,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -97,7 +97,7 @@ class DeliveryOverview extends StatelessWidget {
                               return Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Text(ingoing.toString(), style: TextStyle(fontSize: 20.0, color: Theme.of(context).colorScheme.onSurface),),
+                                  Text(ingoing.toString(), style: TextStyle(fontSize: 18.0, color: Theme.of(context).colorScheme.onSurface),),
                                 ],
                               );
                             }
@@ -126,7 +126,7 @@ class DeliveryOverview extends StatelessWidget {
                               'Outgoing',
                               style: TextStyle(
                                 color: Theme.of(context).colorScheme.onSurface,
-                                fontSize: 20.0,
+                                fontSize: 18.0,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -161,7 +161,7 @@ class DeliveryOverview extends StatelessWidget {
                               return Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Text(outgoing.toString(), style: TextStyle(fontSize: 20.0, color: Theme.of(context).colorScheme.onSurface),),
+                                  Text(outgoing.toString(), style: TextStyle(fontSize: 18.0, color: Theme.of(context).colorScheme.onSurface),),
                                 ],
                               );
                             }
