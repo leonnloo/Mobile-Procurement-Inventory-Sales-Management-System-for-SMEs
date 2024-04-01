@@ -1,6 +1,6 @@
 # Mobile-Procurement-Inventory-Sales-Management-System-for-SMEs
 
-## GRP TEAM-14 (最后一次更新 - 24/2/2024)
+## GRP TEAM-14
 
 ### Team Members:
 Leon Loo Yang\
@@ -8,26 +8,6 @@ Zeyu Sun\
 Huining Wang\
 Haozhe Zhang\
 Tianpu Le
-
-## ！！！重要 ！！！
-开branch时，跟着这个方式取名，例如：
-```
-functionality-login (基本操作编码)
-functionality-register
-functionality-sales_management
-functionality-procurement
-enhancement-procurement (如果有更新或是换UI设计)
-enhancement-sale_orders
-database-linking_flask_mongodb (backend)
-database-linking_flask_flutter
-bugfix-... (修改bug)
-```
-前面是统一标题，后面自己设置，如果觉得有什么新的名字可以当作标题就在群里提出来\
-\
-还有就是commit的meesage, 都写成past tense, 例如：Added, Developed, Modified, Changed, Updated\
-\
-**你们能开issues就开，记得放milestones, labels, assignees等等**
-
 
 ## Getting Started:
 #### 1. Get Flutter
@@ -101,63 +81,3 @@ https://m3.material.io/
 This repo is a guide to flutter widgets with sample codes and pictures 
 - https://github.com/material-components/material-components-flutter
 
-## Tasks
-程序在进入lib里
-记得跟着folder的名字归类
-有什么问题就直接问
-
-### 1) Tianpu
-PRODUCTS:
-- filter system
-- safety quantity (critical level)
-- markup (based on cost price, determine selling price to raise margin), margin (based on selling price, determine profit)
-
-SUPPLIER & CUSTOMER:
-filter system
-obtain numbers from contacts (import from contacts)
-
-### 2) Leon
-BACKEND:
-- sql tables - look how to achieve every company have their own datasets, each employee has sales record (number of sales, revenue)
-- learn how to link mongodb -> flask -> flutter
-- CRUD (create, read, update, delete)
-
-LOGIN:
-- authentication 
-- register (only new company can register, employees have to be added by admin or people in authority to the database in settings)
-- when user first time login, prompt for new password, other necessary information (added by admin)
-- login
-- verification for registering
-- forgot password?
- 
-HOME:
-- adjustable widgets?
-- add icon on the bottom right (add orders, purchase, customer, supplier, product, inventory)
-
-### 3) huining
-SALES:
-- target sales
-- profits and losses - month, opening(costs), total purchases, total sales, closing (cost), profit or loss, expenses, net profit
-- sales by date
-- sales by item (selling products, products by revenue)
-- sales by time (day, week, month, last 3 month, ?year?)
-- sales by customer
-- individual employee sales
-
-### 4) Zeyu
-- Design themes for the app\
-\
-ORDER:
-- order dispatch and delivery (packed, shipped, delivered)
-- customer claims and refunds - form, history
-- filter system
-
-### 5) Haozhe
-PROCUREMENT:
-- add weekly, montly purchases statistics
-- filter system
-
-INVENTORY:
-- add inventory statistics
-- filter system
-- safety quantity (critical level)
