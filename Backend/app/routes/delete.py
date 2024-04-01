@@ -124,6 +124,7 @@ def delete_procurement(id: str, token: str = Depends(oauth_scheme)):
                     else:
                         new_status = 'Out of Stock'
                     
+                    item['total_price'] = item['quantity'] * item['unit_price']
                     item['status'] = new_status
                     inventory_db.update_one({"item_id": old_purchase['item_id']}, {"$set": item})
                 else:

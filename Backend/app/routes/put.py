@@ -236,6 +236,7 @@ def update_procurement(purchase: NewProcurement, procurement_id: str, token: str
                     else:
                         new_status = 'Out of Stock'
                     
+                    item['total_price'] = item['quantity'] * item['unit_price']
                     item['status'] = new_status
                     inventory_db.update_one({"item_id": purchase.item_id}, {"$set": item})
                 else:
@@ -274,6 +275,7 @@ def update_procurement(purchase: NewProcurement, procurement_id: str, token: str
                     else:
                         new_status = 'Out of Stock'
                     
+                    item['total_price'] = item['quantity'] * item['unit_price']
                     item['status'] = new_status
                     inventory_db.update_one({"item_id": purchase.item_id}, {"$set": item})
                 else:
@@ -327,6 +329,7 @@ def update_procurement_status(purchase: NewProcurement, procurement_id: str, tok
                         new_status = 'Out of Stock'
                     
                     item['status'] = new_status
+                    item['total_price'] = item['quantity'] * item['unit_price']
                     inventory_db.update_one({"item_id": purchase.item_id}, {"$set": item})
                 else:
                     raise HTTPException(

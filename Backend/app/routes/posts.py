@@ -83,7 +83,6 @@ def supplier_form(supplier: NewSupplier, token: str = Depends(oauth_scheme)):
     suppliers_db.insert_one(dict(updated_supplier))
     return {"Message": "Supplier successfully registered"}
 
-# ! Update monthly sales when inputting a new order
 # ----------------------------------------- Sales Form ----------------------------------------- 
 @post_router.post("/sales_order_form")
 def sales_order_form(order: NewSaleOrder, token: str = Depends(oauth_scheme)):
@@ -277,6 +276,7 @@ def procurement_form(procurement: NewProcurement, token: str = Depends(oauth_sch
                 else:
                     new_status = 'Out of Stock'
                 
+                item['total_price'] = item['quantity'] * item['unit_price']
                 item['status'] = new_status
                 inventory_db.update_one({"item_id": procurement.item_id}, {"$set": item})
             else:
