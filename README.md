@@ -7,7 +7,7 @@ Leon Loo Yang\
 Zeyu Sun\
 Huining Wang\
 Haozhe Zhang\
-Tianpu Lejff
+Tianpu Le
 
 # Installation Guide:
 ## Frontend:
