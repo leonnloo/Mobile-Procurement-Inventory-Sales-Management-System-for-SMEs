@@ -68,6 +68,6 @@ python routes/chatbot/spacy_train.py
 ```
 Run and the API would be hosted on local:
 ```
-uvicorn main:app
+uvicorn main:app --reload
 ```
 
