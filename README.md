@@ -66,7 +66,7 @@ Execute the following command after cd into `app`:
 python -m spacy download en_core_web_lg
 python routes/chatbot/spacy_train.py
 ```
-Run and the API server would be hosted on local:
+Run and the API would be hosted on local:
 ```
 uvicorn main:app --reload
 ```
