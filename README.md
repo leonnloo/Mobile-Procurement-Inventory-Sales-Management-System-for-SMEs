@@ -31,7 +31,7 @@ $ cd Prototype
 ```
 
 ### 4. Run
-Connect your device using emulator on Android Studio or VSC
+Connect your device using emulator on Android Studio or VSC (install android emulator extension)
 ```
 $ flutter upgrade
 $ flutter pub get
