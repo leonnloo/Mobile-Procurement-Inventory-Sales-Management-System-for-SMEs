@@ -42,7 +42,7 @@ If `flutter pub get` cannot be executed due to network restrictions, consider ch
 setx PUB_HOSTED_URL "https://pub.flutter-io.cn"
 setx FLUTTER_STORAGE_BASE_URL "https://storage.flutter-io.cn"
 ```
-After executing the code on the terminal, restart the IDE and run `flutter pub get` once more.
+After executing the code on the terminal, restart your IDE and run `flutter pub get` once more.
 
 ## Backend Setup:
 ### Backend is hosted on the cloud, but here's how to run the backend on local:
