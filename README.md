@@ -13,7 +13,7 @@ Tianpu Le
 ## Frontend:
 ### 1. Get Flutter
 * Install flutter : [Flutter Installation](https://flutter.dev/docs/get-started/install)
-* If there's any problem persists,  consider checking out:
+* If there's any problem persists, consider checking out:
 https://docs.flutter.dev/community/china
 
 ### 2. Run on either Android Studios or Visual Studio Code (VSC)
