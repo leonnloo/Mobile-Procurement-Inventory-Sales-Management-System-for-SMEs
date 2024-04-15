@@ -44,7 +44,7 @@ setx FLUTTER_STORAGE_BASE_URL "https://storage.flutter-io.cn"
 ```
 After executing the code on the terminal, restart your IDE and run `flutter pub get` once more.
 
-## Backend Setup:
+## Backend Setup: 
 ### Backend is hosted on the cloud, but here's how to run the backend on local:
 
 Change directory into Backend and select python 3.12.2 as the interpreter after cloning the repository.\
