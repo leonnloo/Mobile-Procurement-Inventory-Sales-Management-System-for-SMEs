@@ -15,7 +15,7 @@ Tianpu Le
 * Install flutter : [Flutter Installation](https://flutter.dev/docs/get-started/install)
 * If there's any problem persists, consider checking out:
 https://docs.flutter.dev/community/china
- 
+  
 ### 2. Run on either Android Studios or Visual Studio Code (VSC)
 * Install Android Studio : [Android Studio Installation](https://developer.android.com/studio)
 * Using Android Studio's device manager on the top or at the right bar to create a virtual device
