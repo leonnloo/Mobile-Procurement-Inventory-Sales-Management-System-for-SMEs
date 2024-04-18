@@ -9,7 +9,7 @@ Huining Wang\
 Haozhe Zhang\
 Tianpu Le
 
-# Installation Guide:
+# Installation Guide: 
 ## Frontend:
 ### 1. Get Flutter
 * Install flutter : [Flutter Installation](https://flutter.dev/docs/get-started/install)
