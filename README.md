@@ -49,7 +49,7 @@ After executing the code on the terminal, restart your IDE and run `flutter pub 
 
 Change directory into Backend and select python 3.12.2 as the interpreter after cloning the repository.\
 Create a virtual environment:
-```
+``` 
 py -3 -m venv venv
 ```
 After creating the virtual environment, change the interpreter to use the `python` on `venv/Scripts/python`.\
