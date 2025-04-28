@@ -1,73 +1,131 @@
-# Mobile-Procurement-Inventory-Sales-Management-System-for-SMEs
+# 📱 Business Management Solution for SMEs
 
-## GRP TEAM-14
- 
-### Team Members:
-Leon Loo Yang\
-Zeyu Sun\
-Huining Wang\
-Haozhe Zhang\
-Tianpu Le  
+<p align="center">
+  <img src="https://img.shields.io/badge/Platform-Mobile-blue" alt="Platform">
+  <img src="https://img.shields.io/badge/Framework-Flutter-blue" alt="Framework">
+  <img src="https://img.shields.io/badge/Backend-FastAPI-green" alt="Backend">
+  <img src="https://img.shields.io/badge/Database-MongoDB-green" alt="Database">
+</p>
 
-# Installation Guide: 
-## Frontend:
-### 1. Get Flutter
-* Install flutter : [Flutter Installation](https://flutter.dev/docs/get-started/install)
-* If there's any problem persists, consider checking out:
-https://docs.flutter.dev/community/china
-  
-### 2. Run on either Android Studios or Visual Studio Code (VSC)
-* Install Android Studio : [Android Studio Installation](https://developer.android.com/studio)
-* Using Android Studio's device manager on the top or at the right bar to create a virtual device
+## 🚀 Product Overview
 
+This lightweight mobile application is designed to help small and medium enterprises (SMEs) streamline their business operations. It offers an integrated solution for procurement, inventory, and sales management in a single platform accessible anytime, anywhere.
 
-If you wish to proceed the project with VSC, you would need to install android emulator extensions on VSC to run the virtual devices. If you have Code Runner Extensions installed, it is recommended to disable it before compiling the flutter code.
+### 🎯 Problem
 
-### 3. Clone this repo
+SMEs struggle with slow, manual procurement, inventory, and sales management processes. Existing ERPs are often too expensive or complex for their needs.
+
+### 💡 Solution
+
+Our application provides an affordable, user-friendly mobile platform that simplifies business operations, reduces paperwork, and improves efficiency.
+
+### ✨ Key Features
+
+- 🤝 **Supplier & Customer Management**  
+  Maintain comprehensive databases of suppliers and customers with all relevant information.
+
+- 📝 **Procurement Tracking**  
+  Manage purchase orders, track deliveries, and handle supplier contracts efficiently.
+
+- 📦 **Inventory Management**  
+  Real-time inventory updates, low stock alerts, and demand forecasting to optimize inventory levels.
+
+- 🏷️ **Product Catalog**  
+  Easy product management with pricing, categories, and specifications.
+
+- 📊 **Sales Monitoring**  
+  Track sales targets, employee performance, and view monthly breakdowns.
+
+- 📑 **Sales Order Automation**  
+  Generate quotes, contracts, and templates with a few taps.
+
+- 👥 **Role-based Access Control**  
+  Secure user accounts with customized permissions based on roles.
+
+- 🤖 **Integrated Chatbot**  
+  Quick help and guidance through an AI-powered assistant.
+
+- 🔔 **Notifications & Analytics**  
+  Real-time alerts and comprehensive dashboards for business insights.
+
+## 🔧 Technology Stack
+
+- **Frontend**: Flutter (cross-platform mobile app)
+- **Backend**: FastAPI (Python lightweight REST API)
+- **Database**: MongoDB Atlas (cloud NoSQL)
+- **Authentication**: JWT-based
+- **Mail Service**: Mailersend (for password resets)
+- **Chatbot**: PyTorch-powered lightweight NLP model
+
+## 📋 Development Setup
+
+### Frontend Setup:
+
+#### 1. Flutter Installation
+
+- Install Flutter: [Flutter Installation](https://flutter.dev/docs/get-started/install)
+- For regions with access restrictions: [Flutter in China](https://docs.flutter.dev/community/china)
+
+#### 2. IDE Setup
+
+- Option 1: [Android Studio](https://developer.android.com/studio) with Flutter plugin
+- Option 2: Visual Studio Code with Flutter and Android Emulator extensions
+
+#### 3. Getting the Source Code
+
 ```
 $ git clone https://github.com/leonnloo/Mobile-Procurement-Inventory-Sales-Management-System-for-SMEs.git
 $ cd Mobile-Procurement-Inventory-Sales-Management-System-for-SMEs
 $ cd Prototype
 ```
 
-### 4. Run
-Connect your device using emulator on Android Studio or VSC (install android emulator extension)
+#### 4. Running the Application
+
+Connect a physical device or set up an emulator, then run:
+
 ```
 $ flutter upgrade
 $ flutter pub get
 $ flutter run
 ```
-If `flutter pub get` cannot be executed due to network restrictions, consider changing source of download to the mirror ones in China：
+
+Network access workaround if needed:
+
 ```
 setx PUB_HOSTED_URL "https://pub.flutter-io.cn"
 setx FLUTTER_STORAGE_BASE_URL "https://storage.flutter-io.cn"
 ```
-After executing the code on the terminal, restart your IDE and run `flutter pub get` once more.
 
-## Backend Setup:  
-### Backend is hosted on the cloud, but here's how to run the backend on local:
+### Backend Setup:
 
-Change directory into Backend and select python 3.12.2 as the interpreter after cloning the repository.\
-Create a virtual environment:
-``` 
-py -3 -m venv venv
-```
-After creating the virtual environment, change the interpreter to use the `python` on `venv/Scripts/python`.\
-Activate the virtual machine by executing:
-```
-venv/Scripts/activate
-```
-Install the libraries using:
-```
-python install -r requirements.txt
-```
-Execute the following command after cd into `app`:
-```
-python -m spacy download en_core_web_lg
-python routes/chatbot/spacy_train.py
-```
-Run and the API server would be hosted on local:
-```
-uvicorn main:app --reload
-```
+The backend is hosted in the cloud for production use. For local development:
 
+1. **Environment Setup**:
+
+   - Use Python 3.12.2 as interpreter
+   - Create and activate a virtual environment:
+
+   ```
+   py -3 -m venv venv
+   venv/Scripts/activate
+   ```
+
+2. **Install Dependencies**:
+
+   ```
+   python install -r requirements.txt
+   ```
+
+3. **NLP Model Setup**:
+
+   ```
+   python -m spacy download en_core_web_lg
+   python routes/chatbot/spacy_train.py
+   ```
+
+4. **Start the Server**:
+   ```
+   uvicorn main:app --reload
+   ```
+
+The API server will be available on your local machine for development purposes.
